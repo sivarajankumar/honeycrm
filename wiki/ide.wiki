@@ -1,0 +1,6 @@
+= setup ide for gwt development = 
+ * see http://code.google.com/intl/de-DE/webtoolkit/usingeclipse.html
+ * download eclipse java ide from
+ * install plugins form the following update sites:
+   * http://dl.google.com/eclipse/plugin/3.5
+   * http://subclipse.tigris.org/update_1.6.x
