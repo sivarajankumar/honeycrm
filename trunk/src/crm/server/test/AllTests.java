@@ -12,7 +12,6 @@ public class AllTests {
 		suite.addTestSuite(ObjectCopyTest.class);
 		suite.addTestSuite(DtoSyncTest.class);
 		suite.addTestSuite(DtoIndicesTest.class);
-		suite.addTestSuite(ListViewTest.class);
 		suite.addTestSuite(IANATest.class);
 		//$JUnit-END$
 		return suite;
