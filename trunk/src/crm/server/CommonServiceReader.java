@@ -48,6 +48,10 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	public ListQueryResult<? extends Viewable> search(int dtoIndex, Viewable searchDto, int from, int to) {
+		return searchWithOperator(dtoIndex, searchDto, from, to, BoolOperator.AND);
+	}
+
+	private ListQueryResult<? extends Viewable> searchWithOperator(int dtoIndex, Viewable searchDto, int from, int to, final BoolOperator operator) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
 		final List<String> queries = new LinkedList<String>();
@@ -68,12 +72,12 @@ public class CommonServiceReader extends AbstractCommonService {
 							queries.add(field.getName() + " == " + value);
 						}
 					} else {
-	
+
 					}
 				}
 			}
 
-			query.setFilter(join(queries, " AND "));
+			query.setFilter(join(queries, " " + operator.toString() + " "));
 			array = getArrayFromQueryResult(dtoIndex, (Collection) query.execute());
 		} catch (Exception e) {
 			// something went wrong, print stacktrace and return an empty list to the client.
@@ -110,7 +114,7 @@ public class CommonServiceReader extends AbstractCommonService {
 
 	public Viewable getByName(int dtoIndex, String name) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
-		final Query query = m.newQuery(getDomainClass(dtoIndex), "name == \""+name+"\"");
+		final Query query = m.newQuery(getDomainClass(dtoIndex), "name == \"" + name + "\"");
 		final Collection collection = (Collection) query.execute();
 
 		if (1 == collection.size()) {
@@ -122,4 +126,36 @@ public class CommonServiceReader extends AbstractCommonService {
 			return (Viewable) copy.copy(collection.iterator().next(), getDtoClass(dtoIndex));
 		}
 	}
+
+	public ListQueryResult<? extends Viewable> fulltextSearch(String query, int from, int to) {
+		return null;
+		/*
+		for (final Class<? extends Viewable> dto : dtoToDomainClass.values()) {
+			try {
+				Viewable viewable = dto.newInstance();
+				
+				ReflectionHelper.getDtoFields(dto);
+				
+				dto.getde
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}*/
+	}
+
+	enum BoolOperator {
+		AND {
+			@Override
+			public String toString() {
+				return " AND ";
+			}
+		},
+		OR {
+			@Override
+			public String toString() {
+				return " OR ";
+			}
+		};
+	}
+
 }

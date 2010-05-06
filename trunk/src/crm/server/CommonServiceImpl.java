@@ -72,4 +72,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 			delete(dtoIndex, id);
 		}
 	}
+
+	@Override
+	public ListQueryResult<? extends Viewable> fulltextSearch(String query, int from, int to) {
+		return reader.fulltextSearch(query, from, to);
+	}
 }

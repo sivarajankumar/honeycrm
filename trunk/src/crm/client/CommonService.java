@@ -19,6 +19,7 @@ public interface CommonService extends RemoteService {
 	public ListQueryResult<? extends Viewable> getAll(final int dtoIndex, int from, int to);
 	public ListQueryResult<? extends Viewable> getAllByNamePrefix(final int dtoIndex, String prefix, int from, int to);
 	public ListQueryResult<? extends Viewable> search(int dtoIndex, Viewable searchContact, int from, int to);
+	public ListQueryResult<? extends Viewable> fulltextSearch(String query, int from, int to);
 	
 	// update
 	public void update(int dtoIndex, Viewable account, long id);

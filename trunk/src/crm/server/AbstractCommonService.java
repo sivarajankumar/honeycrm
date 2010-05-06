@@ -27,14 +27,14 @@ import crm.server.domain.Employee;
 abstract public class AbstractCommonService extends RemoteServiceServlet {
 	private static final long serialVersionUID = -2405965558198509695L;
 	protected static final PersistenceManager m = PMF.get().getPersistenceManager();
-	protected static final Map<Class<? extends Viewable>, Class> toDtoMap = new HashMap<Class<? extends Viewable>, Class>();
+	protected static final Map<Class<? extends Viewable>, Class> dtoToDomainClass = new HashMap<Class<? extends Viewable>, Class>();
 	protected static final CopyMachine copy = new CopyMachine();
 
 	static {
 		// TODO do this automatically with reflection
-		toDtoMap.put(DtoContact.class, Contact.class);
-		toDtoMap.put(DtoAccount.class, Account.class);
-		toDtoMap.put(DtoEmployee.class, Employee.class);
+		dtoToDomainClass.put(DtoContact.class, Contact.class);
+		dtoToDomainClass.put(DtoAccount.class, Account.class);
+		dtoToDomainClass.put(DtoEmployee.class, Employee.class);
 	}
 
 	protected Class<? extends AbstractDto> getDtoClass(final int dtoIndex) {
@@ -43,8 +43,8 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	
 	protected Class getDomainClass(final int dtoIndex) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
-		assert toDtoMap.containsKey(dtoClass);
-		return toDtoMap.get(dtoClass);
+		assert dtoToDomainClass.containsKey(dtoClass);
+		return dtoToDomainClass.get(dtoClass);
 	}
 	
 	protected Object getDomainObject(final int dtoIndex, final long id) {
