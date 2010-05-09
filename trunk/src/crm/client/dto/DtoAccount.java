@@ -77,8 +77,7 @@ public class DtoAccount extends AbstractDto {
 			setAnnualRevenue(Double.valueOf(value.toString()));
 			break;
 		default:
-			assert false;
-			break;
+			super.setFieldValue(index, value);
 		}
 	}
 
@@ -93,8 +92,8 @@ public class DtoAccount extends AbstractDto {
 	}
 
 	@Override
-	public Object getFieldValue(final int fieldId) {
-		switch (fieldId) {
+	public Object getFieldValue(final int index) {
+		switch (index) {
 		case INDEX_DATE:
 			return date;
 		case INDEX_ADDRESS:
@@ -104,14 +103,13 @@ public class DtoAccount extends AbstractDto {
 		case INDEX_ANNUALREVENUE:
 			return annualRevenue;
 		default:
-			assert false; // should never reach this point..
-			return null;
+			return super.getFieldValue(index);
 		}
 	}
 
 	@Override
 	public int[] getListViewColumnIds() {
-		return new int[] { INDEX_NAME, INDEX_ADDRESS };
+		return new int[] { INDEX_MARKED, INDEX_NAME, INDEX_ADDRESS };
 	}
 
 	@Override

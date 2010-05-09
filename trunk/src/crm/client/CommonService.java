@@ -17,12 +17,14 @@ public interface CommonService extends RemoteService {
 	public Viewable get(int dtoIndex, long id);
 	public Viewable getByName(int dtoIndex, String name);
 	public ListQueryResult<? extends Viewable> getAll(final int dtoIndex, int from, int to);
+	public ListQueryResult<? extends Viewable> getAllMarked(final int dtoIndex, int from, int to);
 	public ListQueryResult<? extends Viewable> getAllByNamePrefix(final int dtoIndex, String prefix, int from, int to);
 	public ListQueryResult<? extends Viewable> search(int dtoIndex, Viewable searchContact, int from, int to);
 	public ListQueryResult<? extends Viewable> fulltextSearch(String query, int from, int to);
 	
 	// update
 	public void update(int dtoIndex, Viewable account, long id);
+	public void mark(int dtoIndex, long id, boolean marked);
 
 	// delete
 	public void delete(int dtoIndex, long id);

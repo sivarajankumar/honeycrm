@@ -1,6 +1,5 @@
 package crm.client.view;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import crm.client.IANA;
@@ -20,18 +19,12 @@ public class SearchableListView extends ListView {
 		commonService.search(IANA.mashal(clazz), viewable, 0, MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends Viewable>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
-				Window.alert("search failed");
+				displayError(caught);
 			}
 
 			@Override
 			public void onSuccess(ListQueryResult<? extends Viewable> result) {
-				LoadIndicator.get().endLoading();
-
-				// TODO 
-				cache.put(currentPage(), result.getResults());
-				setNumberOfPages(result.getItemCount());
-				showPage(currentPage());
+				insertSearchResults(result);
 			}
 		});
 	}
@@ -39,4 +32,30 @@ public class SearchableListView extends ListView {
 	public void clearSearch() {
 		refresh();
 	}
+
+	public void getAllMarked() {
+		LoadIndicator.get().startLoading();
+		
+		commonService.getAllMarked(IANA.mashal(clazz), 0, MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends Viewable>>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				displayError(caught);
+			}
+
+			@Override
+			public void onSuccess(ListQueryResult<? extends Viewable> result) {
+				insertSearchResults(result);
+			}
+		});
+	}
+	
+	private void insertSearchResults(ListQueryResult<? extends Viewable> result) {
+		LoadIndicator.get().endLoading();
+		
+		// TODO 
+		cache.put(currentPage(), result.getResults());
+		setNumberOfPages(result.getItemCount());
+		showPage(currentPage());
+	}
+
 }

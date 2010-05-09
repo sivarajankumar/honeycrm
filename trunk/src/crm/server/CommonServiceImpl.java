@@ -3,6 +3,7 @@ package crm.server;
 import java.util.Set;
 
 import crm.client.CommonService;
+import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 import crm.client.dto.Viewable;
 
@@ -76,5 +77,17 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public ListQueryResult<? extends Viewable> fulltextSearch(String query, int from, int to) {
 		return reader.fulltextSearch(query, from, to);
+	}
+
+	@Override
+	public void mark(int dtoIndex, long id, boolean marked) {
+		Viewable viewable = get(dtoIndex, id);
+		viewable.setFieldValue(AbstractDto.INDEX_MARKED, marked);
+		update(dtoIndex, viewable, id);
+	}
+
+	@Override
+	public ListQueryResult<? extends Viewable> getAllMarked(int dtoIndex, int from, int to) {
+		return reader.getAllMarked(dtoIndex, from, to);
 	}
 }

@@ -1,27 +1,28 @@
 package crm.server.domain;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
-public class Contact {
+public class Contact extends AbstractEntity {
 	@Persistent
 	private String city;
 	@Persistent
 	private String email;
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	@PrimaryKey
-	private Key id;
 	@Persistent
 	private String name;
 	@Persistent
 	private String phone;
 	@Persistent
 	private long accountID;
+	@Persistent
+	private boolean emailOptedOut;
+	@Persistent
+	private String mobile;
+	@Persistent
+	private boolean doNotCall;
+	@Persistent
+	private String doNotCallExplanation;
 
 	public Contact() {
 	}
@@ -36,10 +37,6 @@ public class Contact {
 
 	public String getEmail() {
 		return email;
-	}
-
-	public Key getId() {
-		return id;
 	}
 
 	public String getName() {
@@ -58,10 +55,6 @@ public class Contact {
 		this.email = email;
 	}
 
-	public void setId(Key id) {
-		this.id = id;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -76,5 +69,37 @@ public class Contact {
 
 	public void setAccountID(long accountID) {
 		this.accountID = accountID;
+	}
+
+	public boolean isEmailOptedOut() {
+		return emailOptedOut;
+	}
+
+	public void setEmailOptedOut(boolean emailOptedOut) {
+		this.emailOptedOut = emailOptedOut;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public boolean isDoNotCall() {
+		return doNotCall;
+	}
+
+	public void setDoNotCall(boolean doNotCall) {
+		this.doNotCall = doNotCall;
+	}
+
+	public String getDoNotCallExplanation() {
+		return doNotCallExplanation;
+	}
+
+	public void setDoNotCallExplanation(String doNotCallExplanation) {
+		this.doNotCallExplanation = doNotCallExplanation;
 	}
 }

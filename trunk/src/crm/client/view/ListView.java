@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -100,7 +99,7 @@ public class ListView extends AbstractView {
 		updatePageCounterLabel();
 	}
 
-	private void set(final int row, final Viewable listViewable) {
+	private void initializeRow(final int row, final Viewable listViewable) {
 		final ClickHandler showDetailViewHandler = new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -150,7 +149,7 @@ public class ListView extends AbstractView {
 				final Viewable[] values = cache.get(page);
 
 				for (int i = 0; i < values.length; i++) {
-					set(i, values[i]);
+					initializeRow(i, values[i]);
 				}
 
 				removeTrailingRows(values.length);
@@ -188,8 +187,7 @@ public class ListView extends AbstractView {
 		commonService.getAll(IANA.mashal(clazz), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends Viewable>>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
-				Window.alert("Could not get data");
+				displayError(caught);
 			}
 
 			@Override

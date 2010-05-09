@@ -56,6 +56,7 @@ public class TabModuleView extends AbstractView {
 				commonService.addDemo(IANA.mashal(clazz), new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
+						listView.refresh();
 						LoadIndicator.get().endLoading();
 					}
 					
@@ -65,8 +66,6 @@ public class TabModuleView extends AbstractView {
 						Window.alert("Could not create demo contact");
 					}
 				});
-				
-				listView.refresh();
 			}
 		});
 		
@@ -96,5 +95,9 @@ public class TabModuleView extends AbstractView {
 	public void saveCompleted() {
 		listView.refresh();	
 		createView.cancel();
+	}
+	
+	public void markCompleted() {
+		listView.refresh();
 	}
 }

@@ -15,6 +15,9 @@ import java.util.Set;
 
 import crm.client.dto.AbstractDto;
 
+/**
+ * Helper class for all major, reusable reflection related services.
+ */
 public class ReflectionHelper {
 	/**
 	 * Traverses a package and returns all classes prefixed with prefix of the package.
@@ -159,5 +162,31 @@ public class ReflectionHelper {
 			}
 		}
 		return false;
+	}
+	
+	
+	/**
+	 * Returns fields of classSrc and inherited fields.
+	 */
+	public static Field[] getAllFields(final Class classSrc) {
+		final Class superClass = classSrc.getSuperclass();
+		final Field[] srcFields = classSrc.getDeclaredFields();
+
+		if (null == superClass) { // does the source class have a super class?
+			return srcFields; // no it does not. only iterate over fields of this class.
+		} else {
+			return merge(srcFields, getAllFields(superClass)); // yes it has a superclass. we have to copy the superclass fields too.
+		}
+	}
+
+	/**
+	 * Returns an array containing elements of both given arrays array1, array2 i.e. merges the given arrays into one.
+	 */
+	private static Field[] merge(final Object[] array1, final Object[] array2) {
+		// TODO implement this in a more generic way (for objects in general) but somehow typesafe..
+		final Field[] array = new Field[array1.length + array2.length];
+		System.arraycopy(array1, 0, array, 0, array1.length);
+		System.arraycopy(array2, 0, array, array1.length, array2.length);
+		return array;
 	}
 }

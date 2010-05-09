@@ -7,15 +7,17 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import crm.client.dto.AbstractDto;
 
 public class SearchWidget extends AbstractView {
 	private final FlexTable table = new FlexTable();
-	
+
 	public SearchWidget(final Class<? extends AbstractDto> clazz, final SearchableListView listview) {
 		super(clazz);
 
@@ -37,7 +39,7 @@ public class SearchWidget extends AbstractView {
 					});
 				}
 				// TODO do this for other possible widgets as well
-				
+
 				table.setWidget(y, 2 * x + 0, widgetLabel);
 				table.setWidget(y, 2 * x + 1, widgetValue);
 			}
@@ -50,7 +52,7 @@ public class SearchWidget extends AbstractView {
 				startSearch(listview, table, fieldIDs);
 			}
 		});
-		
+
 		final Button clearBtn = new Button("Clear");
 		clearBtn.addClickHandler(new ClickHandler() {
 			@Override
@@ -60,12 +62,35 @@ public class SearchWidget extends AbstractView {
 			}
 		});
 
-		table.setWidget(fieldIDs.length, 0, searchBtn);
-		table.setWidget(fieldIDs.length, 1, clearBtn);
-		
-		initWidget(table);
+		final Button markedBtn = new Button("Marked");
+		markedBtn.addClickHandler(new ClickHandler() {
+			private boolean showMarked = false;
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (showMarked) {
+					markedBtn.setText("Marked"); // allow user to see all items
+					listview.refresh();
+				} else {
+					markedBtn.setText("All"); // allow user to see only marked items
+					listview.getAllMarked();
+				}
+				showMarked = !showMarked;
+			}
+		});
+
+		final HorizontalPanel buttonPanel = new HorizontalPanel();
+		buttonPanel.add(searchBtn);
+		buttonPanel.add(clearBtn);
+		buttonPanel.add(markedBtn);
+
+		final VerticalPanel verticalPanel = new VerticalPanel();
+		verticalPanel.add(table);
+		verticalPanel.add(buttonPanel);
+
+		initWidget(verticalPanel);
 	}
-	
+
 	private void startSearch(final SearchableListView listview, final FlexTable table, final int[][] fieldIDs) {
 		setViewable(fieldIDs, table, viewable); // build query by writing input from textboxes into viewable instance
 		listview.search(viewable);

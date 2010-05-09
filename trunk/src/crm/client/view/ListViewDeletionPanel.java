@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 
@@ -27,7 +26,7 @@ public class ListViewDeletionPanel extends AbstractView {
 
 	public ListViewDeletionPanel(final Class<? extends AbstractDto> clazz, final ListView listview) {
 		super(clazz);
-		
+
 		this.listview = listview;
 
 		deleteAllCheckbox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -42,14 +41,14 @@ public class ListViewDeletionPanel extends AbstractView {
 
 	public void deleteSelected() {
 		// TODO let the user confirm the deletion again
-		
+
 		final int currentPage = listview.currentPage();
-		
+
 		if (deleteIdsPerPage.containsKey(currentPage)) {
 			LoadIndicator.get().startLoading();
-			
+
 			final Set<Long> ids = deleteIdsPerPage.get(currentPage);
-			
+
 			commonService.deleteAll(IANA.mashal(clazz), ids, new AsyncCallback<Void>() {
 				@Override
 				public void onSuccess(Void result) {
@@ -57,28 +56,28 @@ public class ListViewDeletionPanel extends AbstractView {
 					listview.refresh();
 					deleteAllCheckbox.setValue(false); // uncheck checkbox after refresh
 				}
-				
+
 				@Override
 				public void onFailure(Throwable caught) {
-					Window.alert("Could not delete all items");
+					displayError(caught);
 				}
 			});
 		} else {
 			// this page has no items selected for deletion. nothing has to be done.
 		}
 	}
-	
+
 	protected void updateDeleteSelection(final boolean shouldBeDeleted) {
 		final int page = listview.currentPage();
 		initializeSet(page);
-		
+
 		assert deleteIdsPerPage.containsKey(page) && deleteIdsPerPage.get(page) != null;
-		
+
 		// remove all ids from the set ..
 		deleteIdsPerPage.get(page).clear();
-		
+
 		// and add those again that have been selected now.
-		for (final long id: listview.toggleAllForDeletion(shouldBeDeleted)) {
+		for (final long id : listview.toggleAllForDeletion(shouldBeDeleted)) {
 			addToDeleteList(id, page, shouldBeDeleted);
 		}
 	}
@@ -107,10 +106,11 @@ public class ListViewDeletionPanel extends AbstractView {
 			deleteIdsPerPage.get(page).remove(id);
 		}
 	}
-	
+
 	/**
 	 * Prepare the map entry for its first use. Create a new empty set at the desired position if it does not exist yet.
-	 * @param page 
+	 * 
+	 * @param page
 	 */
 	private void initializeSet(final int page) {
 		if (!deleteIdsPerPage.containsKey(page)) {

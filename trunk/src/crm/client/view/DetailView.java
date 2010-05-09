@@ -59,7 +59,7 @@ public class DetailView extends AbstractView {
 		commonService.get(IANA.mashal(clazz), id, new AsyncCallback<Viewable>() {
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
+				displayError(caught);
 			}
 
 			@Override
@@ -139,9 +139,8 @@ public class DetailView extends AbstractView {
 			commonService.delete(IANA.mashal(clazz), currentId, new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
-					LoadIndicator.get().endLoading();
+					displayError(caught);
 					currentId = -1;
-					Window.alert("could not delete account with id " + currentId);
 				}
 
 				@Override
