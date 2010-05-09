@@ -67,7 +67,7 @@ body {
 /* VIEWS */
 
 .detail_view {
-	width: 29%;
+	width: 49%;
 	float: left;
 	height: 100%;
 	padding: 5px;
@@ -96,7 +96,7 @@ body {
 }
 
 .list_view {
-	width: 50%;
+	width: 30%;
 	float: left;
 	padding: 5px;
 	border-right: 5px solid white;
