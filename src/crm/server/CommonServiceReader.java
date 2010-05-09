@@ -107,6 +107,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)"); // TODO use toLowerCase in query as well to ignore case
 		query.declareParameters("String searchedName");
 		query.setRange(from, to);
+		
 		final Collection collection = (Collection) query.execute(prefix);
 
 		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
@@ -141,6 +142,16 @@ public class CommonServiceReader extends AbstractCommonService {
 				e.printStackTrace();
 			}
 		}*/
+	}
+	
+	public ListQueryResult<? extends Viewable> getAllMarked(int dtoIndex, int from, int to) {
+		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
+		final Query query = m.newQuery(getDomainClass(dtoIndex));
+		query.setRange(from, to);
+		query.setFilter("marked == true");
+
+		final Collection collection = (Collection) query.execute();
+		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
 	enum BoolOperator {

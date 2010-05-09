@@ -73,14 +73,14 @@ public class DtoSyncTest extends TestCase {
 						final List<Field> dtoFields = new LinkedList<Field>();
 						
 						for (final Field field: dto.getDeclaredFields()) {
-							if (!copy.shouldBeSkipped(field.getName())) {
+							if (!copy.shouldBeSkipped(field)) {
 								dtoFields.add(field);
 							}
 						}
 						
 						final List<Field> dbFields = new LinkedList<Field>();
 						for (final Field field: domain.getDeclaredFields()) {
-							if (!copy.shouldBeSkipped(field.getName())) {
+							if (!copy.shouldBeSkipped(field)) {
 								dbFields.add(field);
 							}
 						}

@@ -3,18 +3,24 @@ package crm.server;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import com.google.appengine.api.datastore.Key;
 
 public class CopyMachine {
-	private static final Set<String> skipPrefixes = new HashSet<String>();
+	private static final Set<String> badVariableNames = new HashSet<String>();
+	private static final Set<String> badVariablePrefixes = new HashSet<String>();
 
 	static {
-		skipPrefixes.add("$");
-		skipPrefixes.add("jdo");
-		skipPrefixes.add("INDEX_");
+		badVariablePrefixes.add("$");
+		badVariablePrefixes.add("jdo");
+		badVariablePrefixes.add("INDEX_");
+		
+		badVariableNames.add("serialVersionUID");
 	}
 
 	/**
@@ -67,25 +73,13 @@ public class CopyMachine {
 
 	/**
 	 * Copies all fields from the source object into the destination object.
-	 * 
-	 * @param srcObject
-	 * @param classSrc
-	 * @param classDest
-	 * @param instanceUpdatedDest
-	 * @throws NoSuchMethodException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
 	 */
 	private void copyFields(final Object srcObject, final Class classSrc, final Class classDest, final Object instanceUpdatedDest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		final Field[] srcFields = classSrc.getDeclaredFields();
+		final Field[] allFields = filterFields(ReflectionHelper.getAllFields(classSrc));
 
-		for (int i = 0; i < srcFields.length; i++) {
-			final Field srcField = srcFields[i];
+		for (int i = 0; i < allFields.length; i++) {
+			final Field srcField = allFields[i];
 			final String srcFieldName = srcField.getName();
-
-			if (shouldBeSkipped(srcFieldName)) {
-				continue;
-			}
 
 			// assumption: if we reach this point the get method for the field has to exist.
 
@@ -123,21 +117,41 @@ public class CopyMachine {
 	}
 
 	/**
-	 * Returns true if the field with the given name should be skipped during copying / DTO-DB comparison. False otherwise.
+	 * Method throwing away all fields that are irrellevant and should not be copied by this copy machine (e.g. automatically added fields for serialization).
 	 */
-	public boolean shouldBeSkipped(final String srcFieldName) {
-		if (srcFieldName.equals("serialVersionUID")) {
-			return true;
-		}
-		for (final String badPrefix : skipPrefixes) {
-			if (srcFieldName.startsWith(badPrefix)) {
-				return true;
+	private Field[] filterFields(final Field[] allFields) {
+		final List<Field> filteredFields = new LinkedList<Field>();
+		for (int i = 0; i < allFields.length; i++) {
+			if (!shouldBeSkipped(allFields[i])) {
+				filteredFields.add(allFields[i]);
 			}
 		}
+		
+		return filteredFields.toArray(new Field[0]);
+	}
+
+	/**
+	 * Returns true if the field with the given name should be skipped during copying / DTO-DB comparison. False otherwise.
+	 */
+	public boolean shouldBeSkipped(final Field field) {
+		if (Modifier.STATIC == (field.getModifiers() & Modifier.STATIC)) {
+			return true; // skip static fields
+		}
+		
+		if (badVariableNames.contains(field.getName())) {
+			return true; // skip field because its name is on the bad variables name
+		}
+
+		for (final String badPrefix : badVariablePrefixes) {
+			if (field.getName().startsWith(badPrefix)) {
+				return true; // skip field because it starts with a prefix that is on the bad prefix list
+			}
+		}
+		
 		return false;
 	}
 
 	public Set<String> getSkipPrefixes() {
-		return skipPrefixes;
+		return badVariablePrefixes;
 	}
 }

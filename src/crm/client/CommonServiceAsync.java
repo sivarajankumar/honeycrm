@@ -19,4 +19,6 @@ public interface CommonServiceAsync {
 	void getAllByNamePrefix(int dtoIndex, String prefix, int from, int to, AsyncCallback<ListQueryResult<? extends Viewable>> callback);
 	void getByName(int dtoIndex, String name, AsyncCallback<Viewable> callback);
 	void fulltextSearch(String query, int from, int to, AsyncCallback<ListQueryResult<? extends Viewable>> callback);
+	void mark(int dtoIndex, long id, boolean marked, AsyncCallback<Void> callback);
+	void getAllMarked(int dtoIndex, int from, int to, AsyncCallback<ListQueryResult<? extends Viewable>> callback);
 }

@@ -1,6 +1,5 @@
 package crm.client.view;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -11,10 +10,10 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
-import crm.client.CommonService;
 import crm.client.CommonServiceAsync;
 import crm.client.IANA;
 import crm.client.LoadIndicator;
+import crm.client.ServiceRegistry;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
 import crm.client.dto.ListQueryResult;
@@ -23,7 +22,7 @@ import crm.client.dto.Viewable;
 public class RelateWidget extends SuggestBox {
 	private long id;
 	private final Class<? extends AbstractDto> clazz;
-	private static final CommonServiceAsync commonService = GWT.create(CommonService.class);
+	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 
 	public RelateWidget(Class<? extends AbstractDto> clazz2, final long id) {
 		super(new MultiWordSuggestOracle());

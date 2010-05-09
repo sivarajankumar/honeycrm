@@ -2,13 +2,14 @@ package crm.client.view;
 
 import java.util.Date;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
@@ -16,10 +17,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-import crm.client.CommonService;
 import crm.client.CommonServiceAsync;
 import crm.client.IANA;
 import crm.client.LoadIndicator;
+import crm.client.ServiceRegistry;
 import crm.client.TabCenterView;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
@@ -29,7 +30,7 @@ abstract public class AbstractView extends Composite {
 	// private static final NumberFormat DATE_FORMAT = DateFo NumberFormat.getFormat(LocaleInfo.getCurrentLocale().getNumberConstants().currencyPattern());
 	private static final NumberFormat CURRENCY_FORMAT_RW = NumberFormat.getFormat("0.00", "EUR"); // TODO how to prefix euro sign? or other unicode characters?
 	private static final NumberFormat CURRENCY_FORMAT_RO = NumberFormat.getFormat("0.00"); // TODO how to prefix euro sign? or other unicode characters?
-	protected final CommonServiceAsync commonService = GWT.create(CommonService.class);
+	protected final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected final Class<? extends AbstractDto> clazz;
 	protected Viewable viewable;
 
@@ -46,8 +47,6 @@ abstract public class AbstractView extends Composite {
 	 * Initialize a viewable from the widgets (e.g., textboxes, dateboxes, relate fields) in a table.
 	 */
 	protected void setViewable(final int[][] fieldIds, final FlexTable table, final Viewable tmpViewable) {
-		// final int[][] fieldIds = tmpViewable.getFormFieldIds();
-
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final int id = fieldIds[y][x];
@@ -63,6 +62,8 @@ abstract public class AbstractView extends Composite {
 					value = ((RelateWidget) widgetValue).getId();
 				} else if (widgetValue instanceof CheckBox) {
 					value = ((CheckBox) widgetValue).getValue();
+				} else if (widgetValue instanceof RichTextArea) {
+					value = ((RichTextArea) widgetValue).getHTML();
 				} else {
 					assert false; // unexpected widget
 					value = null;
@@ -114,8 +115,12 @@ abstract public class AbstractView extends Composite {
 	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a special use case..
 	 */
 	protected Widget getWidgetByType(final Viewable tmpViewable, final int fieldId, final boolean readOnly) {
+		if (AbstractDto.INDEX_MARKED == fieldId) {
+			return new MarkWidget(clazz, tmpViewable);
+		}
+		
 		final Object value = tmpViewable.getFieldValue(fieldId);
-
+		
 		if (readOnly) {
 			// TODO display related entity instead of value.toString if type is RELATE
 			switch (tmpViewable.getFieldById(fieldId).getType()) {
@@ -150,10 +155,24 @@ abstract public class AbstractView extends Composite {
 					});
 					return link;
 				}
+			case BOOLEAN:
+				CheckBox widget7 = new CheckBox();
+				widget7.setEnabled(false);
+				widget7.setValue((Boolean) value);
+				return widget7;
 			case CURRENCY:
 				Label widget5 = new Label();
 				widget5.setText(CURRENCY_FORMAT_RO.format((Double) value));
 				return widget5;
+			case EMAIL:
+				if (value.toString().isEmpty()) {
+					return new Label();
+				} else {
+					// Display email as a mailto:a@b.com link to make sure the clients mail client will be opened.
+					return new Anchor(value.toString(), true, "mailto:" + value.toString());
+				}
+			case TEXT:
+				return new HTML((null == value) ? "" : value.toString());
 			default:
 				return new Label((null == value) ? "" : value.toString());
 			}
@@ -167,13 +186,14 @@ abstract public class AbstractView extends Composite {
 				DateBox widget2 = new DateBox();
 				widget2.setValue((Date) value);
 				return widget2;
+			case EMAIL:
 			case STRING:
 				TextBox widget3 = new TextBox();
 				widget3.setValue((String) value);
 				return widget3;
 			case TEXT:
 				RichTextArea widget4 = new RichTextArea();
-				widget4.setText((String) value);
+				widget4.setHTML((String) value);
 				return widget4;
 			case RELATE:
 				return new RelateWidget(DtoAccount.class, (Long) value);
@@ -210,5 +230,10 @@ abstract public class AbstractView extends Composite {
 				}
 			}
 		}
+	}
+	
+	protected void displayError(final Throwable caught) {
+		LoadIndicator.get().endLoading();
+		Window.alert(caught.getLocalizedMessage());
 	}
 }

@@ -2,18 +2,11 @@ package crm.server.domain;
 
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
-public class Account {
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	@PrimaryKey
-	private Key id;
+public class Account extends AbstractEntity {
 	@Persistent
 	private String name;
 	@Persistent
@@ -24,14 +17,6 @@ public class Account {
 	private double annualRevenue;
 
 	public Account() {
-	}
-
-	public Key getId() {
-		return id;
-	}
-
-	public void setId(Key id) {
-		this.id = id;
 	}
 
 	public String getName() {

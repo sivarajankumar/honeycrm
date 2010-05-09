@@ -7,6 +7,8 @@ public interface Viewable {
 	public long getId();
 	public void setFieldValue(final int index, final Object value);
 	public void setId(long id);
+	public boolean isMarked();
+	public void setMarked(boolean marked);
 	
 	public int[][] getFormFieldIds();
 	public Object getFieldValue(final int id);

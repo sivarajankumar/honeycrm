@@ -8,16 +8,14 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
-
 public class ListViewPaginationBar extends Composite {
-
 	private ListView listview;
 	private Button delete = new Button("-");
 	private Button first = new Button("<<");
 	private Button left = new Button("<");
 	private Button right = new Button(">");
 	private Button last = new Button(">>");
-	
+
 	public ListViewPaginationBar(final ListView listview, Label label) {
 		this.listview = listview;
 
@@ -27,12 +25,12 @@ public class ListViewPaginationBar extends Composite {
 				listview.deleteSelected();
 			}
 		});
-		
+
 		final HorizontalPanel underListPanel = new HorizontalPanel();
 		underListPanel.setStyleName("under_list_panel");
 		final HorizontalPanel paginationPanel = new HorizontalPanel();
 		paginationPanel.setStyleName("list_pagination");
-		
+
 		underListPanel.add(delete);
 		paginationPanel.add(first);
 		paginationPanel.add(left);
@@ -41,9 +39,9 @@ public class ListViewPaginationBar extends Composite {
 		paginationPanel.add(last);
 		underListPanel.add(paginationPanel);
 		underListPanel.add(new HTML("<div class='clear'></div>"));
-		
+
 		setupHandlers();
-		
+
 		initWidget(underListPanel);
 	}
 
@@ -54,7 +52,7 @@ public class ListViewPaginationBar extends Composite {
 				listview.showFirstPage();
 			}
 		});
-		
+
 		left.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -63,13 +61,13 @@ public class ListViewPaginationBar extends Composite {
 		});
 
 		right.addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				listview.showPageRight();
 			}
 		});
-		
+
 		last.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

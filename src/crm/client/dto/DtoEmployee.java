@@ -3,7 +3,6 @@ package crm.client.dto;
 import crm.client.dto.Field.Type;
 
 public class DtoEmployee extends AbstractDto {
-
 	private static final long serialVersionUID = -2906735286411254274L;
 	private String name;
 	private boolean active;
@@ -45,15 +44,14 @@ public class DtoEmployee extends AbstractDto {
 	}
 
 	@Override
-	public Object getFieldValue(final int id) {
-		switch (id) {
+	public Object getFieldValue(final int index) {
+		switch (index) {
 		case INDEX_NAME:
 			return name;
 		case INDEX_ACTIVE:
 			return active;
 		default:
-			assert false;
-			return null;
+			return super.getFieldValue(index);
 		}
 	}
 
@@ -87,7 +85,7 @@ public class DtoEmployee extends AbstractDto {
 			setName(String.valueOf(value));
 			break;
 		default:
-			assert false;
+			super.setFieldValue(index, value);
 		}
 	}
 
