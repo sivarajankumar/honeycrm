@@ -40,7 +40,7 @@ public class DtoIndicesTest extends TestCase {
 			fail();
 		}
 	}
-	
+
 	// Check if the getter and setter operating on the indices return / set the correct values.
 	private void setterGetterCheck(final Class dto, final Set<String> fieldNames) throws NoSuchFieldException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		for (final String name : fieldNames) {
@@ -65,7 +65,7 @@ public class DtoIndicesTest extends TestCase {
 				// set a new random value using the setFieldValue method and check whether both get methods return the same value that has just been set
 				final Object newValue = getRandomValueByType(field.getType());
 				setFieldValue.invoke(dtoInstance, indexFieldValue, newValue);
-				
+
 				if (!newValue.equals(getter.invoke(dtoInstance))) {
 					System.err.println("equality check failed for field " + name + " / " + indexField.getName());
 				}
@@ -127,7 +127,7 @@ public class DtoIndicesTest extends TestCase {
 			return null;
 		}
 	}
-	
+
 	private boolean skippedField(String string) {
 		for (final String str : skipFields) {
 			if (str.equals(string) || string.startsWith(str)) {

@@ -82,7 +82,7 @@ public class DtoContact extends AbstractDto {
 	public void setAccountID(long accountID) {
 		this.accountID = accountID;
 	}
-	
+
 	public boolean isEmailOptedOut() {
 		return emailOptedOut;
 	}
@@ -161,7 +161,7 @@ public class DtoContact extends AbstractDto {
 		final int[] row1 = new int[] { INDEX_NAME, INDEX_ACCOUNTID };
 		final int[] row2 = new int[] { INDEX_EMAIL, INDEX_EMAILOPTEDOUT };
 		final int[] row3 = new int[] { INDEX_PHONE, INDEX_MOBILE };
-		final int[] row4 = new int[] { INDEX_DONOTCALL, INDEX_DONOTCALLEXPLANATION }; 
+		final int[] row4 = new int[] { INDEX_DONOTCALL, INDEX_DONOTCALLEXPLANATION };
 		final int[] row5 = new int[] { INDEX_CITY };
 
 		return new int[][] { row1, row5, row2, row3, row4, row5 };
@@ -184,7 +184,7 @@ public class DtoContact extends AbstractDto {
 			return doNotCall;
 		case INDEX_DONOTCALLEXPLANATION:
 			return doNotCallExplanation;
-		case INDEX_EMAILOPTEDOUT: 
+		case INDEX_EMAILOPTEDOUT:
 			return emailOptedOut;
 		case INDEX_MOBILE:
 			return mobile;

@@ -17,7 +17,6 @@ import crm.client.ServiceRegistry;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
 import crm.client.dto.ListQueryResult;
-import crm.client.dto.Viewable;
 
 public class RelateWidget extends SuggestBox {
 	private long id;
@@ -38,8 +37,8 @@ public class RelateWidget extends SuggestBox {
 
 	private void setValueForId(final long id) {
 		LoadIndicator.get().startLoading();
-		
-		commonService.get(IANA.mashal(DtoAccount.class), id, new AsyncCallback<Viewable>() {
+
+		commonService.get(IANA.mashal(DtoAccount.class), id, new AsyncCallback<AbstractDto>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				LoadIndicator.get().endLoading();
@@ -47,13 +46,13 @@ public class RelateWidget extends SuggestBox {
 			}
 
 			@Override
-			public void onSuccess(Viewable result) {
+			public void onSuccess(AbstractDto result) {
 				LoadIndicator.get().endLoading();
 
 				if (null == result) {
 					setValue("Not found");
 				} else {
-					setValue(((DtoAccount)result).getName());
+					setValue(((DtoAccount) result).getName());
 				}
 			}
 		});
@@ -69,9 +68,9 @@ public class RelateWidget extends SuggestBox {
 				if (!query.isEmpty()) {
 					LoadIndicator.get().startLoading();
 
-					commonService.getAllByNamePrefix(IANA.mashal(DtoAccount.class), query, 0, 20, new AsyncCallback<ListQueryResult<? extends Viewable>>() {
+					commonService.getAllByNamePrefix(IANA.mashal(DtoAccount.class), query, 0, 20, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
 						@Override
-						public void onSuccess(ListQueryResult<? extends Viewable> result) {
+						public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
 							LoadIndicator.get().endLoading();
 
 							if (0 == result.getResults().length) {
@@ -80,8 +79,8 @@ public class RelateWidget extends SuggestBox {
 								final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
 								o.clear();
 
-								for (final Viewable a : result.getResults()) {
-									o.add(((DtoAccount)a).getName());
+								for (final AbstractDto a : result.getResults()) {
+									o.add(((DtoAccount) a).getName());
 								}
 							}
 						}
@@ -112,20 +111,20 @@ public class RelateWidget extends SuggestBox {
 				if (DtoAccount.class == clazz) {
 					final String selected = event.getSelectedItem().getReplacementString();
 
-					commonService.getByName(IANA.mashal(clazz), selected, new AsyncCallback<Viewable>() {
+					commonService.getByName(IANA.mashal(clazz), selected, new AsyncCallback<AbstractDto>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							Window.alert("Could not get id of selected item = " + selected);
 						}
 
 						@Override
-						public void onSuccess(Viewable result) {
+						public void onSuccess(AbstractDto result) {
 							if (null == result) {
 								// the related entity could not be found or the search returned more than one result.
 								// TODO what should be done in this case?
 							} else {
 								id = result.getId();
-							}							
+							}
 						}
 					});
 				}

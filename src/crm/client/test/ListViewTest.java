@@ -12,7 +12,7 @@ public class ListViewTest extends AbstractClientTest {
 		Timer loadTimer = new Timer() {
 			@Override
 			public void run() {
-				assert(0 == lv.currentPage());
+				assert (0 == lv.currentPage());
 				finishTest();
 			}
 		};

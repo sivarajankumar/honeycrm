@@ -9,10 +9,10 @@ import java.util.Set;
 
 import crm.client.dto.Field.Type;
 
-public abstract class AbstractDto implements Serializable, Viewable {
+public abstract class AbstractDto implements Serializable {
 	private static final long serialVersionUID = -656461822356703122L;
 	// Instances of all existing Dto classes
-	private static final Map<Class<? extends Viewable>, AbstractDto> map = new HashMap<Class<? extends Viewable>, AbstractDto>();
+	private static final Map<Class<? extends AbstractDto>, AbstractDto> map = new HashMap<Class<? extends AbstractDto>, AbstractDto>();
 	protected long id;
 	protected long views;
 	protected boolean marked;
@@ -40,7 +40,6 @@ public abstract class AbstractDto implements Serializable, Viewable {
 		// TODO make it possible to show an empty label without destroying the css
 	}
 
-	@Override
 	public void setFieldValue(int index, Object value) {
 		switch (index) {
 		case INDEX_VIEWS:
@@ -60,7 +59,6 @@ public abstract class AbstractDto implements Serializable, Viewable {
 		}
 	}
 
-	@Override
 	public Object getFieldValue(final int index) {
 		switch (index) {
 		case INDEX_VIEWS:
@@ -76,7 +74,6 @@ public abstract class AbstractDto implements Serializable, Viewable {
 		}
 	}
 
-	@Override
 	public long getId() {
 		return id;
 	}
@@ -125,13 +122,13 @@ public abstract class AbstractDto implements Serializable, Viewable {
 		this.fields = fields;
 	}
 
-	public static Viewable getViewable(final Class<? extends Viewable> clazz) {
+	public static AbstractDto getViewable(final Class<? extends AbstractDto> clazz) {
 		assert map.containsKey(clazz);
 		return map.get(clazz);
 	}
 
-	public static Viewable getViewableForHistoryToken(final String historyToken) {
-		for (final Class<? extends Viewable> clazz : map.keySet()) {
+	public static AbstractDto getViewableForHistoryToken(final String historyToken) {
+		for (final Class<? extends AbstractDto> clazz : map.keySet()) {
 			if (historyToken.equals(map.get(clazz).getHistoryToken())) {
 				return map.get(clazz);
 			}
@@ -140,7 +137,6 @@ public abstract class AbstractDto implements Serializable, Viewable {
 		return null;
 	}
 
-	@Override
 	public Field getFieldById(final int id) {
 		for (final Field field : fields) {
 			if (id == field.getId()) {
@@ -153,4 +149,14 @@ public abstract class AbstractDto implements Serializable, Viewable {
 
 		return null;
 	}
+
+	abstract public int[][] getFormFieldIds();
+
+	abstract public String getHistoryToken();
+
+	abstract public int[] getListViewColumnIds();
+
+	abstract public int[][] getSearchFields();
+
+	abstract public String getTitle();
 }

@@ -16,7 +16,6 @@ import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
 import crm.client.dto.DtoContact;
 import crm.client.dto.DtoEmployee;
-import crm.client.dto.Viewable;
 import crm.server.domain.Account;
 import crm.server.domain.Contact;
 import crm.server.domain.Employee;
@@ -27,7 +26,7 @@ import crm.server.domain.Employee;
 abstract public class AbstractCommonService extends RemoteServiceServlet {
 	private static final long serialVersionUID = -2405965558198509695L;
 	protected static final PersistenceManager m = PMF.get().getPersistenceManager();
-	protected static final Map<Class<? extends Viewable>, Class> dtoToDomainClass = new HashMap<Class<? extends Viewable>, Class>();
+	protected static final Map<Class<? extends AbstractDto>, Class> dtoToDomainClass = new HashMap<Class<? extends AbstractDto>, Class>();
 	protected static final CopyMachine copy = new CopyMachine();
 
 	static {
@@ -40,34 +39,34 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	protected Class<? extends AbstractDto> getDtoClass(final int dtoIndex) {
 		return IANA.unmarshal(dtoIndex);
 	}
-	
+
 	protected Class getDomainClass(final int dtoIndex) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
 		assert dtoToDomainClass.containsKey(dtoClass);
 		return dtoToDomainClass.get(dtoClass);
 	}
-	
+
 	protected Object getDomainObject(final int dtoIndex, final long id) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "id == " + id);
 		final Collection collection = (Collection) query.execute();
-		
+
 		if (1 == collection.size()) {
 			return collection.iterator().next();
 		} else {
 			return null;
 		}
 	}
-	
+
 	protected AbstractDto[] getArrayFromQueryResult(final int dtoIndex, final Collection collection) {
 		if (collection.isEmpty()) {
 			return new AbstractDto[0];
 		} else {
-			final List<Viewable> list = new LinkedList<Viewable>();
-			
+			final List<AbstractDto> list = new LinkedList<AbstractDto>();
+
 			for (Object item : collection) {
-				list.add((Viewable) copy.copy(item, getDtoClass(dtoIndex)));
+				list.add((AbstractDto) copy.copy(item, getDtoClass(dtoIndex)));
 			}
-			
+
 			return list.toArray(new AbstractDto[0]);
 		}
 	}

@@ -127,7 +127,7 @@ public class ReflectionHelper {
 		final String rest = field.getName().substring(1);
 
 		final boolean isBooleanField = (field.getType() == boolean.class || field.getType() == Boolean.class);
-		
+
 		if ("get".equals(prefix) && isBooleanField) {
 			// boolean fields are accessed with is<Variable Name> getters (e.g. isActive()).
 			return "is" + firstLetter.toUpperCase() + rest;
@@ -135,7 +135,7 @@ public class ReflectionHelper {
 			return prefix + firstLetter.toUpperCase() + rest;
 		}
 	}
-	
+
 	/**
 	 * Return all fields of the dto class that are from the original domain object, i.e. all accessible properties except automatically added or those that are only necessary for organizational purposes.
 	 */
@@ -144,27 +144,26 @@ public class ReflectionHelper {
 		badFieldNames.add("serialVersionUID");
 		badFieldNames.add("INDEX_");
 		badFieldNames.add("$");
-		
+
 		final List<Field> dtoFields = new LinkedList<Field>();
-		for (final Field field: dtoClass.getDeclaredFields()) {
+		for (final Field field : dtoClass.getDeclaredFields()) {
 			if (!badFieldNames.contains(field.getName()) && !containsPrefix(badFieldNames, field.getName())) {
 				dtoFields.add(field);
 			}
 		}
-		
+
 		return dtoFields.toArray(new Field[0]);
 	}
-	
+
 	private static boolean containsPrefix(final Set<String> set, final String str) {
-		for (final String prefix: set) {
+		for (final String prefix : set) {
 			if (str.startsWith(prefix)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	
+
 	/**
 	 * Returns fields of classSrc and inherited fields.
 	 */

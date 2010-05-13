@@ -19,7 +19,7 @@ public class CopyMachine {
 		badVariablePrefixes.add("$");
 		badVariablePrefixes.add("jdo");
 		badVariablePrefixes.add("INDEX_");
-		
+
 		badVariableNames.add("serialVersionUID");
 	}
 
@@ -126,7 +126,7 @@ public class CopyMachine {
 				filteredFields.add(allFields[i]);
 			}
 		}
-		
+
 		return filteredFields.toArray(new Field[0]);
 	}
 
@@ -137,7 +137,7 @@ public class CopyMachine {
 		if (Modifier.STATIC == (field.getModifiers() & Modifier.STATIC)) {
 			return true; // skip static fields
 		}
-		
+
 		if (badVariableNames.contains(field.getName())) {
 			return true; // skip field because its name is on the bad variables name
 		}
@@ -147,7 +147,7 @@ public class CopyMachine {
 				return true; // skip field because it starts with a prefix that is on the bad prefix list
 			}
 		}
-		
+
 		return false;
 	}
 

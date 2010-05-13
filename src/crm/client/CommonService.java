@@ -5,29 +5,38 @@ import java.util.Set;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
-import crm.client.dto.Viewable;
 
 @RemoteServiceRelativePath("common")
 public interface CommonService extends RemoteService {
 	// create
-	public void create(int dtoIndex, Viewable viewable);
+	public void create(int dtoIndex, AbstractDto viewable);
 
 	// read
-	public Viewable get(int dtoIndex, long id);
-	public Viewable getByName(int dtoIndex, String name);
-	public ListQueryResult<? extends Viewable> getAll(final int dtoIndex, int from, int to);
-	public ListQueryResult<? extends Viewable> getAllMarked(final int dtoIndex, int from, int to);
-	public ListQueryResult<? extends Viewable> getAllByNamePrefix(final int dtoIndex, String prefix, int from, int to);
-	public ListQueryResult<? extends Viewable> search(int dtoIndex, Viewable searchContact, int from, int to);
-	public ListQueryResult<? extends Viewable> fulltextSearch(String query, int from, int to);
-	
+	public AbstractDto get(int dtoIndex, long id);
+
+	public AbstractDto getByName(int dtoIndex, String name);
+
+	public ListQueryResult<? extends AbstractDto> getAll(final int dtoIndex, int from, int to);
+
+	public ListQueryResult<? extends AbstractDto> getAllMarked(final int dtoIndex, int from, int to);
+
+	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(final int dtoIndex, String prefix, int from, int to);
+
+	public ListQueryResult<? extends AbstractDto> search(int dtoIndex, AbstractDto searchContact, int from, int to);
+
+	public ListQueryResult<? extends AbstractDto> fulltextSearch(String query, int from, int to);
+
 	// update
-	public void update(int dtoIndex, Viewable account, long id);
+	public void update(int dtoIndex, AbstractDto account, long id);
+
 	public void mark(int dtoIndex, long id, boolean marked);
 
 	// delete
 	public void delete(int dtoIndex, long id);
+
 	public void deleteAll(int dtoIndex, Set<Long> ids);
+
 	public void addDemo(int dtoIndex);
 }

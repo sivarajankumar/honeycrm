@@ -10,7 +10,7 @@ public class Field implements IsSerializable, Serializable {
 	private int id;
 	private Type type;
 	private String label;
-	
+
 	public Field() {
 	}
 
@@ -19,19 +19,19 @@ public class Field implements IsSerializable, Serializable {
 		this.type = type;
 		this.label = label;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public Type getType() {
 		return type;
 	}
-	
+
 	public String getLabel() {
 		return label;
 	}
-	
+
 	public enum Type {
 		STRING, TEXT, DATE, BOOLEAN, RELATE, CURRENCY, INTEGER, EMAIL
 	}

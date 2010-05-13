@@ -21,7 +21,6 @@ import crm.client.LoadIndicator;
 import crm.client.TabCenterView;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
-import crm.client.dto.Viewable;
 
 // TODO track which items are already in the cache
 // TODO update cached items when forced to do so (everytime user opens a page the first time) AND in the background (polling)
@@ -30,7 +29,7 @@ public class ListView extends AbstractView {
 	/**
 	 * Map pages to listviewable arrays.
 	 */
-	protected Map<Integer, Viewable[]> cache = new HashMap<Integer, Viewable[]>();
+	protected Map<Integer, AbstractDto[]> cache = new HashMap<Integer, AbstractDto[]>();
 	protected static final int MAX_ENTRIES = 10;
 	private static final int HEADER_ROWS = 1;
 	/**
@@ -99,7 +98,7 @@ public class ListView extends AbstractView {
 		updatePageCounterLabel();
 	}
 
-	private void initializeRow(final int row, final Viewable listViewable) {
+	private void initializeRow(final int row, final AbstractDto listViewable) {
 		final ClickHandler showDetailViewHandler = new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -146,7 +145,7 @@ public class ListView extends AbstractView {
 	protected void showPage(final int page) {
 		if (1 <= page && page <= numberOfPages) {
 			if (cache.containsKey(page)) {
-				final Viewable[] values = cache.get(page);
+				final AbstractDto[] values = cache.get(page);
 
 				for (int i = 0; i < values.length; i++) {
 					initializeRow(i, values[i]);
@@ -184,14 +183,14 @@ public class ListView extends AbstractView {
 
 		LoadIndicator.get().startLoading();
 
-		commonService.getAll(IANA.mashal(clazz), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends Viewable>>() {
+		commonService.getAll(IANA.mashal(clazz), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(ListQueryResult<? extends Viewable> result) {
+			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
 				LoadIndicator.get().endLoading();
 				if (-1 == page) {
 					currentPage = 1;
