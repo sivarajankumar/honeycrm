@@ -94,6 +94,7 @@ public class TabModuleView extends AbstractView {
 
 	public void saveCompleted() {
 		listView.refresh();
+		detailView.refresh();
 		createView.cancel();
 	}
 

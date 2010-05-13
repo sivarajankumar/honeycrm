@@ -56,22 +56,24 @@ public class CreateView extends AbstractView {
 			for (int x = 0; x < fields[y].length; x++) {
 				final int id = fields[y][x];
 
-				final Widget widgetLabel = new Label(viewable.getFieldById(id).getLabel());
-				final Widget widgetEdit = getWidgetByType(viewable, id, false);
-
-				if (widgetEdit instanceof FocusWidget) {
-					((FocusWidget) widgetEdit).addKeyDownHandler(new KeyDownHandler() {
-						@Override
-						public void onKeyDown(KeyDownEvent event) {
-							if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
-								create();
+				if (!AbstractDto.isInternalReadOnlyField(id)) {
+					final Widget widgetLabel = new Label(viewable.getFieldById(id).getLabel());
+					final Widget widgetEdit = getWidgetByType(viewable, id, false);
+	
+					if (widgetEdit instanceof FocusWidget) {
+						((FocusWidget) widgetEdit).addKeyDownHandler(new KeyDownHandler() {
+							@Override
+							public void onKeyDown(KeyDownEvent event) {
+								if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
+									create();
+								}
 							}
-						}
-					});
+						});
+					}
+	
+					table.setWidget(y, x * 2 + 0, widgetLabel);
+					table.setWidget(y, x * 2 + 1, widgetEdit);
 				}
-
-				table.setWidget(y, x * 2 + 0, widgetLabel);
-				table.setWidget(y, x * 2 + 1, widgetEdit);
 			}
 		}
 

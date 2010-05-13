@@ -122,7 +122,7 @@ public class DtoContact extends AbstractDto {
 
 	// TODO this is absolute crap because this way the Dto class has to know the ui code
 	@Override
-	public void setFieldValue(final int index, final Object value) {
+	protected void internalSetFieldValue(final int index, final Object value) {
 		switch (index) {
 		case INDEX_NAME:
 			setName(value.toString());
@@ -152,23 +152,23 @@ public class DtoContact extends AbstractDto {
 			setMobile(value.toString());
 			break;
 		default:
-			super.setFieldValue(index, value);
+			throw new RuntimeException("Unexpected Index: " + index);
 		}
 	}
 
 	@Override
-	public int[][] getFormFieldIds() {
+	protected int[][] interalGetFormFieldIds() {
 		final int[] row1 = new int[] { INDEX_NAME, INDEX_ACCOUNTID };
 		final int[] row2 = new int[] { INDEX_EMAIL, INDEX_EMAILOPTEDOUT };
 		final int[] row3 = new int[] { INDEX_PHONE, INDEX_MOBILE };
-		final int[] row4 = new int[] { INDEX_DONOTCALL, INDEX_DONOTCALLEXPLANATION };
-		final int[] row5 = new int[] { INDEX_CITY };
+		final int[] row4 = new int[] { INDEX_CITY };
+		final int[] row5 = new int[] { INDEX_DONOTCALL, INDEX_DONOTCALLEXPLANATION };
 
-		return new int[][] { row1, row5, row2, row3, row4, row5 };
+		return new int[][] { row1, row2, row3, row4, row5 };
 	}
 
 	@Override
-	public Object getFieldValue(int index) {
+	protected Object internalGetFieldValue(int index) {
 		switch (index) {
 		case INDEX_NAME:
 			return name;
@@ -189,7 +189,7 @@ public class DtoContact extends AbstractDto {
 		case INDEX_MOBILE:
 			return mobile;
 		default:
-			return super.getFieldValue(index);
+			throw new RuntimeException("Unexpected Index: " + index);
 		}
 	}
 

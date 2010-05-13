@@ -48,27 +48,32 @@ abstract public class AbstractView extends Composite {
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final int id = fieldIds[y][x];
-				// TODO this position y, 2*x+1 depends on the current layout of the form..
-				final Widget widgetValue = table.getWidget(y, 2 * x + 1);
-				final Object value;
 
-				if (widgetValue instanceof TextBox) {
-					value = ((TextBox) widgetValue).getText();
-				} else if (widgetValue instanceof DateBox) {
-					value = ((DateBox) widgetValue).getValue();
-				} else if (widgetValue instanceof RelateWidget) {
-					value = ((RelateWidget) widgetValue).getId();
-				} else if (widgetValue instanceof CheckBox) {
-					value = ((CheckBox) widgetValue).getValue();
-				} else if (widgetValue instanceof TextArea) {
-					value = ((TextArea) widgetValue).getText();
-				} else {
-					assert false; // unexpected widget
-					Window.alert("Unexpected Widget: " + widgetValue.getClass()); // inform the user
-					value = null;
+				if (!AbstractDto.isInternalReadOnlyField(id)) {
+					// TODO this position y, 2*x+1 depends on the current layout of the form..
+					final Widget widgetValue = table.getWidget(y, 2 * x + 1);
+					final Object value;
+
+					if (widgetValue instanceof TextBox) {
+						value = ((TextBox) widgetValue).getText();
+					} else if (widgetValue instanceof DateBox) {
+						value = ((DateBox) widgetValue).getValue();
+					} else if (widgetValue instanceof RelateWidget) {
+						value = ((RelateWidget) widgetValue).getId();
+					} else if (widgetValue instanceof CheckBox) {
+						value = ((CheckBox) widgetValue).getValue();
+					} else if (widgetValue instanceof TextArea) {
+						value = ((TextArea) widgetValue).getText();
+					// TODO also enable this for MarkWidget
+					// } else if (widgetValue instanceof MarkWidget) {
+					// value = widgetValue.
+					} else {
+						displayError(new RuntimeException("Unexpected Widget: " + widgetValue.getClass())); // unexpected widget
+						throw new RuntimeException("Unexpected Widget Type: " + widgetValue.getClass().toString());
+					}
+
+					tmpViewable.setFieldValue(id, value);
 				}
-
-				tmpViewable.setFieldValue(id, value);
 			}
 		}
 	}
@@ -185,6 +190,10 @@ abstract public class AbstractView extends Composite {
 				DateBox widget2 = new DateBox();
 				widget2.setValue((Date) value);
 				return widget2;
+			case INTEGER:
+				TextBox widget6 = new TextBox();
+				widget6.setText(Long.toString((Long) value));
+				return widget6;
 			case EMAIL:
 			case STRING:
 				TextBox widget3 = new TextBox();
@@ -202,8 +211,7 @@ abstract public class AbstractView extends Composite {
 				widget5.setText(CURRENCY_FORMAT_RW.format((Double) value));
 				return widget5;
 			default:
-				assert false; // should never reach this point
-				return null;
+				throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString()); // should never reach this point
 			}
 		}
 	}
@@ -234,6 +242,7 @@ abstract public class AbstractView extends Composite {
 
 	protected void displayError(final Throwable caught) {
 		LoadIndicator.get().endLoading();
-		Window.alert(caught.getLocalizedMessage());
+		Window.alert(caught.getClass().toString());
+		// throw new RuntimeException(caught.getLocalizedMessage());
 	}
 }

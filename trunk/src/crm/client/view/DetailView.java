@@ -50,6 +50,13 @@ public class DetailView extends AbstractView {
 	private void updateTitle(String title) {
 		label.setText(PREFIX + title);
 	}
+	
+	/**
+	 * Forces reload of all fields of the domain object. This is neccessary for updating fields that are set on server side and not visible while editing.
+	 */
+	public void refresh() {
+		refresh(currentId);
+	}
 
 	public void refresh(final long id) {
 		updateTitle(label.getTitle());
@@ -86,6 +93,9 @@ public class DetailView extends AbstractView {
 		this.currentId = tmpViewable.getId();
 		this.viewable = tmpViewable;
 
+		// remove previous cell contents
+		table.clear();
+		
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final int id = fieldIds[y][x];
@@ -107,8 +117,11 @@ public class DetailView extends AbstractView {
 					}
 				}
 
-				table.setWidget(y, 2 * x + 0, widgetLabel);
-				table.setWidget(y, 2 * x + 1, widgetValue);
+				if (readOnly || (!readOnly && !AbstractDto.isInternalReadOnlyField(id))) {
+					// display the widget because we are in readonly mode or we are not in ro mode but it is no internal field
+					table.setWidget(y, 2 * x + 0, widgetLabel);
+					table.setWidget(y, 2 * x + 1, widgetValue);
+				}
 			}
 		}
 	}
@@ -153,8 +166,7 @@ public class DetailView extends AbstractView {
 	}
 
 	public void saveChanges() {
-		save(table, currentId);
-		refreshFields(viewable);
+		save(table, currentId); // when save has been completed the environment may request a refresh of the currently displayed fields so we do not have to do this.
 	}
 
 	/**
