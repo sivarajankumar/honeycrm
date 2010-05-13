@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -62,10 +63,11 @@ abstract public class AbstractView extends Composite {
 					value = ((RelateWidget) widgetValue).getId();
 				} else if (widgetValue instanceof CheckBox) {
 					value = ((CheckBox) widgetValue).getValue();
-				} else if (widgetValue instanceof RichTextArea) {
-					value = ((RichTextArea) widgetValue).getHTML();
+				} else if (widgetValue instanceof TextArea) {
+					value = ((TextArea) widgetValue).getText();
 				} else {
 					assert false; // unexpected widget
+					Window.alert("Unexpected Widget: " + widgetValue.getClass()); // inform the user
 					value = null;
 				}
 
@@ -172,7 +174,7 @@ abstract public class AbstractView extends Composite {
 					return new Anchor(value.toString(), true, "mailto:" + value.toString());
 				}
 			case TEXT:
-				return new HTML((null == value) ? "" : value.toString());
+				return new Label((null == value) ? "" : value.toString());
 			default:
 				return new Label((null == value) ? "" : value.toString());
 			}
@@ -192,8 +194,9 @@ abstract public class AbstractView extends Composite {
 				widget3.setValue((String) value);
 				return widget3;
 			case TEXT:
-				RichTextArea widget4 = new RichTextArea();
-				widget4.setHTML((String) value);
+				// Display normal TextArea instead of more advanced RichTextArea until a nice RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
+				TextArea widget4 = new TextArea();
+				widget4.setText((String) value);
 				return widget4;
 			case RELATE:
 				return new RelateWidget(DtoAccount.class, (Long) value);
