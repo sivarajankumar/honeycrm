@@ -1,10 +1,12 @@
 package crm.server;
 
+import java.util.Date;
 import java.util.Set;
 
 import crm.client.CommonService;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
+import crm.server.domain.AbstractEntity;
 
 public class CommonServiceImpl extends AbstractCommonService implements CommonService {
 	private static final long serialVersionUID = -7312945910083902842L;
@@ -51,8 +53,10 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	// TODO does not update the relate field anymore
 	@Override
 	public void update(int dtoIndex, AbstractDto dto, long id) {
-		final Object existingObject = getDomainObject(dtoIndex, id);
+		dto.setLastUpdatedAt(new Date(System.currentTimeMillis()));
 
+		final AbstractEntity existingObject = (AbstractEntity) getDomainObject(dtoIndex, id);
+		
 		if (null != existingObject) {
 			m.makePersistent(copy.getUpdatedInstance(dto, existingObject));
 		}

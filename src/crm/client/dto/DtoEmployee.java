@@ -44,19 +44,19 @@ public class DtoEmployee extends AbstractDto {
 	}
 
 	@Override
-	public Object getFieldValue(final int index) {
+	protected Object internalGetFieldValue(final int index) {
 		switch (index) {
 		case INDEX_NAME:
 			return name;
 		case INDEX_ACTIVE:
 			return active;
 		default:
-			return super.getFieldValue(index);
+			throw new RuntimeException("Unexpected Index: " + index);
 		}
 	}
 
 	@Override
-	public int[][] getFormFieldIds() {
+	public int[][] interalGetFormFieldIds() {
 		return new int[][] { new int[] { INDEX_NAME }, new int[] { INDEX_ACTIVE } };
 	}
 
@@ -76,7 +76,7 @@ public class DtoEmployee extends AbstractDto {
 	}
 
 	@Override
-	public void setFieldValue(int index, Object value) {
+	protected void internalSetFieldValue(int index, Object value) {
 		switch (index) {
 		case INDEX_ACTIVE:
 			setActive((Boolean) value);
@@ -85,7 +85,7 @@ public class DtoEmployee extends AbstractDto {
 			setName(String.valueOf(value));
 			break;
 		default:
-			super.setFieldValue(index, value);
+			throw new RuntimeException("Unexpected Index: " + index);
 		}
 	}
 

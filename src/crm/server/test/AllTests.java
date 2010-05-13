@@ -8,6 +8,7 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for crm.server.test");
 		// $JUnit-BEGIN$
+		suite.addTestSuite(ArrayHelperTest.class);
 		suite.addTestSuite(DemoDataProviderTest.class);
 		suite.addTestSuite(ObjectCopyTest.class);
 		suite.addTestSuite(DtoSyncTest.class);

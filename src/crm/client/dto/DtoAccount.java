@@ -60,7 +60,7 @@ public class DtoAccount extends AbstractDto {
 	}
 
 	@Override
-	public void setFieldValue(final int index, final Object value) {
+	protected void internalSetFieldValue(final int index, final Object value) {
 		switch (index) {
 		case INDEX_NAME:
 			setName(value.toString());
@@ -77,12 +77,12 @@ public class DtoAccount extends AbstractDto {
 			setAnnualRevenue(Double.valueOf(value.toString()));
 			break;
 		default:
-			super.setFieldValue(index, value);
+			assert false;
 		}
 	}
 
 	@Override
-	public int[][] getFormFieldIds() {
+	protected int[][] interalGetFormFieldIds() {
 		final int[] row1 = new int[] { INDEX_NAME };
 		final int[] row2 = new int[] { INDEX_ADDRESS };
 		final int[] row3 = new int[] { INDEX_DATE };
@@ -92,7 +92,7 @@ public class DtoAccount extends AbstractDto {
 	}
 
 	@Override
-	public Object getFieldValue(final int index) {
+	protected Object internalGetFieldValue(final int index) {
 		switch (index) {
 		case INDEX_DATE:
 			return date;
@@ -103,7 +103,7 @@ public class DtoAccount extends AbstractDto {
 		case INDEX_ANNUALREVENUE:
 			return annualRevenue;
 		default:
-			return super.getFieldValue(index);
+			throw new RuntimeException("Unexpected Index " + index);
 		}
 	}
 

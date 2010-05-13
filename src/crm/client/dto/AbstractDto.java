@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import crm.client.ArrayHelper;
 import crm.client.dto.Field.Type;
 
 public abstract class AbstractDto implements Serializable {
@@ -36,26 +37,21 @@ public abstract class AbstractDto implements Serializable {
 		fields.add(new Field(INDEX_VIEWS, Type.INTEGER, "Views"));
 		fields.add(new Field(INDEX_CREATEDAT, Type.DATE, "Created at"));
 		fields.add(new Field(INDEX_LASTUPDATEDAT, Type.DATE, "Last updated at"));
-		fields.add(new Field(INDEX_MARKED, Type.BOOLEAN, ""));
+		fields.add(new Field(INDEX_MARKED, Type.BOOLEAN, "Marked"));
 		// TODO make it possible to show an empty label without destroying the css
 	}
 
 	public void setFieldValue(int index, Object value) {
 		switch (index) {
 		case INDEX_VIEWS:
-			setViews((Long) value);
-			break;
 		case INDEX_CREATEDAT:
-			setCreatedAt((Date) value);
-			break;
 		case INDEX_LASTUPDATEDAT:
-			setLastUpdatedAt((Date) value);
-			break;
+			throw new RuntimeException("Settings of builtin fields is not allowed by client. Only server is allowed to set those fields");
 		case INDEX_MARKED:
 			setMarked((Boolean) value);
 			break;
 		default:
-			throw new RuntimeException("Unexpected field index value " + index);
+			internalSetFieldValue(index, value);
 		}
 	}
 
@@ -70,7 +66,22 @@ public abstract class AbstractDto implements Serializable {
 		case INDEX_MARKED:
 			return marked;
 		default:
-			throw new RuntimeException("Unexpected field index value " + index);
+			return internalGetFieldValue(index);
+		}
+	}
+
+	/**
+	 * Returns true if field with given index is an internal field. False otherwise. The internal fields are visible to the client but only the server is allowed to update those fields, i.e. the edit-/create views should not display widgets for changing their values.
+	 */
+	public static boolean isInternalReadOnlyField(final int index) {
+		switch (index) {
+		case INDEX_CREATEDAT:
+		case INDEX_LASTUPDATEDAT:
+		case INDEX_VIEWS:
+		case INDEX_MARKED:
+			return true;
+		default:
+			return false;
 		}
 	}
 
@@ -150,7 +161,15 @@ public abstract class AbstractDto implements Serializable {
 		return null;
 	}
 
-	abstract public int[][] getFormFieldIds();
+	public int[][] getFormFieldIds() {
+		return ArrayHelper.merge(interalGetFormFieldIds(), new int[][] { new int[] { INDEX_CREATEDAT, INDEX_LASTUPDATEDAT }, new int[] { INDEX_VIEWS, INDEX_MARKED } });
+	}
+
+	abstract protected void internalSetFieldValue(final int index, final Object value);
+
+	abstract protected Object internalGetFieldValue(final int index);
+
+	abstract protected int[][] interalGetFormFieldIds();
 
 	abstract public String getHistoryToken();
 

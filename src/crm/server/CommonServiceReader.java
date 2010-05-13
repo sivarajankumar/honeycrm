@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.jdo.Query;
 
+import crm.client.ArrayHelper;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 
@@ -76,7 +77,7 @@ public class CommonServiceReader extends AbstractCommonService {
 				}
 			}
 
-			query.setFilter(join(queries, " " + operator.toString() + " "));
+			query.setFilter(ArrayHelper.join(queries, " " + operator.toString() + " "));
 			array = getArrayFromQueryResult(dtoIndex, (Collection) query.execute());
 		} catch (Exception e) {
 			// something went wrong, print stacktrace and return an empty list to the client.
@@ -86,21 +87,7 @@ public class CommonServiceReader extends AbstractCommonService {
 
 		return new ListQueryResult<AbstractDto>(array, array.length);
 	}
-
-	private String join(final List<String> list, final String glue) {
-		String query = "";
-
-		for (int i = 0; i < list.size(); i++) {
-			query += list.get(i);
-
-			if (i < list.size() - 1) {
-				query += glue;
-			}
-		}
-
-		return query;
-	}
-
+	
 	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(int dtoIndex, String prefix, int from, int to) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)"); // TODO use toLowerCase in query as well to ignore case
