@@ -18,12 +18,12 @@ public class CreateView extends AbstractView {
 	private final FlexTable table;
 	private final CreateViewButtonBar buttonBar;
 	private final Button createBtn = new Button("Create");
-	
+
 	public CreateView(final Class<? extends AbstractDto> clazz) {
 		super(clazz);
 
 		buttonBar = new CreateViewButtonBar(this);
-		
+
 		createBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -40,7 +40,7 @@ public class CreateView extends AbstractView {
 		panel.add(buttonBar);
 
 		cancel();
-		
+
 		initWidget(panel);
 	}
 

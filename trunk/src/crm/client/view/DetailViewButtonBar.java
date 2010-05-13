@@ -11,12 +11,12 @@ public class DetailViewButtonBar extends Composite {
 	private Button cancelBtn = new Button("Cancel");
 	private Button editBtn = new Button("Edit");
 	private Button deleteBtn = new Button("Delete");
-	
+
 	private final DetailView detailview;
 
 	public DetailViewButtonBar(final DetailView detailview) {
 		this.detailview = detailview;
-		
+
 		final HorizontalPanel panel = new HorizontalPanel();
 		panel.add(saveBtn);
 		panel.add(cancelBtn);

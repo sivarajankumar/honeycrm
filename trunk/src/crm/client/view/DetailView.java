@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Widget;
 import crm.client.IANA;
 import crm.client.LoadIndicator;
 import crm.client.dto.AbstractDto;
-import crm.client.dto.Viewable;
 
 public class DetailView extends AbstractView {
 	private static final String PREFIX = "Detail View";
@@ -56,14 +55,14 @@ public class DetailView extends AbstractView {
 		updateTitle(label.getTitle());
 		LoadIndicator.get().startLoading();
 
-		commonService.get(IANA.mashal(clazz), id, new AsyncCallback<Viewable>() {
+		commonService.get(IANA.mashal(clazz), id, new AsyncCallback<AbstractDto>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(Viewable result) {
+			public void onSuccess(AbstractDto result) {
 				if (null == result) {
 					Window.alert("Could not find account with id " + id);
 				} else {
@@ -78,11 +77,11 @@ public class DetailView extends AbstractView {
 	}
 
 	// TODO only update the field contents instead of removing all fields an adding them
-	private void refreshFields(final Viewable viewable) {
+	private void refreshFields(final AbstractDto viewable) {
 		setFields(viewable, true);
 	}
 
-	private void setFields(final Viewable tmpViewable, final boolean readOnly) {
+	private void setFields(final AbstractDto tmpViewable, final boolean readOnly) {
 		final int[][] fieldIds = tmpViewable.getFormFieldIds();
 		this.currentId = tmpViewable.getId();
 		this.viewable = tmpViewable;

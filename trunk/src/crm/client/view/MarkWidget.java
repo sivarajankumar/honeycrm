@@ -9,20 +9,19 @@ import crm.client.IANA;
 import crm.client.LoadIndicator;
 import crm.client.TabCenterView;
 import crm.client.dto.AbstractDto;
-import crm.client.dto.Viewable;
 
 /**
  * Checkbox that is responsible for marking special dtos.
  */
 public class MarkWidget extends AbstractView {
-	public MarkWidget(final Class<? extends AbstractDto> clazz, final Viewable viewable) {
+	public MarkWidget(final Class<? extends AbstractDto> clazz, final AbstractDto viewable) {
 		super(clazz);
 
 		final long id = viewable.getId();
 		final CheckBox markBox = new CheckBox();
-		
+
 		markBox.setValue((Boolean) viewable.getFieldValue(AbstractDto.INDEX_MARKED));
-		
+
 		markBox.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

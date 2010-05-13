@@ -9,10 +9,8 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -25,7 +23,6 @@ import crm.client.ServiceRegistry;
 import crm.client.TabCenterView;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
-import crm.client.dto.Viewable;
 
 abstract public class AbstractView extends Composite {
 	// private static final NumberFormat DATE_FORMAT = DateFo NumberFormat.getFormat(LocaleInfo.getCurrentLocale().getNumberConstants().currencyPattern());
@@ -33,7 +30,7 @@ abstract public class AbstractView extends Composite {
 	private static final NumberFormat CURRENCY_FORMAT_RO = NumberFormat.getFormat("0.00"); // TODO how to prefix euro sign? or other unicode characters?
 	protected final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected final Class<? extends AbstractDto> clazz;
-	protected Viewable viewable;
+	protected AbstractDto viewable;
 
 	public AbstractView(final Class<? extends AbstractDto> clazz) {
 		this.clazz = clazz;
@@ -47,7 +44,7 @@ abstract public class AbstractView extends Composite {
 	/**
 	 * Initialize a viewable from the widgets (e.g., textboxes, dateboxes, relate fields) in a table.
 	 */
-	protected void setViewable(final int[][] fieldIds, final FlexTable table, final Viewable tmpViewable) {
+	protected void setViewable(final int[][] fieldIds, final FlexTable table, final AbstractDto tmpViewable) {
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final int id = fieldIds[y][x];
@@ -116,13 +113,13 @@ abstract public class AbstractView extends Composite {
 	/**
 	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a special use case..
 	 */
-	protected Widget getWidgetByType(final Viewable tmpViewable, final int fieldId, final boolean readOnly) {
+	protected Widget getWidgetByType(final AbstractDto tmpViewable, final int fieldId, final boolean readOnly) {
 		if (AbstractDto.INDEX_MARKED == fieldId) {
 			return new MarkWidget(clazz, tmpViewable);
 		}
-		
+
 		final Object value = tmpViewable.getFieldValue(fieldId);
-		
+
 		if (readOnly) {
 			// TODO display related entity instead of value.toString if type is RELATE
 			switch (tmpViewable.getFieldById(fieldId).getType()) {
@@ -132,10 +129,10 @@ abstract public class AbstractView extends Composite {
 					return new Label();
 				} else {
 					// resolve the real name of the entity by its id and display a HyperLink as widget
-					final Viewable relatedViewable = new DtoAccount();
+					final AbstractDto relatedViewable = new DtoAccount();
 					final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
 
-					commonService.get(IANA.mashal(DtoAccount.class), (Long) value, new AsyncCallback<Viewable>() {
+					commonService.get(IANA.mashal(DtoAccount.class), (Long) value, new AsyncCallback<AbstractDto>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							// assume no related entity has been selected
@@ -144,7 +141,7 @@ abstract public class AbstractView extends Composite {
 						}
 
 						@Override
-						public void onSuccess(Viewable result) {
+						public void onSuccess(AbstractDto result) {
 							if (null == result) {
 								// assume no related entity has been selected
 								// Window.alert("Could not find account with id " + value);
@@ -211,7 +208,7 @@ abstract public class AbstractView extends Composite {
 		}
 	}
 
-	public Class<? extends Viewable> getClazz() {
+	public Class<? extends AbstractDto> getClazz() {
 		return clazz;
 	}
 
@@ -234,7 +231,7 @@ abstract public class AbstractView extends Composite {
 			}
 		}
 	}
-	
+
 	protected void displayError(final Throwable caught) {
 		LoadIndicator.get().endLoading();
 		Window.alert(caught.getLocalizedMessage());

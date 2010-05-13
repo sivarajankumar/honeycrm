@@ -14,7 +14,6 @@ import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
 import crm.client.dto.DtoContact;
 import crm.client.dto.DtoEmployee;
-import crm.client.dto.Viewable;
 import crm.client.view.LogConsole;
 
 // TODO update history token when a new tab is selected
@@ -22,16 +21,16 @@ public class TabCenterView extends DecoratedTabPanel {
 	private static final TabCenterView instance = new TabCenterView();
 
 	// use list instead of set to make sure the sequence stays the same
-	private final List<Viewable> modules = new ArrayList<Viewable>();
-	private final Map<Class<? extends Viewable>, TabModuleView> moduleViewMap = new HashMap<Class<? extends Viewable>, TabModuleView>();
+	private final List<AbstractDto> modules = new ArrayList<AbstractDto>();
+	private final Map<Class<? extends AbstractDto>, TabModuleView> moduleViewMap = new HashMap<Class<? extends AbstractDto>, TabModuleView>();
 	/**
 	 * Store the position for each module in the tab panel (e.g. Contacts -> Tab 0, Accounts -> Tab 1, ..)
 	 */
-	private final Map<Class<? extends Viewable>, Integer> tabPositionMap = new HashMap<Class<? extends Viewable>, Integer>();
+	private final Map<Class<? extends AbstractDto>, Integer> tabPositionMap = new HashMap<Class<? extends AbstractDto>, Integer>();
 	/**
 	 * Store which module is set at which position in the tab panel (e.g. Tab 0 -> Contacts, Tab 1 -> Accounts, ..). This is almost the reverse version of tabPositionMap. However tabPositionMapReverse stores instances of Viewable instead storing classes.
 	 */
-	private final Map<Integer, Viewable> tabPositionMapReverse = new HashMap<Integer, Viewable>();
+	private final Map<Integer, AbstractDto> tabPositionMapReverse = new HashMap<Integer, AbstractDto>();
 
 	public static TabCenterView instance() {
 		return instance;
@@ -43,11 +42,11 @@ public class TabCenterView extends DecoratedTabPanel {
 		modules.add(AbstractDto.getViewable(DtoContact.class));
 		modules.add(AbstractDto.getViewable(DtoAccount.class));
 		modules.add(AbstractDto.getViewable(DtoEmployee.class));
-		
+
 		int tabPos = 0;
-		for (final Viewable viewable : modules) {
-			final Class<? extends Viewable> clazz = viewable.getClass();
-			final TabModuleView view = new TabModuleView((Class<? extends AbstractDto>) clazz);
+		for (final AbstractDto viewable : modules) {
+			final Class<? extends AbstractDto> clazz = viewable.getClass();
+			final TabModuleView view = new TabModuleView(clazz);
 
 			moduleViewMap.put(clazz, view);
 			tabPositionMap.put(clazz, tabPos);
@@ -64,23 +63,23 @@ public class TabCenterView extends DecoratedTabPanel {
 		});
 
 		LogConsole.log("created center view");
-		
+
 		selectTab(0);
 	}
 
-	public TabModuleView get(Class<? extends Viewable> clazz) {
+	public TabModuleView get(Class<? extends AbstractDto> clazz) {
 		return moduleViewMap.get(clazz);
 	}
 
 	/**
 	 * Shows the module tab for the module described by the given class.
 	 */
-	public void showModuleTabWithId(final Class<? extends Viewable> clazz, final long id) {
+	public void showModuleTabWithId(final Class<? extends AbstractDto> clazz, final long id) {
 		showModuleTab(clazz);
 		moduleViewMap.get(clazz).showDetailView(id);
 	}
 
-	public void showModuleTab(Class<? extends Viewable> clazz) {
+	public void showModuleTab(Class<? extends AbstractDto> clazz) {
 		assert tabPositionMap.containsKey(clazz) && moduleViewMap.containsKey(clazz);
 		selectTab(tabPositionMap.get(clazz));
 	}

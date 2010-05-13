@@ -55,7 +55,7 @@ public class DtoSyncTest extends TestCase {
 	public void testSync() {
 		try {
 			final CopyMachine copy = new CopyMachine();
-			
+
 			Class[] domainClasses = ReflectionHelper.getClasses("crm.server.domain");
 			Class[] dtos = ReflectionHelper.getClasses("crm.client.dto");
 
@@ -71,21 +71,21 @@ public class DtoSyncTest extends TestCase {
 
 					if (dtoName.equals(domainName)) {
 						final List<Field> dtoFields = new LinkedList<Field>();
-						
-						for (final Field field: dto.getDeclaredFields()) {
+
+						for (final Field field : dto.getDeclaredFields()) {
 							if (!copy.shouldBeSkipped(field)) {
 								dtoFields.add(field);
 							}
 						}
-						
+
 						final List<Field> dbFields = new LinkedList<Field>();
-						for (final Field field: domain.getDeclaredFields()) {
+						for (final Field field : domain.getDeclaredFields()) {
 							if (!copy.shouldBeSkipped(field)) {
 								dbFields.add(field);
 							}
 						}
-						
-						if (!areEqualSets(dtoFields.toArray(new Field[]{}), dbFields.toArray(new Field[]{}))) {
+
+						if (!areEqualSets(dtoFields.toArray(new Field[] {}), dbFields.toArray(new Field[] {}))) {
 							System.out.println(dto.getName() + " -> " + domain.getName() + " is out of sync");
 							outOfSync = true;
 						}

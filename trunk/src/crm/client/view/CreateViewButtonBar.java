@@ -32,7 +32,7 @@ public class CreateViewButtonBar extends HorizontalPanel {
 				createView.cancel();
 			}
 		});
-		
+
 		add(saveBtn);
 		add(cancelBtn);
 	}
