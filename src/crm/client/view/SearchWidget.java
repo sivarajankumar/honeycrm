@@ -25,7 +25,7 @@ public class SearchWidget extends AbstractView {
 		for (int y = 0; y < fieldIDs.length; y++) {
 			for (int x = 0; x < fieldIDs[y].length; x++) {
 				final Label widgetLabel = new Label(viewable.getFieldById(fieldIDs[y][x]).getLabel());
-				final Widget widgetValue = getWidgetByType(viewable, fieldIDs[y][x], false);
+				final Widget widgetValue = getWidgetByType(viewable, fieldIDs[y][x], View.EDIT);
 
 				// attach key press event for starting search on hitting ENTER
 				if (widgetValue instanceof TextBox) {

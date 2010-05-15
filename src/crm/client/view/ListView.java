@@ -122,7 +122,7 @@ public class ListView extends AbstractView {
 		table.setWidget(HEADER_ROWS + row, 0, deletePanel.getDeleteCheckboxFor(listViewable.getId(), currentPage));
 
 		for (int i = 0; i < ids.length; i++) {
-			final Widget w = getWidgetByType(listViewable, ids[i], true);
+			final Widget w = getWidgetByType(listViewable, ids[i], View.DETAIL);
 
 			// TODO mouse pointer should be changed on mouse over or label should look like link.
 			if (w instanceof Label) {
