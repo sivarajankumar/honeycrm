@@ -16,6 +16,9 @@ import crm.client.IANA;
 import crm.client.LoadIndicator;
 import crm.client.dto.AbstractDto;
 
+/**
+ * This widget is responsible for displaying detail / edit / create - views for entities.
+ */
 public class DetailView extends AbstractView {
 	private static final String PREFIX = "Detail View";
 	private final VerticalPanel panel = new VerticalPanel();
@@ -32,7 +35,7 @@ public class DetailView extends AbstractView {
 
 		// updateTitle(getTitleFromClazz());
 
-		buttonBar = new DetailViewButtonBar(this);
+		buttonBar = new DetailViewButtonBar(clazz, this);
 
 		// css settings
 		label.setStyleName("view_header_label");
@@ -76,6 +79,7 @@ public class DetailView extends AbstractView {
 					// detailview should be responsible for rendering
 					// only return the field types here
 					refreshFields(result);
+					buttonBar.startViewing();
 				}
 				LoadIndicator.get().endLoading();
 			}
@@ -85,10 +89,10 @@ public class DetailView extends AbstractView {
 
 	// TODO only update the field contents instead of removing all fields an adding them
 	private void refreshFields(final AbstractDto viewable) {
-		setFields(viewable, true);
+		setFields(viewable, View.DETAIL);
 	}
 
-	private void setFields(final AbstractDto tmpViewable, final boolean readOnly) {
+	private void setFields(final AbstractDto tmpViewable, final View view) {
 		final int[][] fieldIds = tmpViewable.getFormFieldIds();
 		this.currentId = tmpViewable.getId();
 		this.viewable = tmpViewable;
@@ -99,10 +103,11 @@ public class DetailView extends AbstractView {
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final int id = fieldIds[y][x];
-				final Widget widgetLabel = getLabelForField(id);
-				final Widget widgetValue = getWidgetByType(tmpViewable, id, readOnly);
 
-				if (!readOnly) {
+				final Widget widgetLabel = getLabelForField(id);
+				final Widget widgetValue = getWidgetByType(tmpViewable, id, view);
+
+				if (view != View.DETAIL) {
 					if (widgetValue instanceof TextBox) {
 						((TextBox) widgetValue).addKeyDownHandler(new KeyDownHandler() {
 							@Override
@@ -117,7 +122,7 @@ public class DetailView extends AbstractView {
 					}
 				}
 
-				if (readOnly || (!readOnly && !AbstractDto.isInternalReadOnlyField(id))) {
+				if (view == View.DETAIL || (view != View.DETAIL && !AbstractDto.isInternalReadOnlyField(id))) {
 					// display the widget because we are in readonly mode or we are not in ro mode but it is no internal field
 					table.setWidget(y, 2 * x + 0, widgetLabel);
 					table.setWidget(y, 2 * x + 1, widgetValue);
@@ -131,7 +136,7 @@ public class DetailView extends AbstractView {
 	 */
 	public void edit() {
 		if (isShowing()) {
-			setFields(viewable, false);
+			setFields(viewable, View.EDIT);
 		}
 	}
 
@@ -140,7 +145,7 @@ public class DetailView extends AbstractView {
 	 */
 	public void view() {
 		if (isShowing()) {
-			setFields(viewable, true);
+			setFields(viewable, View.DETAIL);
 		}
 	}
 
@@ -158,8 +163,7 @@ public class DetailView extends AbstractView {
 				@Override
 				public void onSuccess(Void result) {
 					LoadIndicator.get().endLoading();
-					table.clear();
-					currentId = -1;
+					stopViewing();
 				}
 			});
 		}
@@ -174,5 +178,18 @@ public class DetailView extends AbstractView {
 	 */
 	public boolean isShowing() {
 		return currentId != -1;
+	}
+
+	public void startCreating() {
+		emptyInputFields(table);
+		setFields(viewable, View.CREATE);
+	}
+
+	/**
+	 * Throws away all input fields and resets currentId
+	 */
+	public void stopViewing() {
+		table.clear();
+		currentId = -1;
 	}
 }

@@ -26,8 +26,6 @@ import crm.client.dto.DtoAccount;
 
 abstract public class AbstractView extends Composite {
 	// private static final NumberFormat DATE_FORMAT = DateFo NumberFormat.getFormat(LocaleInfo.getCurrentLocale().getNumberConstants().currencyPattern());
-	private static final NumberFormat CURRENCY_FORMAT_RW = NumberFormat.getFormat("0.00", "EUR"); // TODO how to prefix euro sign? or other unicode characters?
-	private static final NumberFormat CURRENCY_FORMAT_RO = NumberFormat.getFormat("0.00"); // TODO how to prefix euro sign? or other unicode characters?
 	protected final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected final Class<? extends AbstractDto> clazz;
 	protected AbstractDto viewable;
@@ -118,102 +116,8 @@ abstract public class AbstractView extends Composite {
 	/**
 	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a special use case..
 	 */
-	protected Widget getWidgetByType(final AbstractDto tmpViewable, final int fieldId, final boolean readOnly) {
-		if (AbstractDto.INDEX_MARKED == fieldId) {
-			return new MarkWidget(clazz, tmpViewable);
-		}
-
-		final Object value = tmpViewable.getFieldValue(fieldId);
-
-		if (readOnly) {
-			// TODO display related entity instead of value.toString if type is RELATE
-			switch (tmpViewable.getFieldById(fieldId).getType()) {
-			case RELATE:
-				if (0 == (Long) value) {
-					// return an empty label because no account has been selected yet
-					return new Label();
-				} else {
-					// resolve the real name of the entity by its id and display a HyperLink as widget
-					final AbstractDto relatedViewable = new DtoAccount();
-					final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
-
-					commonService.get(IANA.mashal(DtoAccount.class), (Long) value, new AsyncCallback<AbstractDto>() {
-						@Override
-						public void onFailure(Throwable caught) {
-							// assume no related entity has been selected
-							// Window.alert("Could not find account with id " + value);
-							link.setText("Not Found");
-						}
-
-						@Override
-						public void onSuccess(AbstractDto result) {
-							if (null == result) {
-								// assume no related entity has been selected
-								// Window.alert("Could not find account with id " + value);
-								link.setText("");
-							} else {
-								// TODO make DTO independent
-								link.setText(((DtoAccount) result).getName());
-							}
-						}
-					});
-					return link;
-				}
-			case BOOLEAN:
-				CheckBox widget7 = new CheckBox();
-				widget7.setEnabled(false);
-				widget7.setValue((Boolean) value);
-				return widget7;
-			case CURRENCY:
-				Label widget5 = new Label();
-				widget5.setText(CURRENCY_FORMAT_RO.format((Double) value));
-				return widget5;
-			case EMAIL:
-				if (value.toString().isEmpty()) {
-					return new Label();
-				} else {
-					// Display email as a mailto:a@b.com link to make sure the clients mail client will be opened.
-					return new Anchor(value.toString(), true, "mailto:" + value.toString());
-				}
-			case TEXT:
-				return new Label((null == value) ? "" : value.toString());
-			default:
-				return new Label((null == value) ? "" : value.toString());
-			}
-		} else {
-			switch (tmpViewable.getFieldById(fieldId).getType()) {
-			case BOOLEAN:
-				CheckBox widget = new CheckBox();
-				widget.setValue((Boolean) value);
-				return widget;
-			case DATE:
-				DateBox widget2 = new DateBox();
-				widget2.setValue((Date) value);
-				return widget2;
-			case INTEGER:
-				TextBox widget6 = new TextBox();
-				widget6.setText(Long.toString((Long) value));
-				return widget6;
-			case EMAIL:
-			case STRING:
-				TextBox widget3 = new TextBox();
-				widget3.setValue((String) value);
-				return widget3;
-			case TEXT:
-				// Display normal TextArea instead of more advanced RichTextArea until a nice RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
-				TextArea widget4 = new TextArea();
-				widget4.setText((String) value);
-				return widget4;
-			case RELATE:
-				return new RelateWidget(DtoAccount.class, (Long) value);
-			case CURRENCY:
-				TextBox widget5 = new TextBox();
-				widget5.setText(CURRENCY_FORMAT_RW.format((Double) value));
-				return widget5;
-			default:
-				throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString()); // should never reach this point
-			}
-		}
+	protected Widget getWidgetByType(final AbstractDto tmpViewable, final int fieldId, final View view) {
+		return WidgetSelector.getWidgetByType(clazz, tmpViewable, fieldId, view);
 	}
 
 	public Class<? extends AbstractDto> getClazz() {
@@ -244,5 +148,9 @@ abstract public class AbstractView extends Composite {
 		LoadIndicator.get().endLoading();
 		Window.alert(caught.getClass().toString());
 		// throw new RuntimeException(caught.getLocalizedMessage());
+	}
+	
+	public enum View {
+		DETAIL, EDIT, CREATE
 	}
 }

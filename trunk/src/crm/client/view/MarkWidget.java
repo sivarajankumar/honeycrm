@@ -35,7 +35,7 @@ public class MarkWidget extends AbstractView {
 
 					@Override
 					public void onSuccess(Void result) {
-						TabCenterView.instance().get(clazz).markCompleted(); // tell container that mark has been completed
+						TabCenterView.instance().get(clazz).refreshListView(); // tell container that mark has been completed
 						LoadIndicator.get().endLoading();
 					}
 				});
