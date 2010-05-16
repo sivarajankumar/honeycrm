@@ -177,7 +177,7 @@ public class DetailView extends AbstractView {
 	 * Returns true if this detailview is showing a proper entry. Otherwise false.
 	 */
 	public boolean isShowing() {
-		return currentId != -1;
+		return currentId != -1 && currentId != 0;
 	}
 
 	public void startCreating() {

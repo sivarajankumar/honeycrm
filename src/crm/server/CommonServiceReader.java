@@ -33,7 +33,6 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	public ListQueryResult<? extends AbstractDto> getAll(final int dtoIndex, int from, int to) {
-		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		// order by number of views descending -> most viewed items at the top 
 		// TODO allow user defined order as well i.e. sorting by arbitrary columns

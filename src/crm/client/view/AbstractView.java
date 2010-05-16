@@ -79,7 +79,7 @@ abstract public class AbstractView extends Composite {
 	protected void save(final FlexTable table, final long id) {
 		// id == -1 indicates that there is no id yet.
 		// thus if id != -1 we know the id -> we do an update
-		final boolean isUpdate = -1 != id;
+		final boolean isUpdate = -1 != id && 0 != id;
 
 		LoadIndicator.get().startLoading();
 
