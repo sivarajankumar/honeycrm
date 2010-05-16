@@ -10,3 +10,4 @@
  * checkout the trunk of this project from http://honeycrm.googlecode.com/svn/trunk
  * create a new Java project in eclipse from existing sources (your trunk checkout)
  * happy coding :-)
+ * *NOTE:* everyone can check out the repository anonymously. if you actually want to commit you need to join the project and get write access to the repository.
