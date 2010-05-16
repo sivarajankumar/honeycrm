@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import crm.client.ArrayHelper;
 import crm.client.dto.AbstractDto;
 
 /**
@@ -122,7 +123,7 @@ public class ReflectionHelper {
 	/**
 	 * Returns the getter/setter for a property, e.g. getId if fieldName is id
 	 */
-	public static String getMethodName(final String prefix, final Field field) {
+	public String getMethodName(final String prefix, final Field field) {
 		final String firstLetter = field.getName().substring(0, 1);
 		final String rest = field.getName().substring(1);
 
@@ -139,7 +140,7 @@ public class ReflectionHelper {
 	/**
 	 * Return all fields of the dto class that are from the original domain object, i.e. all accessible properties except automatically added or those that are only necessary for organizational purposes.
 	 */
-	public static Field[] getDtoFields(final Class<? extends AbstractDto> dtoClass) {
+	public Field[] getDtoFields(final Class<? extends AbstractDto> dtoClass) {
 		final Set<String> badFieldNames = new HashSet<String>();
 		badFieldNames.add("serialVersionUID");
 		badFieldNames.add("INDEX_");
@@ -167,7 +168,7 @@ public class ReflectionHelper {
 	/**
 	 * Returns fields of classSrc and inherited fields.
 	 */
-	public static Field[] getAllFields(final Class classSrc) {
+	public Field[] getAllFields(final Class classSrc) {
 		final Class superClass = classSrc.getSuperclass();
 		final Field[] srcFields = classSrc.getDeclaredFields();
 
@@ -180,6 +181,7 @@ public class ReflectionHelper {
 
 	/**
 	 * Returns an array containing elements of both given arrays array1, array2 i.e. merges the given arrays into one.
+	 * TODO this is a code duplicate with ArrayHelper.merge(). But cannot replace it with ArrayHelper code since it is situated in client code and Fields cannot be instantiated in client code.
 	 */
 	private static Field[] merge(final Object[] array1, final Object[] array2) {
 		// TODO implement this in a more generic way (for objects in general) but somehow typesafe..

@@ -13,7 +13,6 @@ import crm.server.domain.AbstractEntity;
  */
 public class CommonServiceImpl extends AbstractCommonService implements CommonService {
 	private static final long serialVersionUID = -7312945910083902842L;
-
 	private static final CommonServiceCreator creator = new CommonServiceCreator();
 	private static final CommonServiceReader reader = new CommonServiceReader();
 
@@ -35,11 +34,14 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public AbstractDto get(final int dtoIndex, final long id) {
 		final AbstractDto dto = reader.get(dtoIndex, id);
-		
+
+		if (null == dto) {
+			return null; // do not do anything more than that because we could not find the dto
+		}
+
 		// increase number of views on every get request for a specific DTO
-		dto.setViews(dto.getViews()+1);
+		dto.setViews(dto.getViews() + 1);
 		update(dtoIndex, dto, id);
-		
 		return dto;
 	}
 
@@ -65,7 +67,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		dto.setLastUpdatedAt(new Date(System.currentTimeMillis()));
 
 		final AbstractEntity existingObject = (AbstractEntity) getDomainObject(dtoIndex, id);
-		
+
 		if (null != existingObject) {
 			m.makePersistent(copy.getUpdatedInstance(dto, existingObject));
 		}

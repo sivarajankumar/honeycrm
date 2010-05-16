@@ -28,6 +28,7 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	protected static final PersistenceManager m = PMF.get().getPersistenceManager();
 	protected static final Map<Class<? extends AbstractDto>, Class> dtoToDomainClass = new HashMap<Class<? extends AbstractDto>, Class>();
 	protected static final CopyMachine copy = new CopyMachine();
+	protected static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 
 	static {
 		// TODO do this automatically with reflection
