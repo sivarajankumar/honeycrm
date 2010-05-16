@@ -46,7 +46,7 @@ public class DetailViewButtonBar extends AbstractView {
 			@Override
 			public void onClick(ClickEvent event) {
 				detailview.saveChanges();
-				startViewing();
+				// startViewing();
 			}
 		});
 
@@ -75,10 +75,7 @@ public class DetailViewButtonBar extends AbstractView {
 		
 		demoBtn.addClickHandler(getDemoButtonClickHandler(clazz));
 
-		saveBtn.setVisible(false);
-		cancelBtn.setVisible(false);
-		editBtn.setVisible(false);
-		deleteBtn.setVisible(false);
+		stopViewing();
 
 		initWidget(panel);
 	}
@@ -127,13 +124,13 @@ public class DetailViewButtonBar extends AbstractView {
 	 */
 	public void startCreating() {
 		// if (detailview.isShowing()) {
-			detailview.startCreating();
+			detailview.stopViewing();
 
-			saveBtn.setVisible(true);
-			cancelBtn.setVisible(true);
-
-			createBtn.setVisible(false);
-			demoBtn.setVisible(false);
+			createBtn.setVisible(true);
+			demoBtn.setVisible(true);
+			
+			saveBtn.setVisible(false);
+			cancelBtn.setVisible(false);
 			editBtn.setVisible(false);
 			deleteBtn.setVisible(false);
 		// }
@@ -151,5 +148,15 @@ public class DetailViewButtonBar extends AbstractView {
 			demoBtn.setVisible(false);
 			createBtn.setVisible(false);
 		}
+	}
+	
+	public void stopViewing() {
+		createBtn.setVisible(true);
+		demoBtn.setVisible(true);
+		
+		saveBtn.setVisible(false);
+		cancelBtn.setVisible(false);
+		editBtn.setVisible(false);
+		deleteBtn.setVisible(false);		
 	}
 }

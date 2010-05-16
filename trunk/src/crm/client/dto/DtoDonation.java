@@ -31,11 +31,11 @@ public class DtoDonation extends AbstractDto {
 		fields.add(new Field(INDEX_EMPLOYEEID, Type.RELATE, "Employee"));
 		fields.add(new Field(INDEX_DONATORID, Type.RELATE, "Donator"));
 		fields.add(new Field(INDEX_PROJECTID, Type.RELATE, "Project"));
-		fields.add(new Field(INDEX_DONATEDFOR, Type.STRING, "Donated for"));
-		fields.add(new Field(INDEX_KIND, Type.STRING, "Kind"));
+		fields.add(new FieldEnum(INDEX_DONATEDFOR, "Donated for", "Foundation", "Project donation", "Unlinked donation"));
+		fields.add(new FieldEnum(INDEX_KIND, "Kind", "Subscription", "Unique"));
 		fields.add(new Field(INDEX_RECEIPTIONDATE, Type.DATE, "Receiption date"));
-		fields.add(new Field(INDEX_REACTION, Type.STRING, "Reaction"));
-		fields.add(new Field(INDEX_REACTEDHOW, Type.STRING, "Reaction channel"));
+		fields.add(new FieldEnum(INDEX_REACTION, "Reaction", "Thanked", "Receipt", "Certificate", "No"));
+		fields.add(new FieldEnum(INDEX_REACTEDHOW, "Reaction channel", "E-Mail", "Letter", "Phone Call"));
 		fields.add(new Field(INDEX_DATE, Type.DATE, "Date"));
 	}
 

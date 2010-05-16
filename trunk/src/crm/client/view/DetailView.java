@@ -53,7 +53,7 @@ public class DetailView extends AbstractView {
 	private void updateTitle(String title) {
 		label.setText(PREFIX + title);
 	}
-	
+
 	/**
 	 * Forces reload of all fields of the domain object. This is neccessary for updating fields that are set on server side and not visible while editing.
 	 */
@@ -62,44 +62,47 @@ public class DetailView extends AbstractView {
 	}
 
 	public void refresh(final long id) {
-		updateTitle(label.getTitle());
-		LoadIndicator.get().startLoading();
+		if (0 == id) {
+			throw new RuntimeException("Cannot refresh because id == 0");
+		} else {
+			updateTitle(label.getTitle());
+			LoadIndicator.get().startLoading();
 
-		commonService.get(IANA.mashal(clazz), id, new AsyncCallback<AbstractDto>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				displayError(caught);
-			}
-
-			@Override
-			public void onSuccess(AbstractDto result) {
-				if (null == result) {
-					Window.alert("Could not find account with id " + id);
-				} else {
-					// detailview should be responsible for rendering
-					// only return the field types here
-					refreshFields(result);
-					buttonBar.startViewing();
+			commonService.get(IANA.mashal(clazz), id, new AsyncCallback<AbstractDto>() {
+				@Override
+				public void onFailure(Throwable caught) {
+					displayError(caught);
 				}
-				LoadIndicator.get().endLoading();
-			}
 
-		});
+				@Override
+				public void onSuccess(AbstractDto result) {
+					if (null == result) {
+						Window.alert("Could not find account with id " + id);
+					} else {
+						// detailview should be responsible for rendering
+						// only return the field types here
+						refreshFields(result);
+						buttonBar.startViewing();
+					}
+					LoadIndicator.get().endLoading();
+				}
+			});
+		}
 	}
 
 	// TODO only update the field contents instead of removing all fields an adding them
 	private void refreshFields(final AbstractDto viewable) {
-		setFields(viewable, View.DETAIL);
+		resetFields(viewable, View.DETAIL);
 	}
 
-	private void setFields(final AbstractDto tmpViewable, final View view) {
+	private void resetFields(final AbstractDto tmpViewable, final View view) {
 		final int[][] fieldIds = tmpViewable.getFormFieldIds();
 		this.currentId = tmpViewable.getId();
 		this.viewable = tmpViewable;
 
 		// remove previous cell contents
 		table.clear();
-		
+
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final int id = fieldIds[y][x];
@@ -136,7 +139,7 @@ public class DetailView extends AbstractView {
 	 */
 	public void edit() {
 		if (isShowing()) {
-			setFields(viewable, View.EDIT);
+			resetFields(viewable, View.EDIT);
 		}
 	}
 
@@ -145,7 +148,7 @@ public class DetailView extends AbstractView {
 	 */
 	public void view() {
 		if (isShowing()) {
-			setFields(viewable, View.DETAIL);
+			resetFields(viewable, View.DETAIL);
 		}
 	}
 
@@ -182,8 +185,7 @@ public class DetailView extends AbstractView {
 
 	public void startCreating() {
 		currentId = -1; // throw away previous id
-		emptyInputFields(table);
-		setFields(viewable, View.CREATE);
+		resetFields(viewable, View.CREATE);
 	}
 
 	/**
@@ -192,5 +194,6 @@ public class DetailView extends AbstractView {
 	public void stopViewing() {
 		table.clear();
 		currentId = -1;
+		buttonBar.stopViewing();
 	}
 }

@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -18,6 +19,7 @@ import crm.client.IANA;
 import crm.client.ServiceRegistry;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
+import crm.client.dto.FieldEnum;
 import crm.client.view.AbstractView.View;
 
 /**
@@ -77,6 +79,20 @@ public class WidgetSelector {
 			TextBox widget5 = new TextBox();
 			widget5.setText(CURRENCY_FORMAT_RW.format((Double) value));
 			return widget5;
+		case ENUM:
+			ListBox box = new ListBox();
+			if (tmpViewable.getFieldById(fieldId) instanceof FieldEnum) {
+				final String[] options = ((FieldEnum)tmpViewable.getFieldById(fieldId)).getOptions(); 
+				for (int i=0; i<options.length; i++) {
+					box.addItem(options[i]);
+					if (options[i].equals(value.toString())) { // preselect the item that has been stored in the db
+						box.setSelectedIndex(i);
+					}
+				}
+				return box;
+			} else {
+				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
+			}
 		default:
 			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString()); // should never reach this point
 		}
@@ -132,8 +148,8 @@ public class WidgetSelector {
 				// Display email as a mailto:a@b.com link to make sure the clients mail client will be opened.
 				return new Anchor(value.toString(), true, "mailto:" + value.toString());
 			}
+		case ENUM:
 		case TEXT:
-			return new Label((null == value) ? "" : value.toString());
 		default:
 			return new Label((null == value) ? "" : value.toString());
 		}
@@ -163,6 +179,17 @@ public class WidgetSelector {
 		case CURRENCY:
 			TextBox widget5 = new TextBox();
 			return widget5;
+		case ENUM:
+			ListBox box = new ListBox();
+			if (tmpViewable.getFieldById(fieldId) instanceof FieldEnum) {
+				final String[] options = ((FieldEnum)tmpViewable.getFieldById(fieldId)).getOptions(); 
+				for (int i=0; i<options.length; i++) {
+					box.addItem(options[i]);
+				}
+				return box;
+			} else {
+				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
+			}
 		default:
 			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString()); // should never reach this point
 		}

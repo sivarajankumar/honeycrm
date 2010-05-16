@@ -39,6 +39,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 			return null; // do not do anything more than that because we could not find the dto
 		}
 
+		// TODO in when the name of an relate field is determined this get() method is called
+		// TODO this increases the number of views for the related entity every time it is displayed..
+		// TOD this should be avoided.
 		// increase number of views on every get request for a specific DTO
 		dto.setViews(dto.getViews() + 1);
 		update(dtoIndex, dto, id);

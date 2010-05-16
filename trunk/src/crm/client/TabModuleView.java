@@ -63,7 +63,9 @@ public class TabModuleView extends AbstractView {
 
 	public void saveCompleted() {
 		listView.refresh();
-		detailView.refresh();
+		// TODO cannot call refresh because id of created entity is unknown
+		//	detailView.refresh();
+		detailView.stopViewing();
 	}
 
 	public void refreshListView() {
