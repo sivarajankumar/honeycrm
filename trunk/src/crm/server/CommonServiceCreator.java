@@ -8,6 +8,9 @@ import crm.client.dto.DtoAccount;
 import crm.client.dto.DtoContact;
 import crm.server.domain.AbstractEntity;
 
+/**
+ * Is part of the database layer.
+ */
 public class CommonServiceCreator extends AbstractCommonService {
 	private static final long serialVersionUID = -272641981474976416L;
 
