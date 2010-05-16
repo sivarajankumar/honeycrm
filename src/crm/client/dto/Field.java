@@ -11,7 +11,7 @@ public class Field implements IsSerializable, Serializable {
 	private Type type;
 	private String label;
 
-	public Field() {
+	public Field() { // for gwt
 	}
 
 	public Field(final int id, final Type type, final String label) {
@@ -33,6 +33,6 @@ public class Field implements IsSerializable, Serializable {
 	}
 
 	public enum Type {
-		STRING, TEXT, DATE, BOOLEAN, RELATE, CURRENCY, INTEGER, EMAIL
+		STRING, TEXT, DATE, BOOLEAN, RELATE, CURRENCY, INTEGER, EMAIL, ENUM
 	}
 }

@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -56,6 +57,8 @@ abstract public class AbstractView extends Composite {
 						value = ((CheckBox) widgetValue).getValue();
 					} else if (widgetValue instanceof TextArea) {
 						value = ((TextArea) widgetValue).getText();
+					} else if (widgetValue instanceof ListBox) {
+						value = ((ListBox)widgetValue).getItemText(((ListBox) widgetValue).getSelectedIndex());
 					// TODO also enable this for MarkWidget
 					// } else if (widgetValue instanceof MarkWidget) {
 					// value = widgetValue.
@@ -133,7 +136,7 @@ abstract public class AbstractView extends Composite {
 					((DateBox) w).setValue(null);
 				} else if (w instanceof RelateWidget) {
 					((RelateWidget) w).setText("");
-				}
+				}// else if (w instanceof )
 			}
 		}
 	}
