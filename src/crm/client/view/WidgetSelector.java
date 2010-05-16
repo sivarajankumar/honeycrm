@@ -64,12 +64,12 @@ public class WidgetSelector {
 		case EMAIL:
 		case STRING:
 			TextBox widget3 = new TextBox();
-			widget3.setValue(value.toString());
+			widget3.setValue((null == value) ? "" : value.toString());
 			return widget3;
 		case TEXT:
 			// Display normal TextArea instead of more advanced RichTextArea until a nice RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
 			TextArea widget4 = new TextArea();
-			widget4.setText(value.toString());
+			widget4.setText((null == value) ? "" : value.toString());
 			return widget4;
 		case RELATE:
 			return new RelateWidget(DtoAccount.class, (Long) value);

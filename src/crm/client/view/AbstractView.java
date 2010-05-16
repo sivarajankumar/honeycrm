@@ -1,15 +1,10 @@
 package crm.client.view;
 
-import java.util.Date;
-
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -22,7 +17,6 @@ import crm.client.LoadIndicator;
 import crm.client.ServiceRegistry;
 import crm.client.TabCenterView;
 import crm.client.dto.AbstractDto;
-import crm.client.dto.DtoAccount;
 
 abstract public class AbstractView extends Composite {
 	// private static final NumberFormat DATE_FORMAT = DateFo NumberFormat.getFormat(LocaleInfo.getCurrentLocale().getNumberConstants().currencyPattern());
