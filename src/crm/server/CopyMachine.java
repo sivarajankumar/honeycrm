@@ -12,6 +12,7 @@ import java.util.Set;
 import com.google.appengine.api.datastore.Key;
 
 public class CopyMachine {
+	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	private static final Set<String> badVariableNames = new HashSet<String>();
 	private static final Set<String> badVariablePrefixes = new HashSet<String>();
 
@@ -76,7 +77,7 @@ public class CopyMachine {
 	 * TODO this is critical for server performance -> make bugatti veyron-ish fast.
 	 */
 	private void copyFields(final Object srcObject, final Class classSrc, final Class classDest, final Object instanceUpdatedDest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-		final Field[] allFields = filterFields(ReflectionHelper.getAllFields(classSrc));
+		final Field[] allFields = filterFields(reflectionHelper.getAllFields(classSrc));
 
 		for (int i = 0; i < allFields.length; i++) {
 			final Field srcField = allFields[i];
@@ -85,13 +86,13 @@ public class CopyMachine {
 			// assumption: if we reach this point the get method for the field has to exist.
 
 			// we call the get method for this field on the source object to avoid an illegal access exception that could occur if the property is private
-			final Method getter = classSrc.getMethod(ReflectionHelper.getMethodName("get", srcField));
+			final Method getter = classSrc.getMethod(reflectionHelper.getMethodName("get", srcField));
 			final Object srcFieldValue = getter.invoke(srcObject);
 
 			if (null != srcFieldValue) { // only call the setter if the field has any value.
 				try {
 					// call the set method for this field on the destination object
-					final Method setter = classDest.getMethod(ReflectionHelper.getMethodName("set", srcField), srcField.getType());
+					final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), srcField.getType());
 					setter.invoke(instanceUpdatedDest, srcFieldValue);
 				} catch (NoSuchMethodException e) {
 					// Assume this happened because we tried to set the id (class Key) of a DB class
@@ -105,7 +106,7 @@ public class CopyMachine {
 							// The id field is a Key instance in the server code.
 							// Since we cannot use this class in client code it is represented as a string in the client code
 							// For this reason handle this field as a special case.
-							final Method setter = classDest.getMethod(ReflectionHelper.getMethodName("set", srcField), long.class);
+							final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), long.class);
 							setter.invoke(instanceUpdatedDest, ((Key) srcFieldValue).getId());
 						}
 					} else {
@@ -118,7 +119,7 @@ public class CopyMachine {
 	}
 
 	/**
-	 * Method throwing away all fields that are irrellevant and should not be copied by this copy machine (e.g. automatically added fields for serialization).
+	 * Method throwing away all fields that are irrelevant and should not be copied by this copy machine (e.g. automatically added fields for serialization).
 	 */
 	private Field[] filterFields(final Field[] allFields) {
 		final List<Field> filteredFields = new LinkedList<Field>();

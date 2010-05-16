@@ -35,6 +35,9 @@ public class CommonServiceReader extends AbstractCommonService {
 	public ListQueryResult<? extends AbstractDto> getAll(final int dtoIndex, int from, int to) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
+		// order by number of views descending -> most viewed items at the top 
+		// TODO allow user defined order as well i.e. sorting by arbitrary columns
+		query.setOrdering("views desc");
 		query.setRange(from, to);
 
 		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(dtoIndex, (Collection) query.execute()), getItemCount(dtoIndex));
@@ -61,8 +64,8 @@ public class CommonServiceReader extends AbstractCommonService {
 		AbstractDto[] array;
 
 		try {
-			for (final Field field : ReflectionHelper.getDtoFields(dtoClass)) {
-				final Method getter = dtoClass.getMethod(ReflectionHelper.getMethodName("get", field));
+			for (final Field field : reflectionHelper.getDtoFields(dtoClass)) {
+				final Method getter = dtoClass.getMethod(reflectionHelper.getMethodName("get", field));
 				final Object value = getter.invoke(searchDto);
 
 				if (null != value) {

@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 
 import junit.framework.TestCase;
+import crm.server.CachingReflectionHelper;
 import crm.server.DemoDataHolder;
 import crm.server.DemoDataProvider;
 import crm.server.ReflectionHelper;
@@ -17,6 +18,7 @@ import crm.server.ReflectionHelper;
 public class DtoIndicesTest extends TestCase {
 	private static final Random r = new Random();
 	private static final Set<String> skipFields;
+	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 
 	static {
 		skipFields = new HashSet<String>();
@@ -51,8 +53,8 @@ public class DtoIndicesTest extends TestCase {
 				final Field indexField = dto.getDeclaredField("INDEX_" + name.toUpperCase());
 				final int indexFieldValue = indexField.getInt(dtoInstance);
 
-				final Method setter = dto.getMethod(ReflectionHelper.getMethodName("set", field), field.getType());
-				final Method getter = dto.getMethod(ReflectionHelper.getMethodName("get", field));
+				final Method setter = dto.getMethod(reflectionHelper.getMethodName("set", field), field.getType());
+				final Method getter = dto.getMethod(reflectionHelper.getMethodName("get", field));
 				final Method getFieldValue = dto.getMethod("getFieldValue", int.class);
 				final Method setFieldValue = dto.getMethod("setFieldValue", int.class, Object.class);
 
