@@ -181,6 +181,7 @@ public class DetailView extends AbstractView {
 	}
 
 	public void startCreating() {
+		currentId = -1; // throw away previous id
 		emptyInputFields(table);
 		setFields(viewable, View.CREATE);
 	}

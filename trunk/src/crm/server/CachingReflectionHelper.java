@@ -5,12 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import crm.client.dto.AbstractDto;
-
 import net.sf.jsr107cache.Cache;
 import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheFactory;
 import net.sf.jsr107cache.CacheManager;
+import crm.client.dto.AbstractDto;
 
 /**
  * Caching wrapper around ReflectionHelper class. Caches expensive reflective operations when possible.
@@ -47,7 +46,7 @@ public class CachingReflectionHelper extends ReflectionHelper {
 		if (!cacheGetAllFields.containsKey(classSrc)) {
 			cacheGetAllFields.put(classSrc, super.getAllFields(classSrc));
 		}
-		return (Field[]) cacheGetAllFields.get(classSrc);
+		return cacheGetAllFields.get(classSrc);
 		// } else {
 		// return super.getAllFields(classSrc);
 		// }
@@ -60,7 +59,7 @@ public class CachingReflectionHelper extends ReflectionHelper {
 		if (!cacheGetDtoFields.containsKey(dtoClass)) {
 			cacheGetDtoFields.put(dtoClass, super.getDtoFields(dtoClass));
 		}
-		return (Field[]) cacheGetDtoFields.get(dtoClass);
+		return cacheGetDtoFields.get(dtoClass);
 		// } else {
 		// return super.getDtoFields(dtoClass);
 		// }

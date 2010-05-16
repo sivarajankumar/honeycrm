@@ -10,17 +10,18 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.google.gwt.core.ext.soyc.Member;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import crm.client.IANA;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
 import crm.client.dto.DtoContact;
+import crm.client.dto.DtoDonation;
 import crm.client.dto.DtoEmployee;
 import crm.client.dto.DtoMembership;
 import crm.server.domain.Account;
 import crm.server.domain.Contact;
+import crm.server.domain.Donation;
 import crm.server.domain.Employee;
 import crm.server.domain.Membership;
 
@@ -41,6 +42,7 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 		dtoToDomainClass.put(DtoAccount.class, Account.class);
 		dtoToDomainClass.put(DtoEmployee.class, Employee.class);
 		dtoToDomainClass.put(DtoMembership.class, Membership.class);
+		dtoToDomainClass.put(DtoDonation.class, Donation.class);
 	}
 
 	protected Class<? extends AbstractDto> getDtoClass(final int dtoIndex) {

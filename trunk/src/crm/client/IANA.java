@@ -6,6 +6,7 @@ import java.util.Map;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
 import crm.client.dto.DtoContact;
+import crm.client.dto.DtoDonation;
 import crm.client.dto.DtoEmployee;
 import crm.client.dto.DtoMembership;
 
@@ -22,6 +23,7 @@ public class IANA {
 		resolveMap.put(DtoContact.class, i++);
 		resolveMap.put(DtoEmployee.class, i++);
 		resolveMap.put(DtoMembership.class, i++);
+		resolveMap.put(DtoDonation.class, i++);
 	}
 
 	/**
