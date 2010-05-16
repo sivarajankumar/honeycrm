@@ -73,6 +73,7 @@ public class CopyMachine {
 
 	/**
 	 * Copies all fields from the source object into the destination object.
+	 * TODO this is critical for server performance -> make bugatti veyron-ish fast.
 	 */
 	private void copyFields(final Object srcObject, final Class classSrc, final Class classDest, final Object instanceUpdatedDest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		final Field[] allFields = filterFields(ReflectionHelper.getAllFields(classSrc));

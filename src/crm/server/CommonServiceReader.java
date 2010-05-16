@@ -13,6 +13,9 @@ import crm.client.ArrayHelper;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 
+/**
+ * Is part of the database layer.
+ */
 public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 

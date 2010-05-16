@@ -8,6 +8,9 @@ import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 import crm.server.domain.AbstractEntity;
 
+/**
+ * Is somewhat the business layer.
+ */
 public class CommonServiceImpl extends AbstractCommonService implements CommonService {
 	private static final long serialVersionUID = -7312945910083902842L;
 
@@ -31,7 +34,13 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public AbstractDto get(final int dtoIndex, final long id) {
-		return reader.get(dtoIndex, id);
+		final AbstractDto dto = reader.get(dtoIndex, id);
+		
+		// increase number of views on every get request for a specific DTO
+		dto.setViews(dto.getViews()+1);
+		update(dtoIndex, dto, id);
+		
+		return dto;
 	}
 
 	@Override
