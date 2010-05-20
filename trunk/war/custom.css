@@ -67,7 +67,7 @@ body {
 /* VIEWS */
 
 .detail_view {
-	/* width: 40%; /* force width of detail view smaller to avoid current wrapping bug */
+	width: 60%; /* force width of detail view smaller to avoid current wrapping bug */
 	float: left;
 	height: 100%;
 	padding: 5px;
@@ -100,10 +100,10 @@ body {
 	float: left;
 	padding: 5px;
 	border-right: 5px solid white;
-	border-left: 5px solid white;
+	/*border-left: 5px solid white;*/
 }
 
-.under_list_anel {
+.under_list_panel {
 	width: 100%;	
 }
 
@@ -112,7 +112,7 @@ body {
 }
 
 .actions {
-	width: 20%;
+	width: 30%;
 	float: left;
 	padding: 5px;
 }
