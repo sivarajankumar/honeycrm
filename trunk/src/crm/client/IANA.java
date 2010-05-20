@@ -9,6 +9,7 @@ import crm.client.dto.DtoContact;
 import crm.client.dto.DtoDonation;
 import crm.client.dto.DtoEmployee;
 import crm.client.dto.DtoMembership;
+import crm.client.dto.DtoProject;
 
 // Since GWT cannot (un-)marshal Class<T> constructs this is useful for the implementation of a generic service (e.g. CommonServiceImpl)
 // to communicate the type of the expected objects (e.g. the getAll call specifies the type of the objects that should be retrieved as the first parameter).
@@ -24,6 +25,7 @@ public class IANA {
 		resolveMap.put(DtoEmployee.class, i++);
 		resolveMap.put(DtoMembership.class, i++);
 		resolveMap.put(DtoDonation.class, i++);
+		resolveMap.put(DtoProject.class, i++);
 	}
 
 	/**

@@ -33,6 +33,7 @@ public abstract class AbstractDto implements Serializable {
 		map.put(DtoEmployee.class, new DtoEmployee());
 		map.put(DtoMembership.class, new DtoMembership());
 		map.put(DtoDonation.class, new DtoDonation());
+		map.put(DtoProject.class, new DtoProject());
 	}
 
 	public AbstractDto() {

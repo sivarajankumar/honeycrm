@@ -19,11 +19,13 @@ import crm.client.dto.DtoContact;
 import crm.client.dto.DtoDonation;
 import crm.client.dto.DtoEmployee;
 import crm.client.dto.DtoMembership;
+import crm.client.dto.DtoProject;
 import crm.server.domain.Account;
 import crm.server.domain.Contact;
 import crm.server.domain.Donation;
 import crm.server.domain.Employee;
 import crm.server.domain.Membership;
+import crm.server.domain.Project;
 
 /**
  * Implements very basic functionality for CommonServiceImpl class.
@@ -43,6 +45,7 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 		dtoToDomainClass.put(DtoEmployee.class, Employee.class);
 		dtoToDomainClass.put(DtoMembership.class, Membership.class);
 		dtoToDomainClass.put(DtoDonation.class, Donation.class);
+		dtoToDomainClass.put(DtoProject.class, Project.class);
 	}
 
 	protected Class<? extends AbstractDto> getDtoClass(final int dtoIndex) {

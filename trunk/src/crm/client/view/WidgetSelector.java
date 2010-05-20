@@ -1,6 +1,7 @@
 package crm.client.view;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -19,7 +20,6 @@ import com.google.gwt.user.datepicker.client.DateBox;
 
 import crm.client.CollectionHelper;
 import crm.client.CommonServiceAsync;
-import crm.client.IANA;
 import crm.client.ServiceRegistry;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
@@ -94,7 +94,7 @@ public class WidgetSelector {
 		case ENUM:
 		case MULTIENUM:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldEnum) {
-				final Set<String> selectedItems = CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
+				final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
 				final String[] options = ((FieldEnum) tmpViewable.getFieldById(fieldId)).getOptions();
 				final ListBox box = new ListBox(Type.MULTIENUM == tmpViewable.getFieldById(fieldId).getType());
 

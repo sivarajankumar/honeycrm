@@ -16,6 +16,7 @@ import crm.client.dto.DtoContact;
 import crm.client.dto.DtoDonation;
 import crm.client.dto.DtoEmployee;
 import crm.client.dto.DtoMembership;
+import crm.client.dto.DtoProject;
 import crm.client.view.LogConsole;
 
 // TODO update history token when a new tab is selected
@@ -46,6 +47,7 @@ public class TabCenterView extends DecoratedTabPanel {
 		modules.add(AbstractDto.getViewable(DtoEmployee.class));
 		modules.add(AbstractDto.getViewable(DtoMembership.class));
 		modules.add(AbstractDto.getViewable(DtoDonation.class));
+		modules.add(AbstractDto.getViewable(DtoProject.class));
 
 		int tabPos = 0;
 		for (final AbstractDto viewable : modules) {
