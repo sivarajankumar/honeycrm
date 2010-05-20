@@ -67,7 +67,7 @@ body {
 /* VIEWS */
 
 .detail_view {
-	width: 40%; /* force width of detail view smaller to avoid current wrapping bug */
+	/* width: 40%; /* force width of detail view smaller to avoid current wrapping bug */
 	float: left;
 	height: 100%;
 	padding: 5px;

@@ -174,11 +174,16 @@ public class WidgetSelector {
 				return new Label(DATE_FORMAT.format((Date)value));
 			}
 		case MULTIENUM:
-			String ul = "";
-			for (final String selection : value.toString().split(FieldMultiEnum.SEPARATOR)) {
-				ul += "<li>" + selection + "</li>";
+			if (value.toString().isEmpty()) {
+				return new Label("");
+			} else {
+				String ul = "";
+				
+				for (final String selection : value.toString().split(FieldMultiEnum.SEPARATOR)) {
+					ul += "<li>" + selection + "</li>";
+				}
+				return new HTML("<ul>" + ul + "</ul>");
 			}
-			return new HTML("<ul>" + ul + "</ul>");
 		case ENUM:
 		case TEXT:
 		default:
