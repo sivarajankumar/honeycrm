@@ -4,6 +4,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
+// TODO when one operation finishes while a concurrent one is still running the loading is ended too early
 public class LoadIndicator extends Composite {
 	private FlowPanel panel = new FlowPanel();
 	private Label loading = new Label("Loading.. ");

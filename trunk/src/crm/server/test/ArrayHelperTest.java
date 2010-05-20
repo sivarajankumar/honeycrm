@@ -4,27 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
-import crm.client.ArrayHelper;
+import crm.client.CollectionHelper;
 
 public class ArrayHelperTest extends TestCase {
 	public void testJoin() {
 		final String glue = ",";
 		final List<String> foo = new ArrayList<String>();
-		assertEquals("", ArrayHelper.join(foo, glue));
+		assertEquals("", CollectionHelper.join(foo, glue));
 
 		foo.add("a");
-		assertEquals("a", ArrayHelper.join(foo, glue));
+		assertEquals("a", CollectionHelper.join(foo, glue));
 
 		foo.add("b");
 		foo.add("c");
-		assertEquals("a" + glue + "b" + glue + "c", ArrayHelper.join(foo, glue));
+		assertEquals("a" + glue + "b" + glue + "c", CollectionHelper.join(foo, glue));
 	}
 
 	public void testMerge() {
 		final int[][] a = new int[][] { { 1, 2 }, { 3, 4 } };
 		final int[][] b = new int[][] { { 5, 6 }, { 7, 8 } };
 
-		final int[][] c = ArrayHelper.merge(a, b);
+		final int[][] c = CollectionHelper.merge(a, b);
 		for (int y = 0; y < a.length; y++) {
 			for (int x = 0; x < a[y].length; x++) {
 				assertEquals(a[y][x], c[y][x]);

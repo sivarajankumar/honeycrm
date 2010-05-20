@@ -7,9 +7,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Field implements IsSerializable, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private int id;
-	private Type type;
-	private String label;
+	protected int id;
+	protected Type type;
+	protected String label;
 
 	public Field() { // for gwt
 	}
@@ -33,6 +33,6 @@ public class Field implements IsSerializable, Serializable {
 	}
 
 	public enum Type {
-		STRING, TEXT, DATE, BOOLEAN, RELATE, CURRENCY, INTEGER, EMAIL, ENUM
+		STRING, TEXT, DATE, BOOLEAN, RELATE, CURRENCY, INTEGER, EMAIL, ENUM, MULTIENUM
 	}
 }

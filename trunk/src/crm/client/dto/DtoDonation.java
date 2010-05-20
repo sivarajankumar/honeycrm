@@ -28,14 +28,14 @@ public class DtoDonation extends AbstractDto {
 	public static final int INDEX_DATE = 9;
 
 	public DtoDonation() {
-		fields.add(new Field(INDEX_EMPLOYEEID, Type.RELATE, "Employee"));
-		fields.add(new Field(INDEX_DONATORID, Type.RELATE, "Donator"));
-		fields.add(new Field(INDEX_PROJECTID, Type.RELATE, "Project"));
+		fields.add(new FieldRelate(INDEX_EMPLOYEEID, DtoEmployee.class, "Employee"));
+		fields.add(new FieldRelate(INDEX_DONATORID, DtoContact.class, "Donator"));
+		fields.add(new FieldRelate(INDEX_PROJECTID, DtoContact.class, "Project")); // TODO add dto project first..
 		fields.add(new FieldEnum(INDEX_DONATEDFOR, "Donated for", "Foundation", "Project donation", "Unlinked donation"));
 		fields.add(new FieldEnum(INDEX_KIND, "Kind", "Subscription", "Unique"));
 		fields.add(new Field(INDEX_RECEIPTIONDATE, Type.DATE, "Receiption date"));
 		fields.add(new FieldEnum(INDEX_REACTION, "Reaction", "Thanked", "Receipt", "Certificate", "No"));
-		fields.add(new FieldEnum(INDEX_REACTEDHOW, "Reaction channel", "E-Mail", "Letter", "Phone Call"));
+		fields.add(new FieldMultiEnum(INDEX_REACTEDHOW, "Reaction channel", "E-Mail", "Letter", "Phone Call"));
 		fields.add(new Field(INDEX_DATE, Type.DATE, "Date"));
 	}
 
@@ -200,5 +200,10 @@ public class DtoDonation extends AbstractDto {
 
 	public void setReactedHow(String reactedHow) {
 		this.reactedHow = reactedHow;
+	}
+
+	@Override
+	public String getQuicksearchItem() {
+		return "not implemented yet";
 	}
 }

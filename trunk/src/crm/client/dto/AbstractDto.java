@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import crm.client.ArrayHelper;
+import crm.client.CollectionHelper;
 import crm.client.dto.Field.Type;
 
 public abstract class AbstractDto implements Serializable {
@@ -164,20 +164,15 @@ public abstract class AbstractDto implements Serializable {
 	}
 
 	public int[][] getFormFieldIds() {
-		return ArrayHelper.merge(interalGetFormFieldIds(), new int[][] { new int[] { INDEX_CREATEDAT, INDEX_LASTUPDATEDAT }, new int[] { INDEX_VIEWS, INDEX_MARKED } });
+		return CollectionHelper.merge(interalGetFormFieldIds(), new int[][] { new int[] { INDEX_CREATEDAT, INDEX_LASTUPDATEDAT }, new int[] { INDEX_VIEWS, INDEX_MARKED } });
 	}
 
 	abstract protected void internalSetFieldValue(final int index, final Object value);
-
 	abstract protected Object internalGetFieldValue(final int index);
-
 	abstract protected int[][] interalGetFormFieldIds();
-
 	abstract public String getHistoryToken();
-
 	abstract public int[] getListViewColumnIds();
-
 	abstract public int[][] getSearchFields();
-
 	abstract public String getTitle();
+	abstract public String getQuicksearchItem();
 }

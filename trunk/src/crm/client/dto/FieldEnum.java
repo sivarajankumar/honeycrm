@@ -6,7 +6,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class FieldEnum extends Field implements IsSerializable, Serializable {
 	private static final long serialVersionUID = 1402930579645096497L;
-	private String[] options;
+	protected String[] options;
 	
 	public FieldEnum() { // for gwt
 	}

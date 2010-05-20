@@ -2,6 +2,7 @@ package crm.server;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import crm.client.CommonService;
 import crm.client.dto.AbstractDto;
@@ -12,6 +13,7 @@ import crm.server.domain.AbstractEntity;
  * Is somewhat the business layer.
  */
 public class CommonServiceImpl extends AbstractCommonService implements CommonService {
+	private static final Logger log = Logger.getLogger(CommonServiceImpl.class.getName());
 	private static final long serialVersionUID = -7312945910083902842L;
 	private static final CommonServiceCreator creator = new CommonServiceCreator();
 	private static final CommonServiceReader reader = new CommonServiceReader();
@@ -55,6 +57,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(int dtoIndex, String prefix, int from, int to) {
+		log.fine("getAllByNamePrefix("+dtoIndex+","+prefix+")");
 		return reader.getAllByNamePrefix(dtoIndex, prefix, from, to);
 	}
 

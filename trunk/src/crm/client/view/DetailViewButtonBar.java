@@ -125,12 +125,13 @@ public class DetailViewButtonBar extends AbstractView {
 	public void startCreating() {
 		// if (detailview.isShowing()) {
 			detailview.stopViewing();
+			detailview.startCreating();
 
-			createBtn.setVisible(true);
-			demoBtn.setVisible(true);
+			saveBtn.setVisible(true);
+			cancelBtn.setVisible(true);
 			
-			saveBtn.setVisible(false);
-			cancelBtn.setVisible(false);
+			createBtn.setVisible(false);
+			demoBtn.setVisible(false);
 			editBtn.setVisible(false);
 			deleteBtn.setVisible(false);
 		// }

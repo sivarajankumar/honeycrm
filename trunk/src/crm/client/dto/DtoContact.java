@@ -32,7 +32,7 @@ public class DtoContact extends AbstractDto {
 		fields.add(new Field(INDEX_PHONE, Type.STRING, "Phone"));
 		fields.add(new Field(INDEX_CITY, Type.STRING, "City"));
 		fields.add(new Field(INDEX_EMAIL, Type.EMAIL, "E-Mail"));
-		fields.add(new Field(INDEX_ACCOUNTID, Type.RELATE, "Account"));
+		fields.add(new FieldRelate(INDEX_ACCOUNTID, DtoAccount.class, "Account"));
 		fields.add(new Field(INDEX_DONOTCALL, Type.BOOLEAN, "Do not call"));
 		fields.add(new Field(INDEX_DONOTCALLEXPLANATION, Type.TEXT, "Why not call"));
 		fields.add(new Field(INDEX_EMAILOPTEDOUT, Type.BOOLEAN, "No Mails"));
@@ -206,5 +206,10 @@ public class DtoContact extends AbstractDto {
 	@Override
 	public int[][] getSearchFields() {
 		return new int[][] { new int[] { INDEX_NAME }, new int[] { INDEX_ACCOUNTID } };
+	}
+
+	@Override
+	public String getQuicksearchItem() {
+		return name;
 	}
 }

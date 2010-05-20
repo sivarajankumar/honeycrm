@@ -20,12 +20,12 @@ import crm.client.dto.ListQueryResult;
 
 public class RelateWidget extends SuggestBox {
 	private long id;
-	private final Class<? extends AbstractDto> clazz;
+	private final int marshalledClass;
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 
-	public RelateWidget(Class<? extends AbstractDto> clazz2, final long id) {
+	public RelateWidget(final int marshalledClazz, final long id) {
 		super(new MultiWordSuggestOracle());
-		this.clazz = clazz2;
+		this.marshalledClass = marshalledClazz;
 		addHandlers();
 
 		if (0 != id) {
@@ -38,7 +38,7 @@ public class RelateWidget extends SuggestBox {
 	private void setValueForId(final long id) {
 		LoadIndicator.get().startLoading();
 
-		commonService.get(IANA.mashal(DtoAccount.class), id, new AsyncCallback<AbstractDto>() {
+		commonService.get(marshalledClass, id, new AsyncCallback<AbstractDto>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				LoadIndicator.get().endLoading();
@@ -52,7 +52,7 @@ public class RelateWidget extends SuggestBox {
 				if (null == result) {
 					setValue("Not found");
 				} else {
-					setValue(((DtoAccount) result).getName());
+					setValue(result.getQuicksearchItem());
 				}
 			}
 		});
@@ -68,7 +68,7 @@ public class RelateWidget extends SuggestBox {
 				if (!query.isEmpty()) {
 					LoadIndicator.get().startLoading();
 
-					commonService.getAllByNamePrefix(IANA.mashal(DtoAccount.class), query, 0, 20, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
 						@Override
 						public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
 							LoadIndicator.get().endLoading();
@@ -80,7 +80,7 @@ public class RelateWidget extends SuggestBox {
 								o.clear();
 
 								for (final AbstractDto a : result.getResults()) {
-									o.add(((DtoAccount) a).getName());
+									o.add(a.getQuicksearchItem());
 								}
 							}
 						}
@@ -108,26 +108,24 @@ public class RelateWidget extends SuggestBox {
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
 				// determine id of this item and store the id in the gui to make sure it is available on submit
-				if (DtoAccount.class == clazz) {
-					final String selected = event.getSelectedItem().getReplacementString();
+				final String selected = event.getSelectedItem().getReplacementString();
 
-					commonService.getByName(IANA.mashal(clazz), selected, new AsyncCallback<AbstractDto>() {
-						@Override
-						public void onFailure(Throwable caught) {
-							Window.alert("Could not get id of selected item = " + selected);
-						}
+				commonService.getByName(marshalledClass, selected, new AsyncCallback<AbstractDto>() {
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Could not get id of selected item = " + selected);
+					}
 
-						@Override
-						public void onSuccess(AbstractDto result) {
-							if (null == result) {
-								// the related entity could not be found or the search returned more than one result.
-								// TODO what should be done in this case?
-							} else {
-								id = result.getId();
-							}
+					@Override
+					public void onSuccess(AbstractDto result) {
+						if (null == result) {
+							// the related entity could not be found or the search returned more than one result.
+							// TODO what should be done in this case?
+						} else {
+							id = result.getId();
 						}
-					});
-				}
+					}
+				});
 			}
 		});
 	}
