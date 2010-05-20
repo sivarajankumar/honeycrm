@@ -40,14 +40,15 @@ public class TabModuleView extends AbstractView {
 		VerticalPanel searchPanel = new VerticalPanel();
 
 		searchPanel.setStyleName("actions");
-		searchPanel.add(new HTML("<div class='view_header_label'>Tightomat</div>"));
+		searchPanel.add(new HTML("<div class='view_header_label'>Searchomat</div>"));
 		// searchPanel.add(createView);
 		searchPanel.add(searchWidget);
-
+		searchPanel.add(listPanel);
+		
 		hor.setStyleName("tab_content");
 		hor.add(searchPanel);
 		// hor.add(new HTML("<div class='horizontal_seperator'></div>"));
-		hor.add(listPanel);
+		//hor.add(listPanel);
 		// hor.add(new HTML("<div class='horizontal_seperator'></div>"));
 		hor.add(viewPanel);
 		hor.add(new HTML("<div class='clear'></div>"));

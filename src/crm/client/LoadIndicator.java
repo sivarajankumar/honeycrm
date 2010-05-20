@@ -4,8 +4,11 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
-// TODO when one operation finishes while a concurrent one is still running the loading is ended too early
 public class LoadIndicator extends Composite {
+	/**
+	 * Save how many actions have been triggered on the server by the client. The request to remove the load indicator will be fulfilled if all actions are finished.
+	 */
+	private long concurrentActions = 0;
 	private FlowPanel panel = new FlowPanel();
 	private Label loading = new Label("Loading.. ");
 
@@ -25,9 +28,12 @@ public class LoadIndicator extends Composite {
 
 	public void startLoading() {
 		loading.setVisible(true);
+		++concurrentActions;
 	}
 
 	public void endLoading() {
-		loading.setVisible(false);
+		if (--concurrentActions == 0) {
+			loading.setVisible(false);
+		}
 	}
 }
