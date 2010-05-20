@@ -1,11 +1,14 @@
 package crm.client.view;
 
 import java.util.Date;
+import java.util.Set;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -14,22 +17,27 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
+import crm.client.CollectionHelper;
 import crm.client.CommonServiceAsync;
 import crm.client.IANA;
 import crm.client.ServiceRegistry;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.DtoAccount;
 import crm.client.dto.FieldEnum;
+import crm.client.dto.FieldMultiEnum;
+import crm.client.dto.FieldRelate;
+import crm.client.dto.Field.Type;
 import crm.client.view.AbstractView.View;
 
 /**
  * Determines the widget that should be displayed for a given field type.
  */
 public class WidgetSelector {
+	protected static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getShortDateFormat();
 	protected static final NumberFormat CURRENCY_FORMAT_RW = NumberFormat.getFormat("0.00", "EUR"); // TODO how to prefix euro sign? or other unicode characters?
 	protected static final NumberFormat CURRENCY_FORMAT_RO = NumberFormat.getFormat("0.00"); // TODO how to prefix euro sign? or other unicode characters?
 	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
-	
+
 	public static Widget getWidgetByType(final Class<? extends AbstractDto> clazz, final AbstractDto tmpViewable, final int fieldId, final View view) {
 		if (AbstractDto.INDEX_MARKED == fieldId) {
 			return new MarkWidget(clazz, tmpViewable);
@@ -74,21 +82,29 @@ public class WidgetSelector {
 			widget4.setText((null == value) ? "" : value.toString());
 			return widget4;
 		case RELATE:
-			return new RelateWidget(DtoAccount.class, (Long) value);
+			if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
+				return new RelateWidget(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), (Long) value);
+			} else {
+				throw new RuntimeException("Expected FieldRelate. Received " + tmpViewable.getFieldById(fieldId).getClass().toString());
+			}
 		case CURRENCY:
 			TextBox widget5 = new TextBox();
 			widget5.setText(CURRENCY_FORMAT_RW.format((Double) value));
 			return widget5;
 		case ENUM:
-			ListBox box = new ListBox();
+		case MULTIENUM:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldEnum) {
-				final String[] options = ((FieldEnum)tmpViewable.getFieldById(fieldId)).getOptions(); 
-				for (int i=0; i<options.length; i++) {
+				final Set<String> selectedItems = CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
+				final String[] options = ((FieldEnum) tmpViewable.getFieldById(fieldId)).getOptions();
+				final ListBox box = new ListBox(Type.MULTIENUM == tmpViewable.getFieldById(fieldId).getType());
+
+				for (int i = 0; i < options.length; i++) {
 					box.addItem(options[i]);
-					if (options[i].equals(value.toString())) { // preselect the item that has been stored in the db
-						box.setSelectedIndex(i);
+					if (selectedItems.contains(options[i])) { // preselect the item(s) that have been stored in the db
+						box.setItemSelected(i, true);
 					}
 				}
+				
 				return box;
 			} else {
 				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
@@ -106,11 +122,14 @@ public class WidgetSelector {
 				// return an empty label because no account has been selected yet
 				return new Label();
 			} else {
+				if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
+				//	return new RelateWidget(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), 0);
+					
 				// resolve the real name of the entity by its id and display a HyperLink as widget
-				final AbstractDto relatedViewable = new DtoAccount();
+				final AbstractDto relatedViewable = new DtoAccount(); // TODO determine history token from field..
 				final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
 
-				commonService.get(IANA.mashal(DtoAccount.class), (Long) value, new AsyncCallback<AbstractDto>() {
+				commonService.get(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), (Long) value, new AsyncCallback<AbstractDto>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						// assume no related entity has been selected
@@ -125,12 +144,12 @@ public class WidgetSelector {
 							// Window.alert("Could not find account with id " + value);
 							link.setText("");
 						} else {
-							// TODO make DTO independent
-							link.setText(((DtoAccount) result).getName());
+							link.setText(result.getQuicksearchItem());
 						}
 					}
 				});
 				return link;
+				}
 			}
 		case BOOLEAN:
 			CheckBox widget7 = new CheckBox();
@@ -148,6 +167,18 @@ public class WidgetSelector {
 				// Display email as a mailto:a@b.com link to make sure the clients mail client will be opened.
 				return new Anchor(value.toString(), true, "mailto:" + value.toString());
 			}
+		case DATE:
+			if (null == value) {
+				return new Label();
+			} else {
+				return new Label(DATE_FORMAT.format((Date)value));
+			}
+		case MULTIENUM:
+			String ul = "";
+			for (final String selection : value.toString().split(FieldMultiEnum.SEPARATOR)) {
+				ul += "<li>" + selection + "</li>";
+			}
+			return new HTML("<ul>" + ul + "</ul>");
 		case ENUM:
 		case TEXT:
 		default:
@@ -175,15 +206,20 @@ public class WidgetSelector {
 			TextArea widget4 = new TextArea();
 			return widget4;
 		case RELATE:
-			return new RelateWidget(DtoAccount.class, 0);
+			if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
+				return new RelateWidget(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), 0);
+			} else {
+				throw new RuntimeException("Expected FieldRelate. Received " + tmpViewable.getFieldById(fieldId).getClass().toString());
+			}
 		case CURRENCY:
 			TextBox widget5 = new TextBox();
 			return widget5;
 		case ENUM:
-			ListBox box = new ListBox();
+		case MULTIENUM:
+			ListBox box = new ListBox(Type.MULTIENUM == tmpViewable.getFieldById(fieldId).getType());
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldEnum) {
-				final String[] options = ((FieldEnum)tmpViewable.getFieldById(fieldId)).getOptions(); 
-				for (int i=0; i<options.length; i++) {
+				final String[] options = ((FieldEnum) tmpViewable.getFieldById(fieldId)).getOptions();
+				for (int i = 0; i < options.length; i++) {
 					box.addItem(options[i]);
 				}
 				return box;

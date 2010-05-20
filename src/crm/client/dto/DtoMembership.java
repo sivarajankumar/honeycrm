@@ -26,8 +26,8 @@ public class DtoMembership extends AbstractDto {
 	public static final int INDEX_ENDDATE = 8;
 
 	public DtoMembership() {
-		fields.add(new Field(INDEX_MEMBERID, Type.RELATE, "Member"));
-		fields.add(new Field(INDEX_EMPLOYEEID, Type.RELATE, "Employee"));
+		fields.add(new FieldRelate(INDEX_MEMBERID, DtoContact.class, "Member"));
+		fields.add(new FieldRelate(INDEX_EMPLOYEEID, DtoEmployee.class, "Employee"));
 		fields.add(new Field(INDEX_PAYMENT, Type.STRING, "Contribution"));
 		fields.add(new Field(INDEX_TIEDTOPURPOSE, Type.STRING, "Tied to purpose"));
 		fields.add(new Field(INDEX_PURPOSE, Type.TEXT, "Purpose"));
@@ -183,5 +183,10 @@ public class DtoMembership extends AbstractDto {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	@Override
+	public String getQuicksearchItem() {
+		return "not implemented yet";
 	}
 }

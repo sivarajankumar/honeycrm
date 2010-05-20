@@ -1,5 +1,8 @@
 package crm.client.view;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -12,12 +15,14 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
+import crm.client.CollectionHelper;
 import crm.client.CommonServiceAsync;
 import crm.client.IANA;
 import crm.client.LoadIndicator;
 import crm.client.ServiceRegistry;
 import crm.client.TabCenterView;
 import crm.client.dto.AbstractDto;
+import crm.client.dto.FieldMultiEnum;
 
 abstract public class AbstractView extends Composite {
 	// private static final NumberFormat DATE_FORMAT = DateFo NumberFormat.getFormat(LocaleInfo.getCurrentLocale().getNumberConstants().currencyPattern());
@@ -58,10 +63,25 @@ abstract public class AbstractView extends Composite {
 					} else if (widgetValue instanceof TextArea) {
 						value = ((TextArea) widgetValue).getText();
 					} else if (widgetValue instanceof ListBox) {
-						value = ((ListBox)widgetValue).getItemText(((ListBox) widgetValue).getSelectedIndex());
-					// TODO also enable this for MarkWidget
-					// } else if (widgetValue instanceof MarkWidget) {
-					// value = widgetValue.
+						final ListBox box = (ListBox) widgetValue;
+						String selectedValue = "";
+						if (box.isMultipleSelect()) {
+							// this is a multi enum field. determine the fields that have been selected and concatenate their values.
+							final Set<String> selectedValues = new HashSet<String>();
+							for (int i = 0; i < box.getItemCount(); i++) {
+								if (box.isItemSelected(i)) {
+									selectedValues.add(box.getValue(i));
+								}
+							}
+							selectedValue = CollectionHelper.join(selectedValues, FieldMultiEnum.SEPARATOR);
+						} else if (-1 < box.getSelectedIndex()) {
+							// this is an enum field (single line dropdown). only add anything if something has been selected to avoid array index out of bounds exceptions at runtime
+							selectedValue += box.getValue(box.getSelectedIndex());
+						}
+						value = selectedValue;
+						// TODO also enable this for MarkWidget
+						// } else if (widgetValue instanceof MarkWidget) {
+						// value = widgetValue.
 					} else {
 						displayError(new RuntimeException("Unexpected Widget: " + widgetValue.getClass())); // unexpected widget
 						throw new RuntimeException("Unexpected Widget Type: " + widgetValue.getClass().toString());
@@ -146,7 +166,7 @@ abstract public class AbstractView extends Composite {
 		Window.alert(caught.getClass().toString());
 		// throw new RuntimeException(caught.getLocalizedMessage());
 	}
-	
+
 	public enum View {
 		DETAIL, EDIT, CREATE
 	}

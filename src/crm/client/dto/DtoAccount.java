@@ -121,4 +121,9 @@ public class DtoAccount extends AbstractDto {
 	public int[][] getSearchFields() {
 		return new int[][] { new int[] { INDEX_NAME } };
 	}
+
+	@Override
+	public String getQuicksearchItem() {
+		return name;
+	}
 }
