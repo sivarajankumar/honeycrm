@@ -11,11 +11,9 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 import crm.client.CommonServiceAsync;
-import crm.client.IANA;
 import crm.client.LoadIndicator;
 import crm.client.ServiceRegistry;
 import crm.client.dto.AbstractDto;
-import crm.client.dto.DtoAccount;
 import crm.client.dto.ListQueryResult;
 
 public class RelateWidget extends SuggestBox {
