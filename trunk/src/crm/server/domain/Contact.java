@@ -23,6 +23,20 @@ public class Contact extends AbstractEntity {
 	private boolean doNotCall;
 	@Persistent
 	private String doNotCallExplanation;
+	@Persistent
+	private String bankAccountData;
+	@Persistent
+	private String profession;
+	@Persistent
+	private String study;
+	@Persistent
+	private long partnerId;
+	@Persistent
+	private long child1Id;
+	@Persistent
+	private long child2Id;
+	@Persistent
+	private long responsibleId;
 
 	public Contact() {
 	}
@@ -101,5 +115,61 @@ public class Contact extends AbstractEntity {
 
 	public void setDoNotCallExplanation(String doNotCallExplanation) {
 		this.doNotCallExplanation = doNotCallExplanation;
+	}
+
+	public String getBankAccountData() {
+		return bankAccountData;
+	}
+
+	public void setBankAccountData(String bankAccountData) {
+		this.bankAccountData = bankAccountData;
+	}
+
+	public String getProfession() {
+		return profession;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
+
+	public String getStudy() {
+		return study;
+	}
+
+	public void setStudy(String study) {
+		this.study = study;
+	}
+
+	public long getPartnerId() {
+		return partnerId;
+	}
+
+	public void setPartnerId(long partnerId) {
+		this.partnerId = partnerId;
+	}
+
+	public long getChild1Id() {
+		return child1Id;
+	}
+
+	public void setChild1Id(long child1Id) {
+		this.child1Id = child1Id;
+	}
+
+	public long getChild2Id() {
+		return child2Id;
+	}
+
+	public void setChild2Id(long child2Id) {
+		this.child2Id = child2Id;
+	}
+
+	public long getResponsibleId() {
+		return responsibleId;
+	}
+
+	public void setResponsibleId(long responsibleId) {
+		this.responsibleId = responsibleId;
 	}
 }
