@@ -256,4 +256,8 @@ public class ListView extends AbstractView {
 	public void deleteSelected() {
 		deletePanel.deleteSelected();
 	}
+
+	public void deleteAll() {
+		deletePanel.deleteAll();
+	}
 }

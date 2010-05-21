@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 public class ListViewPaginationBar extends Composite {
 	private ListView listview;
 	private Button delete = new Button("-");
+	private Button deleteAll = new Button("Delete All");
 	private Button first = new Button("<<");
 	private Button left = new Button("<");
 	private Button right = new Button(">");
@@ -25,6 +26,13 @@ public class ListViewPaginationBar extends Composite {
 				listview.deleteSelected();
 			}
 		});
+		
+		deleteAll.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				listview.deleteAll();
+			}
+		});
 
 		final HorizontalPanel underListPanel = new HorizontalPanel();
 		underListPanel.setStyleName("under_list_panel");
@@ -32,6 +40,7 @@ public class ListViewPaginationBar extends Composite {
 		paginationPanel.setStyleName("list_pagination");
 
 		underListPanel.add(delete);
+		underListPanel.add(deleteAll);
 		paginationPanel.add(first);
 		paginationPanel.add(left);
 		paginationPanel.add(label);
