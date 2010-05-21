@@ -39,8 +39,10 @@ public class CollectionHelper {
 	 */
 	public static Set<String> toSet(final String[] array) {
 		final Set<String> set = new HashSet<String>();
-		for(int i=0; i<array.length; i++) {
-			set.add(array[i]);
+		if (null != array) {
+			for(int i=0; i<array.length; i++) {
+				set.add(array[i]);
+			}
 		}
 		return set;
 	}
