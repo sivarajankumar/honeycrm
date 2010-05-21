@@ -1,8 +1,11 @@
 package crm.server;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 import java.util.logging.Logger;
+
+import javax.jdo.Query;
 
 import crm.client.CommonService;
 import crm.client.dto.AbstractDto;
@@ -109,5 +112,12 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public ListQueryResult<? extends AbstractDto> getAllMarked(int dtoIndex, int from, int to) {
 		return reader.getAllMarked(dtoIndex, from, to);
+	}
+
+	@Override
+	public void deleteAll(int dtoIndex) {
+		final Query q = m.newQuery(getDomainClass(dtoIndex));
+		final Collection collection = (Collection) q.execute();
+		m.deletePersistentAll(collection);
 	}
 }

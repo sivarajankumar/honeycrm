@@ -117,4 +117,21 @@ public class ListViewDeletionPanel extends AbstractView {
 			deleteIdsPerPage.put(page, new HashSet<Long>());
 		}
 	}
+
+	public void deleteAll() {
+		LoadIndicator.get().startLoading();
+		
+		commonService.deleteAll(IANA.mashal(clazz), new AsyncCallback() {
+			@Override
+			public void onFailure(Throwable caught) {
+				displayError(caught);
+			}
+
+			@Override
+			public void onSuccess(Object result) {
+				LoadIndicator.get().endLoading();
+				listview.refresh();
+			}
+		});
+	}
 }
