@@ -67,10 +67,11 @@ body {
 /* VIEWS */
 
 .detail_view {
-	width: 60%; /* force width of detail view smaller to avoid current wrapping bug */
+/*	width: 60%; /* force width of detail view smaller to avoid current wrapping bug */
 	float: left;
 	height: 100%;
 	padding: 5px;
+	border-left: 5px solid white;
 }
 
 .detail_view_content {
@@ -99,8 +100,6 @@ body {
 	width: 30%;
 	float: left;
 	padding: 5px;
-	border-right: 5px solid white;
-	/*border-left: 5px solid white;*/
 }
 
 .under_list_panel {
