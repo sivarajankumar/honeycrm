@@ -7,15 +7,22 @@ import crm.client.LoadIndicator;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 
-public class SearchableListView extends ListView {
+public class SearchableListView extends PaginatingListView {
+	private AbstractDto searchViewable;
+
 	public SearchableListView(Class<? extends AbstractDto> clazz) {
 		super(clazz);
 	}
 
-	public void search(AbstractDto tmpViewable) {
+	public void search(final AbstractDto searchedViewable) {
+		this.searchViewable = searchedViewable;
+		doSearchForPage(0);
+	}
+
+	private void doSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.search(IANA.mashal(clazz), viewable, 0, MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		commonService.search(IANA.mashal(clazz), searchViewable, getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
@@ -23,7 +30,7 @@ public class SearchableListView extends ListView {
 
 			@Override
 			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
-				insertSearchResults(result);
+				insertSearchResults(page, result);
 			}
 		});
 	}
@@ -33,9 +40,13 @@ public class SearchableListView extends ListView {
 	}
 
 	public void getAllMarked() {
+		doMarkedSearchForPage(0);
+	}
+
+	private void doMarkedSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.getAllMarked(IANA.mashal(clazz), 0, MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		commonService.getAllMarked(IANA.mashal(clazz), getOffsetForPage(page), getOffsetForPage(page)+MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
@@ -43,18 +54,22 @@ public class SearchableListView extends ListView {
 
 			@Override
 			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
-				insertSearchResults(result);
+				insertSearchResults(page, result);
 			}
 		});
 	}
 
-	private void insertSearchResults(ListQueryResult<? extends AbstractDto> result) {
+	private void insertSearchResults(final int page, ListQueryResult<? extends AbstractDto> result) {
 		LoadIndicator.get().endLoading();
 
 		// TODO
-		cache.put(currentPage(), result.getResults());
+		cache.put(page, result.getResults());
 		setNumberOfPages(result.getItemCount());
-		showPage(currentPage());
+		showPage(page);
 	}
 
+	@Override
+	public void showPageRight() {
+		doSearchForPage(currentPage + 1);
+	}
 }

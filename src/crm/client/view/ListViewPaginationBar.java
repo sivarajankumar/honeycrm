@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
 public class ListViewPaginationBar extends Composite {
-	private ListView listview;
+	private PaginatingListView listview;
 	private Button delete = new Button("-");
 	private Button deleteAll = new Button("Delete All");
 	private Button first = new Button("<<");
@@ -17,7 +17,7 @@ public class ListViewPaginationBar extends Composite {
 	private Button right = new Button(">");
 	private Button last = new Button(">>");
 
-	public ListViewPaginationBar(final ListView listview, Label label) {
+	public ListViewPaginationBar(final PaginatingListView listview, Label label) {
 		this.listview = listview;
 
 		delete.addClickHandler(new ClickHandler() {

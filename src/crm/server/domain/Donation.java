@@ -5,7 +5,11 @@ import java.util.Date;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableProperty;
+
 @PersistenceCapable
+@Searchable
 public class Donation extends AbstractEntity {
 	@Persistent
 	private long employeeId;
@@ -14,17 +18,23 @@ public class Donation extends AbstractEntity {
 	@Persistent
 	private long projectId;
 	@Persistent
+	@SearchableProperty
 	private String donatedFor; // foundation / project donation / unlinked donation
 	@Persistent
+	@SearchableProperty
 	private String kind; // subscription / once
 	@Persistent
 	private Date receiptionDate;
 	@Persistent
+	@SearchableProperty
 	private String reaction; // thanked / receipt / certificate / no
 	@Persistent
+	@SearchableProperty
 	private String reactedHow; // (=channel) email / mail / phone call
 	@Persistent
 	private Date date;
+	@Persistent
+	private double amount;
 	
 	public Donation() {
 	}
@@ -99,5 +109,13 @@ public class Donation extends AbstractEntity {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 }

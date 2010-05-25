@@ -3,31 +3,44 @@ package crm.server.domain;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableProperty;
+
 @PersistenceCapable
+@Searchable
 public class Contact extends AbstractEntity {
 	@Persistent
+	@SearchableProperty
 	private String city;
 	@Persistent
+	@SearchableProperty
 	private String email;
 	@Persistent
+	@SearchableProperty
 	private String name;
 	@Persistent
+	@SearchableProperty
 	private String phone;
 	@Persistent
 	private long accountID;
 	@Persistent
 	private boolean emailOptedOut;
 	@Persistent
+	@SearchableProperty
 	private String mobile;
 	@Persistent
 	private boolean doNotCall;
 	@Persistent
+	@SearchableProperty
 	private String doNotCallExplanation;
 	@Persistent
+	@SearchableProperty
 	private String bankAccountData;
 	@Persistent
+	@SearchableProperty
 	private String profession;
 	@Persistent
+	@SearchableProperty
 	private String study;
 	@Persistent
 	private long partnerId;

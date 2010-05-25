@@ -5,13 +5,19 @@ import java.util.Date;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableProperty;
+
 @PersistenceCapable
+@Searchable
 public class Project extends AbstractEntity {
 	@Persistent
+	@SearchableProperty
 	private String name;
 	@Persistent
 	private long employeeId;
 	@Persistent
+	@SearchableProperty
 	private String description;
 	@Persistent
 	private double targetSum;
@@ -22,6 +28,7 @@ public class Project extends AbstractEntity {
 	@Persistent
 	private Date endDate;
 	@Persistent
+	@SearchableProperty
 	private String phase;
 
 	public Project() {

@@ -49,14 +49,14 @@ public class ServiceTest extends AbstractClientTest {
 		contact.setEmail("a@b.com");
 		contact.setPhone("123123");
 
-		commonService.create(IANA.mashal(DtoContact.class), contact, new AsyncCallback<Void>() {
+		commonService.create(IANA.mashal(DtoContact.class), contact, new AsyncCallback<Long>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				fail();
 			}
 
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccess(Long result) {
 				finishTest();
 			}
 		});

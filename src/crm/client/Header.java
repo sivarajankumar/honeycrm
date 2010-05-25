@@ -5,7 +5,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SuggestBox;
 
 public class Header extends Composite {
 	public Header() {
@@ -13,7 +12,7 @@ public class Header extends Composite {
 		panel.setStyleName("header");
 
 		/*
-		 * ------------------------------------------------------------------ | logo | loadIndicator | header_links | | | | login | profile | help | searchPanel | ------------------------------------------------------------------
+		 * logo | loadIndicator | header_links | | | | login | profile | help | searchPanel | ------------------------------------------------------------------
 		 */
 
 		Label logo = new Label("Honeeeeeeeyyyyy CRM");
@@ -37,21 +36,22 @@ public class Header extends Composite {
 		Hyperlink help = new Hyperlink("Help", "Help");
 		help.setStyleName("header_link");
 
+		HTML pipe3 = new HTML("&nbsp; | &nbsp;");
+		pipe3.setStyleName("header_link");
+		
 		FlowPanel searchPanel = new FlowPanel();
 		searchPanel.setStyleName("header_search");
 
 		Label searchLabel = new Label("Search");
 		searchLabel.setStyleName("header_search_label");
 
-		SuggestBox suggest = new SuggestBox();
-		suggest.setStyleName("header_search_field");
-
 		searchPanel.add(searchLabel);
-		searchPanel.add(suggest);
+		searchPanel.add(new FulltextSearchWidget());
 		searchPanel.add(new HTML("<div class='clear'></div>"));
 
 		// from right to left
 		header_links.add(searchPanel);
+		header_links.add(pipe3);
 		header_links.add(help);
 		header_links.add(pipe2);
 		header_links.add(profile);

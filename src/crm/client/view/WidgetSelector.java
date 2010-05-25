@@ -201,6 +201,7 @@ public class WidgetSelector {
 			return widget2;
 		case INTEGER:
 			TextBox widget6 = new TextBox();
+			widget6.setText(tmpViewable.getFieldById(fieldId).getDefaultValue());
 			return widget6;
 		case EMAIL:
 		case STRING:
@@ -218,6 +219,7 @@ public class WidgetSelector {
 			}
 		case CURRENCY:
 			TextBox widget5 = new TextBox();
+			widget5.setText(tmpViewable.getFieldById(fieldId).getDefaultValue());
 			return widget5;
 		case ENUM:
 		case MULTIENUM:

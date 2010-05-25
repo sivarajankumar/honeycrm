@@ -141,7 +141,7 @@ public class DetailView extends AbstractView {
 		if (isShowing()) {
 			resetFields(viewable, View.EDIT);
 		} else {
-			Window.alert("Do nothing because id is not defined");
+			// Window.alert("Do nothing because id is not defined");
 		}
 	}
 
@@ -152,7 +152,7 @@ public class DetailView extends AbstractView {
 		if (isShowing()) {
 			resetFields(viewable, View.DETAIL);
 		} else {
-			Window.alert("Do nothing because id is not defined");
+			// Window.alert("Do nothing because id is not defined");
 		}
 	}
 

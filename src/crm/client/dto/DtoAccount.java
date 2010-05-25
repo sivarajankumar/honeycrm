@@ -19,7 +19,7 @@ public class DtoAccount extends AbstractDto {
 		fields.add(new Field(INDEX_NAME, Type.STRING, "Name"));
 		fields.add(new Field(INDEX_ADDRESS, Type.STRING, "Address"));
 		fields.add(new Field(INDEX_DATE, Type.DATE, "Date"));
-		fields.add(new Field(INDEX_ANNUALREVENUE, Type.CURRENCY, "Annual Revenue"));
+		fields.add(new Field(INDEX_ANNUALREVENUE, Type.CURRENCY, "Annual Revenue", "0"));
 	}
 
 	public String getName() {
@@ -83,12 +83,9 @@ public class DtoAccount extends AbstractDto {
 
 	@Override
 	protected int[][] interalGetFormFieldIds() {
-		final int[] row1 = new int[] { INDEX_NAME };
+		final int[] row1 = new int[] { INDEX_NAME, INDEX_DATE, INDEX_ANNUALREVENUE };
 		final int[] row2 = new int[] { INDEX_ADDRESS };
-		final int[] row3 = new int[] { INDEX_DATE };
-		final int[] row4 = new int[] { INDEX_ANNUALREVENUE };
-
-		return new int[][] { row1, row2, row3, row4 };
+		return new int[][] { row1, row2 };
 	}
 
 	@Override

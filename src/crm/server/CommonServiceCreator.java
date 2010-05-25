@@ -14,17 +14,19 @@ import crm.server.domain.AbstractEntity;
 public class CommonServiceCreator extends AbstractCommonService {
 	private static final long serialVersionUID = -272641981474976416L;
 
-	public void create(int dtoIndex, AbstractDto dto) {
+	public long create(int dtoIndex, AbstractDto dto) {
 		final AbstractEntity domainObject = (AbstractEntity) copy.copy(dto, getDomainClass(dtoIndex));
-		internalCreate(domainObject);
+		return internalCreate(domainObject);
 	}
 
 	// encapsulates setting the created at field on each save
-	private void internalCreate(final AbstractEntity domainObject) {
-		domainObject.setCreatedAt(new Date(System.currentTimeMillis()));
-		
-		if (null != domainObject) {
+	private long internalCreate(final AbstractEntity domainObject) {
+		if (null == domainObject) {
+			throw new RuntimeException("Could not create domain object because domainObject was null");
+		} else {
+			domainObject.setCreatedAt(new Date(System.currentTimeMillis()));
 			m.makePersistent(domainObject);
+			return domainObject.getId().getId();
 		}
 	}
 

@@ -37,11 +37,11 @@ public class ListView extends AbstractView {
 	 */
 	private static final int LEADING_COLS = 1;
 
-	private int currentPage = -1;
-	private int numberOfPages = -1;
+	protected int currentPage = -1;
+	protected int numberOfPages = -1;
 
-	private final Label label = new Label();
-	private final FlowPanel panel = new FlowPanel();
+	protected final Label label = new Label();
+	protected final FlowPanel panel = new FlowPanel();
 	private final FlexTable table = new FlexTable();
 	private final ListViewDeletionPanel deletePanel;
 
@@ -68,7 +68,6 @@ public class ListView extends AbstractView {
 		}
 
 		panel.add(table);
-		panel.add(new ListViewPaginationBar(this, label));
 
 		// initialize the leading columns
 		table.setWidget(0, 0, deletePanel = new ListViewDeletionPanel(clazz, this));
@@ -177,7 +176,7 @@ public class ListView extends AbstractView {
 	}
 
 	private void refreshPage(final int page) {
-		final int offset = (-1 == page) ? (0) : (page - 1) * MAX_ENTRIES;
+		final int offset = getOffsetForPage(page);
 
 		assert 0 <= offset;
 
@@ -200,6 +199,10 @@ public class ListView extends AbstractView {
 				showPage(-1 == page ? 1 : page);
 			}
 		});
+	}
+
+	protected int getOffsetForPage(final int page) {
+		return (-1 == page) ? (0) : (page - 1) * MAX_ENTRIES;
 	}
 
 	public int currentPage() {
@@ -226,27 +229,11 @@ public class ListView extends AbstractView {
 		return ids;
 	}
 
-	/*
+	/**
 	 * Pagination
 	 */
 	private void updatePageCounterLabel() {
 		label.setText("Page " + currentPage + " of " + numberOfPages);
-	}
-
-	public void showLastPage() {
-		showPage(numberOfPages);
-	}
-
-	public void showFirstPage() {
-		showPage(1);
-	}
-
-	public void showPageLeft() {
-		showPage(currentPage - 1);
-	}
-
-	public void showPageRight() {
-		showPage(currentPage + 1);
 	}
 
 	public void refresh() {

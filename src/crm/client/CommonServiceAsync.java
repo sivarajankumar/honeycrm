@@ -10,7 +10,6 @@ import crm.client.dto.ListQueryResult;
 public interface CommonServiceAsync {
 	void getAll(final int dtoIndex, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback);
 	void get(int dtoIndex, long id, AsyncCallback<AbstractDto> callback);
-	void create(int dtoIndex, AbstractDto viewable, AsyncCallback<Void> callback);
 	void search(int dtoIndex, AbstractDto searchContact, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback);
 	void update(int dtoIndex, AbstractDto account, long id, AsyncCallback<Void> callback);
 	void delete(int dtoIndex, long id, AsyncCallback<Void> callback);
@@ -22,4 +21,5 @@ public interface CommonServiceAsync {
 	void mark(int dtoIndex, long id, boolean marked, AsyncCallback<Void> callback);
 	void getAllMarked(int dtoIndex, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback);
 	void deleteAll(int dtoIndex, AsyncCallback<Void> callback);
+	void create(int dtoIndex, AbstractDto viewable, AsyncCallback<Long> callback);
 }

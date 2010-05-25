@@ -5,11 +5,17 @@ import java.util.Date;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableProperty;
+
 @PersistenceCapable
+@Searchable
 public class Account extends AbstractEntity {
 	@Persistent
+	@SearchableProperty
 	private String name;
 	@Persistent
+	@SearchableProperty
 	private String address;
 	@Persistent
 	private Date date;

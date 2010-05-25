@@ -3,9 +3,14 @@ package crm.server.domain;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableProperty;
+
 @PersistenceCapable
+@Searchable
 public class Employee extends AbstractEntity {
 	@Persistent
+	@SearchableProperty
 	private String name;
 	@Persistent
 	private boolean active;
