@@ -16,6 +16,7 @@ public class DtoDonation extends AbstractDto {
 	private String reaction; // thanked / receipt / certificate / no
 	private String reactedHow; // (=channel) email / mail / phone call
 	private Date date;
+	private double amount;
 
 	public static final int INDEX_EMPLOYEEID = 1;
 	public static final int INDEX_DONATORID = 2;
@@ -26,6 +27,7 @@ public class DtoDonation extends AbstractDto {
 	public static final int INDEX_REACTION = 7;
 	public static final int INDEX_REACTEDHOW = 8;
 	public static final int INDEX_DATE = 9;
+	public static final int INDEX_AMOUNT = 10;
 
 	public DtoDonation() {
 		fields.add(new FieldRelate(INDEX_EMPLOYEEID, DtoEmployee.class, "Employee"));
@@ -37,6 +39,7 @@ public class DtoDonation extends AbstractDto {
 		fields.add(new FieldEnum(INDEX_REACTION, "Reaction", "Thanked", "Receipt", "Certificate", "No"));
 		fields.add(new FieldMultiEnum(INDEX_REACTEDHOW, "Reaction channel", "E-Mail", "Letter", "Phone Call"));
 		fields.add(new Field(INDEX_DATE, Type.DATE, "Date"));
+		fields.add(new Field(INDEX_AMOUNT, Type.CURRENCY, "Amount", "0"));
 	}
 
 	@Override
@@ -62,11 +65,12 @@ public class DtoDonation extends AbstractDto {
 	@Override
 	protected int[][] interalGetFormFieldIds() {
 		final int[] row1 = new int[] { INDEX_DONATORID, INDEX_KIND };
-		final int[] row2 = new int[] { INDEX_DONATEDFOR, INDEX_EMPLOYEEID };
-		final int[] row3 = new int[] { INDEX_REACTION, INDEX_REACTEDHOW };
-		final int[] row4 = new int[] { INDEX_DATE };
-		final int[] row5 = new int[] { INDEX_RECEIPTIONDATE, INDEX_PROJECTID };
-		return new int[][] { row1, row2, row3, row4, row5 };
+		final int[] row2 = new int[] {INDEX_AMOUNT};
+		final int[] row3 = new int[] { INDEX_DONATEDFOR, INDEX_EMPLOYEEID };
+		final int[] row4 = new int[] { INDEX_REACTION, INDEX_REACTEDHOW };
+		final int[] row5 = new int[] { INDEX_DATE };
+		final int[] row6 = new int[] { INDEX_RECEIPTIONDATE, INDEX_PROJECTID };
+		return new int[][] { row1, row2, row3, row4, row5, row6 };
 	}
 
 	@Override
@@ -90,6 +94,8 @@ public class DtoDonation extends AbstractDto {
 			return reactedHow;
 		case INDEX_DATE:
 			return date;
+		case INDEX_AMOUNT:
+			return amount;
 		default:
 			throw new RuntimeException("Unexpected Index: " + index);
 		}
@@ -124,6 +130,9 @@ public class DtoDonation extends AbstractDto {
 			break;
 		case INDEX_DATE:
 			setDate((Date) value);
+			break;
+		case INDEX_AMOUNT:
+			setAmount(null == value ? 0.0 : Double.parseDouble(value.toString().isEmpty() ? "0" : value.toString()));
 			break;
 		default:
 			throw new RuntimeException("Unexpected Index: " + index);
@@ -205,5 +214,13 @@ public class DtoDonation extends AbstractDto {
 	@Override
 	public String getQuicksearchItem() {
 		return "not implemented yet";
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 }

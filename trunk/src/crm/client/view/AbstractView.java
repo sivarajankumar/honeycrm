@@ -109,8 +109,7 @@ abstract public class AbstractView extends Composite {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("could not create");
-				LoadIndicator.get().endLoading();
+				displayError(caught);
 			}
 		};
 
@@ -122,7 +121,19 @@ abstract public class AbstractView extends Composite {
 		if (isUpdate) {
 			commonService.update(IANA.mashal(clazz), viewable, id, saveCallback);
 		} else {
-			commonService.create(IANA.mashal(clazz), viewable, saveCallback);
+			commonService.create(IANA.mashal(clazz), viewable, new AsyncCallback<Long>() {
+				@Override
+				public void onFailure(Throwable caught) {
+					displayError(caught);
+				}
+
+				@Override
+				public void onSuccess(Long result) {
+					TabCenterView.instance().get(clazz).saveCompletedForId(result);
+//					TabCenterView.instance().get(clazz).showDetailView(result);
+					LoadIndicator.get().endLoading();
+				}
+			});
 		}
 	}
 

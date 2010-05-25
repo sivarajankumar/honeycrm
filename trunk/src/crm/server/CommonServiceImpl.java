@@ -22,8 +22,8 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final CommonServiceReader reader = new CommonServiceReader();
 
 	@Override
-	public void create(int dtoIndex, AbstractDto dto) {
-		creator.create(dtoIndex, dto);
+	public long create(int dtoIndex, AbstractDto dto) {
+		return creator.create(dtoIndex, dto);
 	}
 
 	@Override

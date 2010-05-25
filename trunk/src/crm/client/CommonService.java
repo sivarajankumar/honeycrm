@@ -11,7 +11,7 @@ import crm.client.dto.ListQueryResult;
 @RemoteServiceRelativePath("common")
 public interface CommonService extends RemoteService {
 	// create
-	public void create(int dtoIndex, AbstractDto viewable);
+	public long create(int dtoIndex, AbstractDto viewable);
 
 	// read
 	public AbstractDto get(int dtoIndex, long id);

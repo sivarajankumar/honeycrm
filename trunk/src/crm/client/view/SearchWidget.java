@@ -5,7 +5,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -15,7 +17,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import crm.client.dto.AbstractDto;
 
-public class SearchWidget extends AbstractView {
+public class SearchWidget extends AbstractView implements KeyPressHandler {
+	private final DisclosurePanel panel = new DisclosurePanel("Searchomat");
 	private final FlexTable table = new FlexTable();
 
 	public SearchWidget(final Class<? extends AbstractDto> clazz, final SearchableListView listview) {
@@ -88,11 +91,24 @@ public class SearchWidget extends AbstractView {
 		verticalPanel.add(table);
 		verticalPanel.add(buttonPanel);
 
-		initWidget(verticalPanel);
+		panel.setContent(verticalPanel);
+
+		initWidget(panel);
 	}
 
 	private void startSearch(final SearchableListView listview, final FlexTable table, final int[][] fieldIDs) {
 		setViewable(fieldIDs, table, viewable); // build query by writing input from textboxes into viewable instance
 		listview.search(viewable);
+	}
+
+	/**
+	 * Open widget if closed. Close widget otherwise.
+	 */
+	@Override
+	public void onKeyPress(KeyPressEvent event) {
+		Window.alert("fired");
+		if (event.isAltKeyDown() && 's' == event.getCharCode()) {
+			panel.setOpen(!panel.isOpen());
+		}
 	}
 }

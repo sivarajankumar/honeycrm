@@ -5,7 +5,11 @@ import java.util.Date;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableProperty;
+
 @PersistenceCapable
+@Searchable
 public class Membership extends AbstractEntity {
 	@Persistent
 	private long memberId; // relation to contacts
@@ -14,10 +18,13 @@ public class Membership extends AbstractEntity {
 	@Persistent
 	private double payment;
 	@Persistent
+	@SearchableProperty
 	private String tiedToPurpose; // yes, no, 'soon'
 	@Persistent
+	@SearchableProperty
 	private String purpose;
 	@Persistent
+	@SearchableProperty
 	private String paymentMethod; // Direct Debit authorisation / transaction
 	@Persistent
 	private Date startDate;

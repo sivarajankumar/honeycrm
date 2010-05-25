@@ -10,6 +10,7 @@ import java.util.List;
 import javax.jdo.Query;
 
 import crm.client.CollectionHelper;
+import crm.client.IANA;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 
@@ -34,7 +35,7 @@ public class CommonServiceReader extends AbstractCommonService {
 
 	public ListQueryResult<? extends AbstractDto> getAll(final int dtoIndex, int from, int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
-		// order by number of views descending -> most viewed items at the top 
+		// order by number of views descending -> most viewed items at the top
 		// TODO allow user defined order as well i.e. sorting by arbitrary columns
 		query.setOrdering("views desc");
 		query.setRange(from, to);
@@ -71,7 +72,7 @@ public class CommonServiceReader extends AbstractCommonService {
 					if (String.class == field.getType()) { // use ignore case starts with
 						// TODO to lower case
 						// TODO does this allow sql injection or is it prevented by gwt?
-						queries.add(field.getName() + ".startsWith(\"" + value + "\")");
+						queries.add("this." + field.getName() + ".startsWith(\"" + value.toString().toLowerCase() + "\")");
 					} else if (Long.class == field.getType() || long.class == field.getType()) { // use exact match
 						if (0 != (Long) value) {
 							queries.add(field.getName() + " == " + value);
@@ -81,8 +82,7 @@ public class CommonServiceReader extends AbstractCommonService {
 					}
 				}
 			}
-
-			query.setFilter(CollectionHelper.join(queries, " " + operator.toString() + " "));
+			query.setFilter(CollectionHelper.join(queries, operator.toString()));
 			array = getArrayFromQueryResult(dtoIndex, (Collection) query.execute());
 		} catch (Exception e) {
 			// something went wrong, print stacktrace and return an empty list to the client.
@@ -92,7 +92,7 @@ public class CommonServiceReader extends AbstractCommonService {
 
 		return new ListQueryResult<AbstractDto>(array, array.length);
 	}
-	
+
 	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(int dtoIndex, String prefix, int from, int to) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)"); // TODO use toLowerCase in query as well to ignore case
@@ -119,15 +119,30 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult<? extends AbstractDto> fulltextSearch(String query, int from, int to) {
+	public ListQueryResult<? extends AbstractDto> fulltextSearch(String search, int from, int to) {
+		for (final Class<? extends AbstractDto> dto : dtoToDomainClass.keySet()) {
+			try {
+				final AbstractDto searchDto = dto.newInstance();
+
+				for (final Field field : reflectionHelper.getDtoFields(dto)) {
+					if (String.class == field.getType()) {
+						dto.getMethod(reflectionHelper.getMethodName("set", field), String.class).invoke(searchDto, search);
+					} else if (Long.class == field.getType() || long.class == field.getType()) {
+						try {
+							dto.getMethod(reflectionHelper.getMethodName("set", field), long.class).invoke(searchDto, Long.parseLong(search));
+						} catch (NumberFormatException e) {
+							// this was no long value. ignore it.
+						}
+					}
+				}
+
+				// TODO return after first module. join results.
+				return searchWithOperator(IANA.mashal(dto), searchDto, 0, -1, BoolOperator.OR);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return null;
-		/*
-		 * for (final Class<? extends Viewable> dto : dtoToDomainClass.values()) { try { Viewable viewable = dto.newInstance();
-		 * 
-		 * ReflectionHelper.getDtoFields(dto);
-		 * 
-		 * dto.getde } catch (Exception e) { e.printStackTrace(); } }
-		 */
 	}
 
 	public ListQueryResult<? extends AbstractDto> getAllMarked(int dtoIndex, int from, int to) {
@@ -144,13 +159,13 @@ public class CommonServiceReader extends AbstractCommonService {
 		AND {
 			@Override
 			public String toString() {
-				return " AND ";
+				return " && ";
 			}
 		},
 		OR {
 			@Override
 			public String toString() {
-				return " OR ";
+				return " || ";
 			}
 		};
 	}

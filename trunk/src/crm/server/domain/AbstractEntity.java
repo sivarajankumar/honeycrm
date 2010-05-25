@@ -9,13 +9,18 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableId;
+
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
+@Searchable
 abstract public class AbstractEntity {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
+	@SearchableId
 	protected Key id;
 	@Persistent
 	protected boolean marked;

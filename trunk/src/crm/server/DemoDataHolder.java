@@ -53,20 +53,20 @@ public class DemoDataHolder {
 		address.add("Bahnhofstrasse");
 		address.add("Strasse der Jugend");
 
-		names.add("Peter");
-		names.add("Ingo");
-		names.add("Mike");
-		names.add("Lion");
-		names.add("Peter");
-		names.add("Ralf");
-		names.add("Erich");
-		names.add("Monika");
-		names.add("Petra");
-		names.add("Sarah");
+		names.add("Homer Simpson");
+		names.add("Lisa Simpson");
+		names.add("Maggy Simpson");
+		names.add("Marge Simpson");
+		names.add("Apu");
+		names.add("Mr. Burns");
+		names.add("Mr. Burns' Assistant");
+		names.add("Bart Simpson");
+		names.add("Matt Groening");
+		names.add("Moe");
 
 		// TODO these constraints should be read directly from the domain classes
-		final int minPhoneNumber = 10000;
-		final int maxPhoneNumber = 9999;
+		final int minPhoneNumber = 1000000;
+		final int maxPhoneNumber = 999999;
 
 		final long minDate = getMinDateTimestamp();
 		final long maxDateTimespan = getMaxDateTimespan(minDate);
