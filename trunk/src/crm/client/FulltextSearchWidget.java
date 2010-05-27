@@ -26,11 +26,13 @@ public class FulltextSearchWidget extends SuggestBox {
 					public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
 						LoadIndicator.get().endLoading();
 						
-						final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
-						o.clear();
-
-						for (final AbstractDto a : result.getResults()) {
-							o.add(a.getQuicksearchItem());
+						if (null != result) {
+							final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
+							o.clear();
+	
+							for (final AbstractDto a : result.getResults()) {
+								o.add(a.getQuicksearchItem());
+							}
 						}
 					}
 

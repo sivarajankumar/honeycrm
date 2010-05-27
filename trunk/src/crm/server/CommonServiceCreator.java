@@ -26,7 +26,7 @@ public class CommonServiceCreator extends AbstractCommonService {
 		} else {
 			domainObject.setCreatedAt(new Date(System.currentTimeMillis()));
 			m.makePersistent(domainObject);
-			return domainObject.getId().getId();
+			return domainObject.getId();
 		}
 	}
 
