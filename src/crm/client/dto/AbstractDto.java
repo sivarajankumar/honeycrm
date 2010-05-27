@@ -14,7 +14,7 @@ public abstract class AbstractDto implements Serializable {
 	private static final long serialVersionUID = -656461822356703122L;
 	// Instances of all existing Dto classes
 	private static final Map<Class<? extends AbstractDto>, AbstractDto> map = new HashMap<Class<? extends AbstractDto>, AbstractDto>();
-	protected long id;
+	protected Long id;
 	protected long views;
 	protected boolean marked;
 	protected Date createdAt;
@@ -88,11 +88,11 @@ public abstract class AbstractDto implements Serializable {
 		}
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

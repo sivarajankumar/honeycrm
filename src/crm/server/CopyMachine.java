@@ -100,13 +100,14 @@ public class CopyMachine {
 					// a special case here.
 					if ("id".equals(srcFieldName) || srcFieldName.endsWith("ID")) {
 						if (srcFieldValue instanceof Long) {
-							// TODO cannot copy long id value into key since we cannot intantiate keys..
-							// TODO try Key k = KeyFactory.createKey(Employee.class.getSimpleName(), "Alfred.Smith@example.com");
+							final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), Long.class);
+							// can safely cast to Long because we know now that this is an instance of Long
+							setter.invoke(instanceUpdatedDest, (Long) srcFieldValue);
 						} else if (srcFieldValue instanceof Key) {
 							// The id field is a Key instance in the server code.
 							// Since we cannot use this class in client code it is represented as a string in the client code
 							// For this reason handle this field as a special case.
-							final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), long.class);
+							final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), Long.class);
 							setter.invoke(instanceUpdatedDest, ((Key) srcFieldValue).getId());
 						}
 					} else {

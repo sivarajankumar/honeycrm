@@ -9,8 +9,10 @@ import java.util.List;
 
 import javax.jdo.Query;
 
+import org.compass.core.CompassHits;
+import org.compass.core.CompassSearchSession;
+
 import crm.client.CollectionHelper;
-import crm.client.IANA;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 
@@ -119,8 +121,22 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult<? extends AbstractDto> fulltextSearch(String search, int from, int to) {
-		for (final Class<? extends AbstractDto> dto : dtoToDomainClass.keySet()) {
+	public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from, int to) {
+		if (null != query && query.length() > 2) {
+			System.out.println("searching for '" + query + "'");
+
+			final CompassSearchSession session = PMF.compass().openSearchSession();
+			CompassHits hits = session.find(query);
+			
+			log.info("got " + hits.getLength() + " results");
+			System.out.println("got " + hits.getLength() + " results");
+
+			session.close();
+		}
+		
+		return null;
+		
+		/*for (final Class<? extends AbstractDto> dto : dtoToDomainClass.keySet()) {
 			try {
 				final AbstractDto searchDto = dto.newInstance();
 
@@ -142,7 +158,7 @@ public class CommonServiceReader extends AbstractCommonService {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return null;*/
 	}
 
 	public ListQueryResult<? extends AbstractDto> getAllMarked(int dtoIndex, int from, int to) {
