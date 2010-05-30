@@ -125,7 +125,10 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	public void deleteAllItems() {
 		log.info("Deleting all items..");
 		for (final Class<? extends AbstractEntity> entityClass: dtoToDomainClass.values()) {
-			m.deletePersistentAll(m.newQuery(entityClass).execute());
+			final Collection collection = (Collection) m.newQuery(entityClass).execute();
+			if (!collection.isEmpty()) {
+				m.deletePersistentAll(collection);
+			}
 		}
 		log.info("Deleting all items done.");
 	}

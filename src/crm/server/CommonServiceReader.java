@@ -9,16 +9,20 @@ import java.util.List;
 
 import javax.jdo.Query;
 
+import org.compass.core.CompassHit;
 import org.compass.core.CompassHits;
 import org.compass.core.CompassSearchSession;
 
 import crm.client.CollectionHelper;
+import crm.client.FulltextSearchWidget;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 
 /**
  * Is part of the database layer.
  */
+// TODO this throws ConcurrentModificationExceptions (e.g. during getAll).
+// TODO every modification should be wrapped into a transaction to avoid this. not sure if this would solve the issue.
 public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 
@@ -122,7 +126,9 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from, int to) {
-/*		if (null != query && query.length() > 2) {
+		final ListQueryResult<AbstractDto> result = new ListQueryResult<AbstractDto>();
+		
+		if (null != query && query.length() > FulltextSearchWidget.MIN_QUERY_LENGTH) {
 			System.out.println("searching for '" + query + "'");
 
 			final CompassSearchSession session = PMF.compass().openSearchSession();
@@ -131,10 +137,22 @@ public class CommonServiceReader extends AbstractCommonService {
 			log.info("got " + hits.getLength() + " results");
 			System.out.println("got " + hits.getLength() + " results");
 
+			if (0 < hits.getLength()) {
+				final AbstractDto[] dtos = new AbstractDto[hits.getLength()];
+
+				for (int i=0; i<hits.getLength(); i++) {
+					final CompassHit hit = hits.hit(i);
+					dtos[i] = (AbstractDto) copy.copy(hit.getData(), domainClassToDto.get(hit.getData().getClass()));
+				}
+
+				session.close();
+				return new ListQueryResult<AbstractDto>(dtos, dtos.length);
+			}
+				
 			session.close();
 		}
-	*/	
-		return null;
+		
+		return result;
 		
 		/*for (final Class<? extends AbstractDto> dto : dtoToDomainClass.keySet()) {
 			try {
