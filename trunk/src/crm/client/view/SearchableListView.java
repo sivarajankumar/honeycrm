@@ -16,7 +16,7 @@ public class SearchableListView extends PaginatingListView {
 
 	public void search(final AbstractDto searchedViewable) {
 		this.searchViewable = searchedViewable;
-		doSearchForPage(0);
+		doSearchForPage(1);
 	}
 
 	private void doSearchForPage(final int page) {
@@ -40,7 +40,11 @@ public class SearchableListView extends PaginatingListView {
 	}
 
 	public void getAllMarked() {
-		doMarkedSearchForPage(0);
+		doMarkedSearchForPage(1);
+		// TODO create a new fresh viewable instance, then only set martked to true
+		// TODO actually we must not overwrite the current searchViewable variable
+//		this.searchViewable.setMarked(true);
+//		search(searchViewable);
 	}
 
 	private void doMarkedSearchForPage(final int page) {

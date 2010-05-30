@@ -30,5 +30,6 @@ public interface CommonService extends RemoteService {
 	public void delete(int dtoIndex, long id);
 	public void deleteAll(int dtoIndex, Set<Long> ids);
 	public void deleteAll(int dtoIndex);
+	public void deleteAllItems();
 	public void addDemo(int dtoIndex);
 }

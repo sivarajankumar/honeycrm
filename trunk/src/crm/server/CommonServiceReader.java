@@ -74,7 +74,7 @@ public class CommonServiceReader extends AbstractCommonService {
 					if (String.class == field.getType()) { // use ignore case starts with
 						// TODO to lower case
 						// TODO does this allow sql injection or is it prevented by gwt?
-						queries.add("this." + field.getName() + ".startsWith(\"" + value.toString().toLowerCase() + "\")");
+						queries.add("this." + field.getName() + ".startsWith(\"" + value.toString() + "\")");
 					} else if (Long.class == field.getType() || long.class == field.getType()) { // use exact match
 						if (0 != (Long) value) {
 							queries.add(field.getName() + " == " + value);
@@ -122,7 +122,7 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from, int to) {
-		if (null != query && query.length() > 2) {
+/*		if (null != query && query.length() > 2) {
 			System.out.println("searching for '" + query + "'");
 
 			final CompassSearchSession session = PMF.compass().openSearchSession();
@@ -133,7 +133,7 @@ public class CommonServiceReader extends AbstractCommonService {
 
 			session.close();
 		}
-		
+	*/	
 		return null;
 		
 		/*for (final Class<? extends AbstractDto> dto : dtoToDomainClass.keySet()) {

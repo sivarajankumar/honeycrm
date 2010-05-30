@@ -20,6 +20,7 @@ import crm.client.dto.DtoDonation;
 import crm.client.dto.DtoEmployee;
 import crm.client.dto.DtoMembership;
 import crm.client.dto.DtoProject;
+import crm.server.domain.AbstractEntity;
 import crm.server.domain.Account;
 import crm.server.domain.Contact;
 import crm.server.domain.Donation;
@@ -34,7 +35,7 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	protected static final Logger log = Logger.getLogger(AbstractCommonService.class.getName());
 	private static final long serialVersionUID = -2405965558198509695L;
 	protected static final PersistenceManager m = PMF.get().getPersistenceManager();
-	protected static final Map<Class<? extends AbstractDto>, Class> dtoToDomainClass = new HashMap<Class<? extends AbstractDto>, Class>();
+	protected static final Map<Class<? extends AbstractDto>, Class<? extends AbstractEntity>> dtoToDomainClass = new HashMap<Class<? extends AbstractDto>, Class<? extends AbstractEntity>>();
 	protected static final CopyMachine copy = new CopyMachine();
 	protected static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 

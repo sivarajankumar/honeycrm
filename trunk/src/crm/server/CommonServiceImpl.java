@@ -120,4 +120,13 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		final Collection collection = (Collection) q.execute();
 		m.deletePersistentAll(collection);
 	}
+
+	@Override
+	public void deleteAllItems() {
+		log.info("Deleting all items..");
+		for (final Class<? extends AbstractEntity> entityClass: dtoToDomainClass.values()) {
+			m.deletePersistentAll(m.newQuery(entityClass).execute());
+		}
+		log.info("Deleting all items done.");
+	}
 }
