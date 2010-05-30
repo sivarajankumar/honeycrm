@@ -5,6 +5,8 @@ import java.util.Random;
 import crm.server.domain.Account;
 import crm.server.domain.Contact;
 
+// TODO add test data for international characters (e.g. japanese/cyrillic/korean/chinese names)
+// TODO provide test data for all modules that can be used during testing
 // TODO letter sz causes problems during bootstrap, see #5
 // TODO this should be done within a plugin. until we find a good one we have to do this within this class.
 public class DemoDataProvider {

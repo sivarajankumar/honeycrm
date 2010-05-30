@@ -22,4 +22,5 @@ public interface CommonServiceAsync {
 	void getAllMarked(int dtoIndex, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback);
 	void deleteAll(int dtoIndex, AsyncCallback<Void> callback);
 	void create(int dtoIndex, AbstractDto viewable, AsyncCallback<Long> callback);
+	void deleteAllItems(AsyncCallback<Void> callback);
 }

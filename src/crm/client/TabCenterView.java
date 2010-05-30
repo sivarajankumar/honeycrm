@@ -60,11 +60,17 @@ public class TabCenterView extends DecoratedTabPanel {
 			add(view, viewable.getTitle() + "s");
 		}
 
+		add(new AdminWidget(), "Admin");
+		
 		addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override
 			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-				// add the history token for the module stored in this tab
-				History.newItem(tabPositionMapReverse.get(event.getItem()).getHistoryToken());
+				if (tabPositionMapReverse.containsKey(event.getItem())) {
+					// add the history token for the module stored in this tab
+					History.newItem(tabPositionMapReverse.get(event.getItem()).getHistoryToken());
+				} else {
+					// TODO add history for special tabs like admin panel
+				}
 			}
 		});
 

@@ -14,7 +14,7 @@ public abstract class AbstractDto implements Serializable {
 	private static final long serialVersionUID = -656461822356703122L;
 	// Instances of all existing Dto classes
 	private static final Map<Class<? extends AbstractDto>, AbstractDto> map = new HashMap<Class<? extends AbstractDto>, AbstractDto>();
-	protected Long id;
+	protected Long id = -1L; // initialize with -1 indicating that no id has been set yet
 	protected long views;
 	protected boolean marked;
 	protected Date createdAt;
