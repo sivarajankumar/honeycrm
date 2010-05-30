@@ -62,6 +62,7 @@ body {
 
 .header_search_field {
 	float: left;
+	width: 300px;
 }
 
 /* VIEWS */

@@ -36,9 +36,10 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	private static final long serialVersionUID = -2405965558198509695L;
 	protected static final PersistenceManager m = PMF.get().getPersistenceManager();
 	protected static final Map<Class<? extends AbstractDto>, Class<? extends AbstractEntity>> dtoToDomainClass = new HashMap<Class<? extends AbstractDto>, Class<? extends AbstractEntity>>();
+	protected static final Map<Class<? extends AbstractEntity>,Class<? extends AbstractDto>> domainClassToDto = new HashMap<Class<? extends AbstractEntity>, Class<? extends AbstractDto>>();
 	protected static final CopyMachine copy = new CopyMachine();
 	protected static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
-
+	
 	static {
 		// TODO do this automatically with reflection
 		dtoToDomainClass.put(DtoContact.class, Contact.class);
@@ -47,6 +48,12 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 		dtoToDomainClass.put(DtoMembership.class, Membership.class);
 		dtoToDomainClass.put(DtoDonation.class, Donation.class);
 		dtoToDomainClass.put(DtoProject.class, Project.class);
+		
+		// build up a reverse map of the already existing dtoToDomainClass map
+		// TODO this should be refactored into a single unit 
+		for (final Class<? extends AbstractDto> dtoClass: dtoToDomainClass.keySet()) {
+			domainClassToDto.put(dtoToDomainClass.get(dtoClass), dtoClass);
+		}
 	}
 
 	protected Class<? extends AbstractDto> getDtoClass(final int dtoIndex) {

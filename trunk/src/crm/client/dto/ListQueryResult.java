@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class ListQueryResult<T extends AbstractDto> implements Serializable {
 	private T[] results;
-	private int itemCount;
+	private int itemCount = 0;
 	private static final long serialVersionUID = 2873158543385988528L;
 
 	public ListQueryResult() { // is there because gwt needs it for serialisation purposes
