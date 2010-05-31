@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jdo.Query;
-import javax.jdo.Transaction;
 
 import crm.client.CommonService;
 import crm.client.dto.AbstractDto;
@@ -21,6 +20,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final long serialVersionUID = -7312945910083902842L;
 	private static final CommonServiceCreator creator = new CommonServiceCreator();
 	private static final CommonServiceReader reader = new CommonServiceReader();
+	private static final CommonServiceReaderFulltext fulltext = new CommonServiceReaderFulltext();
 
 	@Override
 	public long create(int dtoIndex, AbstractDto dto) {
@@ -34,18 +34,19 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public ListQueryResult<? extends AbstractDto> getAll(final int dtoIndex, int from, int to) {
+		// TODO using transactions currently breaks getAll()
 		// TODO do everything within the context of a transaction
-		final Transaction t = m.currentTransaction();
-		try {
-			t.begin();
-			final ListQueryResult<? extends AbstractDto> result = reader.getAll(dtoIndex, from, to);
-			t.commit();
-			return result;
-		} finally {
-			if (t.isActive()) {
-				t.rollback();
-			}
-		}
+		// final Transaction t = m.currentTransaction();
+		// try {
+		// t.begin();
+		final ListQueryResult<? extends AbstractDto> result = reader.getAll(dtoIndex, from, to);
+		// t.commit();
+		return result;
+		// } finally {
+		// if (t.isActive()) {
+		// t.rollback();
+		// }
+		// }
 	}
 
 	@Override
@@ -111,7 +112,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public ListQueryResult<? extends AbstractDto> fulltextSearch(String query, int from, int to) {
-		return reader.fulltextSearch(query, from, to);
+		return fulltext.fulltextSearch(query, from, to);
 	}
 
 	@Override
