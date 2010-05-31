@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jdo.Query;
+import javax.jdo.Transaction;
 
 import crm.client.CommonService;
 import crm.client.dto.AbstractDto;
@@ -33,7 +34,18 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public ListQueryResult<? extends AbstractDto> getAll(final int dtoIndex, int from, int to) {
-		return reader.getAll(dtoIndex, from, to);
+		// TODO do everything within the context of a transaction
+		final Transaction t = m.currentTransaction();
+		try {
+			t.begin();
+			final ListQueryResult<? extends AbstractDto> result = reader.getAll(dtoIndex, from, to);
+			t.commit();
+			return result;
+		} finally {
+			if (t.isActive()) {
+				t.rollback();
+			}
+		}
 	}
 
 	@Override
@@ -60,7 +72,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(int dtoIndex, String prefix, int from, int to) {
-		log.fine("getAllByNamePrefix("+dtoIndex+","+prefix+")");
+		log.fine("getAllByNamePrefix(" + dtoIndex + "," + prefix + ")");
 		return reader.getAllByNamePrefix(dtoIndex, prefix, from, to);
 	}
 
@@ -124,7 +136,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void deleteAllItems() {
 		log.info("Deleting all items..");
-		for (final Class<? extends AbstractEntity> entityClass: dtoToDomainClass.values()) {
+		for (final Class<? extends AbstractEntity> entityClass : dtoToDomainClass.values()) {
 			final Collection collection = (Collection) m.newQuery(entityClass).execute();
 			if (!collection.isEmpty()) {
 				m.deletePersistentAll(collection);
