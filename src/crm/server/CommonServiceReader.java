@@ -9,12 +9,7 @@ import java.util.List;
 
 import javax.jdo.Query;
 
-import org.compass.core.CompassHit;
-import org.compass.core.CompassHits;
-import org.compass.core.CompassSearchSession;
-
 import crm.client.CollectionHelper;
-import crm.client.FulltextSearchWidget;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 
@@ -63,7 +58,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		return searchWithOperator(dtoIndex, searchDto, from, to, BoolOperator.AND);
 	}
 
-	private ListQueryResult<? extends AbstractDto> searchWithOperator(int dtoIndex, AbstractDto searchDto, int from, int to, final BoolOperator operator) {
+	protected ListQueryResult<? extends AbstractDto> searchWithOperator(int dtoIndex, AbstractDto searchDto, int from, int to, final BoolOperator operator) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
 		final List<String> queries = new LinkedList<String>();
@@ -125,7 +120,8 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from, int to) {
+	// TODO do not implement fulltext search using compass / lucene until it runs when deployed in app engine
+/*	public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from, int to) {
 		final ListQueryResult<AbstractDto> result = new ListQueryResult<AbstractDto>();
 		
 		if (null != query && query.length() > FulltextSearchWidget.MIN_QUERY_LENGTH) {
@@ -153,31 +149,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 		
 		return result;
-		
-		/*for (final Class<? extends AbstractDto> dto : dtoToDomainClass.keySet()) {
-			try {
-				final AbstractDto searchDto = dto.newInstance();
-
-				for (final Field field : reflectionHelper.getDtoFields(dto)) {
-					if (String.class == field.getType()) {
-						dto.getMethod(reflectionHelper.getMethodName("set", field), String.class).invoke(searchDto, search);
-					} else if (Long.class == field.getType() || long.class == field.getType()) {
-						try {
-							dto.getMethod(reflectionHelper.getMethodName("set", field), long.class).invoke(searchDto, Long.parseLong(search));
-						} catch (NumberFormatException e) {
-							// this was no long value. ignore it.
-						}
-					}
-				}
-
-				// TODO return after first module. join results.
-				return searchWithOperator(IANA.mashal(dto), searchDto, 0, -1, BoolOperator.OR);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return null;*/
-	}
+	}*/
 
 	public ListQueryResult<? extends AbstractDto> getAllMarked(int dtoIndex, int from, int to) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);

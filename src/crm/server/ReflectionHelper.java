@@ -179,8 +179,20 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Returns an array containing elements of both given arrays array1, array2 i.e. merges the given arrays into one.
-	 * TODO this is a code duplicate with ArrayHelper.merge(). But cannot replace it with ArrayHelper code since it is situated in client code and Fields cannot be instantiated in client code.
+	 * Returns all fields annotated with the given annotation
+	 */
+	public Field[] getAllFieldsWithAnnotation(final Class classSrc, final Class annotationClass) {
+		final List<Field> list = new LinkedList<Field>();
+		for (final Field field : getAllFields(classSrc)) {
+			if (field.isAnnotationPresent(annotationClass)) {
+				list.add(field);
+			}
+		}
+		return list.toArray(new Field[0]);
+	}
+
+	/**
+	 * Returns an array containing elements of both given arrays array1, array2 i.e. merges the given arrays into one. TODO this is a code duplicate with ArrayHelper.merge(). But cannot replace it with ArrayHelper code since it is situated in client code and Fields cannot be instantiated in client code.
 	 */
 	private static Field[] merge(final Object[] array1, final Object[] array2) {
 		// TODO implement this in a more generic way (for objects in general) but somehow typesafe..

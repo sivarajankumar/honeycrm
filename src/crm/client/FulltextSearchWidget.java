@@ -16,19 +16,24 @@ import crm.client.dto.ListQueryResult;
 public class FulltextSearchWidget extends SuggestBox {
 	public static final int MIN_QUERY_LENGTH = 3;
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
+	private String lastQueryString;
 
 	public FulltextSearchWidget() {
 		setStyleName("header_search_field");
-		
+
 		addKeyPressHandler(new KeyPressHandler() {
 			@Override
 			public void onKeyPress(KeyPressEvent event) {
 				final String queryString = (getText() + event.getCharCode()).trim();
 
-				if (queryString.length() < MIN_QUERY_LENGTH) {
-					emptySuggestOracle();
-				} else {
-					startFulltextSearch(queryString);
+				if (!queryString.equals(lastQueryString)) {
+					if (queryString.length() < MIN_QUERY_LENGTH) {
+						emptySuggestOracle();
+					} else {
+						startFulltextSearch(queryString);
+					}
+
+					lastQueryString = queryString;
 				}
 			}
 		});
