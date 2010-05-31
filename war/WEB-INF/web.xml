@@ -19,4 +19,7 @@
   <welcome-file-list>
     <welcome-file>Gae.html</welcome-file>
   </welcome-file-list>
+
+  <!-- See http://code.google.com/intl/de-DE/appengine/kb/java.html#What_Is_A_Loading_Request -->
+  <precompilation-enabled>true</precompilation-enabled>
 </web-app>
