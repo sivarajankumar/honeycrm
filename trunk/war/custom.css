@@ -1,7 +1,15 @@
 /* GENERAL */
 
 body {
-	background-color: #1189FF ! important;	
+	background-color: #1189FF ! important;
+}
+
+.loading_panel {
+	color: white;
+	font-weight: bold;
+	margin-left: auto;
+	margin-right: auto;
+	top: 50px ! important;	
 }
 
 .body {

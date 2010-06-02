@@ -5,6 +5,6 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 public class Gae implements EntryPoint {
 	public void onModuleLoad() {
-		RootLayoutPanel.get().add(new TabLayout());
+		RootLayoutPanel.get().add(new LoadingPanel());
 	}
 }
