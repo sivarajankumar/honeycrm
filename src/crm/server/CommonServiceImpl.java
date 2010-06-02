@@ -138,11 +138,21 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	public void deleteAllItems() {
 		log.info("Deleting all items..");
 		for (final Class<? extends AbstractEntity> entityClass : dtoToDomainClass.values()) {
-			final Collection collection = (Collection) m.newQuery(entityClass).execute();
-			if (!collection.isEmpty()) {
-				m.deletePersistentAll(collection);
+			try {
+				for (final AbstractEntity entity : (Collection<? extends AbstractEntity>) m.newQuery(entityClass).execute()) {
+					m.deletePersistent(entity);
+				}
+			} catch (NullPointerException e) {
+				e.printStackTrace();
 			}
 		}
 		log.info("Deleting all items done.");
+	}
+
+	/**
+	 * Do nothing just call this empty method to wake up the server side. This is done to speedup the up coming requests. Do an initial slow request by the client. When this is has been answered the user interface will be rendered and the real requests will follow in quick succession. 
+	 */
+	@Override
+	public void wakeupServer() {
 	}
 }

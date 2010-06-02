@@ -32,4 +32,7 @@ public interface CommonService extends RemoteService {
 	public void deleteAll(int dtoIndex);
 	public void deleteAllItems();
 	public void addDemo(int dtoIndex);
+	
+	// misc
+	public void wakeupServer();
 }
