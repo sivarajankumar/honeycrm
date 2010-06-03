@@ -23,5 +23,4 @@
   <!-- This seems to be relevant for testing purposes. -->
   <!-- See http://code.google.com/intl/de-DE/webtoolkit/doc/latest/FAQ_Troubleshooting.html#Resource_not_found -->
   <servlet path="/common" class="crm.server.CommonServiceImpl"/>
- 
 </module>
