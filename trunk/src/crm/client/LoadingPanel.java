@@ -50,7 +50,7 @@ public class LoadingPanel extends Composite {
 		int imageCount = 0;
 
 		for (final String url : prefetchImages) {
-			status.setText("Loading image #" + (++imageCount) + " of " + prefetchImages.size());
+			setStatus("Loading image #" + (++imageCount) + " of " + prefetchImages.size());
 			Image.prefetch(url);
 		}
 
