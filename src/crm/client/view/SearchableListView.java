@@ -43,14 +43,14 @@ public class SearchableListView extends PaginatingListView {
 		doMarkedSearchForPage(1);
 		// TODO create a new fresh viewable instance, then only set martked to true
 		// TODO actually we must not overwrite the current searchViewable variable
-//		this.searchViewable.setMarked(true);
-//		search(searchViewable);
+		// this.searchViewable.setMarked(true);
+		// search(searchViewable);
 	}
 
 	private void doMarkedSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.getAllMarked(IANA.mashal(clazz), getOffsetForPage(page), getOffsetForPage(page)+MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		commonService.getAllMarked(IANA.mashal(clazz), getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);

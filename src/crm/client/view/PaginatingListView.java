@@ -5,7 +5,7 @@ import crm.client.dto.AbstractDto;
 public class PaginatingListView extends ListView {
 	public PaginatingListView(final Class<? extends AbstractDto> clazz) {
 		super(clazz);
-		
+
 		panel.add(new ListViewPaginationBar(this, label));
 	}
 

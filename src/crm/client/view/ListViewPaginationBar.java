@@ -26,7 +26,7 @@ public class ListViewPaginationBar extends Composite {
 				listview.deleteSelected();
 			}
 		});
-		
+
 		deleteAll.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

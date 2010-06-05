@@ -7,8 +7,11 @@ import crm.client.dto.Field.Type;
 public class DtoDonation extends AbstractDto {
 	private static final long serialVersionUID = 6528143648066271951L;
 
+	@RelatesTo(DtoEmployee.class)
 	private long employeeId;
+	@RelatesTo(DtoContact.class)
 	private long donatorId; // contact
+	@RelatesTo(DtoProject.class)
 	private long projectId;
 	private String donatedFor; // foundation / project donation / unlinked donation
 	private String kind; // subscription / once
@@ -32,7 +35,9 @@ public class DtoDonation extends AbstractDto {
 	public DtoDonation() {
 		fields.add(new FieldRelate(INDEX_EMPLOYEEID, DtoEmployee.class, "Employee"));
 		fields.add(new FieldRelate(INDEX_DONATORID, DtoContact.class, "Donator"));
-		fields.add(new FieldRelate(INDEX_PROJECTID, DtoContact.class, "Project")); // TODO add dto project first..
+		fields.add(new FieldRelate(INDEX_PROJECTID, DtoContact.class, "Project")); // TODO add dto
+																					// project
+																					// first..
 		fields.add(new FieldEnum(INDEX_DONATEDFOR, "Donated for", "Foundation", "Project donation", "Unlinked donation"));
 		fields.add(new FieldEnum(INDEX_KIND, "Kind", "Subscription", "Unique"));
 		fields.add(new Field(INDEX_RECEIPTIONDATE, Type.DATE, "Receiption date"));
@@ -49,7 +54,7 @@ public class DtoDonation extends AbstractDto {
 
 	@Override
 	public int[] getListViewColumnIds() {
-		return new int[] { INDEX_MARKED, INDEX_DONATORID, INDEX_EMPLOYEEID, INDEX_REACTION };
+		return new int[] { INDEX_MARKED, INDEX_DONATORID, INDEX_EMPLOYEEID, INDEX_REACTION, INDEX_AMOUNT };
 	}
 
 	@Override
@@ -65,7 +70,7 @@ public class DtoDonation extends AbstractDto {
 	@Override
 	protected int[][] interalGetFormFieldIds() {
 		final int[] row1 = new int[] { INDEX_DONATORID, INDEX_KIND };
-		final int[] row2 = new int[] {INDEX_AMOUNT};
+		final int[] row2 = new int[] { INDEX_AMOUNT };
 		final int[] row3 = new int[] { INDEX_DONATEDFOR, INDEX_EMPLOYEEID };
 		final int[] row4 = new int[] { INDEX_REACTION, INDEX_REACTEDHOW };
 		final int[] row5 = new int[] { INDEX_DATE };

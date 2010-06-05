@@ -24,11 +24,11 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 	public SearchWidget(final Class<? extends AbstractDto> clazz, final SearchableListView listview) {
 		super(clazz);
 
-		final int[][] fieldIDs = viewable.getSearchFields();
+		final int[][] fieldIDs = dto.getSearchFields();
 		for (int y = 0; y < fieldIDs.length; y++) {
 			for (int x = 0; x < fieldIDs[y].length; x++) {
-				final Label widgetLabel = new Label(viewable.getFieldById(fieldIDs[y][x]).getLabel());
-				final Widget widgetValue = getWidgetByType(viewable, fieldIDs[y][x], View.EDIT);
+				final Label widgetLabel = new Label(dto.getFieldById(fieldIDs[y][x]).getLabel());
+				final Widget widgetValue = getWidgetByType(dto, fieldIDs[y][x], View.EDIT);
 
 				// attach key press event for starting search on hitting ENTER
 				if (widgetValue instanceof TextBox) {
@@ -97,8 +97,9 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 	}
 
 	private void startSearch(final SearchableListView listview, final FlexTable table, final int[][] fieldIDs) {
-		setViewable(fieldIDs, table, viewable); // build query by writing input from textboxes into viewable instance
-		listview.search(viewable);
+		setViewable(fieldIDs, table, dto); // build query by writing input from textboxes into
+											// viewable instance
+		listview.search(dto);
 	}
 
 	/**

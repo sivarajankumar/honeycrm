@@ -24,7 +24,7 @@ public class DetailViewButtonBar extends AbstractView {
 
 	public DetailViewButtonBar(final Class<? extends AbstractDto> clazz, final DetailView detailview) {
 		super(clazz);
-		
+
 		this.detailview = detailview;
 
 		final HorizontalPanel panel = new HorizontalPanel();
@@ -41,7 +41,7 @@ public class DetailViewButtonBar extends AbstractView {
 				startCreating();
 			}
 		});
-		
+
 		saveBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -72,7 +72,7 @@ public class DetailViewButtonBar extends AbstractView {
 				startViewing();
 			}
 		});
-		
+
 		demoBtn.addClickHandler(getDemoButtonClickHandler(clazz));
 
 		stopViewing();
@@ -111,35 +111,35 @@ public class DetailViewButtonBar extends AbstractView {
 
 		demoBtn.setVisible(true);
 		createBtn.setVisible(true);
+		// only show if detailview is displaying a valid item
+		editBtn.setVisible(detailview.isShowing()); 
+		deleteBtn.setVisible(detailview.isShowing());
 
-		editBtn.setVisible(detailview.isShowing()); // only show if detailview is displaying a valid item
-		deleteBtn.setVisible(detailview.isShowing()); // only show if detailview is displaying a valid item
-		
 		saveBtn.setVisible(false);
 		cancelBtn.setVisible(false);
 	}
-	
+
 	/**
 	 * display all input fields for creating a new entity
 	 */
 	public void startCreating() {
 		// if (detailview.isShowing()) {
-			detailview.stopViewing();
-			detailview.startCreating();
+		detailview.stopViewing();
+		detailview.startCreating();
 
-			saveBtn.setVisible(true);
-			cancelBtn.setVisible(true);
-			
-			createBtn.setVisible(false);
-			demoBtn.setVisible(false);
-			editBtn.setVisible(false);
-			deleteBtn.setVisible(false);
+		saveBtn.setVisible(true);
+		cancelBtn.setVisible(true);
+
+		createBtn.setVisible(false);
+		demoBtn.setVisible(false);
+		editBtn.setVisible(false);
+		deleteBtn.setVisible(false);
 		// }
 	}
-	
+
 	public void startEditing() {
 		if (detailview.isShowing()) {
-			detailview.edit();
+			detailview.startEditing();
 
 			saveBtn.setVisible(true);
 			cancelBtn.setVisible(true);
@@ -150,14 +150,14 @@ public class DetailViewButtonBar extends AbstractView {
 			createBtn.setVisible(false);
 		}
 	}
-	
+
 	public void stopViewing() {
 		createBtn.setVisible(true);
 		demoBtn.setVisible(true);
-		
+
 		saveBtn.setVisible(false);
 		cancelBtn.setVisible(false);
 		editBtn.setVisible(false);
-		deleteBtn.setVisible(false);		
+		deleteBtn.setVisible(false);
 	}
 }

@@ -58,7 +58,8 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		}
 
 		// TODO in when the name of an relate field is determined this get() method is called
-		// TODO this increases the number of views for the related entity every time it is displayed..
+		// TODO this increases the number of views for the related entity every time it is
+		// displayed..
 		// TOD this should be avoided.
 		// increase number of views on every get request for a specific DTO
 		dto.setViews(dto.getViews() + 1);
@@ -137,7 +138,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void deleteAllItems() {
 		log.info("Deleting all items..");
-		for (final Class<? extends AbstractEntity> entityClass : dtoToDomainClass.values()) {
+		for (final Class<? extends AbstractEntity> entityClass : registry.getDomainClasses()) {
 			try {
 				for (final AbstractEntity entity : (Collection<? extends AbstractEntity>) m.newQuery(entityClass).execute()) {
 					m.deletePersistent(entity);
@@ -150,9 +151,17 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	/**
-	 * Do nothing just call this empty method to wake up the server side. This is done to speedup the up coming requests. Do an initial slow request by the client. When this is has been answered the user interface will be rendered and the real requests will follow in quick succession. 
+	 * Do nothing just call this empty method to wake up the server side. This is done to speedup
+	 * the up coming requests. Do an initial slow request by the client. When this is has been
+	 * answered the user interface will be rendered and the real requests will follow in quick
+	 * succession.
 	 */
 	@Override
 	public void wakeupServer() {
+	}
+
+	@Override
+	public ListQueryResult<? extends AbstractDto> getAllRelated(int originatingDtoIndex, Long id, int relatedDtoIndex) {
+		return reader.getAllRelated(originatingDtoIndex, id, relatedDtoIndex);
 	}
 }

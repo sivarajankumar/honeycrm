@@ -12,7 +12,8 @@ import net.sf.jsr107cache.CacheManager;
 import crm.client.dto.AbstractDto;
 
 /**
- * Caching wrapper around ReflectionHelper class. Caches expensive reflective operations when possible.
+ * Caching wrapper around ReflectionHelper class. Caches expensive reflective operations when
+ * possible.
  */
 public class CachingReflectionHelper extends ReflectionHelper {
 	private static final Logger log = Logger.getLogger(CachingReflectionHelper.class.getName());

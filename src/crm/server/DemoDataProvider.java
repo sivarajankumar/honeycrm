@@ -8,7 +8,8 @@ import crm.server.domain.Contact;
 // TODO add test data for international characters (e.g. japanese/cyrillic/korean/chinese names)
 // TODO provide test data for all modules that can be used during testing
 // TODO letter sz causes problems during bootstrap, see #5
-// TODO this should be done within a plugin. until we find a good one we have to do this within this class.
+// TODO this should be done within a plugin. until we find a good one we have to do this within this
+// class.
 public class DemoDataProvider {
 	private final static Random r = new Random();
 
@@ -17,7 +18,7 @@ public class DemoDataProvider {
 
 		a.setName(DemoDataHolder.getRandomName());
 		a.setDate(DemoDataHolder.getRandomDate());
-		a.setAnnualRevenue(r.nextLong());
+		a.setAnnualRevenue(r.nextLong() % 1000000000);
 		a.setAddress(DemoDataHolder.getRandomAddress());
 
 		return a;
@@ -54,7 +55,9 @@ public class DemoDataProvider {
 	/*
 	 * public static Contract contract() { Contract c = new Contract();
 	 * 
-	 * c.setDeadline(DemoDataHolder.getRandomDate()); c.setEndDate(DemoDataHolder.getRandomDate()); c.setStartDate(DemoDataHolder.getRandomDate()); c.setName(DemoDataHolder.getRandomContractName());
+	 * c.setDeadline(DemoDataHolder.getRandomDate()); c.setEndDate(DemoDataHolder.getRandomDate());
+	 * c.setStartDate(DemoDataHolder.getRandomDate());
+	 * c.setName(DemoDataHolder.getRandomContractName());
 	 * 
 	 * return c; }
 	 * 
@@ -66,7 +69,10 @@ public class DemoDataProvider {
 	 * 
 	 * public static Service service() { Service s = new Service();
 	 * 
-	 * s.setName(DemoDataHolder.getRandomServiceName()); s.setCancellableInMonths(r.nextInt(100)); s.setMonthsGuaranteed(r.nextInt(100)); s.setDiscount(r.nextInt(100)); s.setDiscountType(DemoDataHolder.getRandomDiscountType()); s.setPrice(r.nextDouble()); s.setWithVat(r.nextBoolean()); s.setQuantity(r.nextInt());
+	 * s.setName(DemoDataHolder.getRandomServiceName()); s.setCancellableInMonths(r.nextInt(100));
+	 * s.setMonthsGuaranteed(r.nextInt(100)); s.setDiscount(r.nextInt(100));
+	 * s.setDiscountType(DemoDataHolder.getRandomDiscountType()); s.setPrice(r.nextDouble());
+	 * s.setWithVat(r.nextBoolean()); s.setQuantity(r.nextInt());
 	 * 
 	 * return s; }
 	 */

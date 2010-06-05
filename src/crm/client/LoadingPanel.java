@@ -62,7 +62,7 @@ public class LoadingPanel extends Composite {
 	 */
 	private void wakeupServer() {
 		setStatus("Waking up server side..");
-		
+
 		ServiceRegistry.commonService().wakeupServer(new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {

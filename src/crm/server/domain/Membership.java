@@ -30,55 +30,70 @@ public class Membership extends AbstractEntity {
 	private Date startDate;
 	@Persistent
 	private Date endDate;
-	
+
 	public Membership() {
 	}
-	
+
 	public long getMemberId() {
 		return memberId;
 	}
+
 	public void setMemberId(long memberId) {
 		this.memberId = memberId;
 	}
+
 	public long getEmployeeId() {
 		return employeeId;
 	}
+
 	public void setEmployeeId(long employeeId) {
 		this.employeeId = employeeId;
 	}
+
 	public double getPayment() {
 		return payment;
 	}
+
 	public void setPayment(double payment) {
 		this.payment = payment;
 	}
+
 	public String getTiedToPurpose() {
 		return tiedToPurpose;
 	}
+
 	public void setTiedToPurpose(String tiedToPurpose) {
 		this.tiedToPurpose = tiedToPurpose;
 	}
+
 	public String getPurpose() {
 		return purpose;
 	}
+
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
+
 	public String getPaymentMethod() {
 		return paymentMethod;
 	}
+
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
+
 	public Date getStartDate() {
 		return startDate;
 	}
+
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
+
 	public Date getEndDate() {
 		return endDate;
 	}
+
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}

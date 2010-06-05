@@ -34,8 +34,11 @@ import crm.client.view.AbstractView.View;
  */
 public class WidgetSelector {
 	protected static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getShortDateFormat();
-	protected static final NumberFormat CURRENCY_FORMAT_RW = NumberFormat.getFormat("0.00", "EUR"); // TODO how to prefix euro sign? or other unicode characters?
-	protected static final NumberFormat CURRENCY_FORMAT_RO = NumberFormat.getFormat("0.00"); // TODO how to prefix euro sign? or other unicode characters?
+	protected static final NumberFormat CURRENCY_FORMAT_EDIT = NumberFormat.getFormat("0.00");
+	// use a currency constant defined in
+	// com/google/gwt/i18n/client/constants/CurrencyCodeMapConstants.properties which can be found
+	// in gwt-user.jar
+	protected static final NumberFormat CURRENCY_FORMAT_READ = NumberFormat.getCurrencyFormat("EUR");
 	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 
 	public static Widget getWidgetByType(final Class<? extends AbstractDto> clazz, final AbstractDto tmpViewable, final int fieldId, final View view) {
@@ -53,7 +56,8 @@ public class WidgetSelector {
 		case EDIT:
 			return getEditWidget(tmpViewable, fieldId, value);
 		default:
-			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString()); // should never reach this point
+			// should never reach this point
+			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString());
 		}
 	}
 
@@ -77,19 +81,20 @@ public class WidgetSelector {
 			widget3.setValue((null == value) ? "" : value.toString());
 			return widget3;
 		case TEXT:
-			// Display normal TextArea instead of more advanced RichTextArea until a nice RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
+			// Display normal TextArea instead of more advanced RichTextArea until a nice
+			// RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
 			TextArea widget4 = new TextArea();
 			widget4.setText((null == value) ? "" : value.toString());
 			return widget4;
 		case RELATE:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
-				return new RelateWidget(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), (Long) value);
+				return new RelateWidget(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz(), (Long) value);
 			} else {
 				throw new RuntimeException("Expected FieldRelate. Received " + tmpViewable.getFieldById(fieldId).getClass().toString());
 			}
 		case CURRENCY:
 			TextBox widget5 = new TextBox();
-			widget5.setText(CURRENCY_FORMAT_RW.format((Double) value));
+			widget5.setText(CURRENCY_FORMAT_EDIT.format((Double) value));
 			return widget5;
 		case ENUM:
 		case MULTIENUM:
@@ -100,17 +105,19 @@ public class WidgetSelector {
 
 				for (int i = 0; i < options.length; i++) {
 					box.addItem(options[i]);
-					if (selectedItems.contains(options[i])) { // preselect the item(s) that have been stored in the db
+					if (selectedItems.contains(options[i])) { // preselect the item(s) that have
+						// been stored in the db
 						box.setItemSelected(i, true);
 					}
 				}
-				
+
 				return box;
 			} else {
 				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
 			}
 		default:
-			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString()); // should never reach this point
+			// should never reach this point
+			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString());
 		}
 	}
 
@@ -123,32 +130,35 @@ public class WidgetSelector {
 				return new Label();
 			} else {
 				if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
-				//	return new RelateWidget(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), 0);
-					
-				// resolve the real name of the entity by its id and display a HyperLink as widget
-				final AbstractDto relatedViewable = new DtoAccount(); // TODO determine history token from field..
-				final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
+					// return new
+					// RelateWidget(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), 0);
 
-				commonService.get(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), (Long) value, new AsyncCallback<AbstractDto>() {
-					@Override
-					public void onFailure(Throwable caught) {
-						// assume no related entity has been selected
-						// Window.alert("Could not find account with id " + value);
-						link.setText("Not Found");
-					}
+					// resolve the real name of the entity by its id and display a HyperLink as
+					// widget
+					final AbstractDto relatedViewable = new DtoAccount(); // TODO determine history
+					// token from field..
+					final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
 
-					@Override
-					public void onSuccess(AbstractDto result) {
-						if (null == result) {
+					commonService.get(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz(), (Long) value, new AsyncCallback<AbstractDto>() {
+						@Override
+						public void onFailure(Throwable caught) {
 							// assume no related entity has been selected
 							// Window.alert("Could not find account with id " + value);
-							link.setText("");
-						} else {
-							link.setText(result.getQuicksearchItem());
+							link.setText("Not Found");
 						}
-					}
-				});
-				return link;
+
+						@Override
+						public void onSuccess(AbstractDto result) {
+							if (null == result) {
+								// assume no related entity has been selected
+								// Window.alert("Could not find account with id " + value);
+								link.setText("");
+							} else {
+								link.setText(result.getQuicksearchItem());
+							}
+						}
+					});
+					return link;
 				}
 			}
 		case BOOLEAN:
@@ -158,27 +168,28 @@ public class WidgetSelector {
 			return widget7;
 		case CURRENCY:
 			Label widget5 = new Label();
-			widget5.setText(CURRENCY_FORMAT_RO.format((Double) value));
+			widget5.setText(CURRENCY_FORMAT_READ.format((Double) value));
 			return widget5;
 		case EMAIL:
 			if (null == value || value.toString().isEmpty()) {
 				return new Label();
 			} else {
-				// Display email as a mailto:a@b.com link to make sure the clients mail client will be opened.
+				// Display email as a mailto:a@b.com link to make sure the clients mail client will
+				// be opened.
 				return new Anchor(value.toString(), true, "mailto:" + value.toString());
 			}
 		case DATE:
 			if (null == value) {
 				return new Label();
 			} else {
-				return new Label(DATE_FORMAT.format((Date)value));
+				return new Label(DATE_FORMAT.format((Date) value));
 			}
 		case MULTIENUM:
 			if (value.toString().isEmpty()) {
 				return new Label("");
 			} else {
 				String ul = "";
-				
+
 				for (final String selection : value.toString().split(FieldMultiEnum.SEPARATOR)) {
 					ul += "<li>" + selection + "</li>";
 				}
@@ -208,12 +219,13 @@ public class WidgetSelector {
 			TextBox widget3 = new TextBox();
 			return widget3;
 		case TEXT:
-			// Display normal TextArea instead of more advanced RichTextArea until a nice RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
+			// Display normal TextArea instead of more advanced RichTextArea until a nice
+			// RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
 			TextArea widget4 = new TextArea();
 			return widget4;
 		case RELATE:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
-				return new RelateWidget(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), 0);
+				return new RelateWidget(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz(), 0);
 			} else {
 				throw new RuntimeException("Expected FieldRelate. Received " + tmpViewable.getFieldById(fieldId).getClass().toString());
 			}
@@ -234,7 +246,8 @@ public class WidgetSelector {
 				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
 			}
 		default:
-			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString()); // should never reach this point
+			// should never reach this point
+			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString());
 		}
 	}
 }

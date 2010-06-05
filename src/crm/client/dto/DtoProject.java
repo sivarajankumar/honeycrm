@@ -8,6 +8,7 @@ public class DtoProject extends AbstractDto {
 	private static final long serialVersionUID = -6523180898796265577L;
 
 	private String name;
+	@RelatesTo(DtoEmployee.class)
 	private long employeeId;
 	private String description;
 	private double targetSum;

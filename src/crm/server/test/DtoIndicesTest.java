@@ -58,13 +58,15 @@ public class DtoIndicesTest extends TestCase {
 				final Method getFieldValue = dto.getMethod("getFieldValue", int.class);
 				final Method setFieldValue = dto.getMethod("setFieldValue", int.class, Object.class);
 
-				// set a random value using the usual setter and check whether both get methods return the same value that has just been set
+				// set a random value using the usual setter and check whether both get methods
+				// return the same value that has just been set
 				final Object value = getRandomValueByType(field.getType());
 				setter.invoke(dtoInstance, value);
 				assertEquals(value, getter.invoke(dtoInstance));
 				assertEquals(value, getFieldValue.invoke(dtoInstance, indexFieldValue));
 
-				// set a new random value using the setFieldValue method and check whether both get methods return the same value that has just been set
+				// set a new random value using the setFieldValue method and check whether both get
+				// methods return the same value that has just been set
 				final Object newValue = getRandomValueByType(field.getType());
 				setFieldValue.invoke(dtoInstance, indexFieldValue, newValue);
 

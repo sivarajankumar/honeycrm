@@ -4,20 +4,25 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.Query;
 
 import crm.client.CollectionHelper;
+import crm.client.IANA;
 import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
+import crm.server.domain.AbstractEntity;
 
 /**
  * Is part of the database layer.
  */
 // TODO this throws ConcurrentModificationExceptions (e.g. during getAll).
-// TODO every modification should be wrapped into a transaction to avoid this. not sure if this would solve the issue.
+// TODO every modification should be wrapped into a transaction to avoid this. not sure if this
+// would solve the issue.
 public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 
@@ -29,7 +34,8 @@ public class CommonServiceReader extends AbstractCommonService {
 		if (result instanceof Integer) {
 			return (Integer) query.execute();
 		} else {
-			// assume that something else can be returned if an error occured (or table is empty (?))
+			// assume that something else can be returned if an error occured (or table is empty
+			// (?))
 			return 0;
 		}
 	}
@@ -74,7 +80,9 @@ public class CommonServiceReader extends AbstractCommonService {
 						// TODO to lower case
 						// TODO does this allow sql injection or is it prevented by gwt?
 						queries.add("this." + field.getName() + ".startsWith(\"" + value.toString() + "\")");
-					} else if (Long.class == field.getType() || long.class == field.getType()) { // use exact match
+					} else if (Long.class == field.getType() || long.class == field.getType()) { // use
+						// exact
+						// match
 						if (0 != (Long) value) {
 							queries.add(field.getName() + " == " + value);
 						}
@@ -96,7 +104,16 @@ public class CommonServiceReader extends AbstractCommonService {
 
 	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(int dtoIndex, String prefix, int from, int to) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
-		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)"); // TODO use toLowerCase in query as well to ignore case
+		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)"); // TODO
+		// use
+		// toLowerCase
+		// in
+		// query
+		// as
+		// well
+		// to
+		// ignore
+		// case
 		query.declareParameters("String searchedName");
 		query.setRange(from, to);
 
@@ -120,36 +137,32 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	// TODO do not implement fulltext search using compass / lucene until it runs when deployed in app engine
-/*	public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from, int to) {
-		final ListQueryResult<AbstractDto> result = new ListQueryResult<AbstractDto>();
-		
-		if (null != query && query.length() > FulltextSearchWidget.MIN_QUERY_LENGTH) {
-			System.out.println("searching for '" + query + "'");
-
-			final CompassSearchSession session = PMF.compass().openSearchSession();
-			CompassHits hits = session.find(query);
-			
-			log.info("got " + hits.getLength() + " results");
-			System.out.println("got " + hits.getLength() + " results");
-
-			if (0 < hits.getLength()) {
-				final AbstractDto[] dtos = new AbstractDto[hits.getLength()];
-
-				for (int i=0; i<hits.getLength(); i++) {
-					final CompassHit hit = hits.hit(i);
-					dtos[i] = (AbstractDto) copy.copy(hit.getData(), domainClassToDto.get(hit.getData().getClass()));
-				}
-
-				session.close();
-				return new ListQueryResult<AbstractDto>(dtos, dtos.length);
-			}
-				
-			session.close();
-		}
-		
-		return result;
-	}*/
+	// TODO do not implement fulltext search using compass / lucene until it runs when deployed in
+	// app engine
+	/*
+	 * public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from,
+	 * int to) { final ListQueryResult<AbstractDto> result = new ListQueryResult<AbstractDto>();
+	 * 
+	 * if (null != query && query.length() > FulltextSearchWidget.MIN_QUERY_LENGTH) {
+	 * System.out.println("searching for '" + query + "'");
+	 * 
+	 * final CompassSearchSession session = PMF.compass().openSearchSession(); CompassHits hits =
+	 * session.find(query);
+	 * 
+	 * log.info("got " + hits.getLength() + " results"); System.out.println("got " +
+	 * hits.getLength() + " results");
+	 * 
+	 * if (0 < hits.getLength()) { final AbstractDto[] dtos = new AbstractDto[hits.getLength()];
+	 * 
+	 * for (int i=0; i<hits.getLength(); i++) { final CompassHit hit = hits.hit(i); dtos[i] =
+	 * (AbstractDto) copy.copy(hit.getData(), domainClassToDto.get(hit.getData().getClass())); }
+	 * 
+	 * session.close(); return new ListQueryResult<AbstractDto>(dtos, dtos.length); }
+	 * 
+	 * session.close(); }
+	 * 
+	 * return result; }
+	 */
 
 	public ListQueryResult<? extends AbstractDto> getAllMarked(int dtoIndex, int from, int to) {
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
@@ -159,6 +172,23 @@ public class CommonServiceReader extends AbstractCommonService {
 
 		final Collection collection = (Collection) query.execute();
 		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
+	}
+
+	public ListQueryResult<? extends AbstractDto> getAllRelated(int originatingDtoIndex, Long id, int relatedDtoIndex) {
+		final Set<AbstractEntity> result = new HashSet<AbstractEntity>();
+
+		/**
+		 * Get all related entities where the id fields contain the id of the originating entity
+		 * e.g. return all contacts which have accountID == 23 where is the id of the originating
+		 * account.
+		 */
+		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(IANA.unmarshal(originatingDtoIndex), IANA.unmarshal(relatedDtoIndex))) {
+			final Query q = m.newQuery(getDomainClass(originatingDtoIndex));
+			q.setFilter(fieldName + " == " + id);
+			result.addAll((Collection<AbstractEntity>) q.execute());
+		}
+
+		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(originatingDtoIndex, result), result.size());
 	}
 
 	enum BoolOperator {

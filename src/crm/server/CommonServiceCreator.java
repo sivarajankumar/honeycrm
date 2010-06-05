@@ -16,6 +16,8 @@ public class CommonServiceCreator extends AbstractCommonService {
 
 	public long create(int dtoIndex, AbstractDto dto) {
 		final AbstractEntity domainObject = (AbstractEntity) copy.copy(dto, getDomainClass(dtoIndex));
+		domainObject.setId(null); // explicitly set id to null to force the database to create a new
+									// row
 		return internalCreate(domainObject);
 	}
 

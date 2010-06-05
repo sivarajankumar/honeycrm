@@ -37,13 +37,13 @@ public class ArrayHelperTest extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testToSet() {
 		assertTrue(CollectionHelper.toSet(null).isEmpty());
 		assertTrue(CollectionHelper.toSet(new String[0]).isEmpty());
-		assertEquals(1, CollectionHelper.toSet(new String[]{"foo"}).size());
-		
-		final Set<String> set = CollectionHelper.toSet(new String[]{"1","2"});
+		assertEquals(1, CollectionHelper.toSet(new String[] { "foo" }).size());
+
+		final Set<String> set = CollectionHelper.toSet(new String[] { "1", "2" });
 		assertEquals(2, set.size());
 		assertTrue(set.contains("1"));
 		assertTrue(set.contains("2"));
