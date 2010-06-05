@@ -11,9 +11,11 @@ import crm.client.dto.DtoAccount;
 import crm.client.dto.DtoContact;
 import crm.client.dto.ListQueryResult;
 
-// TODO this test fails when GWT tries to instantiate the common service implementation, i.e. during instantiation of the persistence manager.
+// TODO this test fails when GWT tries to instantiate the common service implementation, i.e. during
+// instantiation of the persistence manager.
 public class ServiceTest extends AbstractClientTest {
-	// cannot call GWT.create() within constructor / initializer code -> do it per test* method instead
+	// cannot call GWT.create() within constructor / initializer code -> do it per test* method
+	// instead
 
 	@Override
 	protected void gwtSetUp() throws Exception {

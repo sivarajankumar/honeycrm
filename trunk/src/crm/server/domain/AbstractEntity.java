@@ -21,7 +21,8 @@ abstract public class AbstractEntity {
 	@SearchableId
 	// NOTE:
 	// To allow full text search with compass / lucene the id field has to be of type long.
-	// Additionally we have to use Long (not long) because of constrains of google app engine for allowed id types. 
+	// Additionally we have to use Long (not long) because of constrains of google app engine for
+	// allowed id types.
 	protected Long id;
 	@Persistent
 	protected boolean marked;

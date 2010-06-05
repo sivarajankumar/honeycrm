@@ -7,7 +7,9 @@ import crm.client.dto.Field.Type;
 public class DtoMembership extends AbstractDto {
 	private static final long serialVersionUID = 2957773394150131193L;
 
+	@RelatesTo(DtoContact.class)
 	private long memberId; // relation to contacts
+	@RelatesTo(DtoEmployee.class)
 	private long employeeId; // relation to employees
 	private double payment;
 	private String tiedToPurpose; // yes, no, 'soon'

@@ -23,7 +23,8 @@ import crm.client.dto.AbstractDto;
 import crm.client.dto.ListQueryResult;
 
 // TODO track which items are already in the cache
-// TODO update cached items when forced to do so (everytime user opens a page the first time) AND in the background (polling)
+// TODO update cached items when forced to do so (everytime user opens a page the first time) AND in
+// the background (polling)
 // TODO update item count periodically
 public class ListView extends AbstractView {
 	/**
@@ -33,7 +34,8 @@ public class ListView extends AbstractView {
 	protected static final int MAX_ENTRIES = 10;
 	private static final int HEADER_ROWS = 1;
 	/**
-	 * number of columns in front of the actual data containing columns (e.g. delete checkbox column)
+	 * number of columns in front of the actual data containing columns (e.g. delete checkbox
+	 * column)
 	 */
 	private static final int LEADING_COLS = 1;
 
@@ -78,10 +80,10 @@ public class ListView extends AbstractView {
 	}
 
 	private void initHeader() {
-		final int[] fieldIds = viewable.getListViewColumnIds();
+		final int[] fieldIds = dto.getListViewColumnIds();
 
 		for (int i = 0; i < fieldIds.length; i++) {
-			table.setText(0, LEADING_COLS + i, viewable.getFieldById(fieldIds[i]).getLabel());
+			table.setText(0, LEADING_COLS + i, dto.getFieldById(fieldIds[i]).getLabel());
 		}
 	}
 
@@ -221,7 +223,8 @@ public class ListView extends AbstractView {
 			((CheckBox) table.getWidget(y, 0)).setValue(shouldBeDeleted);
 
 			if (shouldBeDeleted) {
-				// determine id of the corresponding list viewable item and add it to the set of IDs that will be deleted.
+				// determine id of the corresponding list viewable item and add it to the set of IDs
+				// that will be deleted.
 				ids.add(cache.get(currentPage)[y - HEADER_ROWS].getId());
 			}
 		}

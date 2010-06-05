@@ -9,10 +9,12 @@ import com.google.gwt.user.client.ui.Label;
 public class Header extends Composite {
 	public Header() {
 		FlowPanel panel = new FlowPanel();
-		panel.setStyleName("header");
+		// use style name honey_header to css name conflict with css code of disclosure panel
+		panel.setStyleName("honey_header");
 
 		/*
-		 * logo | loadIndicator | header_links | | | | login | profile | help | searchPanel | ------------------------------------------------------------------
+		 * logo | loadIndicator | header_links | | | | login | profile | help | searchPanel |
+		 * ------------------------------------------------------------------
 		 */
 
 		Label logo = new Label("Honeeeeeeeyyyyy CRM");
@@ -38,7 +40,7 @@ public class Header extends Composite {
 
 		HTML pipe3 = new HTML("&nbsp; | &nbsp;");
 		pipe3.setStyleName("header_link");
-		
+
 		FlowPanel searchPanel = new FlowPanel();
 		searchPanel.setStyleName("header_search");
 

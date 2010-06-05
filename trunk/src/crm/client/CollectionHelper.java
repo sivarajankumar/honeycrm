@@ -6,8 +6,8 @@ import java.util.Set;
 
 public class CollectionHelper {
 	/**
-	 * Returns an array containing the elements of a first followed by the elements of b.
-	 * TODO implement this in a generic manner.
+	 * Returns an array containing the elements of a first followed by the elements of b. TODO
+	 * implement this in a generic manner.
 	 */
 	public static int[][] merge(final int[][] a, final int[][] b) {
 		final int[][] c = new int[a.length + b.length][];
@@ -15,7 +15,7 @@ public class CollectionHelper {
 		System.arraycopy(b, 0, c, a.length, b.length);
 		return c;
 	}
-	
+
 	/**
 	 * Joins all collection items with given glue string.
 	 */
@@ -23,7 +23,7 @@ public class CollectionHelper {
 		String joinedStr = "";
 
 		int i = 0;
-		for (final String item: collection) {
+		for (final String item : collection) {
 			joinedStr += item;
 
 			if (i++ < collection.size() - 1) {
@@ -33,14 +33,14 @@ public class CollectionHelper {
 
 		return joinedStr;
 	}
-	
+
 	/**
 	 * Convert a string array into a set.
 	 */
 	public static Set<String> toSet(final String[] array) {
 		final Set<String> set = new HashSet<String>();
 		if (null != array) {
-			for(int i=0; i<array.length; i++) {
+			for (int i = 0; i < array.length; i++) {
 				set.add(array[i]);
 			}
 		}

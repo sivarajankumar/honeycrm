@@ -25,7 +25,8 @@ public class CopyMachine {
 	}
 
 	/**
-	 * Copy all fields from source into equally named fields of the destination class. Returns an instance of the destination class with the values of the source object set.
+	 * Copy all fields from source into equally named fields of the destination class. Returns an
+	 * instance of the destination class with the values of the source object set.
 	 */
 	public Object copy(final Object srcObj, final Class destClass) {
 		assert null != srcObj && null != destClass;
@@ -44,13 +45,16 @@ public class CopyMachine {
 	}
 
 	/**
-	 * Returns a new instance of the destObject class with the old contents of destObjects, overwritten with the fields existing in srcObject.
+	 * Returns a new instance of the destObject class with the old contents of destObjects,
+	 * overwritten with the fields existing in srcObject.
 	 * 
 	 * @param srcObject
 	 *            e.g. DTO object
 	 * @param destObject
 	 *            e.g. DB object.
-	 * @return A new instance of the destObjects class. This is a copy of destObject, but all fields that exist in srcObject too are copied from srcObject into the new instance. This fields from srcObject will overwrite corresponding fields in new instance.
+	 * @return A new instance of the destObjects class. This is a copy of destObject, but all fields
+	 *         that exist in srcObject too are copied from srcObject into the new instance. This
+	 *         fields from srcObject will overwrite corresponding fields in new instance.
 	 */
 	public Object getUpdatedInstance(final Object srcObject, final Object destObject) {
 		assert null != srcObject && null != destObject;
@@ -61,7 +65,8 @@ public class CopyMachine {
 			// Copy all values from the destObject into the updated instance.
 			final Object instanceUpdatedDest = copy(destObject, classDest);
 
-			// Now we will overwrite the values of all fields of instanceUpdatedDest with those from srcObject.
+			// Now we will overwrite the values of all fields of instanceUpdatedDest with those from
+			// srcObject.
 			// TODO Key is not copied from old DB class to new instance
 			copyFields(srcObject, classSrc, classDest, instanceUpdatedDest);
 
@@ -73,8 +78,8 @@ public class CopyMachine {
 	}
 
 	/**
-	 * Copies all fields from the source object into the destination object.
-	 * TODO this is critical for server performance -> make bugatti veyron-ish fast.
+	 * Copies all fields from the source object into the destination object. TODO this is critical
+	 * for server performance -> make bugatti veyron-ish fast.
 	 */
 	private void copyFields(final Object srcObject, final Class classSrc, final Class classDest, final Object instanceUpdatedDest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		final Field[] allFields = filterFields(reflectionHelper.getAllFields(classSrc));
@@ -85,7 +90,8 @@ public class CopyMachine {
 
 			// assumption: if we reach this point the get method for the field has to exist.
 
-			// we call the get method for this field on the source object to avoid an illegal access exception that could occur if the property is private
+			// we call the get method for this field on the source object to avoid an illegal access
+			// exception that could occur if the property is private
 			final Method getter = classSrc.getMethod(reflectionHelper.getMethodName("get", srcField));
 			final Object srcFieldValue = getter.invoke(srcObject);
 
@@ -101,17 +107,20 @@ public class CopyMachine {
 					if ("id".equals(srcFieldName) || srcFieldName.endsWith("ID")) {
 						if (srcFieldValue instanceof Long) {
 							final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), Long.class);
-							// can safely cast to Long because we know now that this is an instance of Long
+							// can safely cast to Long because we know now that this is an instance
+							// of Long
 							setter.invoke(instanceUpdatedDest, (Long) srcFieldValue);
 						} else if (srcFieldValue instanceof Key) {
 							// The id field is a Key instance in the server code.
-							// Since we cannot use this class in client code it is represented as a string in the client code
+							// Since we cannot use this class in client code it is represented as a
+							// string in the client code
 							// For this reason handle this field as a special case.
 							final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), Long.class);
 							setter.invoke(instanceUpdatedDest, ((Key) srcFieldValue).getId());
 						}
 					} else {
-						// will not invoke the setter because field does not exist in the destination class.
+						// will not invoke the setter because field does not exist in the
+						// destination class.
 						// log error?
 					}
 				}
@@ -120,7 +129,8 @@ public class CopyMachine {
 	}
 
 	/**
-	 * Method throwing away all fields that are irrelevant and should not be copied by this copy machine (e.g. automatically added fields for serialization).
+	 * Method throwing away all fields that are irrelevant and should not be copied by this copy
+	 * machine (e.g. automatically added fields for serialization).
 	 */
 	private Field[] filterFields(final Field[] allFields) {
 		final List<Field> filteredFields = new LinkedList<Field>();
@@ -134,7 +144,8 @@ public class CopyMachine {
 	}
 
 	/**
-	 * Returns true if the field with the given name should be skipped during copying / DTO-DB comparison. False otherwise.
+	 * Returns true if the field with the given name should be skipped during copying / DTO-DB
+	 * comparison. False otherwise.
 	 */
 	public boolean shouldBeSkipped(final Field field) {
 		if (Modifier.STATIC == (field.getModifiers() & Modifier.STATIC)) {
@@ -147,7 +158,8 @@ public class CopyMachine {
 
 		for (final String badPrefix : badVariablePrefixes) {
 			if (field.getName().startsWith(badPrefix)) {
-				return true; // skip field because it starts with a prefix that is on the bad prefix list
+				return true; // skip field because it starts with a prefix that is on the bad prefix
+								// list
 			}
 		}
 

@@ -17,6 +17,7 @@ import com.google.gwt.user.datepicker.client.DateBox;
 
 import crm.client.CollectionHelper;
 import crm.client.CommonServiceAsync;
+import crm.client.DtoRegistry;
 import crm.client.IANA;
 import crm.client.LoadIndicator;
 import crm.client.ServiceRegistry;
@@ -25,22 +26,22 @@ import crm.client.dto.AbstractDto;
 import crm.client.dto.FieldMultiEnum;
 
 abstract public class AbstractView extends Composite {
-	// private static final NumberFormat DATE_FORMAT = DateFo NumberFormat.getFormat(LocaleInfo.getCurrentLocale().getNumberConstants().currencyPattern());
 	protected final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected final Class<? extends AbstractDto> clazz;
-	protected AbstractDto viewable;
+	protected AbstractDto dto;
 
 	public AbstractView(final Class<? extends AbstractDto> clazz) {
 		this.clazz = clazz;
-		this.viewable = AbstractDto.getViewable(clazz);
+		this.dto = DtoRegistry.instance.getDto(clazz);
 	}
 
 	protected String getTitleFromClazz() {
-		return AbstractDto.getViewable(clazz).getTitle();
+		return DtoRegistry.instance.getDto(clazz).getTitle();
 	}
 
 	/**
-	 * Initialize a viewable from the widgets (e.g., textboxes, dateboxes, relate fields) in a table.
+	 * Initialize a viewable from the widgets (e.g., textboxes, dateboxes, relate fields) in a
+	 * table.
 	 */
 	protected void setViewable(final int[][] fieldIds, final FlexTable table, final AbstractDto tmpViewable) {
 		for (int y = 0; y < fieldIds.length; y++) {
@@ -66,7 +67,8 @@ abstract public class AbstractView extends Composite {
 						final ListBox box = (ListBox) widgetValue;
 						String selectedValue = "";
 						if (box.isMultipleSelect()) {
-							// this is a multi enum field. determine the fields that have been selected and concatenate their values.
+							// this is a multi enum field. determine the fields that have been
+							// selected and concatenate their values.
 							final Set<String> selectedValues = new HashSet<String>();
 							for (int i = 0; i < box.getItemCount(); i++) {
 								if (box.isItemSelected(i)) {
@@ -75,7 +77,9 @@ abstract public class AbstractView extends Composite {
 							}
 							selectedValue = CollectionHelper.join(selectedValues, FieldMultiEnum.SEPARATOR);
 						} else if (-1 < box.getSelectedIndex()) {
-							// this is an enum field (single line dropdown). only add anything if something has been selected to avoid array index out of bounds exceptions at runtime
+							// this is an enum field (single line dropdown). only add anything if
+							// something has been selected to avoid array index out of bounds
+							// exceptions at runtime
 							selectedValue += box.getValue(box.getSelectedIndex());
 						}
 						value = selectedValue;
@@ -83,7 +87,8 @@ abstract public class AbstractView extends Composite {
 						// } else if (widgetValue instanceof MarkWidget) {
 						// value = widgetValue.
 					} else {
-						displayError(new RuntimeException("Unexpected Widget: " + widgetValue.getClass())); // unexpected widget
+						// unexpected widget
+						displayError(new RuntimeException("Unexpected Widget: " + widgetValue.getClass()));
 						throw new RuntimeException("Unexpected Widget Type: " + widgetValue.getClass().toString());
 					}
 
@@ -100,28 +105,26 @@ abstract public class AbstractView extends Composite {
 
 		LoadIndicator.get().startLoading();
 
-		final AsyncCallback<Void> saveCallback = new AsyncCallback<Void>() {
-			@Override
-			public void onSuccess(Void result) {
-				TabCenterView.instance().get(clazz).saveCompleted();
-				LoadIndicator.get().endLoading();
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				displayError(caught);
-			}
-		};
-
 		if (isUpdate) {
-			viewable.setId(id);
+			dto.setId(id);
 		}
-		setViewable(viewable.getFormFieldIds(), table, viewable);
+		setViewable(dto.getFormFieldIds(), table, dto);
 
 		if (isUpdate) {
-			commonService.update(IANA.mashal(clazz), viewable, id, saveCallback);
+			commonService.update(IANA.mashal(clazz), dto, id, new AsyncCallback<Void>() {
+				@Override
+				public void onSuccess(Void result) {
+					TabCenterView.instance().get(clazz).saveCompleted();
+					LoadIndicator.get().endLoading();
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+					displayError(caught);
+				}
+			});
 		} else {
-			commonService.create(IANA.mashal(clazz), viewable, new AsyncCallback<Long>() {
+			commonService.create(IANA.mashal(clazz), dto, new AsyncCallback<Long>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
@@ -130,7 +133,7 @@ abstract public class AbstractView extends Composite {
 				@Override
 				public void onSuccess(Long result) {
 					TabCenterView.instance().get(clazz).saveCompletedForId(result);
-//					TabCenterView.instance().get(clazz).showDetailView(result);
+					// TabCenterView.instance().get(clazz).showDetailView(result);
 					LoadIndicator.get().endLoading();
 				}
 			});
@@ -138,11 +141,12 @@ abstract public class AbstractView extends Composite {
 	}
 
 	protected Label getLabelForField(final int id) {
-		return new Label(viewable.getFieldById(id).getLabel());
+		return new Label(dto.getFieldById(id).getLabel());
 	}
 
 	/**
-	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a special use case..
+	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a
+	 * special use case..
 	 */
 	protected Widget getWidgetByType(final AbstractDto tmpViewable, final int fieldId, final View view) {
 		return WidgetSelector.getWidgetByType(clazz, tmpViewable, fieldId, view);

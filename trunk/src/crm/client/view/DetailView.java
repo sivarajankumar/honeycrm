@@ -1,5 +1,7 @@
 package crm.client.view;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -14,18 +16,19 @@ import com.google.gwt.user.client.ui.Widget;
 
 import crm.client.IANA;
 import crm.client.LoadIndicator;
+import crm.client.RelationshipsContainer;
 import crm.client.dto.AbstractDto;
 
 /**
  * This widget is responsible for displaying detail / edit / create - views for entities.
  */
 public class DetailView extends AbstractView {
-	private static final String PREFIX = "Detail View";
 	private final VerticalPanel panel = new VerticalPanel();
-	private final Label label = new Label();
 	private final DetailViewButtonBar buttonBar;
+	private final RelationshipsContainer relationshipsContainer;
 	/**
-	 * table containing the labels and the actual field values (or input fields if we are in edit mode).
+	 * table containing the labels and the actual field values (or input fields if we are in edit
+	 * mode).
 	 */
 	private FlexTable table = new FlexTable();
 	private long currentId = -1; // id of currently displayed item
@@ -33,29 +36,19 @@ public class DetailView extends AbstractView {
 	public DetailView(final Class<? extends AbstractDto> clazz) {
 		super(clazz);
 
-		// updateTitle(getTitleFromClazz());
-
-		buttonBar = new DetailViewButtonBar(clazz, this);
-
-		// css settings
-		label.setStyleName("view_header_label");
-		buttonBar.setStyleName("detail_view_buttons");
-
-		label.setText(PREFIX);
-		panel.add(label);
 		panel.add(table);
-		panel.add(buttonBar);
+		panel.add(buttonBar = new DetailViewButtonBar(clazz, this));
+		panel.add(relationshipsContainer = new RelationshipsContainer(clazz));
 		panel.add(new HTML("<div class='clear'></div>"));
+
+		buttonBar.setStyleName("detail_view_buttons");
 
 		initWidget(panel);
 	}
 
-	private void updateTitle(String title) {
-		label.setText(PREFIX + title);
-	}
-
 	/**
-	 * Forces reload of all fields of the domain object. This is neccessary for updating fields that are set on server side and not visible while editing.
+	 * Forces reload of all fields of the domain object. This is neccessary for updating fields that
+	 * are set on server side and not visible while editing.
 	 */
 	public void refresh() {
 		refresh(currentId);
@@ -65,7 +58,8 @@ public class DetailView extends AbstractView {
 		if (0 == id) {
 			throw new RuntimeException("Cannot refresh because id == 0");
 		} else {
-			updateTitle(label.getTitle());
+			relationshipsContainer.refresh(id);
+
 			LoadIndicator.get().startLoading();
 
 			commonService.get(IANA.mashal(clazz), id, new AsyncCallback<AbstractDto>() {
@@ -79,9 +73,10 @@ public class DetailView extends AbstractView {
 					if (null == result) {
 						Window.alert("Could not find account with id " + id);
 					} else {
-						// detailview should be responsible for rendering
-						// only return the field types here
+						// detailview should be responsible for rendering only return the field
+						// types here
 						refreshFields(result);
+						currentId = result.getId();
 						buttonBar.startViewing();
 					}
 					LoadIndicator.get().endLoading();
@@ -90,7 +85,8 @@ public class DetailView extends AbstractView {
 		}
 	}
 
-	// TODO only update the field contents instead of removing all fields an adding them
+	// TODO only update the field contents instead of removing all fields an
+	// adding them
 	private void refreshFields(final AbstractDto viewable) {
 		resetFields(viewable, View.DETAIL);
 	}
@@ -98,7 +94,7 @@ public class DetailView extends AbstractView {
 	private void resetFields(final AbstractDto tmpViewable, final View view) {
 		final int[][] fieldIds = tmpViewable.getFormFieldIds();
 		this.currentId = tmpViewable.getId();
-		this.viewable = tmpViewable;
+		this.dto = tmpViewable;
 
 		// remove previous cell contents
 		table.clear();
@@ -110,15 +106,29 @@ public class DetailView extends AbstractView {
 				final Widget widgetLabel = getLabelForField(id);
 				final Widget widgetValue = getWidgetByType(tmpViewable, id, view);
 
-				if (view != View.DETAIL) {
+				if (view == View.DETAIL) {
+					if (widgetValue instanceof Label) {
+						((Label) widgetValue).addClickHandler(new ClickHandler() {
+							@Override
+							public void onClick(ClickEvent event) {
+								// the value of this field has been clicked. we assume the user
+								// wanted to express that he would like to start editing the entity
+								// so we start editing of this entity for him
+								// TODO only do the following if this was a double click event. how
+								// to check for this?
+								// TODO additionally put the cursor into the text box of the field
+								// that has been clicked
+								startEditing();
+							}
+						});
+					}
+				} else {
 					if (widgetValue instanceof TextBox) {
 						((TextBox) widgetValue).addKeyDownHandler(new KeyDownHandler() {
 							@Override
 							public void onKeyDown(KeyDownEvent event) {
 								if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
 									saveChanges();
-									buttonBar.startViewing();
-									// button bar start viewing..
 								}
 							}
 						});
@@ -126,7 +136,8 @@ public class DetailView extends AbstractView {
 				}
 
 				if (view == View.DETAIL || (view != View.DETAIL && !AbstractDto.isInternalReadOnlyField(id))) {
-					// display the widget because we are in readonly mode or we are not in ro mode but it is no internal field
+					// display the widget because we are in readonly mode or we
+					// are not in ro mode but it is no internal field
 					table.setWidget(y, 2 * x + 0, widgetLabel);
 					table.setWidget(y, 2 * x + 1, widgetValue);
 				}
@@ -137,9 +148,9 @@ public class DetailView extends AbstractView {
 	/**
 	 * Start editing mode.
 	 */
-	public void edit() {
+	public void startEditing() {
 		if (isShowing()) {
-			resetFields(viewable, View.EDIT);
+			resetFields(dto, View.EDIT);
 		} else {
 			// Window.alert("Do nothing because id is not defined");
 		}
@@ -150,7 +161,7 @@ public class DetailView extends AbstractView {
 	 */
 	public void view() {
 		if (isShowing()) {
-			resetFields(viewable, View.DETAIL);
+			resetFields(dto, View.DETAIL);
 		} else {
 			// Window.alert("Do nothing because id is not defined");
 		}
@@ -177,7 +188,9 @@ public class DetailView extends AbstractView {
 	}
 
 	public void saveChanges() {
-		save(table, currentId); // when save has been completed the environment may request a refresh of the currently displayed fields so we do not have to do this.
+		// when save has been completed the environment may request a refresh of the currently
+		// displayed fields so we do not have to do this.
+		save(table, currentId);
 	}
 
 	/**
@@ -188,8 +201,8 @@ public class DetailView extends AbstractView {
 	}
 
 	public void startCreating() {
-		currentId = -1; // throw away previous id
-		resetFields(viewable, View.CREATE);
+		dto.setId(currentId = -1); // throw away previous id
+		resetFields(dto, View.CREATE);
 	}
 
 	/**

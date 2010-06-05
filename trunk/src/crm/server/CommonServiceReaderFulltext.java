@@ -20,19 +20,19 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 		final List<AbstractDto> list = new LinkedList<AbstractDto>();
 
 		try {
-			for (final Class<? extends AbstractEntity> domainClass : domainClassToDto.keySet()) {
+			for (final Class<? extends AbstractEntity> domainClass : registry.getDomainClasses()) {
 				final Query q = m.newQuery(domainClass);
 
-				LOOP2: for (final AbstractEntity entity : (Collection<? extends AbstractEntity>) q.execute()) {
+				ENTITY_LOOP: for (final AbstractEntity entity : (Collection<? extends AbstractEntity>) q.execute()) {
 					final Class<? extends AbstractEntity> entityClass = entity.getClass();
-					
+
 					for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(entityClass, SearchableProperty.class)) {
 						if (String.class == field.getType()) {
 							String value = (String) entityClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(entity);
 
 							if (null != value && value.contains(query)) {
-								list.add((AbstractDto) copy.copy(entity, domainClassToDto.get(entityClass)));
-								continue LOOP2;
+								list.add((AbstractDto) copy.copy(entity, registry.getDto(entityClass)));
+								continue ENTITY_LOOP;
 							}
 						}
 					}

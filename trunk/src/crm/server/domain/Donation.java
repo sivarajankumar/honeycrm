@@ -35,7 +35,7 @@ public class Donation extends AbstractEntity {
 	private Date date;
 	@Persistent
 	private double amount;
-	
+
 	public Donation() {
 	}
 

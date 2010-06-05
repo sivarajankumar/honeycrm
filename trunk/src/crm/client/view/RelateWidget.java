@@ -27,7 +27,8 @@ public class RelateWidget extends SuggestBox {
 		addHandlers();
 
 		if (0 != id) {
-			// an id of 0 indicates that nothing has been selected yet. if something has been selected yet load the actual name of the related account.
+			// an id of 0 indicates that nothing has been selected yet. if something has been
+			// selected yet load the actual name of the related account.
 			this.id = id;
 			setValueForId(id);
 		}
@@ -95,7 +96,8 @@ public class RelateWidget extends SuggestBox {
 							o.clear();
 							o.add("No Results");
 
-							// TODO indicate that no results have been returned, set background color to red or something like that..
+							// TODO indicate that no results have been returned, set background
+							// color to red or something like that..
 						}
 					});
 				}
@@ -105,7 +107,8 @@ public class RelateWidget extends SuggestBox {
 		addSelectionHandler(new SelectionHandler<Suggestion>() {
 			@Override
 			public void onSelection(SelectionEvent<Suggestion> event) {
-				// determine id of this item and store the id in the gui to make sure it is available on submit
+				// determine id of this item and store the id in the gui to make sure it is
+				// available on submit
 				final String selected = event.getSelectedItem().getReplacementString();
 
 				commonService.getByName(marshalledClass, selected, new AsyncCallback<AbstractDto>() {
@@ -117,7 +120,8 @@ public class RelateWidget extends SuggestBox {
 					@Override
 					public void onSuccess(AbstractDto result) {
 						if (null == result) {
-							// the related entity could not be found or the search returned more than one result.
+							// the related entity could not be found or the search returned more
+							// than one result.
 							// TODO what should be done in this case?
 						} else {
 							id = result.getId();

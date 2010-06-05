@@ -24,7 +24,8 @@ public class IANATest extends TestCase {
 					}
 					marshalIndices.add(newIndex);
 				} catch (RuntimeException e) {
-					fail(); // assume runtime exception caused by IANA.marshal method caused by invalid index.
+					fail(); // assume runtime exception caused by IANA.marshal method caused by
+							// invalid index.
 				}
 			}
 
@@ -33,7 +34,8 @@ public class IANATest extends TestCase {
 					final Class<? extends AbstractDto> clazz = IANA.unmarshal(marshalledIndex);
 					assertNotNull(clazz);
 				} catch (RuntimeException e) {
-					fail(); // assume runtime exception caused by invalid index that cannot be unmarshalled to class
+					fail(); // assume runtime exception caused by invalid index that cannot be
+							// unmarshalled to class
 				}
 			}
 		} catch (Exception e) {

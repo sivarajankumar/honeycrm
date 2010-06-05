@@ -17,7 +17,8 @@ public class DtoSyncTest extends TestCase {
 	}
 
 	/**
-	 * Returns true if fields contains a field called fieldName TODO check field type as well. not just the name..
+	 * Returns true if fields contains a field called fieldName TODO check field type as well. not
+	 * just the name..
 	 */
 	private boolean containsField(final String fieldName, Field[] fields) {
 		for (int k = 0; k < fields.length; k++) {
@@ -50,7 +51,8 @@ public class DtoSyncTest extends TestCase {
 	}
 
 	/**
-	 * Determines whether the domain classes and the dtos are in sync, i.e. whether all DTO fields can be found in the domain class and vice versa.
+	 * Determines whether the domain classes and the dtos are in sync, i.e. whether all DTO fields
+	 * can be found in the domain class and vice versa.
 	 */
 	public void testSync() {
 		try {
@@ -67,7 +69,11 @@ public class DtoSyncTest extends TestCase {
 
 				for (int k = 0; k < dtos.length; k++) {
 					final Class dto = dtos[k];
-					final String dtoName = dto.getSimpleName().substring(3); // throw away the first three characters. this should skip the "Dto" at the beginning
+					final String dtoName = dto.getSimpleName().substring(3); // throw away the first
+																				// three characters.
+																				// this should skip
+																				// the "Dto" at the
+																				// beginning
 
 					if (dtoName.equals(domainName)) {
 						final List<Field> dtoFields = new LinkedList<Field>();

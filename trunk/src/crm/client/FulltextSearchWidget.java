@@ -56,7 +56,9 @@ public class FulltextSearchWidget extends SuggestBox {
 
 						if (quicksearchLabels.containsKey(label)) {
 							quicksearchLabels.put(label, quicksearchLabels.get(label) + 1);
-							o.add(label + " (" + quicksearchLabels.get(label) + ")"); // add a counter for this label since it is not unique
+							// add a counter for this label since it is not unique
+							o.add(label + " (" + quicksearchLabels.get(label) + ")");
+
 						} else {
 							quicksearchLabels.put(label, 1);
 							o.add(label);

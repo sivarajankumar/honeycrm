@@ -14,12 +14,14 @@ import crm.client.LoadIndicator;
 import crm.client.dto.AbstractDto;
 
 /**
- * Responsible for the selection and later deletion of items depending on the page currently displayed in the listview.
+ * Responsible for the selection and later deletion of items depending on the page currently
+ * displayed in the listview.
  */
 public class ListViewDeletionPanel extends AbstractView {
 	private final ListView listview;
 	/**
-	 * Store the delete lists per list view page Each map entry represents one page storing a set of ids that should be deleted.
+	 * Store the delete lists per list view page Each map entry represents one page storing a set of
+	 * ids that should be deleted.
 	 */
 	private final HashMap<Integer, Set<Long>> deleteIdsPerPage = new HashMap<Integer, Set<Long>>();
 	private final CheckBox deleteAllCheckbox = new CheckBox();
@@ -108,7 +110,8 @@ public class ListViewDeletionPanel extends AbstractView {
 	}
 
 	/**
-	 * Prepare the map entry for its first use. Create a new empty set at the desired position if it does not exist yet.
+	 * Prepare the map entry for its first use. Create a new empty set at the desired position if it
+	 * does not exist yet.
 	 * 
 	 * @param page
 	 */
@@ -120,15 +123,15 @@ public class ListViewDeletionPanel extends AbstractView {
 
 	public void deleteAll() {
 		LoadIndicator.get().startLoading();
-		
-		commonService.deleteAll(IANA.mashal(clazz), new AsyncCallback() {
+
+		commonService.deleteAll(IANA.mashal(clazz), new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(Object result) {
+			public void onSuccess(Void result) {
 				LoadIndicator.get().endLoading();
 				listview.refresh();
 			}

@@ -32,7 +32,8 @@ public class ObjectCopyTest extends TestCase {
 			Contact domain = (Contact) m.copy(dto, Contact.class);
 			assertNotNull(domain);
 			assertEquals(dto.getName(), domain.getName());
-			// cannot set the id field in this class because instantiation of keys is not supported yet.
+			// cannot set the id field in this class because instantiation of keys is not supported
+			// yet.
 			// assertEquals(dto.getId(), domain.getId());
 			assertEquals(dto.getAccountID(), domain.getAccountID());
 
@@ -67,7 +68,8 @@ public class ObjectCopyTest extends TestCase {
 		for (int i = 0; i < ITERATIONS; i++) {
 			// represents the current object state loaded from the db
 			final DtoContact a = (DtoContact) m.copy(DemoDataProvider.contact(), DtoContact.class);
-			// represents the state updated by the user in the gui, i.e. is a DTO object coming from UI code.
+			// represents the state updated by the user in the gui, i.e. is a DTO object coming from
+			// UI code.
 			final DtoContact b = (DtoContact) m.copy(a, DtoContact.class);
 			// user has changed the name field like this
 			b.setName(b.getName() + "THE CHANGE");

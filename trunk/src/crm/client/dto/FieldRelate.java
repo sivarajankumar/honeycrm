@@ -14,7 +14,7 @@ public class FieldRelate extends Field {
 		this.marshalledClazz = IANA.mashal(clazz);
 	}
 
-	public int getClazz() {
+	public int getRelatedClazz() {
 		return marshalledClazz;
 	}
 }

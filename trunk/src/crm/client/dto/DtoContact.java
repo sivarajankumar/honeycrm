@@ -13,17 +13,24 @@ public class DtoContact extends AbstractDto {
 	private String mobile;
 	private boolean doNotCall;
 	private String doNotCallExplanation;
+	@RelatesTo(DtoAccount.class)
 	private long accountID;
 	private String bankAccountData;
 	private String profession;
 	private String study;
+	@RelatesTo(DtoContact.class)
 	private long partnerId;
+	@RelatesTo(DtoContact.class)
 	private long child1Id;
+	@RelatesTo(DtoContact.class)
 	private long child2Id;
+	@RelatesTo(DtoEmployee.class)
 	private long responsibleId;
 
 	// TODO it should not be neccessary do write this by hand..
-	// TODO unfortunately we cannot initialize this in a static block with "i++" since the case blocks need constant values. Seems like the static analysis does not recognize this as constants.
+	// TODO unfortunately we cannot initialize this in a static block with "i++" since the case
+	// blocks need constant values. Seems like the static analysis does not recognize this as
+	// constants.
 	public static final int INDEX_NAME = 0;
 	public static final int INDEX_PHONE = 1;
 	public static final int INDEX_EMAIL = 2;
@@ -125,7 +132,7 @@ public class DtoContact extends AbstractDto {
 	protected int[][] interalGetFormFieldIds() {
 		final int[] row1 = new int[] { INDEX_NAME, INDEX_ACCOUNTID, INDEX_RESPONSIBLEID };
 		final int[] row2 = new int[] { INDEX_EMAIL, INDEX_EMAILOPTEDOUT };
-		final int[] row3 = new int[]{ INDEX_PHONE, INDEX_MOBILE };
+		final int[] row3 = new int[] { INDEX_PHONE, INDEX_MOBILE };
 		final int[] row4 = new int[] { INDEX_DONOTCALL, INDEX_DONOTCALLEXPLANATION };
 		final int[] row5 = new int[] { INDEX_CITY, INDEX_BANKACCOUNTDATA };
 		final int[] row6 = new int[] { INDEX_PROFESSION, INDEX_STUDY };

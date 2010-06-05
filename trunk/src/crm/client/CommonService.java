@@ -21,7 +21,8 @@ public interface CommonService extends RemoteService {
 	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(final int dtoIndex, String prefix, int from, int to);
 	public ListQueryResult<? extends AbstractDto> search(int dtoIndex, AbstractDto searchContact, int from, int to);
 	public ListQueryResult<? extends AbstractDto> fulltextSearch(String query, int from, int to);
-
+	public ListQueryResult<? extends AbstractDto> getAllRelated(final int originatingDtoIndex, final Long id, final int relatedDtoIndex);
+	
 	// update
 	public void update(int dtoIndex, AbstractDto account, long id);
 	public void mark(int dtoIndex, long id, boolean marked);
@@ -32,7 +33,7 @@ public interface CommonService extends RemoteService {
 	public void deleteAll(int dtoIndex);
 	public void deleteAllItems();
 	public void addDemo(int dtoIndex);
-	
+
 	// misc
 	public void wakeupServer();
 }
