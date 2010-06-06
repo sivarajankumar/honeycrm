@@ -83,6 +83,9 @@ public class LoadingPanel extends Composite {
 	private void initRealUserInterface() {
 		setStatus("Initiating user interface..");
 		this.setVisible(false);
+		// TODO this has no effect. i hope the user has a giant screen because currently scrolling
+		// is not working at all.
+		Window.enableScrolling(true);
 		RootLayoutPanel.get().add(new TabLayout());
 	}
 }

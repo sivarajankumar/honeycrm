@@ -1,4 +1,4 @@
-package crm.client;
+package crm.client.admin;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -7,11 +7,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 
-public class AdminWidget extends Composite {
+import crm.client.CommonServiceAsync;
+import crm.client.LoadIndicator;
+import crm.client.ServiceRegistry;
+
+public class DatabaseWidget extends Composite {
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	private final Button deleteAllBtn = new Button("Delete all items");
 
-	public AdminWidget() {
+	public DatabaseWidget() {
 		deleteAllBtn.addClickHandler(new ClickHandler() {
 
 			@Override

@@ -141,7 +141,7 @@ abstract public class AbstractView extends Composite {
 	}
 
 	protected Label getLabelForField(final int id) {
-		return new Label(dto.getFieldById(id).getLabel());
+		return new Label(dto.getFieldById(id).getLabel() + ":");
 	}
 
 	/**

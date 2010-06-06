@@ -7,8 +7,8 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 
+import crm.client.admin.LogConsole;
 import crm.client.dto.AbstractDto;
-import crm.client.view.LogConsole;
 
 public class TabLayout extends Composite implements ValueChangeHandler<String> {
 	private final Header header = new Header();
@@ -20,8 +20,6 @@ public class TabLayout extends Composite implements ValueChangeHandler<String> {
 		center.setStyleName("tab_layout");
 
 		panel.addNorth(header, 40);
-		if (LogConsole.ENABLED)
-			panel.addSouth(LogConsole.get(), 30);
 		panel.add(center);
 
 		History.addValueChangeHandler(this);

@@ -15,7 +15,7 @@ import crm.client.dto.ListQueryResult;
 public class RelationshipsContainer extends Composite {
 	private final Class<? extends AbstractDto> relatedDtoClass;
 	private Panel panel = new VerticalPanel();
-	
+
 	public RelationshipsContainer(final Class<? extends AbstractDto> relatedDtoClass) {
 		this.relatedDtoClass = relatedDtoClass;
 		initWidget(panel);
@@ -23,13 +23,18 @@ public class RelationshipsContainer extends Composite {
 
 	public void refresh(final Long relatedId) {
 		panel.clear();
-		
-		for (final Class<? extends AbstractDto> originalDtoClass: DtoRegistry.instance.getAllDtoClasses()) {
+
+		for (final Class<? extends AbstractDto> originalDtoClass : DtoRegistry.instance.getAllDtoClasses()) {
 			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, relatedDtoClass));
 		}
 	}
 }
 
+// TODO instantiate and reuse SearchableListView instead. only problem left to solve is: how to
+// determine the name of the id field in the original dto that stores the id of the related dto.
+// e.g. if we want to display all contacts for account 23. how to we know in client side code that
+// we have to search for all contacts with accountId = 23? currently this is only known on server
+// side since there the RelatesTo annotation is read using reflection
 class SingleRelationshipPanel extends Composite {
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	private final Class<? extends AbstractDto> originatingDtoClass;
@@ -64,13 +69,21 @@ class SingleRelationshipPanel extends Composite {
 	}
 
 	private void insertRelatedDtos(ListQueryResult<? extends AbstractDto> result) {
-		// set title
-		table.setWidget(0, 0, getTitleLabel());
+		if (0 == result.getItemCount()) {
+			// hide this relationship since no entries have been found for this relationship
+			setVisible(false);
+		} else {
+			setVisible(true);
 
-		for (int i = 0; i < result.getResults().length; i++) {
-			// display related item somewhat
-			// TODO display more columns
-			table.setWidget(1 + i, 0, new Hyperlink(result.getResults()[i].getQuicksearchItem(), originatingDto.getHistoryToken() + " " + id));
+			// set title
+			table.setWidget(0, 0, getTitleLabel());
+
+			for (int i = 0; i < result.getResults().length; i++) {
+				final AbstractDto originatingDto = result.getResults()[i];
+				// display related item somewhat
+				// TODO display more columns
+				table.setWidget(1 + i, 0, new Hyperlink(originatingDto.getQuicksearchItem(), originatingDto.getHistoryToken() + " " + originatingDto.getId()));
+			}
 		}
 	}
 

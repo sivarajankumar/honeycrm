@@ -43,6 +43,6 @@ public class Field implements IsSerializable, Serializable {
 	}
 
 	public enum Type {
-		STRING, TEXT, DATE, BOOLEAN, RELATE, CURRENCY, INTEGER, EMAIL, ENUM, MULTIENUM
+		STRING, TEXT, DATE, BOOLEAN, RELATE, CURRENCY, INTEGER, EMAIL, ENUM, MULTIENUM, TABLE
 	}
 }
