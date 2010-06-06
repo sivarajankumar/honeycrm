@@ -20,9 +20,10 @@ import com.google.gwt.user.datepicker.client.DateBox;
 
 import crm.client.CollectionHelper;
 import crm.client.CommonServiceAsync;
+import crm.client.DtoRegistry;
+import crm.client.IANA;
 import crm.client.ServiceRegistry;
 import crm.client.dto.AbstractDto;
-import crm.client.dto.DtoAccount;
 import crm.client.dto.FieldEnum;
 import crm.client.dto.FieldMultiEnum;
 import crm.client.dto.FieldRelate;
@@ -33,7 +34,7 @@ import crm.client.view.AbstractView.View;
  * Determines the widget that should be displayed for a given field type.
  */
 public class WidgetSelector {
-	protected static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getShortDateFormat();
+	protected static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getMediumDateFormat();
 	protected static final NumberFormat CURRENCY_FORMAT_EDIT = NumberFormat.getFormat("0.00");
 	// use a currency constant defined in
 	// com/google/gwt/i18n/client/constants/CurrencyCodeMapConstants.properties which can be found
@@ -130,13 +131,9 @@ public class WidgetSelector {
 				return new Label();
 			} else {
 				if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
-					// return new
-					// RelateWidget(((FieldRelate)tmpViewable.getFieldById(fieldId)).getClazz(), 0);
-
 					// resolve the real name of the entity by its id and display a HyperLink as
 					// widget
-					final AbstractDto relatedViewable = new DtoAccount(); // TODO determine history
-					// token from field..
+					final AbstractDto relatedViewable = DtoRegistry.instance.getDto(IANA.unmarshal(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz()));
 					final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
 
 					commonService.get(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz(), (Long) value, new AsyncCallback<AbstractDto>() {

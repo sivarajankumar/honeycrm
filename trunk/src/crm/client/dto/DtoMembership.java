@@ -30,10 +30,10 @@ public class DtoMembership extends AbstractDto {
 	public DtoMembership() {
 		fields.add(new FieldRelate(INDEX_MEMBERID, DtoContact.class, "Member"));
 		fields.add(new FieldRelate(INDEX_EMPLOYEEID, DtoEmployee.class, "Employee"));
-		fields.add(new Field(INDEX_PAYMENT, Type.STRING, "Contribution"));
-		fields.add(new Field(INDEX_TIEDTOPURPOSE, Type.STRING, "Tied to purpose"));
+		fields.add(new Field(INDEX_PAYMENT, Type.CURRENCY, "Contribution"));
+		fields.add(new FieldEnum(INDEX_TIEDTOPURPOSE, "Tied to purpose", "Yes", "No", "Soon"));
 		fields.add(new Field(INDEX_PURPOSE, Type.TEXT, "Purpose"));
-		fields.add(new Field(INDEX_PAYMENTMETHOD, Type.STRING, "Payment method"));
+		fields.add(new FieldEnum(INDEX_PAYMENTMETHOD, "Payment method", "Direct Debit authorisation", "transaction"));
 		fields.add(new Field(INDEX_STARTDATE, Type.DATE, "Start date"));
 		fields.add(new Field(INDEX_ENDDATE, Type.DATE, "End date"));
 	}
@@ -189,6 +189,6 @@ public class DtoMembership extends AbstractDto {
 
 	@Override
 	public String getQuicksearchItem() {
-		return "not implemented yet";
+		return getTitle() + " of " + memberId;
 	}
 }

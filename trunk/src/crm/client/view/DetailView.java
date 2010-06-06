@@ -2,6 +2,8 @@ package crm.client.view;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -22,7 +24,7 @@ import crm.client.dto.AbstractDto;
 /**
  * This widget is responsible for displaying detail / edit / create - views for entities.
  */
-public class DetailView extends AbstractView {
+public class DetailView extends AbstractView implements DoubleClickHandler {
 	private final VerticalPanel panel = new VerticalPanel();
 	private final DetailViewButtonBar buttonBar;
 	private final RelationshipsContainer relationshipsContainer;
@@ -106,6 +108,8 @@ public class DetailView extends AbstractView {
 				final Widget widgetLabel = getLabelForField(id);
 				final Widget widgetValue = getWidgetByType(tmpViewable, id, view);
 
+				widgetLabel.setStyleName("detail_view_label");
+
 				if (view == View.DETAIL) {
 					if (widgetValue instanceof Label) {
 						((Label) widgetValue).addClickHandler(new ClickHandler() {
@@ -118,7 +122,7 @@ public class DetailView extends AbstractView {
 								// to check for this?
 								// TODO additionally put the cursor into the text box of the field
 								// that has been clicked
-								startEditing();
+								buttonBar.startEditing();
 							}
 						});
 					}
@@ -212,5 +216,20 @@ public class DetailView extends AbstractView {
 		table.clear();
 		currentId = -1;
 		buttonBar.stopViewing();
+	}
+
+	@Override
+	public void onDoubleClick(DoubleClickEvent event) {
+		// TODO this event is never received
+		if (isShowing()) {
+			// the value of this field has been clicked. we assume the user
+			// wanted to express that he would like to start editing the entity
+			// so we start editing of this entity for him
+			// TODO only do the following if this was a double click event. how
+			// to check for this?
+			// TODO additionally put the cursor into the text box of the field
+			// that has been clicked
+			buttonBar.startEditing();
+		}
 	}
 }

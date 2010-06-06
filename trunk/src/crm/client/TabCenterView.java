@@ -8,8 +8,9 @@ import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 
+import crm.client.admin.AdminWidget;
+import crm.client.admin.LogConsole;
 import crm.client.dto.AbstractDto;
-import crm.client.view.LogConsole;
 
 // TODO update history token when a new tab is selected
 public class TabCenterView extends DecoratedTabPanel {

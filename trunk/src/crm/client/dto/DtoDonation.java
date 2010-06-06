@@ -35,9 +35,7 @@ public class DtoDonation extends AbstractDto {
 	public DtoDonation() {
 		fields.add(new FieldRelate(INDEX_EMPLOYEEID, DtoEmployee.class, "Employee"));
 		fields.add(new FieldRelate(INDEX_DONATORID, DtoContact.class, "Donator"));
-		fields.add(new FieldRelate(INDEX_PROJECTID, DtoContact.class, "Project")); // TODO add dto
-																					// project
-																					// first..
+		fields.add(new FieldRelate(INDEX_PROJECTID, DtoProject.class, "Project"));
 		fields.add(new FieldEnum(INDEX_DONATEDFOR, "Donated for", "Foundation", "Project donation", "Unlinked donation"));
 		fields.add(new FieldEnum(INDEX_KIND, "Kind", "Subscription", "Unique"));
 		fields.add(new Field(INDEX_RECEIPTIONDATE, Type.DATE, "Receiption date"));
@@ -218,7 +216,8 @@ public class DtoDonation extends AbstractDto {
 
 	@Override
 	public String getQuicksearchItem() {
-		return "not implemented yet";
+		// TODO relate fields should be resolved i.e. we should be able to access the name of the donator here.
+		return getTitle() + " by " + donatorId + " of " + amount;
 	}
 
 	public double getAmount() {

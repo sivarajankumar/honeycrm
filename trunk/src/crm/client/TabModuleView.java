@@ -14,7 +14,6 @@ public class TabModuleView extends AbstractView {
 	private final DetailView detailView;
 	private final SearchableListView listView;
 	private final SearchWidget searchWidget;
-	private final HTML relationView;
 
 	public TabModuleView(final Class<? extends AbstractDto> clazz) {
 		super(clazz);
@@ -22,14 +21,11 @@ public class TabModuleView extends AbstractView {
 		listView = new SearchableListView(clazz);
 		searchWidget = new SearchWidget(clazz, listView);
 		detailView = new DetailView(clazz);
-		relationView = new HTML("<div class='view_header_label'>Relations</div>");
 
 		final FlowPanel viewPanel = new FlowPanel();
 		viewPanel.add(detailView);
-		viewPanel.add(relationView);
 		viewPanel.setStyleName("detail_view");
 		detailView.setStyleName("detail_view_content");
-		relationView.setStyleName("detail_view_relation");
 
 		final VerticalPanel listPanel = new VerticalPanel();
 		listPanel.add(listView);
