@@ -1,5 +1,8 @@
 package honeycrm.client.view;
 
+import honeycrm.client.IANA;
+import honeycrm.client.LoadIndicator;
+import honeycrm.client.TabCenterView;
 import honeycrm.client.dto.AbstractDto;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -8,20 +11,22 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
 public class SearchWidget extends AbstractView implements KeyPressHandler {
-	private final DisclosurePanel panel = new DisclosurePanel("Searchomat");
+	private final FlowPanel panel = new FlowPanel();
 	private final FlexTable table = new FlexTable();
-
+	private Button demoBtn = new Button("Demo");
+	
 	public SearchWidget(final Class<? extends AbstractDto> clazz, final SearchableListView listview) {
 		super(clazz);
 
@@ -46,9 +51,16 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 
 				table.setWidget(y, 2 * x + 0, widgetLabel);
 				table.setWidget(y, 2 * x + 1, widgetValue);
+				
+				break;
 			}
+			
+			//TODO: display full text search for this module
+			break;
 		}
 
+		demoBtn.addClickHandler(getDemoButtonClickHandler(clazz));
+		
 		final Button searchBtn = new Button("Search");
 		searchBtn.addClickHandler(new ClickHandler() {
 			@Override
@@ -83,17 +95,20 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 			}
 		});
 
+		demoBtn.setStyleName("demo_button");
+		table.setStyleName("search_field");
+		
 		final HorizontalPanel buttonPanel = new HorizontalPanel();
+		buttonPanel.setStyleName("search_buttons");
 		buttonPanel.add(searchBtn);
 		buttonPanel.add(clearBtn);
 		buttonPanel.add(markedBtn);
 
-		final VerticalPanel verticalPanel = new VerticalPanel();
-		verticalPanel.add(table);
-		verticalPanel.add(buttonPanel);
-
-		panel.setContent(verticalPanel);
-
+		panel.add(demoBtn);
+		panel.add(table);
+		panel.add(buttonPanel);
+		panel.add(new HTML("<div class='clear'></div>"));
+		
 		initWidget(panel);
 	}
 
@@ -109,8 +124,33 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 	@Override
 	public void onKeyPress(KeyPressEvent event) {
 		Window.alert("fired");
+		/*
 		if (event.isAltKeyDown() && 's' == event.getCharCode()) {
 			panel.setOpen(!panel.isOpen());
 		}
+		*/
+	}
+	
+	private ClickHandler getDemoButtonClickHandler(final Class<? extends AbstractDto> clazz) {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				LoadIndicator.get().startLoading();
+
+				commonService.addDemo(IANA.mashal(clazz), new AsyncCallback<Void>() {
+					@Override
+					public void onSuccess(Void result) {
+						TabCenterView.instance().get(clazz).refreshListView();
+						LoadIndicator.get().endLoading();
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						LoadIndicator.get().endLoading();
+						Window.alert("Could not create demo contact");
+					}
+				});
+			}
+		};
 	}
 }

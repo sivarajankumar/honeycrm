@@ -702,6 +702,7 @@ a, a:visited, a:hover {
 
 .gwt-SuggestBox {
   padding: 2px;
+  height: 20px;
 }
 .gwt-SuggestBoxPopup {
   margin-left: 3px;
@@ -820,8 +821,6 @@ a, a:visited, a:hover {
   border-style: solid;
   border-width: 3px 2px 2px;
   overflow: hidden;
-  padding: 6px;
-  background-color: white;
 }
 
 .gwt-DecoratedTabBar {
@@ -915,6 +914,7 @@ a, a:visited, a:hover {
 
 .gwt-TextBox {
   padding: 2px;
+  height: 20px;
 }
 .gwt-TextBox-readonly {
   color: #888;

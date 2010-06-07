@@ -20,10 +20,31 @@ body {
 	width: 100%;
 }
 
-.tab_content {
+.content {
 	background-color: #ececec;
+	border: 6px solid white;
 }
 
+.search_bar {
+	background-color: #92c1f0;
+	padding: 3px;	
+}
+
+.demo_button {
+	float: left;
+	margin-right: 100px;
+}
+
+.search_field {
+	float: left;
+	color: white;
+	font-weight: bold;
+}
+
+.search_buttons {
+	float: right;
+	margin-right: 3px;
+}
 /* HEADER */
 
 .honey_header {
@@ -99,10 +120,11 @@ body {
 
 .view_header_label {
 	font-size: small;
-	font-weight: bold;	
 	background-color: #d0e4f6;
 	width: 100%;
-	margin-bottom: 5px;
+	border-bottom: 1px solid #92c1f0;
+	height: 19px;
+	padding: 3px;
 }
 
 .relationship_title {
