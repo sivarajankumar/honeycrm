@@ -23,36 +23,38 @@ public class TabModuleView extends AbstractView {
 		searchWidget = new SearchWidget(clazz, listView);
 		detailView = new DetailView(clazz);
 
+		final VerticalPanel content = new VerticalPanel();
+		content.setStyleName("tab_content");
+		
+		final FlowPanel searchPanel = new FlowPanel();
+		searchPanel.setStyleName("search_bar");
+		searchPanel.add(searchWidget);
+		
 		final FlowPanel viewPanel = new FlowPanel();
-		viewPanel.add(detailView);
 		viewPanel.setStyleName("detail_view");
+		viewPanel.add(new HTML("<div class='view_header_label'>Detail View</div>"));
+		viewPanel.add(detailView);
+		
 		detailView.setStyleName("detail_view_content");
 
 		final VerticalPanel listPanel = new VerticalPanel();
-		listPanel.add(listView);
 		listPanel.setStyleName("list_view");
-
+		listPanel.add(listView);
+	
 		final FlowPanel hor = new FlowPanel();
-
-		VerticalPanel searchPanel = new VerticalPanel();
-
-		searchPanel.setStyleName("actions");
-		// searchPanel.add(new
-		// HTML("<div class='view_header_label'>Searchomat</div>"));
-		// searchPanel.add(createView);
-		searchPanel.add(searchWidget);
-		searchPanel.add(listPanel);
-
-		hor.setStyleName("tab_content");
-		hor.add(searchPanel);
+		hor.setStyleName("content");
+		hor.add(listPanel);
 		// hor.add(searchPanel);
 		// hor.add(new HTML("<div class='horizontal_seperator'></div>"));
 		// hor.add(listPanel);
 		// hor.add(new HTML("<div class='horizontal_seperator'></div>"));
 		hor.add(viewPanel);
 		hor.add(new HTML("<div class='clear'></div>"));
+		
+		content.add(searchPanel);
+		content.add(hor);
 
-		initWidget(hor);
+		initWidget(content);
 	}
 
 	public void showDetailView(long id) {

@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 
 public class DetailViewButtonBar extends AbstractView {
-	private Button demoBtn = new Button("Demo");
 	private Button createBtn = new Button("Create");
 	private Button saveBtn = new Button("Save");
 	private Button cancelBtn = new Button("Cancel");
@@ -29,7 +28,6 @@ public class DetailViewButtonBar extends AbstractView {
 		this.detailview = detailview;
 
 		final HorizontalPanel panel = new HorizontalPanel();
-		panel.add(demoBtn);
 		panel.add(createBtn);
 		panel.add(saveBtn);
 		panel.add(cancelBtn);
@@ -74,34 +72,9 @@ public class DetailViewButtonBar extends AbstractView {
 			}
 		});
 
-		demoBtn.addClickHandler(getDemoButtonClickHandler(clazz));
-
 		stopViewing();
 
 		initWidget(panel);
-	}
-
-	private ClickHandler getDemoButtonClickHandler(final Class<? extends AbstractDto> clazz) {
-		return new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				LoadIndicator.get().startLoading();
-
-				commonService.addDemo(IANA.mashal(clazz), new AsyncCallback<Void>() {
-					@Override
-					public void onSuccess(Void result) {
-						TabCenterView.instance().get(clazz).refreshListView();
-						LoadIndicator.get().endLoading();
-					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-						LoadIndicator.get().endLoading();
-						Window.alert("Could not create demo contact");
-					}
-				});
-			}
-		};
 	}
 
 	/**
@@ -110,7 +83,6 @@ public class DetailViewButtonBar extends AbstractView {
 	public void startViewing() {
 		detailview.view();
 
-		demoBtn.setVisible(true);
 		createBtn.setVisible(true);
 		// only show if detailview is displaying a valid item
 		editBtn.setVisible(detailview.isShowing()); 
@@ -132,7 +104,6 @@ public class DetailViewButtonBar extends AbstractView {
 		cancelBtn.setVisible(true);
 
 		createBtn.setVisible(false);
-		demoBtn.setVisible(false);
 		editBtn.setVisible(false);
 		deleteBtn.setVisible(false);
 		// }
@@ -147,14 +118,12 @@ public class DetailViewButtonBar extends AbstractView {
 
 			editBtn.setVisible(false);
 			deleteBtn.setVisible(false);
-			demoBtn.setVisible(false);
 			createBtn.setVisible(false);
 		}
 	}
 
 	public void stopViewing() {
 		createBtn.setVisible(true);
-		demoBtn.setVisible(true);
 
 		saveBtn.setVisible(false);
 		cancelBtn.setVisible(false);
