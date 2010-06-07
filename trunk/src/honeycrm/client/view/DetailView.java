@@ -16,22 +16,20 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-
 /**
  * This widget is responsible for displaying detail / edit / create - views for entities.
  */
 public class DetailView extends AbstractView implements DoubleClickHandler {
-	private final VerticalPanel panel = new VerticalPanel();
 	private final DetailViewButtonBar buttonBar;
 	private final RelationshipsContainer relationshipsContainer;
 	/**
-	 * table containing the labels and the actual field values (or input fields if we are in edit
-	 * mode).
+	 * table containing the labels and the actual field values (or input fields if we are in edit mode).
 	 */
 	private FlexTable table = new FlexTable();
 	private long currentId = -1; // id of currently displayed item
@@ -39,19 +37,23 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	public DetailView(final Class<? extends AbstractDto> clazz) {
 		super(clazz);
 
+		final VerticalPanel panel = new VerticalPanel();
 		panel.add(table);
 		panel.add(buttonBar = new DetailViewButtonBar(clazz, this));
-		panel.add(relationshipsContainer = new RelationshipsContainer(clazz));
 		panel.add(new HTML("<div class='clear'></div>"));
+
+		final HorizontalPanel hpanel = new HorizontalPanel();
+
+		hpanel.add(panel);
+		hpanel.add(relationshipsContainer = new RelationshipsContainer(clazz));
 
 		buttonBar.setStyleName("detail_view_buttons");
 
-		initWidget(panel);
+		initWidget(hpanel);
 	}
 
 	/**
-	 * Forces reload of all fields of the domain object. This is neccessary for updating fields that
-	 * are set on server side and not visible while editing.
+	 * Forces reload of all fields of the domain object. This is neccessary for updating fields that are set on server side and not visible while editing.
 	 */
 	public void refresh() {
 		refresh(currentId);
