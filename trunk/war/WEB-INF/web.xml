@@ -7,7 +7,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>commonServlet</servlet-name>
-    <servlet-class>crm.server.CommonServiceImpl</servlet-class>
+    <servlet-class>honeycrm.server.CommonServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
