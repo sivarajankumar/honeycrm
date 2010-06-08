@@ -40,11 +40,6 @@ public class DtoMembership extends AbstractDto {
 	}
 
 	@Override
-	public String getHistoryToken() {
-		return "m";
-	}
-
-	@Override
 	public int[] getListViewColumnIds() {
 		return new int[] { INDEX_MARKED, INDEX_MEMBERID, INDEX_EMPLOYEEID, INDEX_STARTDATE };
 	}
@@ -52,11 +47,6 @@ public class DtoMembership extends AbstractDto {
 	@Override
 	public int[][] getSearchFields() {
 		return new int[][] { new int[] { INDEX_MEMBERID } };
-	}
-
-	@Override
-	public String getTitle() {
-		return "Membership";
 	}
 
 	@Override

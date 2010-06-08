@@ -61,18 +61,8 @@ public class DtoEmployee extends AbstractDto {
 	}
 
 	@Override
-	public String getHistoryToken() {
-		return "e";
-	}
-
-	@Override
 	public int[] getListViewColumnIds() {
 		return new int[] { INDEX_ACTIVE, INDEX_NAME };
-	}
-
-	@Override
-	public String getTitle() {
-		return "Employee";
 	}
 
 	@Override

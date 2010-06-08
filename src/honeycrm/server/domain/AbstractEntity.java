@@ -12,6 +12,8 @@ import javax.jdo.annotations.PrimaryKey;
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableId;
 
+import com.google.appengine.api.datastore.Key;
+
 @PersistenceCapable
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @Searchable
@@ -23,7 +25,7 @@ abstract public class AbstractEntity {
 	// To allow full text search with compass / lucene the id field has to be of type long.
 	// Additionally we have to use Long (not long) because of constrains of google app engine for
 	// allowed id types.
-	protected Long id;
+	protected Key id;
 	@Persistent
 	protected boolean marked;
 	@Persistent
@@ -36,11 +38,11 @@ abstract public class AbstractEntity {
 	public AbstractEntity() {
 	}
 
-	public Long getId() {
+	public Key getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Key id) {
 		this.id = id;
 	}
 

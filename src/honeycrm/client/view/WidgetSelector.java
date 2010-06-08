@@ -9,6 +9,7 @@ import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.FieldEnum;
 import honeycrm.client.dto.FieldMultiEnum;
 import honeycrm.client.dto.FieldRelate;
+import honeycrm.client.dto.FieldTable;
 import honeycrm.client.dto.Field.Type;
 import honeycrm.client.view.AbstractView.View;
 
@@ -90,7 +91,7 @@ public class WidgetSelector {
 			return widget4;
 		case RELATE:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
-				return new RelateWidget(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz(), (Long) value);
+				return new RelateWidget(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz(), (null == value) ? 0 : (Long) value);
 			} else {
 				throw new RuntimeException("Expected FieldRelate. Received " + tmpViewable.getFieldById(fieldId).getClass().toString());
 			}
@@ -116,6 +117,13 @@ public class WidgetSelector {
 				return box;
 			} else {
 				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
+			}
+		case TABLE:
+			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
+				return new ServiceTableWidget();
+				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
+			} else {
+				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
 			}
 		default:
 			// should never reach this point
@@ -157,6 +165,8 @@ public class WidgetSelector {
 						}
 					});
 					return link;
+				} else {
+					throw new RuntimeException("Expected Field Relate received something else: " + tmpViewable.getFieldById(fieldId).getClass());
 				}
 			}
 		case BOOLEAN:
@@ -192,6 +202,13 @@ public class WidgetSelector {
 					ul += "<li>" + selection + "</li>";
 				}
 				return new HTML("<ul>" + ul + "</ul>");
+			}
+		case TABLE:
+			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
+				return new ServiceTableWidget();
+				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
+			} else {
+				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
 			}
 		case ENUM:
 		case TEXT:
@@ -242,6 +259,13 @@ public class WidgetSelector {
 				return box;
 			} else {
 				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
+			}
+		case TABLE:
+			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
+				return new ServiceTableWidget();
+				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
+			} else {
+				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
 			}
 		default:
 			// should never reach this point

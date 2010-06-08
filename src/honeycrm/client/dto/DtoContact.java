@@ -130,14 +130,16 @@ public class DtoContact extends AbstractDto {
 
 	@Override
 	protected int[][] interalGetFormFieldIds() {
-		final int[] row1 = new int[] { INDEX_NAME, INDEX_ACCOUNTID, INDEX_RESPONSIBLEID };
+		final int[] row1 = new int[] { INDEX_NAME, INDEX_ACCOUNTID };
+		final int[] row11 = new int[]{ INDEX_RESPONSIBLEID };
 		final int[] row2 = new int[] { INDEX_EMAIL, INDEX_EMAILOPTEDOUT };
 		final int[] row3 = new int[] { INDEX_PHONE, INDEX_MOBILE };
 		final int[] row4 = new int[] { INDEX_DONOTCALL, INDEX_DONOTCALLEXPLANATION };
 		final int[] row5 = new int[] { INDEX_CITY, INDEX_BANKACCOUNTDATA };
 		final int[] row6 = new int[] { INDEX_PROFESSION, INDEX_STUDY };
-		final int[] row7 = new int[] { INDEX_PARTNERID, INDEX_CHILD1ID, INDEX_CHILD2ID };
-		return new int[][] { row1, row2, row3, row4, row5, row6, row7 };
+		final int[] row7 = new int[] { INDEX_PARTNERID };
+		final int[] row8 = new int[] { INDEX_CHILD1ID, INDEX_CHILD2ID };
+		return new int[][] { row1, row11, row2, row3, row4, row5, row6, row7, row8 };
 	}
 
 	@Override
@@ -183,11 +185,6 @@ public class DtoContact extends AbstractDto {
 	@Override
 	public int[] getListViewColumnIds() {
 		return new int[] { INDEX_MARKED, INDEX_NAME, INDEX_EMAIL, INDEX_PHONE, INDEX_ACCOUNTID };
-	}
-
-	@Override
-	public String getHistoryToken() {
-		return "c";
 	}
 
 	@Override
@@ -270,11 +267,6 @@ public class DtoContact extends AbstractDto {
 
 	public void setDoNotCallExplanation(String doNotCallExplanation) {
 		this.doNotCallExplanation = doNotCallExplanation;
-	}
-
-	@Override
-	public String getTitle() {
-		return "Contact";
 	}
 
 	public String getBankAccountData() {
