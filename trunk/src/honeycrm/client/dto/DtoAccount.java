@@ -56,11 +56,6 @@ public class DtoAccount extends AbstractDto {
 	}
 
 	@Override
-	public String getTitle() {
-		return "Account";
-	}
-
-	@Override
 	protected void internalSetFieldValue(final int index, final Object value) {
 		switch (index) {
 		case INDEX_NAME:
@@ -84,9 +79,10 @@ public class DtoAccount extends AbstractDto {
 
 	@Override
 	protected int[][] interalGetFormFieldIds() {
-		final int[] row1 = new int[] { INDEX_NAME, INDEX_DATE, INDEX_ANNUALREVENUE };
+		final int[] row1 = new int[] { INDEX_NAME, INDEX_DATE };
+		final int[] row11 = new int[]{ INDEX_ANNUALREVENUE };
 		final int[] row2 = new int[] { INDEX_ADDRESS };
-		return new int[][] { row1, row2 };
+		return new int[][] { row1, row11, row2 };
 	}
 
 	@Override
@@ -108,11 +104,6 @@ public class DtoAccount extends AbstractDto {
 	@Override
 	public int[] getListViewColumnIds() {
 		return new int[] { INDEX_MARKED, INDEX_NAME, INDEX_ADDRESS };
-	}
-
-	@Override
-	public String getHistoryToken() {
-		return "a";
 	}
 
 	@Override

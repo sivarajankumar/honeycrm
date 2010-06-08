@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-
 abstract public class AbstractView extends Composite {
 	protected final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected final Class<? extends AbstractDto> clazz;
@@ -41,8 +40,7 @@ abstract public class AbstractView extends Composite {
 	}
 
 	/**
-	 * Initialize a viewable from the widgets (e.g., textboxes, dateboxes, relate fields) in a
-	 * table.
+	 * Initialize a viewable from the widgets (e.g., textboxes, dateboxes, relate fields) in a table.
 	 */
 	protected void setViewable(final int[][] fieldIds, final FlexTable table, final AbstractDto tmpViewable) {
 		for (int y = 0; y < fieldIds.length; y++) {
@@ -87,6 +85,8 @@ abstract public class AbstractView extends Composite {
 						// TODO also enable this for MarkWidget
 						// } else if (widgetValue instanceof MarkWidget) {
 						// value = widgetValue.
+					} else if (widgetValue instanceof ITableWidget) {
+						value = ((ITableWidget) widgetValue).getData();
 					} else {
 						// unexpected widget
 						displayError(new RuntimeException("Unexpected Widget: " + widgetValue.getClass()));
@@ -146,8 +146,7 @@ abstract public class AbstractView extends Composite {
 	}
 
 	/**
-	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a
-	 * special use case..
+	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a special use case..
 	 */
 	protected Widget getWidgetByType(final AbstractDto tmpViewable, final int fieldId, final View view) {
 		return WidgetSelector.getWidgetByType(clazz, tmpViewable, fieldId, view);

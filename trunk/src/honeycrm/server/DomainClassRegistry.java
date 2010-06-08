@@ -6,19 +6,24 @@ import honeycrm.client.dto.DtoContact;
 import honeycrm.client.dto.DtoDonation;
 import honeycrm.client.dto.DtoEmployee;
 import honeycrm.client.dto.DtoMembership;
+import honeycrm.client.dto.DtoOffering;
+import honeycrm.client.dto.DtoProduct;
 import honeycrm.client.dto.DtoProject;
+import honeycrm.client.dto.DtoService;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.Account;
 import honeycrm.server.domain.Contact;
 import honeycrm.server.domain.Donation;
 import honeycrm.server.domain.Employee;
 import honeycrm.server.domain.Membership;
+import honeycrm.server.domain.Offering;
+import honeycrm.server.domain.Product;
 import honeycrm.server.domain.Project;
+import honeycrm.server.domain.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 
 public class DomainClassRegistry {
 	public static final DomainClassRegistry instance = new DomainClassRegistry();
@@ -33,6 +38,9 @@ public class DomainClassRegistry {
 		dtoToDomain.put(DtoMembership.class, Membership.class);
 		dtoToDomain.put(DtoDonation.class, Donation.class);
 		dtoToDomain.put(DtoProject.class, Project.class);
+		dtoToDomain.put(DtoProduct.class, Product.class);
+		dtoToDomain.put(DtoService.class, Service.class);
+		dtoToDomain.put(DtoOffering.class, Offering.class);
 		
 		for (final Class<? extends AbstractDto> dto: dtoToDomain.keySet()) {
 			domainToDto.put(dtoToDomain.get(dto), dto);

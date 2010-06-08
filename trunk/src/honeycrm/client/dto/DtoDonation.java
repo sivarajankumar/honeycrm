@@ -47,11 +47,6 @@ public class DtoDonation extends AbstractDto {
 	}
 
 	@Override
-	public String getHistoryToken() {
-		return "d";
-	}
-
-	@Override
 	public int[] getListViewColumnIds() {
 		return new int[] { INDEX_MARKED, INDEX_DONATORID, INDEX_EMPLOYEEID, INDEX_REACTION, INDEX_AMOUNT };
 	}
@@ -59,11 +54,6 @@ public class DtoDonation extends AbstractDto {
 	@Override
 	public int[][] getSearchFields() {
 		return new int[][] { new int[] { INDEX_EMPLOYEEID } };
-	}
-
-	@Override
-	public String getTitle() {
-		return "Donation";
 	}
 
 	@Override

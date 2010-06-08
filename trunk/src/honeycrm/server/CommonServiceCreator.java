@@ -8,7 +8,6 @@ import honeycrm.server.domain.AbstractEntity;
 
 import java.util.Date;
 
-
 /**
  * Is part of the database layer.
  */
@@ -17,8 +16,8 @@ public class CommonServiceCreator extends AbstractCommonService {
 
 	public long create(int dtoIndex, AbstractDto dto) {
 		final AbstractEntity domainObject = (AbstractEntity) copy.copy(dto, getDomainClass(dtoIndex));
-		domainObject.setId(null); // explicitly set id to null to force the database to create a new
-									// row
+		// explicitly set id to null to force the database to create a new row
+		domainObject.setId(null);
 		return internalCreate(domainObject);
 	}
 
@@ -29,7 +28,12 @@ public class CommonServiceCreator extends AbstractCommonService {
 		} else {
 			domainObject.setCreatedAt(new Date(System.currentTimeMillis()));
 			m.makePersistent(domainObject);
-			return domainObject.getId();
+			
+			if (null == domainObject.getId()) {
+				throw new RuntimeException("Could not create domain object: Key is still null");
+			} else {
+				return domainObject.getId().getId();
+			}
 		}
 	}
 

@@ -1,14 +1,9 @@
 package honeycrm.client.view;
 
-import honeycrm.client.IANA;
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.TabCenterView;
 import honeycrm.client.dto.AbstractDto;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 

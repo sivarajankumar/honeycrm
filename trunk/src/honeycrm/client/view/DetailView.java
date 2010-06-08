@@ -235,4 +235,8 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 			buttonBar.startEditing();
 		}
 	}
+	
+	public DetailViewButtonBar getButtonBar() {
+		return buttonBar;
+	}
 }

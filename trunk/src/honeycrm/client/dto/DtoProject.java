@@ -4,7 +4,6 @@ import honeycrm.client.dto.Field.Type;
 
 import java.util.Date;
 
-
 public class DtoProject extends AbstractDto {
 	private static final long serialVersionUID = -6523180898796265577L;
 
@@ -39,11 +38,6 @@ public class DtoProject extends AbstractDto {
 	}
 
 	@Override
-	public String getHistoryToken() {
-		return "p";
-	}
-
-	@Override
 	public int[] getListViewColumnIds() {
 		return new int[] { INDEX_NAME, INDEX_EMPLOYEEID, INDEX_TARGETSUM, INDEX_CURRENTSUM, INDEX_ENDDATE };
 	}
@@ -56,11 +50,6 @@ public class DtoProject extends AbstractDto {
 	@Override
 	public int[][] getSearchFields() {
 		return new int[][] { new int[] { INDEX_NAME } };
-	}
-
-	@Override
-	public String getTitle() {
-		return "Project";
 	}
 
 	@Override
