@@ -28,11 +28,12 @@ body {
 .search_bar {
 	background-color: #92c1f0;
 	padding: 3px;	
+	width: 100%;
 }
 
 .demo_button {
 	float: left;
-	margin-right: 100px;
+/*	margin-right: 100px; */
 }
 
 .search_field {
@@ -42,7 +43,7 @@ body {
 }
 
 .search_buttons {
-	float: right;
+	/* float: right;  */ /* for now put search buttons next to search field */
 	margin-right: 3px;
 }
 /* HEADER */
