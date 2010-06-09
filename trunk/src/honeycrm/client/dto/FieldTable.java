@@ -5,7 +5,7 @@ public class FieldTable extends Field {
 
 	public FieldTable() {
 	}
-	
+
 	public FieldTable(final int id, final String label) {
 		super(id, Field.Type.TABLE, label);
 	}

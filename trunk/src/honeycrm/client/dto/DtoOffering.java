@@ -1,6 +1,9 @@
 package honeycrm.client.dto;
 
 import honeycrm.client.dto.Field.Type;
+import honeycrm.client.view.ITableWidget;
+import honeycrm.client.view.ServiceTableWidget;
+import honeycrm.client.view.AbstractView.View;
 
 import java.util.Date;
 import java.util.List;
@@ -20,6 +23,10 @@ public class DtoOffering extends AbstractDto {
 		fields.add(new FieldTable(INDEX_SERVICES, "Services"));
 		fields.add(new FieldRelate(INDEX_CONTACTID, DtoContact.class, "Contact"));
 		fields.add(new Field(INDEX_DEADLINE, Type.DATE, "Deadline"));
+	}
+	
+	public ITableWidget getWidget(View view) {
+		return new ServiceTableWidget(view);
 	}
 
 	@Override
@@ -60,12 +67,14 @@ public class DtoOffering extends AbstractDto {
 	protected void internalSetFieldValue(int index, Object value) {
 		switch (index) {
 		case INDEX_SERVICES:
-			if (value instanceof List<?>) {
+			if (null == value) {
+				setServices(null);
+			} else if (value instanceof List<?>) {
 				setServices((List<DtoService>) value);
-				break;
 			} else {
 				throw new RuntimeException("Received value of invalid type. Expected list received " + value.getClass());
 			}
+			break;
 		case INDEX_DEADLINE:
 			setDeadline((Date) value);
 			break;
