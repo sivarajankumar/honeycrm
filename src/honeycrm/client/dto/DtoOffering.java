@@ -11,6 +11,7 @@ import java.util.List;
 public class DtoOffering extends AbstractDto {
 	private static final long serialVersionUID = -5569259575976686950L;
 
+	@RelatesTo(DtoContact.class)
 	private Long contactId;
 	private Date deadline;
 	private List<DtoService> services;
