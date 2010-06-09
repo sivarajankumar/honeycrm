@@ -10,6 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -128,6 +130,8 @@ public class DtoIndicesTest extends TestCase {
 			return DemoDataHolder.getRandomDate();
 		} else if (Double.class == type || double.class == type) {
 			return r.nextDouble();
+		} else if (List.class == type) {
+			return new LinkedList<Object>();
 		} else {
 			return null;
 		}

@@ -8,8 +8,8 @@ public class DtoService extends AbstractDto {
 	private String name;
 	private double price;
 	
-	private static final int INDEX_NAME = 1;
-	private static final int INDEX_PRICE = 2;
+	public static final int INDEX_NAME = 1;
+	public static final int INDEX_PRICE = 2;
 
 	public DtoService() {
 		fields.add(new Field(INDEX_NAME, Type.STRING, "Name"));

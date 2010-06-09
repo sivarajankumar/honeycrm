@@ -6,6 +6,7 @@ import honeycrm.client.DtoRegistry;
 import honeycrm.client.IANA;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.DtoOffering;
 import honeycrm.client.dto.FieldEnum;
 import honeycrm.client.dto.FieldMultiEnum;
 import honeycrm.client.dto.FieldRelate;
@@ -15,6 +16,7 @@ import honeycrm.client.view.AbstractView.View;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -120,7 +122,10 @@ public class WidgetSelector {
 			}
 		case TABLE:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
-				return new ServiceTableWidget();
+				final ITableWidget table =  ((DtoOffering) tmpViewable).getWidget(View.EDIT);
+				table.setData((List<? extends AbstractDto>) value);
+				return table;
+//				return new ServiceTableWidget();
 				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
 			} else {
 				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
@@ -205,7 +210,10 @@ public class WidgetSelector {
 			}
 		case TABLE:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
-				return new ServiceTableWidget();
+				final ITableWidget table =  ((DtoOffering) tmpViewable).getWidget(View.DETAIL);
+				table.setData((List<? extends AbstractDto>) value);
+				return table;
+//				return new ServiceTableWidget();
 				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
 			} else {
 				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
@@ -262,7 +270,8 @@ public class WidgetSelector {
 			}
 		case TABLE:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
-				return new ServiceTableWidget();
+				return ((DtoOffering) tmpViewable).getWidget(View.CREATE);
+				//return new ServiceTableWidget();
 				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
 			} else {
 				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
