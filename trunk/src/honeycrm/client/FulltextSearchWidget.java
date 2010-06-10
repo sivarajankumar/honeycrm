@@ -13,7 +13,6 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
@@ -25,6 +24,8 @@ public class FulltextSearchWidget extends SuggestBox {
 	private final Map<String, AbstractDto> nameToDto = new HashMap<String, AbstractDto>();
 
 	public FulltextSearchWidget() {
+		super(new FulltextSuggestOracle());
+		
 		setStyleName("header_search_field");
 
 		addKeyPressHandler(new KeyPressHandler() {
@@ -74,7 +75,7 @@ public class FulltextSearchWidget extends SuggestBox {
 				LoadIndicator.get().endLoading();
 
 				if (null != result && result.getItemCount() > 0) {
-					final MultiWordSuggestOracle o = emptySuggestOracle();
+					final FulltextSuggestOracle o = emptySuggestOracle();
 					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
 
 					for (final AbstractDto a : result.getResults()) {
@@ -110,8 +111,9 @@ public class FulltextSearchWidget extends SuggestBox {
 	/**
 	 * Empty the current suggestion oracle and return it.
 	 */
-	private MultiWordSuggestOracle emptySuggestOracle() {
-		final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
+	private FulltextSuggestOracle emptySuggestOracle() {
+		final FulltextSuggestOracle o = (FulltextSuggestOracle) getSuggestOracle();
+		// final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
 		o.clear();
 		return o;
 	}

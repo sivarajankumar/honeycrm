@@ -12,6 +12,12 @@ public class Service extends AbstractEntity {
 	private String name;
 	@Persistent
 	private double price;
+	@Persistent
+	private int quantity;
+	@Persistent
+	private double discount;
+	@Persistent
+	private double sum;
 
 	public Service() {
 	}
@@ -30,5 +36,29 @@ public class Service extends AbstractEntity {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public double getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(double discount) {
+		this.discount = discount;
+	}
+
+	public double getSum() {
+		return sum;
+	}
+
+	public void setSum(double sum) {
+		this.sum = sum;
 	}
 }

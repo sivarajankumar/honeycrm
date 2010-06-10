@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-
 public class CommonServiceTestHelper implements CommonServiceAsync {
 	@Override
 	public void addDemo(int dtoIndex, AsyncCallback<Void> callback) {
@@ -57,8 +56,9 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 
 	@Override
 	public void getAll(int dtoIndex, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback) {
-		// TODO Auto-generated method stub
-		
+		// just return an empty list 
+		ListQueryResult<AbstractDto> list = new ListQueryResult<AbstractDto>();
+		callback.onSuccess(list);
 	}
 
 	@Override

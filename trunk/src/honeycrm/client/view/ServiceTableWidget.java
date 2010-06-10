@@ -7,6 +7,8 @@ import honeycrm.client.view.AbstractView.View;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -14,6 +16,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class ServiceTableWidget extends ITableWidget {
 	private static final int HEADER_ROWS = 1;
@@ -23,7 +26,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 	public ServiceTableWidget(final View view) {
 		this.view = view;
-		
+
 		final VerticalPanel panel = new VerticalPanel();
 
 		for (int x = 0; x < dto.getListViewColumnIds().length; x++) {
@@ -40,15 +43,39 @@ public class ServiceTableWidget extends ITableWidget {
 					final int rows = table.getRowCount();
 
 					for (int x = 0; x < dto.getListViewColumnIds().length; x++) {
-						table.setWidget(rows, x, WidgetSelector.getWidgetByType(dto.getClass(), dto, dto.getListViewColumnIds()[x], view));
+						final int index = dto.getListViewColumnIds()[x];
+						table.setWidget(rows, x, addChangeEvents(index, WidgetSelector.getWidgetByType(dto.getClass(), dto, index, view)));
 					}
 				}
 			});
-			
+
 			panel.add(addBtn);
 		}
 
 		initWidget(panel);
+	}
+
+	private Widget addChangeEvents(final int index, final Widget widget) {
+		// only attach a change event for text boxes
+		if (widget instanceof TextBox) {
+			if (DtoService.INDEX_PRICE == index || DtoService.INDEX_QUANTITY == index || DtoService.INDEX_DISCOUNT == index) {
+				((TextBox) widget).addChangeHandler(new ChangeHandler() {
+					@Override
+					public void onChange(ChangeEvent event) {
+						onPriceOrQuantityUpdate();
+					}
+				});
+			}
+		}
+
+		return widget;
+	}
+
+	/**
+	 * Update the sum for every
+	 */
+	private void onPriceOrQuantityUpdate() {
+		setData(getData());
 	}
 
 	@Override
@@ -69,6 +96,7 @@ public class ServiceTableWidget extends ITableWidget {
 				}
 			}
 
+			s.setSum((s.getPrice() - s.getDiscount()) * s.getQuantity());
 			services.add(s);
 		}
 
@@ -79,9 +107,23 @@ public class ServiceTableWidget extends ITableWidget {
 	public void setData(List<? extends AbstractDto> data) {
 		if (!data.isEmpty()) {
 			if (data.get(0) instanceof DtoService) {
+				final boolean wasTableAlreadyFilled = (table.getRowCount() == HEADER_ROWS + data.size());
+				
 				for (int y = 0; y < data.size(); y++) {
 					for (int x = 0; x < data.get(y).getListViewColumnIds().length; x++) {
-						table.setWidget(HEADER_ROWS + y, x, WidgetSelector.getWidgetByType(data.get(y).getClass(), data.get(y), data.get(y).getListViewColumnIds()[x], view));
+						final int index = data.get(y).getListViewColumnIds()[x];
+						
+						if (wasTableAlreadyFilled) {
+							// update widget because it already exists
+							if (table.getWidget(HEADER_ROWS + y, x) instanceof TextBox) {
+								((TextBox) table.getWidget(HEADER_ROWS + y, x)).setText(data.get(y).getFieldValue(index).toString());
+							}
+						} else {
+							// add a new widget and new click handler
+							// TODO reuse existing widgets and handlers if possible instead of recreating them all the time
+							table.setWidget(HEADER_ROWS + y, x, WidgetSelector.getWidgetByType(data.get(y).getClass(), data.get(y), index, view));
+							addChangeEvents(index, table.getWidget(HEADER_ROWS + y, x));
+						}
 					}
 				}
 			} else {

@@ -20,7 +20,11 @@ public class ListQueryResult<T extends AbstractDto> implements Serializable {
 	}
 
 	public T[] getResults() {
-		return results;
+		if (null == results) {
+			return (T[]) new AbstractDto[0];
+		} else {
+			return results;
+		}
 	}
 
 	public int getItemCount() {
