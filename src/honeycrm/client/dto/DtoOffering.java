@@ -25,7 +25,7 @@ public class DtoOffering extends AbstractDto {
 		fields.add(new FieldRelate(INDEX_CONTACTID, DtoContact.class, "Contact"));
 		fields.add(new Field(INDEX_DEADLINE, Type.DATE, "Deadline"));
 	}
-	
+
 	public ITableWidget getWidget(View view) {
 		return new ServiceTableWidget(view);
 	}
@@ -37,7 +37,7 @@ public class DtoOffering extends AbstractDto {
 
 	@Override
 	public String getQuicksearchItem() {
-		return "not implemented yet";
+		return getTitle() + " for " + contactId;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class DtoOffering extends AbstractDto {
 
 	@Override
 	protected int[][] interalGetFormFieldIds() {
-		return new int[][] { new int[] { INDEX_CONTACTID, INDEX_DEADLINE }, new int[] { INDEX_SERVICES } };
+		return new int[][] { new int[] { INDEX_CONTACTID }, new int[] { INDEX_DEADLINE }, new int[] { INDEX_SERVICES } };
 	}
 
 	@Override

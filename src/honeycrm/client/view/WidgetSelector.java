@@ -7,6 +7,7 @@ import honeycrm.client.IANA;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.DtoOffering;
+import honeycrm.client.dto.Field;
 import honeycrm.client.dto.FieldEnum;
 import honeycrm.client.dto.FieldMultiEnum;
 import honeycrm.client.dto.FieldRelate;
@@ -24,15 +25,17 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
-
 
 /**
  * Determines the widget that should be displayed for a given field type.
@@ -55,11 +58,11 @@ public class WidgetSelector {
 
 		switch (view) {
 		case CREATE:
-			return getCreateWidget(tmpViewable, fieldId);
+			return decorateWidget(getCreateWidget(tmpViewable, fieldId), tmpViewable.getFieldById(fieldId));
 		case DETAIL:
 			return getDetailWidget(tmpViewable, fieldId, value);
 		case EDIT:
-			return getEditWidget(tmpViewable, fieldId, value);
+			return decorateWidget(getEditWidget(tmpViewable, fieldId, value), tmpViewable.getFieldById(fieldId));
 		default:
 			// should never reach this point
 			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString());
@@ -67,7 +70,8 @@ public class WidgetSelector {
 	}
 
 	private static Widget getEditWidget(final AbstractDto tmpViewable, final int fieldId, final Object value) {
-		switch (tmpViewable.getFieldById(fieldId).getType()) {
+		final Field field = tmpViewable.getFieldById(fieldId);
+		switch (field.getType()) {
 		case BOOLEAN:
 			CheckBox widget = new CheckBox();
 			widget.setValue((Boolean) value);
@@ -78,7 +82,8 @@ public class WidgetSelector {
 			return widget2;
 		case INTEGER:
 			TextBox widget6 = new TextBox();
-			widget6.setText(Long.toString((Long) value));
+			widget6.setText(value.toString());
+			widget6.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 			return widget6;
 		case EMAIL:
 		case STRING:
@@ -92,21 +97,22 @@ public class WidgetSelector {
 			widget4.setText((null == value) ? "" : value.toString());
 			return widget4;
 		case RELATE:
-			if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
-				return new RelateWidget(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz(), (null == value) ? 0 : (Long) value);
+			if (field instanceof FieldRelate) {
+				return new RelateWidget(((FieldRelate) field).getRelatedClazz(), (null == value) ? 0 : (Long) value);
 			} else {
-				throw new RuntimeException("Expected FieldRelate. Received " + tmpViewable.getFieldById(fieldId).getClass().toString());
+				throw new RuntimeException("Expected FieldRelate. Received " + field.getClass().toString());
 			}
 		case CURRENCY:
 			TextBox widget5 = new TextBox();
 			widget5.setText(CURRENCY_FORMAT_EDIT.format((Double) value));
+			widget5.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 			return widget5;
 		case ENUM:
 		case MULTIENUM:
-			if (tmpViewable.getFieldById(fieldId) instanceof FieldEnum) {
+			if (field instanceof FieldEnum) {
 				final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
-				final String[] options = ((FieldEnum) tmpViewable.getFieldById(fieldId)).getOptions();
-				final ListBox box = new ListBox(Type.MULTIENUM == tmpViewable.getFieldById(fieldId).getType());
+				final String[] options = ((FieldEnum) field).getOptions();
+				final ListBox box = new ListBox(Type.MULTIENUM == field.getType());
 
 				for (int i = 0; i < options.length; i++) {
 					box.addItem(options[i]);
@@ -121,18 +127,16 @@ public class WidgetSelector {
 				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
 			}
 		case TABLE:
-			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
-				final ITableWidget table =  ((DtoOffering) tmpViewable).getWidget(View.EDIT);
+			if (field instanceof FieldTable) {
+				final ITableWidget table = ((DtoOffering) tmpViewable).getWidget(View.EDIT);
 				table.setData((List<? extends AbstractDto>) value);
 				return table;
-//				return new ServiceTableWidget();
-				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
 			} else {
-				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
+				throw new RuntimeException("Expected FieldTable but received something else: " + field.getClass());
 			}
 		default:
 			// should never reach this point
-			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString());
+			throw new RuntimeException("Unexpected Type: " + field.getType().toString());
 		}
 	}
 
@@ -182,6 +186,7 @@ public class WidgetSelector {
 		case CURRENCY:
 			Label widget5 = new Label();
 			widget5.setText(CURRENCY_FORMAT_READ.format((Double) value));
+			widget5.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 			return widget5;
 		case EMAIL:
 			if (null == value || value.toString().isEmpty()) {
@@ -210,14 +215,16 @@ public class WidgetSelector {
 			}
 		case TABLE:
 			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
-				final ITableWidget table =  ((DtoOffering) tmpViewable).getWidget(View.DETAIL);
+				final ITableWidget table = ((DtoOffering) tmpViewable).getWidget(View.DETAIL);
 				table.setData((List<? extends AbstractDto>) value);
 				return table;
-//				return new ServiceTableWidget();
-				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
 			} else {
 				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
 			}
+		case INTEGER:
+			final Label widget1 = new Label(value.toString());
+			widget1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+			return widget1;
 		case ENUM:
 		case TEXT:
 		default:
@@ -226,7 +233,9 @@ public class WidgetSelector {
 	}
 
 	private static Widget getCreateWidget(final AbstractDto tmpViewable, final int fieldId) {
-		switch (tmpViewable.getFieldById(fieldId).getType()) {
+		final Field field = tmpViewable.getFieldById(fieldId);
+
+		switch (field.getType()) {
 		case BOOLEAN:
 			CheckBox widget = new CheckBox();
 			return widget;
@@ -235,7 +244,8 @@ public class WidgetSelector {
 			return widget2;
 		case INTEGER:
 			TextBox widget6 = new TextBox();
-			widget6.setText(tmpViewable.getFieldById(fieldId).getDefaultValue());
+			widget6.setText(field.getDefaultValue());
+			widget6.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 			return widget6;
 		case EMAIL:
 		case STRING:
@@ -247,20 +257,21 @@ public class WidgetSelector {
 			TextArea widget4 = new TextArea();
 			return widget4;
 		case RELATE:
-			if (tmpViewable.getFieldById(fieldId) instanceof FieldRelate) {
-				return new RelateWidget(((FieldRelate) tmpViewable.getFieldById(fieldId)).getRelatedClazz(), 0);
+			if (field instanceof FieldRelate) {
+				return new RelateWidget(((FieldRelate) field).getRelatedClazz(), 0);
 			} else {
-				throw new RuntimeException("Expected FieldRelate. Received " + tmpViewable.getFieldById(fieldId).getClass().toString());
+				throw new RuntimeException("Expected FieldRelate. Received " + field.getClass().toString());
 			}
 		case CURRENCY:
 			TextBox widget5 = new TextBox();
-			widget5.setText(tmpViewable.getFieldById(fieldId).getDefaultValue());
+			widget5.setText(field.getDefaultValue());
+			widget5.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 			return widget5;
 		case ENUM:
 		case MULTIENUM:
-			ListBox box = new ListBox(Type.MULTIENUM == tmpViewable.getFieldById(fieldId).getType());
-			if (tmpViewable.getFieldById(fieldId) instanceof FieldEnum) {
-				final String[] options = ((FieldEnum) tmpViewable.getFieldById(fieldId)).getOptions();
+			ListBox box = new ListBox(Type.MULTIENUM == field.getType());
+			if (field instanceof FieldEnum) {
+				final String[] options = ((FieldEnum) field).getOptions();
 				for (int i = 0; i < options.length; i++) {
 					box.addItem(options[i]);
 				}
@@ -269,16 +280,29 @@ public class WidgetSelector {
 				throw new RuntimeException("Expected FieldEnum but received something else. Cannot instantiate ListBox.");
 			}
 		case TABLE:
-			if (tmpViewable.getFieldById(fieldId) instanceof FieldTable) {
+			if (field instanceof FieldTable) {
 				return ((DtoOffering) tmpViewable).getWidget(View.CREATE);
-				//return new ServiceTableWidget();
-				// return ((FieldTable)tmpViewable.getFieldById(fieldId)).getWidget();
 			} else {
-				throw new RuntimeException("Expected FieldTable but received something else: " + tmpViewable.getFieldById(fieldId).getClass());
+				throw new RuntimeException("Expected FieldTable but received something else: " + field.getClass());
 			}
 		default:
 			// should never reach this point
-			throw new RuntimeException("Unexpected Type: " + tmpViewable.getFieldById(fieldId).getType().toString());
+			throw new RuntimeException("Unexpected Type: " + field.getType().toString());
 		}
+	}
+
+	/**
+	 * Adjust the width of the widget and the enable / disable it depending on the field settings.
+	 */
+	private static Widget decorateWidget(final Widget widget, final Field field) {
+		if (field.hasSuggestedWidth()) {
+			widget.setWidth(field.getWidthString());
+		}
+		if (widget instanceof FocusWidget) {
+			// call set enabled method when ever possible
+			// enable this field if it is not readonly. disable the field if it is readonly.
+			((FocusWidget) widget).setEnabled(!field.isReadOnly());
+		}
+		return widget;
 	}
 }
