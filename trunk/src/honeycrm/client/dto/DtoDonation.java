@@ -1,9 +1,12 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.FieldCurrency;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldEnum;
+import honeycrm.client.field.FieldMultiEnum;
+import honeycrm.client.field.FieldRelate;
 
 import java.util.Date;
-
 
 public class DtoDonation extends AbstractDto {
 	private static final long serialVersionUID = 6528143648066271951L;
@@ -39,11 +42,11 @@ public class DtoDonation extends AbstractDto {
 		fields.add(new FieldRelate(INDEX_PROJECTID, DtoProject.class, "Project"));
 		fields.add(new FieldEnum(INDEX_DONATEDFOR, "Donated for", "Foundation", "Project donation", "Unlinked donation"));
 		fields.add(new FieldEnum(INDEX_KIND, "Kind", "Subscription", "Unique"));
-		fields.add(new Field(INDEX_RECEIPTIONDATE, Type.DATE, "Receiption date"));
+		fields.add(new FieldDate(INDEX_RECEIPTIONDATE, "Receiption date"));
 		fields.add(new FieldEnum(INDEX_REACTION, "Reaction", "Thanked", "Receipt", "Certificate", "No"));
 		fields.add(new FieldMultiEnum(INDEX_REACTEDHOW, "Reaction channel", "E-Mail", "Letter", "Phone Call"));
-		fields.add(new Field(INDEX_DATE, Type.DATE, "Date"));
-		fields.add(new Field(INDEX_AMOUNT, Type.CURRENCY, "Amount", "0"));
+		fields.add(new FieldDate(INDEX_DATE, "Date"));
+		fields.add(new FieldCurrency(INDEX_AMOUNT, "Amount", "0"));
 	}
 
 	@Override

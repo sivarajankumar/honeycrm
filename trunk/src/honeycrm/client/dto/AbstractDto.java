@@ -1,8 +1,11 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.CollectionHelper;
 import honeycrm.client.DtoRegistry;
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.AbstractField;
+import honeycrm.client.field.FieldBoolean;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldInteger;
+import honeycrm.client.misc.CollectionHelper;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,7 +22,7 @@ public abstract class AbstractDto implements Serializable {
 	protected boolean marked;
 	protected Date createdAt;
 	protected Date lastUpdatedAt;
-	protected Set<Field> fields = new HashSet<Field>();
+	protected Set<AbstractField> fields = new HashSet<AbstractField>();
 
 	public static final int INDEX_CREATEDAT = -1;
 	public static final int INDEX_LASTUPDATEDAT = -2;
@@ -30,10 +33,10 @@ public abstract class AbstractDto implements Serializable {
 	 * static { map = DtoRegistry.instance.getDtoMap(); // add new modules here map.put(DtoContact.class, new DtoContact()); map.put(DtoAccount.class, new DtoAccount()); map.put(DtoEmployee.class, new DtoEmployee()); map.put(DtoMembership.class, new DtoMembership()); map.put(DtoDonation.class, new DtoDonation()); map.put(DtoProject.class, new DtoProject()); }
 	 */
 	public AbstractDto() {
-		fields.add(new Field(INDEX_VIEWS, Type.INTEGER, "Views"));
-		fields.add(new Field(INDEX_CREATEDAT, Type.DATE, "Created at"));
-		fields.add(new Field(INDEX_LASTUPDATEDAT, Type.DATE, "Last updated at"));
-		fields.add(new Field(INDEX_MARKED, Type.BOOLEAN, "Marked"));
+		fields.add(new FieldInteger(INDEX_VIEWS, "Views"));
+		fields.add(new FieldDate(INDEX_CREATEDAT, "Created at"));
+		fields.add(new FieldDate(INDEX_LASTUPDATEDAT, "Last updated at"));
+		fields.add(new FieldBoolean(INDEX_MARKED, "Marked"));
 		// TODO make it possible to show an empty label without destroying the css
 	}
 
@@ -121,11 +124,11 @@ public abstract class AbstractDto implements Serializable {
 		this.marked = marked;
 	}
 
-	public Set<Field> getFields() {
+	public Set<AbstractField> getFields() {
 		return fields;
 	}
 
-	public void setFields(Set<Field> fields) {
+	public void setFields(Set<AbstractField> fields) {
 		this.fields = fields;
 	}
 
@@ -143,8 +146,8 @@ public abstract class AbstractDto implements Serializable {
 		return null;
 	}
 
-	public Field getFieldById(final int id) {
-		for (final Field field : fields) {
+	public AbstractField getFieldById(final int id) {
+		for (final AbstractField field : fields) {
 			if (id == field.getId()) {
 				return field;
 			}

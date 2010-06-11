@@ -44,7 +44,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 					for (int x = 0; x < dto.getListViewColumnIds().length; x++) {
 						final int index = dto.getListViewColumnIds()[x];
-						table.setWidget(rows, x, addChangeEvents(index, WidgetSelector.getWidgetByType(dto.getClass(), dto, index, view)));
+						table.setWidget(rows, x, addChangeEvents(index, dto.getFieldById(index).getWidget(view, dto.getFieldValue(index))));
 					}
 				}
 			});
@@ -121,7 +121,7 @@ public class ServiceTableWidget extends ITableWidget {
 						} else {
 							// add a new widget and new click handler
 							// TODO reuse existing widgets and handlers if possible instead of recreating them all the time
-							table.setWidget(HEADER_ROWS + y, x, WidgetSelector.getWidgetByType(data.get(y).getClass(), data.get(y), index, view));
+							table.setWidget(HEADER_ROWS + y, x, data.get(y).getFieldById(index).getWidget(view, data.get(y).getFieldValue(index)));
 							addChangeEvents(index, table.getWidget(HEADER_ROWS + y, x));
 						}
 					}

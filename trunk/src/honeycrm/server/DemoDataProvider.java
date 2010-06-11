@@ -37,11 +37,7 @@ public class DemoDataProvider {
 	}
 
 	public static String getRandomString() {
-		int length = r.nextInt() % (Integer.MAX_VALUE / 100000);
-		if (length < 0) {
-			length = -length;
-		}
-
+		int length = Math.abs(r.nextInt() % (Integer.MAX_VALUE / 100000));
 		String str = "";
 
 		for (int i = 0; i < length; i++) {

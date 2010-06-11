@@ -1,6 +1,11 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.FieldCurrency;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldEnum;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.field.FieldString;
+import honeycrm.client.field.FieldText;
 
 import java.util.Date;
 
@@ -27,13 +32,13 @@ public class DtoProject extends AbstractDto {
 	public static final int INDEX_PHASE = 8;
 
 	public DtoProject() {
-		fields.add(new Field(INDEX_NAME, Type.STRING, "Name"));
+		fields.add(new FieldString(INDEX_NAME, "Name"));
 		fields.add(new FieldRelate(INDEX_EMPLOYEEID, DtoEmployee.class, "Responsible"));
-		fields.add(new Field(INDEX_DESCRIPTION, Type.TEXT, "Description"));
-		fields.add(new Field(INDEX_TARGETSUM, Type.CURRENCY, "Target sum", "0"));
-		fields.add(new Field(INDEX_CURRENTSUM, Type.CURRENCY, "Current sum", "0"));
-		fields.add(new Field(INDEX_STARTDATE, Type.DATE, "Start date"));
-		fields.add(new Field(INDEX_ENDDATE, Type.DATE, "End date"));
+		fields.add(new FieldText(INDEX_DESCRIPTION, "Description"));
+		fields.add(new FieldCurrency(INDEX_TARGETSUM, "Target sum", "0"));
+		fields.add(new FieldCurrency(INDEX_CURRENTSUM, "Current sum", "0"));
+		fields.add(new FieldDate(INDEX_STARTDATE, "Start date"));
+		fields.add(new FieldDate(INDEX_ENDDATE, "End date"));
 		fields.add(new FieldEnum(INDEX_PHASE, "Phase", "not started", "in progress", "closed"));
 	}
 

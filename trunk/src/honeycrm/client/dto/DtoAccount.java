@@ -1,6 +1,8 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.FieldCurrency;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldString;
 
 import java.util.Date;
 
@@ -17,10 +19,10 @@ public class DtoAccount extends AbstractDto {
 	private double annualRevenue;
 
 	public DtoAccount() {
-		fields.add(new Field(INDEX_NAME, Type.STRING, "Name"));
-		fields.add(new Field(INDEX_ADDRESS, Type.STRING, "Address"));
-		fields.add(new Field(INDEX_DATE, Type.DATE, "Date"));
-		fields.add(new Field(INDEX_ANNUALREVENUE, Type.CURRENCY, "Annual Revenue", "0"));
+		fields.add(new FieldString(INDEX_NAME, "Name"));
+		fields.add(new FieldString(INDEX_ADDRESS, "Address"));
+		fields.add(new FieldDate(INDEX_DATE, "Date"));
+		fields.add(new FieldCurrency(INDEX_ANNUALREVENUE, "Annual Revenue", "0"));
 	}
 
 	public String getName() {
