@@ -1,4 +1,4 @@
-package honeycrm.client;
+package honeycrm.client.misc;
 
 import java.util.Collection;
 import java.util.HashSet;

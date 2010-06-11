@@ -1,9 +1,12 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.FieldCurrency;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldEnum;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.field.FieldText;
 
 import java.util.Date;
-
 
 public class DtoMembership extends AbstractDto {
 	private static final long serialVersionUID = 2957773394150131193L;
@@ -31,12 +34,12 @@ public class DtoMembership extends AbstractDto {
 	public DtoMembership() {
 		fields.add(new FieldRelate(INDEX_MEMBERID, DtoContact.class, "Member"));
 		fields.add(new FieldRelate(INDEX_EMPLOYEEID, DtoEmployee.class, "Employee"));
-		fields.add(new Field(INDEX_PAYMENT, Type.CURRENCY, "Contribution"));
+		fields.add(new FieldCurrency(INDEX_PAYMENT, "Contribution"));
 		fields.add(new FieldEnum(INDEX_TIEDTOPURPOSE, "Tied to purpose", "Yes", "No", "Soon"));
-		fields.add(new Field(INDEX_PURPOSE, Type.TEXT, "Purpose"));
+		fields.add(new FieldText(INDEX_PURPOSE, "Purpose"));
 		fields.add(new FieldEnum(INDEX_PAYMENTMETHOD, "Payment method", "Direct Debit authorisation", "transaction"));
-		fields.add(new Field(INDEX_STARTDATE, Type.DATE, "Start date"));
-		fields.add(new Field(INDEX_ENDDATE, Type.DATE, "End date"));
+		fields.add(new FieldDate(INDEX_STARTDATE, "Start date"));
+		fields.add(new FieldDate(INDEX_ENDDATE, "End date"));
 	}
 
 	@Override

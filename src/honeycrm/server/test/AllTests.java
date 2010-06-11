@@ -8,7 +8,8 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for honeycrm.server.test");
 		// $JUnit-BEGIN$
-		suite.addTestSuite(ArrayHelperTest.class);
+		suite.addTestSuite(NumberParserTest.class);
+		suite.addTestSuite(CollectionHelperTest.class);
 		suite.addTestSuite(DemoDataProviderTest.class);
 		suite.addTestSuite(ObjectCopyTest.class);
 		suite.addTestSuite(DtoSyncTest.class);

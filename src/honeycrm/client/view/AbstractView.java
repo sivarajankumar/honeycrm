@@ -1,6 +1,5 @@
 package honeycrm.client.view;
 
-import honeycrm.client.CollectionHelper;
 import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.DtoRegistry;
 import honeycrm.client.IANA;
@@ -8,7 +7,8 @@ import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.TabCenterView;
 import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.dto.FieldMultiEnum;
+import honeycrm.client.field.FieldMultiEnum;
+import honeycrm.client.misc.CollectionHelper;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -149,7 +149,8 @@ abstract public class AbstractView extends Composite {
 	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a special use case..
 	 */
 	protected Widget getWidgetByType(final AbstractDto tmpViewable, final int fieldId, final View view) {
-		return WidgetSelector.getWidgetByType(clazz, tmpViewable, fieldId, view);
+		return tmpViewable.getFieldById(fieldId).getWidget(view, tmpViewable.getFieldValue(fieldId));
+		// return WidgetSelector.getWidgetByType(clazz, tmpViewable, fieldId, view);
 	}
 
 	public Class<? extends AbstractDto> getClazz() {
@@ -183,6 +184,6 @@ abstract public class AbstractView extends Composite {
 	}
 
 	public enum View {
-		DETAIL, EDIT, CREATE
+		DETAIL, EDIT, CREATE, LIST
 	}
 }

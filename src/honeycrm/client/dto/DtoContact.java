@@ -1,6 +1,11 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.FieldBoolean;
+import honeycrm.client.field.FieldEmail;
+import honeycrm.client.field.FieldEnum;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.field.FieldString;
+import honeycrm.client.field.FieldText;
 
 public class DtoContact extends AbstractDto {
 	private static final long serialVersionUID = -5935793335242391078L;
@@ -49,16 +54,16 @@ public class DtoContact extends AbstractDto {
 	public static final int INDEX_RESPONSIBLEID = 15;
 
 	public DtoContact() { // gwt needs it
-		fields.add(new Field(INDEX_NAME, Type.STRING, "Name"));
-		fields.add(new Field(INDEX_PHONE, Type.STRING, "Phone"));
-		fields.add(new Field(INDEX_CITY, Type.STRING, "City"));
-		fields.add(new Field(INDEX_EMAIL, Type.EMAIL, "E-Mail"));
+		fields.add(new FieldString(INDEX_NAME, "Name"));
+		fields.add(new FieldString(INDEX_PHONE, "Phone"));
+		fields.add(new FieldString(INDEX_CITY, "City"));
+		fields.add(new FieldEmail(INDEX_EMAIL, "E-Mail"));
 		fields.add(new FieldRelate(INDEX_ACCOUNTID, DtoAccount.class, "Account"));
-		fields.add(new Field(INDEX_DONOTCALL, Type.BOOLEAN, "Do not call"));
-		fields.add(new Field(INDEX_DONOTCALLEXPLANATION, Type.TEXT, "Why not call"));
-		fields.add(new Field(INDEX_EMAILOPTEDOUT, Type.BOOLEAN, "No Mails"));
-		fields.add(new Field(INDEX_MOBILE, Type.STRING, "Mobile"));
-		fields.add(new Field(INDEX_BANKACCOUNTDATA, Type.TEXT, "Bank account data"));
+		fields.add(new FieldBoolean(INDEX_DONOTCALL, "Do not call"));
+		fields.add(new FieldText(INDEX_DONOTCALLEXPLANATION, "Why not call"));
+		fields.add(new FieldBoolean(INDEX_EMAILOPTEDOUT, "No Mails"));
+		fields.add(new FieldString(INDEX_MOBILE, "Mobile"));
+		fields.add(new FieldText(INDEX_BANKACCOUNTDATA, "Bank account data"));
 		fields.add(new FieldEnum(INDEX_PROFESSION, "Profession", "Student", "Professor", "Scientific Assistant", "Other"));
 		fields.add(new FieldEnum(INDEX_STUDY, "Study area", "None", "Biology", "Physics", "Mathematics", "Computer science"));
 		fields.add(new FieldRelate(INDEX_PARTNERID, DtoContact.class, "Partner"));
@@ -131,7 +136,7 @@ public class DtoContact extends AbstractDto {
 	@Override
 	protected int[][] interalGetFormFieldIds() {
 		final int[] row1 = new int[] { INDEX_NAME, INDEX_ACCOUNTID };
-		final int[] row11 = new int[]{ INDEX_RESPONSIBLEID };
+		final int[] row11 = new int[] { INDEX_RESPONSIBLEID };
 		final int[] row2 = new int[] { INDEX_EMAIL, INDEX_EMAILOPTEDOUT };
 		final int[] row3 = new int[] { INDEX_PHONE, INDEX_MOBILE };
 		final int[] row4 = new int[] { INDEX_DONOTCALL, INDEX_DONOTCALLEXPLANATION };

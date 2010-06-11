@@ -1,9 +1,9 @@
 package honeycrm.server;
 
-import honeycrm.client.CollectionHelper;
 import honeycrm.client.IANA;
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.misc.CollectionHelper;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.lang.reflect.Array;

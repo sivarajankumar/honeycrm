@@ -1,6 +1,7 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.FieldBoolean;
+import honeycrm.client.field.FieldString;
 
 public class DtoEmployee extends AbstractDto {
 	private static final long serialVersionUID = -2906735286411254274L;
@@ -11,8 +12,8 @@ public class DtoEmployee extends AbstractDto {
 	public static final int INDEX_ACTIVE = 2;
 
 	public DtoEmployee() {
-		fields.add(new Field(INDEX_NAME, Type.STRING, "Name"));
-		fields.add(new Field(INDEX_ACTIVE, Type.BOOLEAN, "Active"));
+		fields.add(new FieldString(INDEX_NAME, "Name"));
+		fields.add(new FieldBoolean(INDEX_ACTIVE, "Active"));
 	}
 
 	public String getName() {

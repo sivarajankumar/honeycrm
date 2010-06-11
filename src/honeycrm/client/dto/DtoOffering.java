@@ -1,6 +1,8 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.field.FieldTable;
 import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.ServiceTableWidget;
 import honeycrm.client.view.AbstractView.View;
@@ -23,7 +25,7 @@ public class DtoOffering extends AbstractDto {
 	public DtoOffering() {
 		fields.add(new FieldTable(INDEX_SERVICES, "Services"));
 		fields.add(new FieldRelate(INDEX_CONTACTID, DtoContact.class, "Contact"));
-		fields.add(new Field(INDEX_DEADLINE, Type.DATE, "Deadline"));
+		fields.add(new FieldDate(INDEX_DEADLINE, "Deadline"));
 	}
 
 	public ITableWidget getWidget(View view) {

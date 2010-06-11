@@ -1,6 +1,8 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.dto.Field.Type;
+import honeycrm.client.field.FieldCurrency;
+import honeycrm.client.field.FieldInteger;
+import honeycrm.client.field.FieldString;
 
 public class DtoService extends AbstractDto {
 	private static final long serialVersionUID = -6969485382441894420L;
@@ -18,11 +20,11 @@ public class DtoService extends AbstractDto {
 	public static final int INDEX_SUM = 5;
 
 	public DtoService() {
-		fields.add(new Field(INDEX_NAME, Type.STRING, "Name", "", 200));
-		fields.add(new Field(INDEX_PRICE, Type.CURRENCY, "Price", "0.0", 100));
-		fields.add(new Field(INDEX_QUANTITY, Type.INTEGER, "Qty", "1", 100));
-		fields.add(new Field(INDEX_DISCOUNT, Type.CURRENCY, "Discount", "0.0", 100));
-		fields.add(new Field(INDEX_SUM, Type.CURRENCY, "Sum", "0.0", 100, true));
+		fields.add(new FieldString(INDEX_NAME, "Name", "", 200));
+		fields.add(new FieldCurrency(INDEX_PRICE, "Price", "0.0", 100));
+		fields.add(new FieldInteger(INDEX_QUANTITY, "Qty", "1", 100));
+		fields.add(new FieldCurrency(INDEX_DISCOUNT, "Discount", "0.0", 100));
+		fields.add(new FieldCurrency(INDEX_SUM, "Sum", "0.0", 100, true));
 	}
 
 	@Override

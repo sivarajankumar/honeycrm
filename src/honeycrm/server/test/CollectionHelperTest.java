@@ -1,6 +1,6 @@
 package honeycrm.server.test;
 
-import honeycrm.client.CollectionHelper;
+import honeycrm.client.misc.CollectionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-public class ArrayHelperTest extends TestCase {
+public class CollectionHelperTest extends TestCase {
 	public void testJoin() {
 		final String glue = ",";
 		final List<String> foo = new ArrayList<String>();
