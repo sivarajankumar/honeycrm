@@ -9,7 +9,7 @@ public class FieldText extends AbstractField {
 
 	public FieldText() {
 	}
-	
+
 	public FieldText(final int index, final String label) {
 		super(index, label);
 	}
@@ -39,5 +39,10 @@ public class FieldText extends AbstractField {
 	@Override
 	protected Widget internalGetListWidget(Object value) {
 		return internalGetDetailWidget(value);
+	}
+
+	@Override
+	public Object getData(Widget w) {
+		return ((TextArea) w).getText();
 	}
 }

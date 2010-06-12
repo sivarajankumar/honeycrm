@@ -7,20 +7,12 @@ import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.TabCenterView;
 import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.field.FieldMultiEnum;
-import honeycrm.client.misc.CollectionHelper;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -40,9 +32,9 @@ abstract public class AbstractView extends Composite {
 	}
 
 	/**
-	 * Initialize a viewable from the widgets (e.g., textboxes, dateboxes, relate fields) in a table.
+	 * Initialize a dto instance from the widgets (e.g., textboxes, dateboxes, relate fields) in a table.
 	 */
-	protected void setViewable(final int[][] fieldIds, final FlexTable table, final AbstractDto tmpViewable) {
+	protected void initializeDtoFromTable(final int[][] fieldIds, final FlexTable table, final AbstractDto tmpDto) {
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final int id = fieldIds[y][x];
@@ -50,50 +42,8 @@ abstract public class AbstractView extends Composite {
 				if (!AbstractDto.isInternalReadOnlyField(id)) {
 					// TODO this position y, 2*x+1 depends on the current layout of the form..
 					final Widget widgetValue = table.getWidget(y, 2 * x + 1);
-					final Object value;
-
-					if (widgetValue instanceof TextBox) {
-						value = ((TextBox) widgetValue).getText();
-					} else if (widgetValue instanceof DateBox) {
-						value = ((DateBox) widgetValue).getValue();
-					} else if (widgetValue instanceof RelateWidget) {
-						value = ((RelateWidget) widgetValue).getId();
-					} else if (widgetValue instanceof CheckBox) {
-						value = ((CheckBox) widgetValue).getValue();
-					} else if (widgetValue instanceof TextArea) {
-						value = ((TextArea) widgetValue).getText();
-					} else if (widgetValue instanceof ListBox) {
-						final ListBox box = (ListBox) widgetValue;
-						String selectedValue = "";
-						if (box.isMultipleSelect()) {
-							// this is a multi enum field. determine the fields that have been
-							// selected and concatenate their values.
-							final Set<String> selectedValues = new HashSet<String>();
-							for (int i = 0; i < box.getItemCount(); i++) {
-								if (box.isItemSelected(i)) {
-									selectedValues.add(box.getValue(i));
-								}
-							}
-							selectedValue = CollectionHelper.join(selectedValues, FieldMultiEnum.SEPARATOR);
-						} else if (-1 < box.getSelectedIndex()) {
-							// this is an enum field (single line dropdown). only add anything if
-							// something has been selected to avoid array index out of bounds
-							// exceptions at runtime
-							selectedValue += box.getValue(box.getSelectedIndex());
-						}
-						value = selectedValue;
-						// TODO also enable this for MarkWidget
-						// } else if (widgetValue instanceof MarkWidget) {
-						// value = widgetValue.
-					} else if (widgetValue instanceof ITableWidget) {
-						value = ((ITableWidget) widgetValue).getData();
-					} else {
-						// unexpected widget
-						displayError(new RuntimeException("Unexpected Widget: " + widgetValue.getClass()));
-						throw new RuntimeException("Unexpected Widget Type: " + widgetValue.getClass().toString());
-					}
-
-					tmpViewable.setFieldValue(id, value);
+					final Object value = tmpDto.getFieldById(id).getData(widgetValue);
+					tmpDto.setFieldValue(id, value);
 				}
 			}
 		}
@@ -109,7 +59,7 @@ abstract public class AbstractView extends Composite {
 		if (isUpdate) {
 			dto.setId(id);
 		}
-		setViewable(dto.getFormFieldIds(), table, dto);
+		initializeDtoFromTable(dto.getFormFieldIds(), table, dto);
 
 		if (isUpdate) {
 			commonService.update(IANA.mashal(clazz), dto, id, new AsyncCallback<Void>() {
@@ -184,6 +134,6 @@ abstract public class AbstractView extends Composite {
 	}
 
 	public enum View {
-		DETAIL, EDIT, CREATE, LIST
+		DETAIL, EDIT, CREATE, LIST, LIST_HEADER
 	}
 }

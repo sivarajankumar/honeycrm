@@ -11,7 +11,7 @@ public class FieldInteger extends AbstractField {
 
 	public FieldInteger() {
 	}
-	
+
 	public FieldInteger(final int index, final String label) {
 		super(index, label);
 	}
@@ -46,5 +46,10 @@ public class FieldInteger extends AbstractField {
 	@Override
 	protected Widget internalGetListWidget(Object value) {
 		return internalGetDetailWidget(value);
+	}
+
+	@Override
+	public Object getData(Widget w) {
+		return ((TextBox) w).getText();
 	}
 }

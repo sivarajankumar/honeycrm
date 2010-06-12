@@ -1,7 +1,11 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.ServiceTableWidget;
 import honeycrm.client.view.AbstractView.View;
+
+import java.util.List;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -17,17 +21,17 @@ public class FieldTable extends AbstractField {
 
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
-		return new ServiceTableWidget(View.CREATE);
+		return getTableWidget(value, View.CREATE);
 	}
 
 	@Override
 	protected Widget internalGetDetailWidget(Object value) {
-		return new ServiceTableWidget(View.DETAIL);
+		return getTableWidget(value, View.DETAIL);
 	}
 
 	@Override
 	protected Widget internalGetEditWidget(Object value) {
-		return new ServiceTableWidget(View.EDIT);
+		return getTableWidget(value, View.EDIT);
 	}
 
 	@Override
@@ -35,4 +39,17 @@ public class FieldTable extends AbstractField {
 		return internalGetDetailWidget(value);
 	}
 
+	/**
+	 * Create the widget and initialize it with data.
+	 */
+	private Widget getTableWidget(Object value, final View view) {
+		final ITableWidget w = new ServiceTableWidget(view);
+		w.setData((List<? extends AbstractDto>) value);
+		return w;
+	}
+
+	@Override
+	public Object getData(Widget w) {
+		return ((ITableWidget) w).getData();
+	}
 }

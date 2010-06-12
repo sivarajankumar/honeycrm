@@ -10,7 +10,7 @@ public class FieldEmail extends AbstractField {
 
 	public FieldEmail() {
 	}
-	
+
 	public FieldEmail(final int index, final String label) {
 		super(index, label);
 	}
@@ -42,5 +42,10 @@ public class FieldEmail extends AbstractField {
 	@Override
 	protected Widget internalGetListWidget(Object value) {
 		return internalGetDetailWidget(value);
+	}
+
+	@Override
+	public Object getData(Widget w) {
+		return ((TextBox) w).getText();
 	}
 }

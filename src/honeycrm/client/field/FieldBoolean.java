@@ -38,4 +38,9 @@ public class FieldBoolean extends AbstractField {
 	protected Widget internalGetListWidget(Object value) {
 		return internalGetDetailWidget(value);
 	}
+
+	@Override
+	public Object getData(Widget widget) {
+		return ((CheckBox) widget).getValue();
+	}
 }

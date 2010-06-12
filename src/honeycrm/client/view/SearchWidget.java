@@ -104,7 +104,7 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 	}
 
 	private void startSearch(final SearchableListView listview, final FlexTable table, final int[][] fieldIDs) {
-		setViewable(fieldIDs, table, dto); // build query by writing input from textboxes into
+		initializeDtoFromTable(fieldIDs, table, dto); // build query by writing input from textboxes into
 											// viewable instance
 		listview.search(dto);
 	}
