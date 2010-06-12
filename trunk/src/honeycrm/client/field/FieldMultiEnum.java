@@ -72,4 +72,18 @@ public class FieldMultiEnum extends FieldEnum {
 	protected Widget internalGetListWidget(Object value) {
 		return internalGetDetailWidget(value);
 	}
+	
+	@Override
+	public Object getData(Widget widgetValue) {
+		final ListBox box = (ListBox) widgetValue;
+		final Set<String> selectedValues = new HashSet<String>();
+
+		for (int i = 0; i < box.getItemCount(); i++) {
+			if (box.isItemSelected(i)) {
+				selectedValues.add(box.getValue(i));
+			}
+		}
+
+		return CollectionHelper.join(selectedValues, FieldMultiEnum.SEPARATOR);
+	}
 }

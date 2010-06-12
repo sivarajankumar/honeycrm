@@ -62,4 +62,15 @@ public class FieldEnum extends AbstractField {
 		return internalGetDetailWidget(value);
 	}
 
+	@Override
+	public Object getData(Widget widgetValue) {
+		final ListBox box = (ListBox) widgetValue;
+
+		if (box.getSelectedIndex() == -1) {
+			// nothing has been selected.
+			return "";
+		} else {
+			return box.getValue(box.getSelectedIndex());
+		}
+	}
 }

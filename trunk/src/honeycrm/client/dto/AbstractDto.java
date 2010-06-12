@@ -24,6 +24,7 @@ public abstract class AbstractDto implements Serializable {
 	protected Date lastUpdatedAt;
 	protected Set<AbstractField> fields = new HashSet<AbstractField>();
 
+	// TODO use com.google.gwt.user.client.Random instead to generate ids
 	public static final int INDEX_CREATEDAT = -1;
 	public static final int INDEX_LASTUPDATEDAT = -2;
 	public static final int INDEX_VIEWS = -3;
@@ -160,7 +161,7 @@ public abstract class AbstractDto implements Serializable {
 	}
 
 	public int[][] getFormFieldIds() {
-		return CollectionHelper.merge(interalGetFormFieldIds(), new int[][] { new int[] { INDEX_CREATEDAT, INDEX_LASTUPDATEDAT }, new int[] { INDEX_VIEWS, INDEX_MARKED } });
+		return CollectionHelper.merge(interalGetFormFieldIds(), new int[][] { new int[] { INDEX_CREATEDAT }, new int[] { INDEX_LASTUPDATEDAT }, new int[] { INDEX_VIEWS }, new int[] { INDEX_MARKED } });
 	}
 
 	/**

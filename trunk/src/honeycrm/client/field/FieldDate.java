@@ -44,4 +44,8 @@ public class FieldDate extends AbstractField {
 		return internalGetDetailWidget(value);
 	}
 
+	@Override
+	public Object getData(Widget w) {
+		return ((DateBox) w).getValue();
+	}
 }

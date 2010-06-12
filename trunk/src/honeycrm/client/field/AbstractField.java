@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.FocusWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractField implements IsSerializable, Serializable {
@@ -95,6 +96,8 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 			return decorateWidget(internalGetListWidget(value));
 		case CREATE:
 			return decorateWidget(internalGetCreateWidget(value));
+		case LIST_HEADER:
+			return getHeaderWidget(value);
 		default:
 			throw new RuntimeException("Unknown view: " + view);
 		}
@@ -104,6 +107,16 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 	abstract protected Widget internalGetDetailWidget(final Object value);
 	abstract protected Widget internalGetCreateWidget(final Object value);
 	abstract protected Widget internalGetEditWidget(final Object value);
+	abstract public Object getData(final Widget w);
+
+	/**
+	 * This returns a label containing the title of this field, all other properties (e.g., width, alignment) are set as for a normal content field.
+	 */
+	private Label getHeaderWidget(final Object value) {
+		final Label label = (Label) decorateWidget(internalGetDetailWidget(value));
+		label.setText(getLabel());
+		return label;
+	}
 
 	/**
 	 * Adjust the width of the widget and the enable / disable it depending on the field settings.

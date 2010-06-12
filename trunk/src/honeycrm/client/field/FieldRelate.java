@@ -58,7 +58,7 @@ public class FieldRelate extends AbstractField {
 				@Override
 				public void onSuccess(AbstractDto result) {
 					LoadIndicator.get().endLoading();
-					
+
 					if (null == result) {
 						// assume no related entity has been selected
 						link.setText("");
@@ -82,4 +82,8 @@ public class FieldRelate extends AbstractField {
 		return internalGetDetailWidget(value);
 	}
 
+	@Override
+	public Object getData(Widget w) {
+		return ((RelateWidget) w).getId();
+	}
 }

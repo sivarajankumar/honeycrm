@@ -1,8 +1,9 @@
 package honeycrm.server.test;
 
+import honeycrm.client.misc.NumberParser;
+
 import java.util.Random;
 
-import honeycrm.client.misc.NumberParser;
 import junit.framework.TestCase;
 
 public class NumberParserTest extends TestCase {
