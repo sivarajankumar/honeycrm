@@ -11,7 +11,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -87,18 +86,27 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 				showMarked = !showMarked;
 			}
 		});
+		
+		final Button advancedSearchBtn = new Button("Advanced Search");
+		advancedSearchBtn.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				
+			}
+		});
 
-		table.setStyleName("search_field");
+		// table.setStyleName("left");
+		// table.setStyleName("search_field");
 		
 		final HorizontalPanel buttonPanel = new HorizontalPanel();
-		buttonPanel.setStyleName("search_buttons");
+		buttonPanel.setStyleName("left");
 		buttonPanel.add(searchBtn);
 		buttonPanel.add(clearBtn);
 		buttonPanel.add(markedBtn);
+		buttonPanel.add(advancedSearchBtn);
 
 		panel.add(table);
 		panel.add(buttonPanel);
-		panel.add(new HTML("<div class='clear'></div>"));
 		
 		initWidget(panel);
 	}

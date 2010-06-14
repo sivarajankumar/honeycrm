@@ -4,12 +4,12 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 public class AllTests {
-
 	public static Test suite() {
-		TestSuite suite = new TestSuite("Test for honeycrm.server.test");
+		TestSuite suite = new TestSuite("Server code tests");
 		// $JUnit-BEGIN$
 		suite.addTestSuite(NumberParserTest.class);
 		suite.addTestSuite(CollectionHelperTest.class);
+		suite.addTestSuite(CsvExportTest.class);
 		suite.addTestSuite(DemoDataProviderTest.class);
 		suite.addTestSuite(ObjectCopyTest.class);
 		suite.addTestSuite(DtoSyncTest.class);
@@ -18,5 +18,4 @@ public class AllTests {
 		// $JUnit-END$
 		return suite;
 	}
-
 }
