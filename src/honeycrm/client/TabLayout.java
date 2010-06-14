@@ -10,7 +10,6 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 
-
 public class TabLayout extends Composite implements ValueChangeHandler<String> {
 	private final Header header = new Header();
 	private final TabCenterView center = TabCenterView.instance();
@@ -34,11 +33,15 @@ public class TabLayout extends Composite implements ValueChangeHandler<String> {
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
-
+		
 		if (2 == token.length) {
-			center.showModuleTabWithId(AbstractDto.getViewableForHistoryToken(token[0]).getClass(), Long.valueOf(token[1]));
+			if ("create".equals(token[1])) {
+				center.showCreateViewForModule(AbstractDto.getDtoFromHistoryToken(token[0]).getClass());
+			} else {
+				center.showModuleTabWithId(AbstractDto.getDtoFromHistoryToken(token[0]).getClass(), Long.valueOf(token[1]));
+			}
 		} else if (1 == token.length) {
-			center.showModuleTab(AbstractDto.getViewableForHistoryToken(token[0]).getClass());
+			center.showModuleTab(AbstractDto.getDtoFromHistoryToken(token[0]).getClass());
 		}
 	}
 }

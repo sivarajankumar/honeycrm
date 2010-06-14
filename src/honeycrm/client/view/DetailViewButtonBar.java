@@ -7,9 +7,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-
 public class DetailViewButtonBar extends AbstractView {
-	private Button createBtn = new Button("Create");
 	private Button saveBtn = new Button("Save");
 	private Button cancelBtn = new Button("Cancel");
 	private Button editBtn = new Button("Edit");
@@ -23,18 +21,10 @@ public class DetailViewButtonBar extends AbstractView {
 		this.detailview = detailview;
 
 		final HorizontalPanel panel = new HorizontalPanel();
-		panel.add(createBtn);
 		panel.add(saveBtn);
 		panel.add(cancelBtn);
 		panel.add(editBtn);
 		panel.add(deleteBtn);
-
-		createBtn.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				startCreating();
-			}
-		});
 
 		saveBtn.addClickHandler(new ClickHandler() {
 			@Override
@@ -78,7 +68,6 @@ public class DetailViewButtonBar extends AbstractView {
 	public void startViewing() {
 		detailview.view();
 
-		createBtn.setVisible(true);
 		// only show if detailview is displaying a valid item
 		editBtn.setVisible(detailview.isShowing()); 
 		deleteBtn.setVisible(detailview.isShowing());
@@ -98,7 +87,6 @@ public class DetailViewButtonBar extends AbstractView {
 		saveBtn.setVisible(true);
 		cancelBtn.setVisible(true);
 
-		createBtn.setVisible(false);
 		editBtn.setVisible(false);
 		deleteBtn.setVisible(false);
 		// }
@@ -113,13 +101,10 @@ public class DetailViewButtonBar extends AbstractView {
 
 			editBtn.setVisible(false);
 			deleteBtn.setVisible(false);
-			createBtn.setVisible(false);
 		}
 	}
 
 	public void stopViewing() {
-		createBtn.setVisible(true);
-
 		saveBtn.setVisible(false);
 		cancelBtn.setVisible(false);
 		editBtn.setVisible(false);

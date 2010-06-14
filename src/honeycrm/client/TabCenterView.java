@@ -83,4 +83,8 @@ public class TabCenterView extends DecoratedTabPanel {
 		assert tabPositionMap.containsKey(clazz) && moduleViewMap.containsKey(clazz);
 		selectTab(tabPositionMap.get(clazz));
 	}
+	
+	public void showCreateViewForModule(final Class<? extends AbstractDto> clazz) {
+		moduleViewMap.get(clazz).showCreateView();
+	}
 }

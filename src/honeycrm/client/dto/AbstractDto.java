@@ -137,7 +137,7 @@ public abstract class AbstractDto implements Serializable {
 	 * public static AbstractDto getViewable(final Class<? extends AbstractDto> clazz) { assert map.containsKey(clazz); return map.get(clazz); }
 	 */
 
-	public static AbstractDto getViewableForHistoryToken(final String historyToken) {
+	public static AbstractDto getDtoFromHistoryToken(final String historyToken) {
 		for (final Class<? extends AbstractDto> clazz : map.keySet()) {
 			if (historyToken.equals(map.get(clazz).getHistoryToken())) {
 				return map.get(clazz);
