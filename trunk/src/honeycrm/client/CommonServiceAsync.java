@@ -26,4 +26,5 @@ public interface CommonServiceAsync {
 	void deleteAllItems(AsyncCallback<Void> callback);
 	void wakeupServer(AsyncCallback<Void> callback);
 	void getAllRelated(int originatingDtoIndex, Long id, int relatedDtoIndex, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback);
+	void fulltextSearchForModule(int dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback);
 }

@@ -165,4 +165,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	public ListQueryResult<? extends AbstractDto> getAllRelated(int originatingDtoIndex, Long id, int relatedDtoIndex) {
 		return reader.getAllRelated(originatingDtoIndex, id, relatedDtoIndex);
 	}
+
+	@Override
+	public ListQueryResult<? extends AbstractDto> fulltextSearchForModule(int dtoIndex, String query, int from, int to) {
+		return fulltext.fulltextSearchForModule(dtoIndex, query, from, to);
+	}
 }
