@@ -1,24 +1,66 @@
 package honeycrm.client.view;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import honeycrm.client.FulltextSearchWidget;
+import honeycrm.client.FulltextSuggestOracle;
+import honeycrm.client.IANA;
+import honeycrm.client.LoadIndicator;
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.ListQueryResult;
 
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.TextBox;
-
-public class ModuleFulltextWidget extends AbstractView {
+public class ModuleFulltextWidget extends FulltextSearchWidget {
+	private final Class<? extends AbstractDto> dtoClazz;
+	
 	public ModuleFulltextWidget(final Class<? extends AbstractDto> clazz) {
-		super(clazz);
-		
-		final TextBox box = new TextBox();
-		box.setWidth("400px");
+		super();
+		this.dtoClazz = clazz;
+	}
+	
+	@Override
+	protected void startFulltextSearch(String queryString) {
+		LoadIndicator.get().startLoading();
 
-		final Panel panel = new FlowPanel();
-		panel.setStyleName("left");
-		panel.add(box);
-		panel.add(new Button("Advanced Search"));
+		commonService.fulltextSearchForModule(IANA.mashal(dtoClazz), queryString, 0, 10, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+			@Override
+			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+				LoadIndicator.get().endLoading();
 
-		initWidget(panel);
+				if (null != result && result.getItemCount() > 0) {
+					final FulltextSuggestOracle o = emptySuggestOracle();
+					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
+
+					for (final AbstractDto a : result.getResults()) {
+						String label = a.getQuicksearchItem();
+
+						if (quicksearchLabels.containsKey(label)) {
+							quicksearchLabels.put(label, quicksearchLabels.get(label) + 1);
+							// add a counter for this label since it is not unique
+							label = label + " (" + quicksearchLabels.get(label) + ")";
+						} else {
+							quicksearchLabels.put(label, 1);
+						}
+
+						// insert this label into the name to id translation map to make sure that
+						// later the id can be determined by looking up the name in this map.
+						nameToDto.put(label, a);
+
+						o.add(label);
+					}
+
+					showSuggestionList();
+				}
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				LoadIndicator.get().endLoading();
+				Window.alert("fulltext search failed");
+			}
+		});
 	}
 }

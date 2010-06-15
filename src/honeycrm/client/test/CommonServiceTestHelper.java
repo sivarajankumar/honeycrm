@@ -109,4 +109,10 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 		
 	}
 
+	@Override
+	public void fulltextSearchForModule(int dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -23,6 +23,7 @@ public interface CommonService extends RemoteService {
 	public ListQueryResult<? extends AbstractDto> search(int dtoIndex, AbstractDto searchContact, int from, int to);
 	public ListQueryResult<? extends AbstractDto> fulltextSearch(String query, int from, int to);
 	public ListQueryResult<? extends AbstractDto> getAllRelated(final int originatingDtoIndex, final Long id, final int relatedDtoIndex);
+	public ListQueryResult<? extends AbstractDto> fulltextSearchForModule(final int dtoIndex, String query, int from, int to);
 	
 	// update
 	public void update(int dtoIndex, AbstractDto account, long id);

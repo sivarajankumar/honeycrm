@@ -94,6 +94,11 @@ body {
 	width: 400px; /* make this very big to assure it dominates the ui: users should encouraged to use this a lot */
 }
 
+/* everything that should be aligned to the left */
+.left {
+	float: left;
+}
+
 /* VIEWS */
 
 .detail_view {

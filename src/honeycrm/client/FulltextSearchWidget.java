@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public class FulltextSearchWidget extends SuggestBox {
 	public static final int MIN_QUERY_LENGTH = 3;
-	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
-	private String lastQueryString;
-	private final Map<String, AbstractDto> nameToDto = new HashMap<String, AbstractDto>();
+	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
+	protected String lastQueryString;
+	protected final Map<String, AbstractDto> nameToDto = new HashMap<String, AbstractDto>();
 
 	public FulltextSearchWidget() {
 		super(new FulltextSuggestOracle());
@@ -54,7 +54,7 @@ public class FulltextSearchWidget extends SuggestBox {
 		});
 	}
 
-	private void redirectToDetailView(SelectionEvent<Suggestion> event) {
+	protected void redirectToDetailView(SelectionEvent<Suggestion> event) {
 		final String label = event.getSelectedItem().getReplacementString();
 
 		if (nameToDto.containsKey(label)) {
@@ -66,7 +66,7 @@ public class FulltextSearchWidget extends SuggestBox {
 		}
 	}
 	
-	private void startFulltextSearch(final String queryString) {
+	protected void startFulltextSearch(final String queryString) {
 		LoadIndicator.get().startLoading();
 
 		commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
@@ -111,7 +111,7 @@ public class FulltextSearchWidget extends SuggestBox {
 	/**
 	 * Empty the current suggestion oracle and return it.
 	 */
-	private FulltextSuggestOracle emptySuggestOracle() {
+	protected FulltextSuggestOracle emptySuggestOracle() {
 		final FulltextSuggestOracle o = (FulltextSuggestOracle) getSuggestOracle();
 		// final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
 		o.clear();
