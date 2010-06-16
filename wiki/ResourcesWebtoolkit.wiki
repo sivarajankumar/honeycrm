@@ -1,3 +1,4 @@
 #summary some resources about google web toolkit
 
 || google i/o 2010 video about ui overhaul ||  http://www.youtube.com/watch?v=g2XclEOJdIc&playnext_from=TL&videos=3iOGbt6Y2as ||
+|| google i/i 2010 webtoolkit and html 5 || http://www.youtube.com/watch?v=aW--Wlf9EFs&feature=channel ||
