@@ -8,6 +8,7 @@ import honeycrm.client.view.SearchableListView;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TabModuleView extends AbstractView {
@@ -27,7 +28,7 @@ public class TabModuleView extends AbstractView {
 		final FlowPanel viewPanel = new FlowPanel();
 		viewPanel.setStyleName("detail_view");
 		viewPanel.add(new HTML("<div class='view_header_label'>Detail View</div>"));
-		viewPanel.add(detailView);
+		viewPanel.add(new ScrollPanel(detailView));
 
 		final VerticalPanel listPanel = new VerticalPanel();
 		listPanel.setStyleName("list_view");

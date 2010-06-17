@@ -7,27 +7,24 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 
-public class TabLayout extends Composite implements ValueChangeHandler<String> {
+public class TabLayout extends DockLayoutPanel implements ValueChangeHandler<String> {
 	private final Header header = new Header();
 	private final TabCenterView center = TabCenterView.instance();
 
 	public TabLayout() {
-		DockLayoutPanel panel = new DockLayoutPanel(Unit.PX);
-		panel.setStyleName("body");
+		super(Unit.PX);
+		setStyleName("body");
 		center.setStyleName("tab_layout");
 
-		panel.addNorth(header, 40);
-		panel.add(center);
+		addNorth(header, 40);
+		add(center);
 
 		History.addValueChangeHandler(this);
 		History.fireCurrentHistoryState();
 
 		LogConsole.log("created layout");
-
-		initWidget(panel);
 	}
 
 	@Override

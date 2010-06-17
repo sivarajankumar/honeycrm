@@ -6,7 +6,6 @@ import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;

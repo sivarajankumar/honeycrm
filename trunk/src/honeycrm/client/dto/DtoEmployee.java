@@ -7,6 +7,8 @@ public class DtoEmployee extends AbstractDto {
 	private static final long serialVersionUID = -2906735286411254274L;
 	private String name;
 	private boolean active;
+	// @RelatesTo(DtoEmployee.class)
+	// private long reportsToId;
 
 	public static final int INDEX_NAME = 1;
 	public static final int INDEX_ACTIVE = 2;

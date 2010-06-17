@@ -2,8 +2,10 @@ package honeycrm.client.test;
 
 import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.DtoContact;
 import honeycrm.client.dto.ListQueryResult;
 
+import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -111,6 +113,18 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 
 	@Override
 	public void fulltextSearchForModule(int dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void importContacts(List<DtoContact> contacts, AsyncCallback<Void> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void feedback(String message, AsyncCallback<Void> callback) {
 		// TODO Auto-generated method stub
 		
 	}
