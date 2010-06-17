@@ -1,17 +1,17 @@
 package honeycrm.client.view;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import honeycrm.client.FulltextSearchWidget;
 import honeycrm.client.FulltextSuggestOracle;
 import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.ListQueryResult;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ModuleFulltextWidget extends FulltextSearchWidget {
 	private final Class<? extends AbstractDto> dtoClazz;

@@ -1,12 +1,15 @@
 package honeycrm.server;
 
 import honeycrm.client.CommonService;
+import honeycrm.client.IANA;
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.DtoContact;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -22,7 +25,8 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final CommonServiceCreator creator = new CommonServiceCreator();
 	private static final CommonServiceReader reader = new CommonServiceReader();
 	private static final CommonServiceReaderFulltext fulltext = new CommonServiceReaderFulltext();
-
+	private static final CommonServiceEmail email = new CommonServiceEmail();
+	
 	@Override
 	public long create(int dtoIndex, AbstractDto dto) {
 		return creator.create(dtoIndex, dto);
@@ -169,5 +173,23 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public ListQueryResult<? extends AbstractDto> fulltextSearchForModule(int dtoIndex, String query, int from, int to) {
 		return fulltext.fulltextSearchForModule(dtoIndex, query, from, to);
+	}
+
+	@Override
+	public void importContacts(List<DtoContact> contacts) {
+		log.info("Starting importing " + contacts.size() + " contacts");
+		
+		int done = 0;
+		for (final DtoContact contact: contacts) {
+			create(IANA.mashal(DtoContact.class), contact);
+			log.fine("Created " + (++done) + " contact(s)");
+		}
+		
+		log.fine("Finished importing " + contacts.size() + " contacts");
+	}
+
+	@Override
+	public void feedback(String message) {
+		email.feedback(message);
 	}
 }

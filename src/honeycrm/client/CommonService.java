@@ -1,8 +1,10 @@
 package honeycrm.client;
 
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.DtoContact;
 import honeycrm.client.dto.ListQueryResult;
 
+import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -38,4 +40,10 @@ public interface CommonService extends RemoteService {
 
 	// misc
 	public void wakeupServer();
+	
+	// import operations
+	public void importContacts(final List<DtoContact> contacts);
+	
+	// email
+	public void feedback(final String message);
 }

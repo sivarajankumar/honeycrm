@@ -3,6 +3,7 @@ package honeycrm.client;
 import honeycrm.client.admin.AdminWidget;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.view.EmailFeedbackWidget;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class TabCenterView extends DecoratedTabPanel {
 		}
 
 		add(new AdminWidget(), "Admin");
+		add(new EmailFeedbackWidget(), "Feedback");
 
 		addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override

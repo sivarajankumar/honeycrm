@@ -1,8 +1,10 @@
 package honeycrm.client;
 
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.DtoContact;
 import honeycrm.client.dto.ListQueryResult;
 
+import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,4 +29,6 @@ public interface CommonServiceAsync {
 	void wakeupServer(AsyncCallback<Void> callback);
 	void getAllRelated(int originatingDtoIndex, Long id, int relatedDtoIndex, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback);
 	void fulltextSearchForModule(int dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult<? extends AbstractDto>> callback);
+	void importContacts(List<DtoContact> contacts, AsyncCallback<Void> callback);
+	void feedback(String message, AsyncCallback<Void> callback);
 }

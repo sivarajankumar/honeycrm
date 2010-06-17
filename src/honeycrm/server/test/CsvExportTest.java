@@ -1,8 +1,9 @@
 package honeycrm.server.test;
 
+import honeycrm.client.csv.AbstractCsv;
+import honeycrm.client.csv.CsvExporter;
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.DtoContact;
-import honeycrm.client.export.CsvExporter;
 import honeycrm.client.misc.CollectionHelper;
 
 import java.util.LinkedList;
@@ -22,15 +23,15 @@ public class CsvExportTest extends TestCase {
 
 		assertNotNull(csv);
 
-		final String[] lines = csv.split(CsvExporter.LINE_SEP);
+		final String[] lines = csv.split(AbstractCsv.LINE_SEP);
 		assertEquals(list.size(), lines.length);
 
 		for (int i = 0; i < lines.length; i++) {
-			final String[] cols = lines[i].split(CsvExporter.COL_SEP);
+			final String[] cols = lines[i].split(AbstractCsv.COL_SEP);
 			assertTrue(cols.length > 1);
 
 			final Set<String> colSet = CollectionHelper.toSet(cols);
-			assertTrue(colSet.contains(CsvExporter.FIELD_DEL + "Foo" + CsvExporter.FIELD_DEL) || colSet.contains(CsvExporter.FIELD_DEL + "Bar" + CsvExporter.FIELD_DEL));
+			assertTrue(colSet.contains(AbstractCsv.FIELD_DEL + "Foo" + AbstractCsv.FIELD_DEL) || colSet.contains(AbstractCsv.FIELD_DEL + "Bar" + AbstractCsv.FIELD_DEL));
 		}
 	}
 }
