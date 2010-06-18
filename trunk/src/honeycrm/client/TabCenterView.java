@@ -12,6 +12,7 @@ import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 
 // TODO update history token when a new tab is selected
@@ -42,11 +43,12 @@ public class TabCenterView extends DecoratedTabPanel {
 		for (final Class<? extends AbstractDto> clazz : DtoRegistry.instance.getAllDtoClasses()) {
 			final AbstractDto dto = DtoRegistry.instance.getDto(clazz);
 			final TabModuleView view = new TabModuleView(clazz);
-
+			view.setSize("100%", "100%");
+			
 			moduleViewMap.put(clazz, view);
 			tabPositionMap.put(clazz, tabPos);
 			tabPositionMapReverse.put(tabPos++, dto);
-			add(view, dto.getTitle() + "s");
+			add(new ScrollPanel(view), dto.getTitle() + "s");
 		}
 
 		add(new AdminWidget(), "Admin");
