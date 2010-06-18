@@ -22,8 +22,8 @@ public class FieldBoolean extends AbstractField {
 	@Override
 	protected Widget internalGetDetailWidget(Object value) {
 		CheckBox widget7 = new CheckBox();
-		widget7.setEnabled(false);
 		widget7.setValue((Boolean) value);
+		widget7.setEnabled(false);
 		return widget7;
 	}
 
