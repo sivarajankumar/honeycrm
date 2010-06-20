@@ -11,6 +11,7 @@ public class AllTests {
 		suite.addTestSuite(CollectionHelperTest.class);
 		suite.addTestSuite(CsvExportTest.class);
 		suite.addTestSuite(CsvImportTest.class);
+		suite.addTestSuite(OfferingReportsTest.class);
 		suite.addTestSuite(DemoDataProviderTest.class);
 		suite.addTestSuite(ObjectCopyTest.class);
 		suite.addTestSuite(DtoSyncTest.class);

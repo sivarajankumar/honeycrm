@@ -5,6 +5,7 @@ import honeycrm.client.dto.DtoContact;
 import honeycrm.client.dto.ListQueryResult;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -46,4 +47,7 @@ public interface CommonService extends RemoteService {
 	
 	// email
 	public void feedback(final String message);
+	
+	// reports
+	public Map<Integer, Double> getAnnuallyOfferingVolumes();
 }

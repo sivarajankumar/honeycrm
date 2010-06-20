@@ -28,6 +28,8 @@ import com.google.gwt.user.client.ui.Widget;
 // the background (polling)
 // TODO update item count periodically
 public class ListView extends AbstractView {
+	private boolean initialized = false;
+	
 	/**
 	 * Map pages to listviewable arrays.
 	 */
@@ -75,7 +77,8 @@ public class ListView extends AbstractView {
 		// initialize the leading columns
 		table.setWidget(0, 0, deletePanel = new ListViewDeletionPanel(clazz, this));
 
-		refresh();
+		// do not refresh within the constructor -> this generates too much load during login
+		// refresh();
 
 		initWidget(panel);
 	}
@@ -179,6 +182,8 @@ public class ListView extends AbstractView {
 	}
 
 	private void refreshPage(final int page) {
+		initialized = true; // set this to true when a page has been refreshed for the first time
+		
 		final int offset = getOffsetForPage(page);
 
 		assert 0 <= offset;
@@ -250,5 +255,9 @@ public class ListView extends AbstractView {
 
 	public void deleteAll() {
 		deletePanel.deleteAll();
+	}
+	
+	public boolean isInitialized() {
+		return initialized;
 	}
 }
