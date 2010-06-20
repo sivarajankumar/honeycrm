@@ -57,7 +57,12 @@ public class TabCenterView extends DecoratedTabPanel {
 			tabPositionMap.put(clazz, tabPos);
 			tabPositionMapReverse.put(tabPos++, dto);
 			
-			add(new ScrollPanel(view), dto.getTitle() + "s");
+			// TODO do not encapsulate view within ScrollPanel since it does not have the desired effect and messes up the layout.
+			// TODO nevertheless, we need scrolling within the tabs.
+			// final ScrollPanel scroll = new ScrollPanel(view);
+			// scroll.setStyleName("tab_content");
+			
+			add((view), dto.getTitle() + "s");
 		}
 
 		add(new AdminWidget(), "Admin");
