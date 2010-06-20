@@ -51,7 +51,7 @@ public class TabCenterView extends DecoratedTabPanel {
 			if (0 == tabPos) 
 				view.refreshListView();
 			
-			view.setSize("800px", "400px");
+			// view.setSize("800px", "400px");
 			
 			moduleViewMap.put(clazz, view);
 			tabPositionMap.put(clazz, tabPos);

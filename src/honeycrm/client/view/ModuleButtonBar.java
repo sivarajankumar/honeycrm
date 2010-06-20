@@ -41,6 +41,8 @@ public class ModuleButtonBar extends AbstractView {
 			@Override
 			public void onClick(ClickEvent event) {
 				History.newItem(dto.getHistoryToken() + " create");
+				// we have to fire the history state, too. otherwise nothing will happen if we are still at the same url. this happens if you create to items in a row.
+				History.fireCurrentHistoryState();
 			}
 		});
 
