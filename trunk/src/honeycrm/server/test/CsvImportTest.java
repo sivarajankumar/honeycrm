@@ -22,5 +22,9 @@ public class CsvImportTest extends TestCase {
 		
 		assertNotNull(list);
 		assertEquals(6, list.size());
+		
+		list.get(0).getName().equals("Irma Bustillos");
+		list.get(0).getEmail().equals("vegan.vegan.vegan@example.tw");
+		list.get(5).getName().equals("Jerrell Lachance");
 	}
 }
