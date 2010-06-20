@@ -12,6 +12,7 @@ public class FieldText extends AbstractField {
 
 	public FieldText(final int index, final String label) {
 		super(index, label);
+		this.width = 200;
 	}
 
 	@Override
