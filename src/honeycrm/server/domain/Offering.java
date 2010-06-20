@@ -44,4 +44,15 @@ public class Offering extends AbstractEntity {
 	public void setContactId(Long contactId) {
 		this.contactId = contactId;
 	}
+
+	/**
+	 * Calculate the sum of all services.
+	 */
+	public Double getCosts() {
+		Double costs = 0.0;
+		for (final Service s : services) {
+			costs += (s.getPrice() - s.getDiscount()) * s.getQuantity();
+		}
+		return costs;
+	}
 }

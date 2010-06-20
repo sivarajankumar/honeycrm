@@ -4,6 +4,8 @@
   <inherits name='com.google.gwt.user.User' />
   <!-- for testing client side code -->
   <inherits name='com.google.gwt.junit.JUnit' />
+  
+  <inherits name='com.google.gwt.visualization.Visualization'/>
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->

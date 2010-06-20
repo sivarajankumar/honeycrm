@@ -1,10 +1,11 @@
 package honeycrm.client.dto;
 
 import honeycrm.client.DtoRegistry;
+import honeycrm.client.IANA;
 import honeycrm.client.field.AbstractField;
-import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldDate;
 import honeycrm.client.field.FieldInteger;
+import honeycrm.client.field.FieldMark;
 import honeycrm.client.misc.CollectionHelper;
 
 import java.io.Serializable;
@@ -37,7 +38,7 @@ public abstract class AbstractDto implements Serializable {
 		fields.add(new FieldInteger(INDEX_VIEWS, "Views"));
 		fields.add(new FieldDate(INDEX_CREATEDAT, "Created at"));
 		fields.add(new FieldDate(INDEX_LASTUPDATEDAT, "Last updated at"));
-		fields.add(new FieldBoolean(INDEX_MARKED, "Marked"));
+		fields.add(new FieldMark(INDEX_MARKED, "Marked", IANA.mashal(this.getClass()), id));
 		// TODO make it possible to show an empty label without destroying the css
 	}
 

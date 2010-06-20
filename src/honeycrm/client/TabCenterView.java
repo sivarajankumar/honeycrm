@@ -3,6 +3,7 @@ package honeycrm.client;
 import honeycrm.client.admin.AdminWidget;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.reports.SampleReport;
 import honeycrm.client.view.EmailFeedbackWidget;
 
 import java.util.HashMap;
@@ -40,19 +41,28 @@ public class TabCenterView extends DecoratedTabPanel {
 	private TabCenterView() {
 		int tabPos = 0;
 		
+		// this.setSize("640px", "300px");
+		
 		for (final Class<? extends AbstractDto> clazz : DtoRegistry.instance.getAllDtoClasses()) {
 			final AbstractDto dto = DtoRegistry.instance.getDto(clazz);
 			final TabModuleView view = new TabModuleView(clazz);
-			view.setSize("100%", "100%");
+
+			// refresh list view only for the first tab (which is the only visible tab at the beginning)
+			if (0 == tabPos) 
+				view.refreshListView();
+			
+			view.setSize("800px", "400px");
 			
 			moduleViewMap.put(clazz, view);
 			tabPositionMap.put(clazz, tabPos);
 			tabPositionMapReverse.put(tabPos++, dto);
+			
 			add(new ScrollPanel(view), dto.getTitle() + "s");
 		}
 
 		add(new AdminWidget(), "Admin");
 		add(new EmailFeedbackWidget(), "Feedback");
+		add(new SampleReport(), "Reports");
 
 		addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override
@@ -85,6 +95,9 @@ public class TabCenterView extends DecoratedTabPanel {
 
 	public void showModuleTab(Class<? extends AbstractDto> clazz) {
 		assert tabPositionMap.containsKey(clazz) && moduleViewMap.containsKey(clazz);
+		if (!moduleViewMap.get(clazz).isListViewInitialized()) {
+			moduleViewMap.get(clazz).refreshListView(); 
+		}
 		selectTab(tabPositionMap.get(clazz));
 	}
 	

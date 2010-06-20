@@ -68,4 +68,8 @@ public class TabModuleView extends AbstractView {
 	public void showCreateView() {
 		detailView.getButtonBar().startCreating();
 	}
+	
+	public boolean isListViewInitialized() {
+		return listView.isInitialized();
+	}
 }

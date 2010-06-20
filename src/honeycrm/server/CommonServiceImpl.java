@@ -10,6 +10,7 @@ import honeycrm.server.domain.AbstractEntity;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -26,6 +27,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final CommonServiceReader reader = new CommonServiceReader();
 	private static final CommonServiceReaderFulltext fulltext = new CommonServiceReaderFulltext();
 	private static final CommonServiceEmail email = new CommonServiceEmail();
+	private static final CommonServiceReporter reporter = new CommonServiceReporter();
 	
 	@Override
 	public long create(int dtoIndex, AbstractDto dto) {
@@ -136,8 +138,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void deleteAll(int dtoIndex) {
 		final Query q = m.newQuery(getDomainClass(dtoIndex));
-		final Collection collection = (Collection) q.execute();
-		m.deletePersistentAll(collection);
+		m.deletePersistentAll((Collection) q.execute());
 	}
 
 	@Override
@@ -145,10 +146,12 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		log.info("Deleting all items..");
 		for (final Class<? extends AbstractEntity> entityClass : registry.getDomainClasses()) {
 			try {
-				for (final AbstractEntity entity : (Collection<? extends AbstractEntity>) m.newQuery(entityClass).execute()) {
+				m.deletePersistentAll((Collection) m.newQuery(entityClass).execute());
+				/*for (final AbstractEntity entity : ) {
 					m.deletePersistent(entity);
-				}
+				}*/
 			} catch (NullPointerException e) {
+				log.warning("A NullPointerException occured during the deletion of all entities");
 				e.printStackTrace();
 			}
 		}
@@ -191,5 +194,10 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void feedback(String message) {
 		email.feedback(message);
+	}
+	
+	@Override
+	public Map<Integer, Double> getAnnuallyOfferingVolumes() {
+		return reporter.getAnnuallyOfferingVolumes();
 	}
 }
