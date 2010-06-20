@@ -17,7 +17,6 @@ import java.util.Set;
 
 import javax.jdo.Query;
 
-
 /**
  * Is part of the database layer.
  */
@@ -66,6 +65,11 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	protected ListQueryResult<? extends AbstractDto> searchWithOperator(int dtoIndex, AbstractDto searchDto, int from, int to, final BoolOperator operator) {
+		if (null == searchDto)
+			// cannot do a proper search, do a getAll query instead
+			// however, the question remains why we received a searchDto which is null..
+			return getAll(dtoIndex, from, to);
+
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
 		final List<String> queries = new LinkedList<String>();
@@ -141,22 +145,17 @@ public class CommonServiceReader extends AbstractCommonService {
 	// TODO do not implement fulltext search using compass / lucene until it runs when deployed in
 	// app engine
 	/*
-	 * public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from,
-	 * int to) { final ListQueryResult<AbstractDto> result = new ListQueryResult<AbstractDto>();
+	 * public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from, int to) { final ListQueryResult<AbstractDto> result = new ListQueryResult<AbstractDto>();
 	 * 
-	 * if (null != query && query.length() > FulltextSearchWidget.MIN_QUERY_LENGTH) {
-	 * System.out.println("searching for '" + query + "'");
+	 * if (null != query && query.length() > FulltextSearchWidget.MIN_QUERY_LENGTH) { System.out.println("searching for '" + query + "'");
 	 * 
-	 * final CompassSearchSession session = PMF.compass().openSearchSession(); CompassHits hits =
-	 * session.find(query);
+	 * final CompassSearchSession session = PMF.compass().openSearchSession(); CompassHits hits = session.find(query);
 	 * 
-	 * log.info("got " + hits.getLength() + " results"); System.out.println("got " +
-	 * hits.getLength() + " results");
+	 * log.info("got " + hits.getLength() + " results"); System.out.println("got " + hits.getLength() + " results");
 	 * 
 	 * if (0 < hits.getLength()) { final AbstractDto[] dtos = new AbstractDto[hits.getLength()];
 	 * 
-	 * for (int i=0; i<hits.getLength(); i++) { final CompassHit hit = hits.hit(i); dtos[i] =
-	 * (AbstractDto) copy.copy(hit.getData(), domainClassToDto.get(hit.getData().getClass())); }
+	 * for (int i=0; i<hits.getLength(); i++) { final CompassHit hit = hits.hit(i); dtos[i] = (AbstractDto) copy.copy(hit.getData(), domainClassToDto.get(hit.getData().getClass())); }
 	 * 
 	 * session.close(); return new ListQueryResult<AbstractDto>(dtos, dtos.length); }
 	 * 
@@ -179,9 +178,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		final Set<AbstractEntity> result = new HashSet<AbstractEntity>();
 
 		/**
-		 * Get all related entities where the id fields contain the id of the originating entity
-		 * e.g. return all contacts which have accountID == 23 where is the id of the originating
-		 * account.
+		 * Get all related entities where the id fields contain the id of the originating entity e.g. return all contacts which have accountID == 23 where is the id of the originating account.
 		 */
 		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(IANA.unmarshal(originatingDtoIndex), IANA.unmarshal(relatedDtoIndex))) {
 			final Query q = m.newQuery(getDomainClass(originatingDtoIndex));
