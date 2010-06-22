@@ -36,6 +36,8 @@ public class RelationshipsContainer extends Composite {
 // e.g. if we want to display all contacts for account 23. how to we know in client side code that
 // we have to search for all contacts with accountId = 23? currently this is only known on server
 // side since there the RelatesTo annotation is read using reflection
+
+// TODO use prefetcher here too
 class SingleRelationshipPanel extends Composite {
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	private final Class<? extends AbstractDto> originatingDtoClass;

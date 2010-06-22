@@ -5,6 +5,8 @@ import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.prefetch.Prefetcher;
+import honeycrm.client.prefetch.PrefetcherCallback;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -15,7 +17,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
-
 
 public class RelateWidget extends SuggestBox {
 	private long id;
@@ -37,23 +38,10 @@ public class RelateWidget extends SuggestBox {
 
 	private void setValueForId(final long id) {
 		LoadIndicator.get().startLoading();
-
-		commonService.get(marshalledClass, id, new AsyncCallback<AbstractDto>() {
+		Prefetcher.instance.get(marshalledClass, id, new PrefetcherCallback() {
 			@Override
-			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
-				setValue("Loading failed");
-			}
-
-			@Override
-			public void onSuccess(AbstractDto result) {
-				LoadIndicator.get().endLoading();
-
-				if (null == result) {
-					setValue("Not found");
-				} else {
-					setValue(result.getQuicksearchItem());
-				}
+			public void setValueDeferred(String name) {
+				setValue(name);
 			}
 		});
 	}

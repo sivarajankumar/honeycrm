@@ -2,13 +2,11 @@ package honeycrm.client.field;
 
 import honeycrm.client.DtoRegistry;
 import honeycrm.client.IANA;
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.prefetch.Prefetcher;
+import honeycrm.client.prefetch.PrefetcherCallback;
 import honeycrm.client.view.RelateWidget;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -44,30 +42,13 @@ public class FieldRelate extends AbstractField {
 			// widget
 			final AbstractDto relatedViewable = DtoRegistry.instance.getDto(IANA.unmarshal(getRelatedClazz()));
 			final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
-
-			// TODO integrate service
-			LoadIndicator.get().startLoading();
-			ServiceRegistry.commonService().get(getRelatedClazz(), (Long) value, new AsyncCallback<AbstractDto>() {
+			Prefetcher.instance.get(getRelatedClazz(), (Long) value, new PrefetcherCallback() {
 				@Override
-				public void onFailure(Throwable caught) {
-					LoadIndicator.get().endLoading();
-					Window.alert("Could not find account with id " + value);
-					link.setText("Not Found");
-				}
-
-				@Override
-				public void onSuccess(AbstractDto result) {
-					LoadIndicator.get().endLoading();
-
-					if (null == result) {
-						// assume no related entity has been selected
-						link.setText("");
-					} else {
-						link.setText(result.getQuicksearchItem());
-					}
+				public void setValueDeferred(String name) {
+					link.setText(name);
 				}
 			});
-
+			
 			return link;
 		}
 	}
