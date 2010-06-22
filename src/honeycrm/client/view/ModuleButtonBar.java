@@ -19,7 +19,6 @@ public class ModuleButtonBar extends AbstractView {
 
 		final FlowPanel panel = new FlowPanel();
 		panel.setStyleName("search_bar");
-		panel.add(getCreateButton());
 		panel.add(new ModuleFulltextWidget(dtoClazz));
 		panel.add(getAdvancedSearchButton());
 		panel.add(new ModuleExportButtonBar(dtoClazz));
@@ -33,20 +32,5 @@ public class ModuleButtonBar extends AbstractView {
 		final Button button = new Button("Advanced Search");
 		button.setStyleName("gwt-Button left");
 		return button;
-	}
-
-	private Button getCreateButton() {
-		final Button createBtn = new Button("Create");
-		createBtn.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(dto.getHistoryToken() + " create");
-				// we have to fire the history state, too. otherwise nothing will happen if we are still at the same url. this happens if you create to items in a row.
-				History.fireCurrentHistoryState();
-			}
-		});
-
-		createBtn.setStyleName("gwt-Button left");
-		return createBtn;
 	}
 }

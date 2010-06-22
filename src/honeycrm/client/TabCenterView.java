@@ -9,11 +9,15 @@ import honeycrm.client.view.EmailFeedbackWidget;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 
 
 // TODO update history token when a new tab is selected
@@ -33,7 +37,8 @@ public class TabCenterView extends DecoratedTabPanel {
 	 * tabPositionMapReverse stores instances of Viewable instead storing classes.
 	 */
 	private final Map<Integer, AbstractDto> tabPositionMapReverse = new HashMap<Integer, AbstractDto>();
-
+	private final Map<Integer, Button> tabPosToCreateBtnMap = new HashMap<Integer, Button>();
+	
 	public static TabCenterView instance() {
 		return instance;
 	}
@@ -62,7 +67,56 @@ public class TabCenterView extends DecoratedTabPanel {
 			// final ScrollPanel scroll = new ScrollPanel(view);
 			// scroll.setStyleName("tab_content");
 			
-			add((view), dto.getTitle() + "s");
+			final Button createBtn = new Button("Create");
+			createBtn.setVisible(false);
+			createBtn.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					view.showCreateView();
+				}
+			});/*
+			createBtn.addMouseOverHandler(new MouseOverHandler() {
+				@Override
+				public void onMouseOver(MouseOverEvent event) {
+					setVisible(true);
+				}
+			});*/
+
+			tabPosToCreateBtnMap.put(tabPos-1, createBtn);
+			
+			final Label moduleTitle = new Label(dto.getTitle() + "s");
+/*			moduleTitle.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					createBtn.setVisible(true);
+				}
+			});
+			moduleTitle.addMouseOverHandler(new MouseOverHandler() {
+				@Override
+				public void onMouseOver(MouseOverEvent event) {	
+					createBtn.setVisible(true);
+				}
+			});
+			moduleTitle.addMouseOutHandler(new MouseOutHandler() {
+				@Override
+				public void onMouseOut(MouseOutEvent event) {
+					createBtn.setVisible(false);
+				}
+			});*/
+			
+			final HorizontalPanel titlePanel = new HorizontalPanel();
+			titlePanel.add(moduleTitle);
+			titlePanel.add(createBtn);
+			
+			
+/*			moduleTitle.addMouseOutHandler(new MouseOutHandler() {
+				@Override
+				public void onMouseOut(MouseOutEvent event) {
+					createBtn.setVisible(false);
+				}
+			});
+		*/	
+			add((view), titlePanel);
 		}
 
 		add(new AdminWidget(), "Admin");
@@ -72,6 +126,15 @@ public class TabCenterView extends DecoratedTabPanel {
 		addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override
 			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+				// hide all create buttons
+				for (final Integer pos: tabPosToCreateBtnMap.keySet()) {
+					tabPosToCreateBtnMap.get(pos).setVisible(false);
+				}
+				if (tabPosToCreateBtnMap.containsKey(event.getItem())) {
+					// show create button for currently selected tab
+					tabPosToCreateBtnMap.get(event.getItem()).setVisible(true);
+				}
+				
 				if (tabPositionMapReverse.containsKey(event.getItem())) {
 					// add the history token for the module stored in this tab
 					History.newItem(tabPositionMapReverse.get(event.getItem()).getHistoryToken());
