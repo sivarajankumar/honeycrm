@@ -21,12 +21,13 @@ public class Prefetcher {
 
 		final CacheEntry entry = cache.get(key);
 
+		entry.getCallbacks().add(callback);
+		
 		if (entry.isLocked()) {
 			// this entry is currently retrieved from the server.
 			// do nothing just add the client to the callbacks for this cache entry.
-			entry.getCallbacks().add(callback);
 		} else {
-			if (entry.isEmpty()) {
+			if (entry.isEmpty() || entry.isOutOfDate()) {
 				// entry is not locked but is still empty.
 				// so we are the first who want to access the field. lock the entry and request data from server.
 				misses++;
