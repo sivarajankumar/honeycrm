@@ -72,7 +72,7 @@ public class FieldRelate extends AbstractField {
 						}
 					});
 				}
-			}, getRelatedClazz(), value);
+			}, 60 * 1000, getRelatedClazz(), value);
 
 			return link;
 		}

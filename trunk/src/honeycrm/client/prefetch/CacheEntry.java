@@ -8,14 +8,20 @@ public class CacheEntry implements Serializable {
 	/**
 	 * Number of milliseconds the cached values are marked as valid i.e. not out dated.
 	 */
-	private static final int CACHE_TIME = 3 * 1000;
+	private static final int DEFAULT_TIMEOUT = 30 * 1000;
 	private static final long serialVersionUID = 5590996936325404685L;
 	private boolean locked;
 	private Object value;
 	private long timestamp;
+	private final long timeout;
 	private List<Consumer> callbacks = new LinkedList<Consumer>();
 
 	public CacheEntry() {
+		this.timeout = DEFAULT_TIMEOUT;
+	}
+	
+	public CacheEntry(long timeout) {
+		this.timeout = timeout;
 	}
 	
 	public List<Consumer> getCallbacks() {
@@ -51,6 +57,6 @@ public class CacheEntry implements Serializable {
 	 * returns true of the cache entry is too old. false otherwise.
 	 */
 	public boolean isOutOfDate() {
-		return System.currentTimeMillis() - timestamp > CACHE_TIME;
+		return System.currentTimeMillis() - timestamp > timeout;
 	}
 }

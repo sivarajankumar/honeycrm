@@ -12,11 +12,11 @@ public class Prefetcher {
 	private Prefetcher() {
 	}
 
-	public <T> void get(final Consumer<T> callback, final ServerCallback<T> serverCallback, final Object...parameters) {
+	public <T> void get(final Consumer<T> callback, final ServerCallback<T> serverCallback, final long timeout, final Object...parameters) {
 		final CacheKey key = new CacheKey(parameters);
 
 		if (!cache.containsKey(key)) {
-			cache.put(key, new CacheEntry());
+			cache.put(key, new CacheEntry(timeout));
 		}
 
 		final CacheEntry entry = cache.get(key);
@@ -55,5 +55,13 @@ public class Prefetcher {
 				hits++;
 			}
 		}
+	}
+
+	public long getHits() {
+		return hits;
+	}
+
+	public long getMisses() {
+		return misses;
 	}
 }
