@@ -26,12 +26,12 @@ public class RelationshipsContainer extends Composite {
 
 	public void refresh(final Long relatedId) {
 		clear();
-		
+
 		for (final Class<? extends AbstractDto> originalDtoClass : DtoRegistry.instance.getAllDtoClasses()) {
 			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, relatedDtoClass));
 		}
 	}
-	
+
 	/**
 	 * Visually throw away all panels.
 	 */
@@ -60,7 +60,7 @@ class SingleRelationshipPanel extends Composite {
 		this.id = id;
 
 		initWidget(table);
-		
+
 		refresh();
 	}
 
@@ -89,7 +89,7 @@ class SingleRelationshipPanel extends Composite {
 					}
 				});
 			}
-		}, IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass));
+		}, 5 * 1000, IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass));
 	}
 
 	private void insertRelatedDtos(ListQueryResult<? extends AbstractDto> result) {

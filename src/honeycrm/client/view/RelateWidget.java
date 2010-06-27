@@ -39,7 +39,7 @@ public class RelateWidget extends SuggestBox {
 
 	private void setValueForId(final long id) {
 		LoadIndicator.get().startLoading();
-		
+
 		Prefetcher.instance.get(new Consumer<AbstractDto>() {
 			@Override
 			public void setValueAsynch(AbstractDto result) {
@@ -54,7 +54,7 @@ public class RelateWidget extends SuggestBox {
 						LoadIndicator.get().endLoading();
 						internalCacheCallback.setValueAsynch(result);
 					}
-					
+
 					@Override
 					public void onFailure(Throwable caught) {
 						LoadIndicator.get().endLoading();
@@ -62,7 +62,7 @@ public class RelateWidget extends SuggestBox {
 					}
 				});
 			}
-		}, marshalledClass, id);
+		}, 60 * 1000, marshalledClass, id);
 	}
 
 	private void addHandlers() {
