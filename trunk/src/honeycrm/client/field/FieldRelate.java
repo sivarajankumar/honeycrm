@@ -2,11 +2,16 @@ package honeycrm.client.field;
 
 import honeycrm.client.DtoRegistry;
 import honeycrm.client.IANA;
+import honeycrm.client.LoadIndicator;
+import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.prefetch.Prefetcher;
-import honeycrm.client.prefetch.PrefetcherCallback;
+import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.ServerCallback;
 import honeycrm.client.view.RelateWidget;
 
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -42,13 +47,33 @@ public class FieldRelate extends AbstractField {
 			// widget
 			final AbstractDto relatedViewable = DtoRegistry.instance.getDto(IANA.unmarshal(getRelatedClazz()));
 			final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
-			Prefetcher.instance.get(getRelatedClazz(), (Long) value, new PrefetcherCallback() {
+
+			Prefetcher.instance.get(new Consumer<AbstractDto>() {
 				@Override
-				public void setValueDeferred(String name) {
-					link.setText(name);
+				public void setValueAsynch(AbstractDto name) {
+					link.setText(((AbstractDto) name).getQuicksearchItem());
 				}
-			});
-			
+			}, new ServerCallback<AbstractDto>() {
+				@Override
+				public void doRpc(final Consumer<AbstractDto> internalCacheCallback) {
+					LoadIndicator.get().startLoading();
+
+					ServiceRegistry.commonService().get(getRelatedClazz(), (Long) value, new AsyncCallback<AbstractDto>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							LoadIndicator.get().endLoading();
+							Window.alert("Could not get item with id " + value.toString());
+						}
+
+						@Override
+						public void onSuccess(AbstractDto result) {
+							internalCacheCallback.setValueAsynch(result);
+							LoadIndicator.get().endLoading();
+						}
+					});
+				}
+			}, getRelatedClazz(), value);
+
 			return link;
 		}
 	}
