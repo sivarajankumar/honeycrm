@@ -2,6 +2,9 @@ package honeycrm.client;
 
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.Prefetcher;
+import honeycrm.client.prefetch.ServerCallback;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -11,7 +14,6 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 
 public class RelationshipsContainer extends Composite {
 	private final Class<? extends AbstractDto> relatedDtoClass;
@@ -36,8 +38,6 @@ public class RelationshipsContainer extends Composite {
 // e.g. if we want to display all contacts for account 23. how to we know in client side code that
 // we have to search for all contacts with accountId = 23? currently this is only known on server
 // side since there the RelatesTo annotation is read using reflection
-
-// TODO use prefetcher here too
 class SingleRelationshipPanel extends Composite {
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	private final Class<? extends AbstractDto> originatingDtoClass;
@@ -52,23 +52,37 @@ class SingleRelationshipPanel extends Composite {
 		this.relatedDtoClass = relatedDto;
 		this.id = id;
 
-		refresh();
-
 		initWidget(table);
+		
+		refresh();
 	}
 
 	public void refresh() {
-		commonService.getAllRelated(IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass), new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		Prefetcher.instance.get(new Consumer<ListQueryResult<? extends AbstractDto>>() {
 			@Override
-			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
-				insertRelatedDtos(result);
+			public void setValueAsynch(ListQueryResult<? extends AbstractDto> value) {
+				insertRelatedDtos(value);
 			}
+		}, new ServerCallback<ListQueryResult<? extends AbstractDto>>() {
+			@Override
+			public void doRpc(final Consumer<ListQueryResult<? extends AbstractDto>> internalCacheCallback) {
+				LoadIndicator.get().startLoading();
 
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getLocalizedMessage());
+				commonService.getAllRelated(IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass), new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+					@Override
+					public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+						LoadIndicator.get().endLoading();
+						internalCacheCallback.setValueAsynch(result);
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						LoadIndicator.get().endLoading();
+						Window.alert(caught.getLocalizedMessage());
+					}
+				});
 			}
-		});
+		}, IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass));
 	}
 
 	private void insertRelatedDtos(ListQueryResult<? extends AbstractDto> result) {
