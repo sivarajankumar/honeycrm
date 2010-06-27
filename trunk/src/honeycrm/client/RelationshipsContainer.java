@@ -25,11 +25,18 @@ public class RelationshipsContainer extends Composite {
 	}
 
 	public void refresh(final Long relatedId) {
-		panel.clear();
-
+		clear();
+		
 		for (final Class<? extends AbstractDto> originalDtoClass : DtoRegistry.instance.getAllDtoClasses()) {
 			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, relatedDtoClass));
 		}
+	}
+	
+	/**
+	 * Visually throw away all panels.
+	 */
+	public void clear() {
+		panel.clear();
 	}
 }
 

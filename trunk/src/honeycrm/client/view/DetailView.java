@@ -158,6 +158,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	public void startEditing() {
 		if (isShowing()) {
 			resetFields(dto, View.EDIT);
+			relationshipsContainer.clear();
 		} else {
 			// Window.alert("Do nothing because id is not defined");
 		}
@@ -210,6 +211,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	public void startCreating() {
 		dto.setId(currentId = -1); // throw away previous id
 		resetFields(dto, View.CREATE);
+		relationshipsContainer.clear();
 	}
 
 	/**
