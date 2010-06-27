@@ -1,7 +1,5 @@
 package honeycrm.client.prefetch;
 
-import honeycrm.client.dto.AbstractDto;
-
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,27 +7,18 @@ import java.util.List;
 // TODO add timestamp and invalidate this entry when timestamp is too old
 public class CacheEntry implements Serializable {
 	private static final long serialVersionUID = 5590996936325404685L;
-	private AbstractDto dto;
 	private boolean locked;
-	private List<PrefetcherCallback> callbacks = new LinkedList<PrefetcherCallback>();
+	private Object value;
+	private List<Consumer> callbacks = new LinkedList<Consumer>();
 
 	public CacheEntry() {
-
 	}
-
-	public AbstractDto getDto() {
-		return dto;
-	}
-
-	public void setDto(AbstractDto dto) {
-		this.dto = dto;
-	}
-
-	public List<PrefetcherCallback> getCallbacks() {
+	
+	public List<Consumer> getCallbacks() {
 		return callbacks;
 	}
 
-	public void setCallbacks(List<PrefetcherCallback> callbacks) {
+	public void setCallbacks(List<Consumer> callbacks) {
 		this.callbacks = callbacks;
 	}
 
@@ -41,7 +30,15 @@ public class CacheEntry implements Serializable {
 		this.locked = locked;
 	}
 	
+	public Object getValue() {
+		return value;
+	}
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
 	public boolean isEmpty() {
-		return null == dto;
+		return null == value;
 	}
 }

@@ -6,7 +6,8 @@ import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.prefetch.Prefetcher;
-import honeycrm.client.prefetch.PrefetcherCallback;
+import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.ServerCallback;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -38,12 +39,30 @@ public class RelateWidget extends SuggestBox {
 
 	private void setValueForId(final long id) {
 		LoadIndicator.get().startLoading();
-		Prefetcher.instance.get(marshalledClass, id, new PrefetcherCallback() {
+		
+		Prefetcher.instance.get(new Consumer<AbstractDto>() {
 			@Override
-			public void setValueDeferred(String name) {
-				setValue(name);
+			public void setValueAsynch(AbstractDto result) {
+				setValue(result.getQuicksearchItem());
 			}
-		});
+		}, new ServerCallback<AbstractDto>() {
+			@Override
+			public void doRpc(final Consumer<AbstractDto> internalCacheCallback) {
+				commonService.get(marshalledClass, id, new AsyncCallback<AbstractDto>() {
+					@Override
+					public void onSuccess(final AbstractDto result) {
+						LoadIndicator.get().endLoading();
+						internalCacheCallback.setValueAsynch(result);
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						LoadIndicator.get().endLoading();
+						Window.alert("Could not get item by id");
+					}
+				});
+			}
+		}, marshalledClass, id);
 	}
 
 	private void addHandlers() {

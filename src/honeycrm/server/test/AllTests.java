@@ -8,6 +8,7 @@ public class AllTests {
 		TestSuite suite = new TestSuite("Server code tests");
 		// $JUnit-BEGIN$
 		suite.addTestSuite(NumberParserTest.class);
+		suite.addTestSuite(CacheTest.class);
 		suite.addTestSuite(CollectionHelperTest.class);
 		suite.addTestSuite(CsvExportTest.class);
 		suite.addTestSuite(CsvImportTest.class);
