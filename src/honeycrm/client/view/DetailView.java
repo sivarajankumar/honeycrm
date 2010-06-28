@@ -64,15 +64,18 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 			throw new RuntimeException("Cannot refresh because id == 0");
 		} else {
 			LoadIndicator.get().startLoading();
+			table.setVisible(false);
 
 			commonService.get(IANA.mashal(clazz), id, new AsyncCallback<AbstractDto>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
+					table.setVisible(true);
 				}
 
 				@Override
 				public void onSuccess(AbstractDto result) {
+					table.setVisible(true);
 					relationshipsContainer.refresh(id);
 					
 					if (null == result) {

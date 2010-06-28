@@ -3,6 +3,7 @@ package honeycrm.client.prefetch;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO invalidate cached items immediately every time they are updated by the user
 public class Prefetcher {
 	public static final Prefetcher instance = new Prefetcher();
 	private Map<CacheKey, CacheEntry> cache = new HashMap<CacheKey, CacheEntry>();
