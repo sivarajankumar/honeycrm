@@ -89,7 +89,7 @@ class SingleRelationshipPanel extends Composite {
 					}
 				});
 			}
-		}, 5 * 1000, IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass));
+		}, 60 * 1000, IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass));
 	}
 
 	private void insertRelatedDtos(ListQueryResult<? extends AbstractDto> result) {
