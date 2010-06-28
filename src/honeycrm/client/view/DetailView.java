@@ -63,8 +63,6 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		if (0 == id) {
 			throw new RuntimeException("Cannot refresh because id == 0");
 		} else {
-			relationshipsContainer.refresh(id);
-
 			LoadIndicator.get().startLoading();
 
 			commonService.get(IANA.mashal(clazz), id, new AsyncCallback<AbstractDto>() {
@@ -75,6 +73,8 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 
 				@Override
 				public void onSuccess(AbstractDto result) {
+					relationshipsContainer.refresh(id);
+					
 					if (null == result) {
 						Window.alert("Could not find account with id " + id);
 					} else {
@@ -102,6 +102,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		this.dto = tmpViewable;
 
 		// remove previous cell contents
+		// TODO perhaps reuse widgets instead if this is faster.
 		table.clear();
 
 		for (int y = 0; y < fieldIds.length; y++) {

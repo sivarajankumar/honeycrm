@@ -67,10 +67,12 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		// TODO in when the name of an relate field is determined this get() method is called
 		// TODO this increases the number of views for the related entity every time it is
 		// displayed..
-		// TOD this should be avoided.
+		// TODO this should be avoided.
 		// increase number of views on every get request for a specific DTO
-		dto.setViews(dto.getViews() + 1);
-		update(dtoIndex, dto, id);
+		
+		// TODO do this asynchronous since it is currently to slow if we do it synchronously
+		// dto.setViews(dto.getViews() + 1);
+		// update(dtoIndex, dto, id);
 		return dto;
 	}
 

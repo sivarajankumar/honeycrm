@@ -96,11 +96,10 @@ abstract public class AbstractView extends Composite {
 	}
 
 	/**
-	 * Have to provide an instance of ListViewable. Using the instance variable viewable is a special use case..
+	 * Returns the widget for displaying fieldId of tmpViewable for the view.
 	 */
 	protected Widget getWidgetByType(final AbstractDto tmpViewable, final int fieldId, final View view) {
 		return tmpViewable.getFieldById(fieldId).getWidget(view, tmpViewable.getFieldValue(fieldId));
-		// return WidgetSelector.getWidgetByType(clazz, tmpViewable, fieldId, view);
 	}
 
 	public Class<? extends AbstractDto> getClazz() {
