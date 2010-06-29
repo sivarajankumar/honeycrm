@@ -1,13 +1,22 @@
-= features =
+= current feature set =
+
+== caching data on client side ==
+to reduce response time information is cached on client side. this reduces the number of callbacks to the server. currently this is only done for relate fields and relationship information.
+
+== contacts csv import from sugarcrm == 
+contact data exported via the default csv export from sugarcrm can be imported into honeycrm using the admin panel. currently not all fields are mapped into honeycrm.
+
+== full text search ==
+users can do full text searches globally (across all modules) as well as within the scope of a particular module (e.g., "all contacts containing the word 'hidden' in some field).
+
+== ideas about future features ==
 
 == versioning ==
 almost (?) everything should be automatically versioned. it should be possible to track modifications between two versions.
 
-
 ''
 The examples above demonstrated using events to update a lastUpdated and dateCreated property to keep track of updates to objects. However, this is actually not necessary. By merely defining a lastUpdated and dateCreated property these will be automatically updated for you by GORM.
 ''
-
 
 == reports ==
 we need a powerful solution to configure reports that should be automatically generated.
