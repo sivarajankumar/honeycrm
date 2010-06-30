@@ -140,7 +140,13 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void deleteAll(int dtoIndex) {
 		final Query q = m.newQuery(getDomainClass(dtoIndex));
-		m.deletePersistentAll((Collection) q.execute());
+
+		// delete step by step instead to avoid "can only delete 500 entities en block" errors in app engine.
+		for (final AbstractEntity entity: (Collection<AbstractEntity>) q.execute()) {
+			m.deletePersistent(entity);
+		}
+		
+//		m.deletePersistentAll((Collection) q.execute());
 	}
 
 	@Override

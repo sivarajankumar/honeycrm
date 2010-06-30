@@ -5,8 +5,8 @@ import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
 import honeycrm.client.view.RelateWidget;
 
@@ -51,7 +51,7 @@ public class FieldRelate extends AbstractField {
 			Prefetcher.instance.get(new Consumer<AbstractDto>() {
 				@Override
 				public void setValueAsynch(AbstractDto name) {
-					link.setText(((AbstractDto) name).getQuicksearchItem());
+					link.setText((name).getQuicksearchItem());
 				}
 			}, new ServerCallback<AbstractDto>() {
 				@Override
