@@ -2,6 +2,7 @@ package honeycrm.server;
 
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.Service;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +13,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.jdo.PersistenceManager;
+
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 public class CopyMachine {
 	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
@@ -68,7 +72,7 @@ public class CopyMachine {
 			// Now we will overwrite the values of all fields of instanceUpdatedDest with those from
 			// srcObject.
 			// TODO Key is not copied from old DB class to new instance
-			copyFields(srcObject, classSrc, classDest, instanceUpdatedDest);
+			copyFields(srcObject, classSrc, classDest, instanceUpdatedDest, true);
 
 			return instanceUpdatedDest;
 		} catch (Exception e) {
@@ -77,10 +81,15 @@ public class CopyMachine {
 		}
 	}
 
+	private void copyFields(final Object srcObject, final Class classSrc, final Class classDest, final Object instanceUpdatedDest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		copyFields(srcObject, classSrc, classDest, instanceUpdatedDest, false);
+	}
+	
 	/**
 	 * Copies all fields from the source object into the destination object. TODO this is critical for server performance -> make bugatti veyron-ish fast.
+	 * @param isUpdate 
 	 */
-	private void copyFields(final Object srcObject, final Class classSrc, final Class classDest, final Object instanceUpdatedDest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+	private void copyFields(final Object srcObject, final Class classSrc, final Class classDest, final Object instanceUpdatedDest, boolean isUpdate) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		final Field[] allFields = filterFields(reflectionHelper.getAllFields(classSrc));
 
 		for (int i = 0; i < allFields.length; i++) {
@@ -97,22 +106,25 @@ public class CopyMachine {
 			if (null != srcFieldValue) { // only call the setter if the field has any value.
 				if (srcFieldValue instanceof List<?>) {
 					if (!((List<?>) srcFieldValue).isEmpty()) {
-						final Class<?> dtoClazz = ((List<?>) srcFieldValue).get(0).getClass();
+						final Class dtoClazz = ((List<?>) srcFieldValue).get(0).getClass();
 
 						if (((List<?>) srcFieldValue).get(0) instanceof AbstractDto) {
+							deleteOldChildItems(classDest, instanceUpdatedDest, isUpdate, srcField);
+							
 							final List<AbstractEntity> serverList = new LinkedList<AbstractEntity>();
 
 							for (final AbstractDto listDtoItem : (List<AbstractDto>) srcFieldValue) {
-								serverList.add((AbstractEntity) copy(listDtoItem, registry.getDomain((Class<? extends AbstractDto>) dtoClazz)));
+								listDtoItem.setId(null); // setting id to null to make sure the item will be created in the db
+								serverList.add((AbstractEntity) copy(listDtoItem, registry.getDomain(dtoClazz)));
 							}
-
+							
 							final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), List.class);
 							setter.invoke(instanceUpdatedDest, serverList);
 						} else if (((List<?>) srcFieldValue).get(0) instanceof AbstractEntity) {
 							final List<AbstractDto> serverList = new LinkedList<AbstractDto>();
 
 							for (final AbstractEntity listDtoItem : (List<AbstractEntity>) srcFieldValue) {
-								serverList.add((AbstractDto) copy(listDtoItem, registry.getDto((Class<? extends AbstractEntity>) dtoClazz)));
+								serverList.add((AbstractDto) copy(listDtoItem, registry.getDto(dtoClazz)));
 							}
 
 							final Method setter = classDest.getMethod(reflectionHelper.getMethodName("set", srcField), List.class);
@@ -149,6 +161,31 @@ public class CopyMachine {
 							// log error?
 						}
 					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * This removes the child elements of an entity during an update to avoid duplicating them. This should not be under the responsibility of this class and has to be refactored in the future!
+	 */
+	private void deleteOldChildItems(final Class classDest, final Object instanceUpdatedDest, boolean isUpdate, final Field srcField) throws IllegalAccessException, InvocationTargetException,
+			NoSuchMethodException {
+		if (isUpdate) {
+			// This is an update, before doing anything else we remove the existing items linked to this entity
+			// This avoids duplicating them on an update.
+			// Note this means that on each update the linked items of an entity are deleted and recreated. This should be avoided in future versions.
+			final List<?> existingItemsList = (List<?>) classDest.getMethod(reflectionHelper.getMethodName("get", srcField)).invoke(instanceUpdatedDest);
+
+			if (existingItemsList.get(0) instanceof AbstractDto) {
+				final Key entityKey = (Key) classDest.getMethod("getId").invoke(instanceUpdatedDest);
+				// TODO this should not be created on each update call!
+				final PersistenceManager m = PMF.get().getPersistenceManager();
+				
+				for (final AbstractDto child : (List<AbstractDto>) existingItemsList) {
+					// TODO this is DtoOffering -> DtoService specific, it has to be implemented in a generic manner (and at a higher level..)
+					final Object childDomainObject = m.getObjectById(Service.class, KeyFactory.createKey(entityKey, "Service", child.getId()));
+					m.deletePersistent(childDomainObject);
 				}
 			}
 		}

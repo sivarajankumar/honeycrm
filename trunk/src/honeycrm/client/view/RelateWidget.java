@@ -5,8 +5,8 @@ import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.AbstractDto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;

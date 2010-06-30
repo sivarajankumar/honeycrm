@@ -1,8 +1,8 @@
 package honeycrm.client.admin;
 
-import java.util.Date;
-
 import honeycrm.client.prefetch.Prefetcher;
+
+import java.util.Date;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
