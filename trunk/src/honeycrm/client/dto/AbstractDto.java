@@ -31,9 +31,6 @@ public abstract class AbstractDto implements Serializable {
 	public static final int INDEX_VIEWS = -3;
 	public static final int INDEX_MARKED = -4;
 
-	/*
-	 * static { map = DtoRegistry.instance.getDtoMap(); // add new modules here map.put(DtoContact.class, new DtoContact()); map.put(DtoAccount.class, new DtoAccount()); map.put(DtoEmployee.class, new DtoEmployee()); map.put(DtoMembership.class, new DtoMembership()); map.put(DtoDonation.class, new DtoDonation()); map.put(DtoProject.class, new DtoProject()); }
-	 */
 	public AbstractDto() {
 		fields.add(new FieldInteger(INDEX_VIEWS, "Views"));
 		fields.add(new FieldDate(INDEX_CREATEDAT, "Created at"));
