@@ -1,0 +1,80 @@
+package honeycrm.client.view;
+
+import honeycrm.client.IANA;
+import honeycrm.client.LoadIndicator;
+import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.ListQueryResult;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+
+public class SearchableListView extends PaginatingListView {
+	private AbstractDto searchViewable;
+
+	public SearchableListView(Class<? extends AbstractDto> clazz) {
+		super(clazz);
+	}
+
+	public void search(final AbstractDto searchedViewable) {
+		this.searchViewable = searchedViewable;
+		doSearchForPage(1);
+	}
+
+	private void doSearchForPage(final int page) {
+		LoadIndicator.get().startLoading();
+
+		commonService.search(IANA.mashal(clazz), searchViewable, getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				displayError(caught);
+			}
+
+			@Override
+			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+				insertSearchResults(page, result);
+			}
+		});
+	}
+
+	public void clearSearch() {
+		refresh();
+	}
+
+	public void getAllMarked() {
+		doMarkedSearchForPage(1);
+		// TODO create a new fresh viewable instance, then only set martked to true
+		// TODO actually we must not overwrite the current searchViewable variable
+		// this.searchViewable.setMarked(true);
+		// search(searchViewable);
+	}
+
+	private void doMarkedSearchForPage(final int page) {
+		LoadIndicator.get().startLoading();
+
+		commonService.getAllMarked(IANA.mashal(clazz), getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				displayError(caught);
+			}
+
+			@Override
+			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+				insertSearchResults(page, result);
+			}
+		});
+	}
+
+	private void insertSearchResults(final int page, ListQueryResult<? extends AbstractDto> result) {
+		LoadIndicator.get().endLoading();
+
+		// TODO
+		cache.put(page, result.getResults());
+		setNumberOfPages(result.getItemCount());
+		showPage(page);
+	}
+
+	@Override
+	public void showPageRight() {
+		doSearchForPage(currentPage + 1);
+	}
+}
