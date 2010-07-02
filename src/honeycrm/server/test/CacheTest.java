@@ -1,7 +1,6 @@
 package honeycrm.server.test;
 
-import honeycrm.client.dto.DtoAccount;
-import honeycrm.client.dto.DtoContact;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.prefetch.CacheKey;
 
 import java.util.HashSet;
@@ -18,9 +17,9 @@ public class CacheTest extends TestCase {
 
 		assertFalse(new Object[] { 1, 2 }.hashCode() == new Object[] { 1, 2 }.hashCode());
 		
-		final CacheKey c = new CacheKey(DtoContact.class, DtoAccount.class, someRandomLong);
-		final CacheKey d = new CacheKey(DtoContact.class, DtoAccount.class, someRandomLong);
-		final CacheKey e = new CacheKey(DtoContact.class, DtoAccount.class, someRandomLong + 1);
+		final CacheKey c = new CacheKey(Dto.class, Dto.class, someRandomLong);
+		final CacheKey d = new CacheKey(Dto.class, Dto.class, someRandomLong);
+		final CacheKey e = new CacheKey(Dto.class, Dto.class, someRandomLong + 1);
 
 		assertTrue(c.equals(d));
 		assertFalse(c.equals(e));
@@ -40,8 +39,8 @@ public class CacheTest extends TestCase {
 		set.add(d);
 		set.add(d);
 		set.add(e);
-		set.add(new CacheKey(DtoContact.class, DtoAccount.class, someRandomLong + 1));
-		set.add(new CacheKey(DtoContact.class, DtoAccount.class, someRandomLong));
+		set.add(new CacheKey(Dto.class, Dto.class, someRandomLong + 1));
+		set.add(new CacheKey(Dto.class, Dto.class, someRandomLong));
 		assertEquals(2, set.size());
 	}
 }

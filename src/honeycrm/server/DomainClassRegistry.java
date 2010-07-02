@@ -1,15 +1,5 @@
 package honeycrm.server;
 
-import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.dto.DtoAccount;
-import honeycrm.client.dto.DtoContact;
-import honeycrm.client.dto.DtoDonation;
-import honeycrm.client.dto.DtoEmployee;
-import honeycrm.client.dto.DtoMembership;
-import honeycrm.client.dto.DtoOffering;
-import honeycrm.client.dto.DtoProduct;
-import honeycrm.client.dto.DtoProject;
-import honeycrm.client.dto.DtoService;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.Account;
 import honeycrm.server.domain.Contact;
@@ -27,32 +17,32 @@ import java.util.Set;
 
 public class DomainClassRegistry {
 	public static final DomainClassRegistry instance = new DomainClassRegistry();
-	private final Map<Class<? extends AbstractDto>, Class<? extends AbstractEntity>> dtoToDomain = new HashMap<Class<? extends AbstractDto>, Class<? extends AbstractEntity>>();
-	private final Map<Class<? extends AbstractEntity>, Class<? extends AbstractDto>> domainToDto = new HashMap<Class<? extends AbstractEntity>, Class<? extends AbstractDto>>();
+	private final Map<String, Class<? extends AbstractEntity>> dtoToDomain = new HashMap<String, Class<? extends AbstractEntity>>();
+	private final Map<Class<? extends AbstractEntity>, String> domainToDto = new HashMap<Class<? extends AbstractEntity>, String>();
 	
 	private DomainClassRegistry() {
 		// TODO do this automatically with reflection
-		dtoToDomain.put(DtoContact.class, Contact.class);
-		dtoToDomain.put(DtoAccount.class, Account.class);
-		dtoToDomain.put(DtoEmployee.class, Employee.class);
-		dtoToDomain.put(DtoMembership.class, Membership.class);
-		dtoToDomain.put(DtoDonation.class, Donation.class);
-		dtoToDomain.put(DtoProject.class, Project.class);
-		dtoToDomain.put(DtoProduct.class, Product.class);
-		dtoToDomain.put(DtoService.class, Service.class);
-		dtoToDomain.put(DtoOffering.class, Offering.class);
+		dtoToDomain.put("contact", Contact.class);
+		dtoToDomain.put("account", Account.class);
+		dtoToDomain.put("employee", Employee.class);
+		dtoToDomain.put("membership", Membership.class);
+		dtoToDomain.put("donation", Donation.class);
+		dtoToDomain.put("project", Project.class);
+		dtoToDomain.put("product", Product.class);
+		dtoToDomain.put("service", Service.class);
+		dtoToDomain.put("offering", Offering.class);
 		
-		for (final Class<? extends AbstractDto> dto: dtoToDomain.keySet()) {
+		for (final String dto: dtoToDomain.keySet()) {
 			domainToDto.put(dtoToDomain.get(dto), dto);
 		}
 	}
 	
-	public Class<? extends AbstractDto> getDto(final Class<? extends AbstractEntity> domainClass) {
+	public String getDto(final Class<? extends AbstractEntity> domainClass) {
 		assert domainToDto.containsKey(domainClass);
 		return domainToDto.get(domainClass);
 	}
 	
-	public Class<? extends AbstractEntity> getDomain(final Class<? extends AbstractDto> dto) {
+	public Class<? extends AbstractEntity> getDomain(final String dto) {
 		assert dtoToDomain.containsKey(dto);
 		return dtoToDomain.get(dto);
 	}

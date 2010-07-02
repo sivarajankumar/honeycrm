@@ -1,6 +1,6 @@
 package honeycrm.client.csv;
 
-import honeycrm.client.dto.DtoContact;
+import honeycrm.client.dto.Dto;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,22 +11,22 @@ public class CsvImporter extends AbstractCsv {
 	/**
 	 * Parse a given csv string and create a list of contact dto objects of it.
 	 */
-	public List<DtoContact> parse(final String csvString) {
+	public List<Dto> parse(final String csvString) {
 		// TODO do some prechecks to find out whether the file is correct (thus proper col separators are used etc).
 		
-		final List<DtoContact> list = new LinkedList<DtoContact>();
+		final List<Dto> list = new LinkedList<Dto>();
 
 		final String[][] table = getData(csvString);
 		final Map<String, Integer> positions = getColumnPositions(table[0]);
 
 		// start at 1 to skip header row
 		for (int y = 1; y < table.length; y++) {
-			final DtoContact newContact = new DtoContact();
+			final Dto newContact = new Dto();
 
-			newContact.setName(table[y][positions.get("first_name")] + " " + table[y][positions.get("last_name")]);
-			newContact.setEmail(table[y][positions.get("email1")]);
-			newContact.setPhone(table[y][positions.get("phone_work")]);
-			newContact.setDoNotCall(table[y][positions.get("do_not_call")].equals("1"));
+			newContact.set("name", table[y][positions.get("first_name")] + " " + table[y][positions.get("last_name")]);
+			newContact.set("email", table[y][positions.get("email1")]);
+			newContact.set("phone", table[y][positions.get("phone_work")]);
+			newContact.set("doNotCall", table[y][positions.get("do_not_call")].equals("1"));
 			
 			list.add(newContact);
 		}

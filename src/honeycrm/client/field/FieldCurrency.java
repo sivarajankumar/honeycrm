@@ -20,19 +20,19 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	// TODO find a way to inherit the constructors from the parent class to avoid declaring them here again
-	public FieldCurrency(final int index, final String label) {
+	public FieldCurrency(final String index, final String label) {
 		super(index, label);
 	}
 
-	public FieldCurrency(final int index, final String label, final String defaultValue) {
+	public FieldCurrency(final String index, final String label, final String defaultValue) {
 		super(index, label, defaultValue);
 	}
 
-	public FieldCurrency(int indexSum, String string, String string2, int i, boolean b) {
+	public FieldCurrency(String indexSum, String string, String string2, int i, boolean b) {
 		super(indexSum, string, string2, i, b);
 	}
 
-	public FieldCurrency(int indexDiscount, String string, String string2, int i) {
+	public FieldCurrency(String indexDiscount, String string, String string2, int i) {
 		super(indexDiscount, string, string2, i);
 	}
 

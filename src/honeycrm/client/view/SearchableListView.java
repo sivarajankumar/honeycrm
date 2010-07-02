@@ -1,21 +1,20 @@
 package honeycrm.client.view;
 
-import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 public class SearchableListView extends PaginatingListView {
-	private AbstractDto searchViewable;
+	private Dto searchViewable;
 
-	public SearchableListView(Class<? extends AbstractDto> clazz) {
+	public SearchableListView(final Dto clazz) {
 		super(clazz);
 	}
 
-	public void search(final AbstractDto searchedViewable) {
+	public void search(final Dto searchedViewable) {
 		this.searchViewable = searchedViewable;
 		doSearchForPage(1);
 	}
@@ -23,14 +22,14 @@ public class SearchableListView extends PaginatingListView {
 	private void doSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.search(IANA.mashal(clazz), searchViewable, getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		commonService.search(dto.getModule(), searchViewable, getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<Dto>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+			public void onSuccess(ListQueryResult<Dto> result) {
 				insertSearchResults(page, result);
 			}
 		});
@@ -51,20 +50,20 @@ public class SearchableListView extends PaginatingListView {
 	private void doMarkedSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.getAllMarked(IANA.mashal(clazz), getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		commonService.getAllMarked(dto.getModule(), getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<Dto>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+			public void onSuccess(ListQueryResult<Dto> result) {
 				insertSearchResults(page, result);
 			}
 		});
 	}
 
-	private void insertSearchResults(final int page, ListQueryResult<? extends AbstractDto> result) {
+	private void insertSearchResults(final int page, ListQueryResult<Dto> result) {
 		LoadIndicator.get().endLoading();
 
 		// TODO

@@ -12,11 +12,11 @@ public class FieldInteger extends AbstractField {
 	public FieldInteger() {
 	}
 
-	public FieldInteger(final int index, final String label) {
+	public FieldInteger(final String index, final String label) {
 		super(index, label);
 	}
 
-	public FieldInteger(int indexQuantity, String string, String string2, int i) {
+	public FieldInteger(String indexQuantity, String string, String string2, int i) {
 		super(indexQuantity, string, string2, i);
 	}
 

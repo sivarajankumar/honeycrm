@@ -1,5 +1,13 @@
 package honeycrm.server.domain;
 
+import honeycrm.client.dto.DetailViewable;
+import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.ListViewable;
+import honeycrm.client.dto.RelatesTo;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.field.FieldTable;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,14 +18,23 @@ import org.compass.annotations.Searchable;
 
 @PersistenceCapable
 @Searchable
+@ListViewable({"contactId", "deadline"})
+@DetailViewable({"contactId", "deadline", "services"})
 public class Offering extends AbstractEntity {
 	@Persistent
 	private List<Service> services;
 	@Persistent
+	@RelatesTo(Contact.class)
 	private Long contactId;
 	@Persistent
 	private Date deadline;
 
+	static {
+		fields.add(new FieldTable("services", "Services"));
+		fields.add(new FieldRelate("contactId", new Dto(), "Contact"));
+		fields.add(new FieldDate("deadline", "Deadline"));
+	}
+	
 	public Offering() {
 	}
 

@@ -1,12 +1,10 @@
 package honeycrm.client.view;
 
 import honeycrm.client.CommonServiceAsync;
-import honeycrm.client.DtoRegistry;
-import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.TabCenterView;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,31 +17,29 @@ import com.google.gwt.user.datepicker.client.DateBox;
 
 abstract public class AbstractView extends Composite {
 	protected final CommonServiceAsync commonService = ServiceRegistry.commonService();
-	protected final Class<? extends AbstractDto> clazz;
-	protected AbstractDto dto;
+	protected Dto dto;
 
-	public AbstractView(final Class<? extends AbstractDto> clazz) {
-		this.clazz = clazz;
-		this.dto = DtoRegistry.instance.getDto(clazz);
+	public AbstractView(final Dto dto) {
+		this.dto = dto;
 	}
 
 	protected String getTitleFromClazz() {
-		return DtoRegistry.instance.getDto(clazz).getTitle();
+		return dto.getTitle();
 	}
 
 	/**
 	 * Initialize a dto instance from the widgets (e.g., textboxes, dateboxes, relate fields) in a table.
 	 */
-	protected void initializeDtoFromTable(final int[][] fieldIds, final FlexTable table, final AbstractDto tmpDto) {
+	protected void initializeDtoFromTable(final String[][] fieldIds, final FlexTable table, final Dto tmpDto) {
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
-				final int id = fieldIds[y][x];
+				final String id = fieldIds[y][x];
 
-				if (!AbstractDto.isInternalReadOnlyField(id)) {
+				if (!Dto.isInternalReadOnlyField(id)) {
 					// TODO this position y, 2*x+1 depends on the current layout of the form..
 					final Widget widgetValue = table.getWidget(y, 2 * x + 1);
 					final Object value = tmpDto.getFieldById(id).getData(widgetValue);
-					tmpDto.setFieldValue(id, value);
+					tmpDto.set(id, value);
 				}
 			}
 		}
@@ -62,10 +58,10 @@ abstract public class AbstractView extends Composite {
 		initializeDtoFromTable(dto.getFormFieldIds(), table, dto);
 
 		if (isUpdate) {
-			commonService.update(IANA.mashal(clazz), dto, id, new AsyncCallback<Void>() {
+			commonService.update(dto, id, new AsyncCallback<Void>() {
 				@Override
 				public void onSuccess(Void result) {
-					TabCenterView.instance().get(clazz).saveCompleted();
+					TabCenterView.instance().get(dto.getModule()).saveCompleted();
 					LoadIndicator.get().endLoading();
 				}
 
@@ -75,7 +71,7 @@ abstract public class AbstractView extends Composite {
 				}
 			});
 		} else {
-			commonService.create(IANA.mashal(clazz), dto, new AsyncCallback<Long>() {
+			commonService.create(dto, new AsyncCallback<Long>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
@@ -83,7 +79,7 @@ abstract public class AbstractView extends Composite {
 
 				@Override
 				public void onSuccess(Long result) {
-					TabCenterView.instance().get(clazz).saveCompletedForId(result);
+					TabCenterView.instance().get(dto.getModule()).saveCompletedForId(result);
 					// TabCenterView.instance().get(clazz).showDetailView(result);
 					LoadIndicator.get().endLoading();
 				}
@@ -91,19 +87,15 @@ abstract public class AbstractView extends Composite {
 		}
 	}
 
-	protected Label getLabelForField(final int id) {
+	protected Label getLabelForField(final String id) {
 		return new Label(dto.getFieldById(id).getLabel() + ":");
 	}
 
 	/**
 	 * Returns the widget for displaying fieldId of tmpViewable for the view.
 	 */
-	protected Widget getWidgetByType(final AbstractDto tmpViewable, final int fieldId, final View view) {
-		return tmpViewable.getFieldById(fieldId).getWidget(view, tmpViewable.getFieldValue(fieldId));
-	}
-
-	public Class<? extends AbstractDto> getClazz() {
-		return clazz;
+	protected Widget getWidgetByType(final Dto tmpViewable, final String fieldId, final View view) {
+		return tmpViewable.getFieldById(fieldId).getWidget(view, tmpViewable.get(fieldId));
 	}
 
 	/**

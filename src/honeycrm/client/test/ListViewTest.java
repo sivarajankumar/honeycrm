@@ -1,12 +1,8 @@
 package honeycrm.client.test;
 
-import honeycrm.client.dto.DtoContact;
-import honeycrm.client.view.ListView;
-
-import com.google.gwt.user.client.Timer;
 
 public class ListViewTest extends AbstractClientTest {
-	public void testColumnConsistency() {
+/*	public void testColumnConsistency() {
 		final ListView lv = new ListView(DtoContact.class);
 		assertNotNull(lv);
 		
@@ -19,5 +15,5 @@ public class ListViewTest extends AbstractClientTest {
 		}.schedule(1000);
 
 		delayTestFinish(Integer.MAX_VALUE);
-	}
+	}*/
 }

@@ -1,6 +1,6 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.ServiceTableWidget;
 import honeycrm.client.view.AbstractView.View;
@@ -15,7 +15,7 @@ public class FieldTable extends AbstractField {
 	public FieldTable() {
 	}
 
-	public FieldTable(final int id, final String label) {
+	public FieldTable(final String id, final String label) {
 		super(id, label);
 	}
 
@@ -44,7 +44,7 @@ public class FieldTable extends AbstractField {
 	 */
 	private Widget getTableWidget(Object value, final View view) {
 		final ITableWidget w = new ServiceTableWidget(view);
-		w.setData((List<? extends AbstractDto>) value);
+		w.setData((List<Dto>) value);
 		return w;
 	}
 

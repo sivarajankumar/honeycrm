@@ -10,11 +10,11 @@ public class FieldString extends AbstractField {
 	public FieldString() {
 	}
 
-	public FieldString(final int index, final String label) {
+	public FieldString(final String index, final String label) {
 		super(index, label);
 	}
 
-	public FieldString(int indexName, String string, String string2, int i) {
+	public FieldString(String indexName, String string, String string2, int i) {
 		super(indexName, string, string2, i);
 	}
 

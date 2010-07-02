@@ -1,7 +1,6 @@
 package honeycrm.server;
 
-import honeycrm.client.IANA;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
 
@@ -19,8 +18,8 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 	public static final boolean ignoreCase = true;
 	private static final long serialVersionUID = -7000384067604090223L;
 
-	public ListQueryResult<? extends AbstractDto> fulltextSearch(final String query, int from, int to) {
-		final List<AbstractDto> list = new LinkedList<AbstractDto>();
+	public ListQueryResult<Dto> fulltextSearch(final String query, int from, int to) {
+		final List<Dto> list = new LinkedList<Dto>();
 
 		try {
 			for (final Class<? extends AbstractEntity> domainClass : registry.getDomainClasses()) {
@@ -30,11 +29,11 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 			e.printStackTrace();
 		}
 
-		return new ListQueryResult<AbstractDto>(list.toArray(new AbstractDto[0]), list.size());
+		return new ListQueryResult<Dto>(list.toArray(new Dto[0]), list.size());
 	}
 
-	private List<AbstractDto> fulltextSearchForModule(final String query, final Class<? extends AbstractEntity> domainClass) {
-		final List<AbstractDto> moduleList = new ArrayList<AbstractDto>();
+	private List<Dto> fulltextSearchForModule(final String query, final Class<? extends AbstractEntity> domainClass) {
+		final List<Dto> moduleList = new ArrayList<Dto>();
 
 		try {
 			final Query q = m.newQuery(domainClass);
@@ -47,7 +46,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 						String value = (String) entityClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(entity);
 
 						if (null != value && ((!ignoreCase && value.contains(query)) || (ignoreCase && value.toLowerCase().contains(query.toLowerCase())))) {
-							moduleList.add((AbstractDto) copy.copy(entity, registry.getDto(entityClass)));
+							moduleList.add(copy.copy(entity));
 							continue ENTITY_LOOP;
 						}
 					}
@@ -60,8 +59,8 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 		return moduleList;
 	}
 
-	public ListQueryResult<? extends AbstractDto> fulltextSearchForModule(int dtoIndex, String query, int from, int to) {
-		final List<AbstractDto> list = fulltextSearchForModule(query, registry.getDomain(IANA.unmarshal(dtoIndex)));
-		return new ListQueryResult<AbstractDto>(list.toArray(new AbstractDto[0]), list.size());
+	public ListQueryResult<Dto> fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
+		final List<Dto> list = fulltextSearchForModule(query, registry.getDomain(dtoIndex));
+		return new ListQueryResult<Dto>(list.toArray(new Dto[0]), list.size());
 	}
 }

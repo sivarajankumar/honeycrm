@@ -1,5 +1,15 @@
 package honeycrm.server.domain;
 
+import honeycrm.client.dto.DetailViewable;
+import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.ListViewable;
+import honeycrm.client.dto.RelatesTo;
+import honeycrm.client.field.FieldCurrency;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldEnum;
+import honeycrm.client.field.FieldMultiEnum;
+import honeycrm.client.field.FieldRelate;
+
 import java.util.Date;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -10,12 +20,17 @@ import org.compass.annotations.SearchableProperty;
 
 @PersistenceCapable
 @Searchable
+@ListViewable({"marked", "donatorId", "employeeId", "reaction", "amount"})
+@DetailViewable({"donatorId,kind","amount","donatedFor,employeeId", "reaction,reactedHow", "date", "receiptionDate,projectId"})
 public class Donation extends AbstractEntity {
 	@Persistent
+	@RelatesTo(Employee.class)
 	private long employeeId;
 	@Persistent
+	@RelatesTo(Contact.class)
 	private long donatorId; // contact
 	@Persistent
+	@RelatesTo(Project.class)
 	private long projectId;
 	@Persistent
 	@SearchableProperty
@@ -36,6 +51,19 @@ public class Donation extends AbstractEntity {
 	@Persistent
 	private double amount;
 
+	static {
+		fields.add(new FieldRelate("employeeId", new Dto(), "Employee"));
+		fields.add(new FieldRelate("donatorId", new Dto(), "Donator"));
+		fields.add(new FieldRelate("projectId", new Dto(), "Project"));
+		fields.add(new FieldEnum("donatedFor", "Donated for", "Foundation", "Project donation", "Unlinked donation"));
+		fields.add(new FieldEnum("kind", "Kind", "Subscription", "Unique"));
+		fields.add(new FieldDate("receiptionDate", "Receiption date"));
+		fields.add(new FieldEnum("reaction", "Reaction", "Thanked", "Receipt", "Certificate", "No"));
+		fields.add(new FieldMultiEnum("reactedHow", "Reaction channel", "E-Mail", "Letter", "Phone Call"));
+		fields.add(new FieldDate("date", "Date"));
+		fields.add(new FieldCurrency("amount", "Amount", "0"));		
+	}
+	
 	public Donation() {
 	}
 

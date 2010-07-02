@@ -1,9 +1,8 @@
 package honeycrm.client.view;
 
-import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.TabCenterView;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 
 import java.util.HashMap;
@@ -33,7 +32,7 @@ public class ListView extends AbstractView {
 	/**
 	 * Map pages to listviewable arrays.
 	 */
-	protected Map<Integer, AbstractDto[]> cache = new HashMap<Integer, AbstractDto[]>();
+	protected Map<Integer, Dto[]> cache = new HashMap<Integer, Dto[]>();
 	protected static final int MAX_ENTRIES = 10;
 	private static final int HEADER_ROWS = 1;
 	/**
@@ -50,7 +49,7 @@ public class ListView extends AbstractView {
 	private final FlexTable table = new FlexTable();
 	private final ListViewDeletionPanel deletePanel;
 
-	public ListView(final Class<? extends AbstractDto> clazz) {
+	public ListView(final Dto clazz) {
 		super(clazz);
 
 		initHeader();
@@ -84,7 +83,7 @@ public class ListView extends AbstractView {
 	}
 
 	private void initHeader() {
-		final int[] fieldIds = dto.getListViewColumnIds();
+		final String[] fieldIds = dto.getListFieldIds();
 
 		for (int i = 0; i < fieldIds.length; i++) {
 			table.setText(0, LEADING_COLS + i, dto.getFieldById(fieldIds[i]).getLabel());
@@ -103,11 +102,11 @@ public class ListView extends AbstractView {
 		updatePageCounterLabel();
 	}
 
-	private void initializeRow(final int row, final AbstractDto listViewable) {
+	private void initializeRow(final int row, final Dto listViewable) {
 		final ClickHandler showDetailViewHandler = new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				TabCenterView.instance().get(clazz).showDetailView(listViewable.getId());
+				TabCenterView.instance().get(dto.getModule()).showDetailView(listViewable.getId());
 				// CenterView.get().showDetailView(clazz, listViewable.getId());
 
 				// TODO: clear all also colored rows when paginate
@@ -121,7 +120,7 @@ public class ListView extends AbstractView {
 			}
 		};
 
-		final int[] ids = listViewable.getListViewColumnIds();
+		final String[] ids = listViewable.getListFieldIds();
 
 		// add the leading columns (e.g. delete checkbox) before actual data
 		table.setWidget(HEADER_ROWS + row, 0, deletePanel.getDeleteCheckboxFor(listViewable.getId(), currentPage));
@@ -150,7 +149,7 @@ public class ListView extends AbstractView {
 	protected void showPage(final int page) {
 		if (1 <= page && page <= numberOfPages) {
 			if (cache.containsKey(page)) {
-				final AbstractDto[] values = cache.get(page);
+				final Dto[] values = cache.get(page);
 
 				for (int i = 0; i < values.length; i++) {
 					initializeRow(i, values[i]);
@@ -190,14 +189,14 @@ public class ListView extends AbstractView {
 
 		LoadIndicator.get().startLoading();
 
-		commonService.getAll(IANA.mashal(clazz), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		commonService.getAll(dto.getModule(), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult<Dto>>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+			public void onSuccess(ListQueryResult<Dto> result) {
 				LoadIndicator.get().endLoading();
 				if (-1 == page) {
 					currentPage = 1;

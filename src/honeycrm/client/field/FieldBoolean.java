@@ -9,7 +9,7 @@ public class FieldBoolean extends AbstractField {
 	public FieldBoolean() {
 	}
 	
-	public FieldBoolean(final int index, final String label) {
+	public FieldBoolean(final String index, final String label) {
 		super(index, label);
 	}
 

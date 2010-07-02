@@ -1,6 +1,6 @@
 package honeycrm.client;
 
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
@@ -16,10 +16,10 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RelationshipsContainer extends Composite {
-	private final Class<? extends AbstractDto> relatedDtoClass;
+	private final Dto relatedDtoClass;
 	private Panel panel = new VerticalPanel();
 
-	public RelationshipsContainer(final Class<? extends AbstractDto> relatedDtoClass) {
+	public RelationshipsContainer(final Dto relatedDtoClass) {
 		this.relatedDtoClass = relatedDtoClass;
 		initWidget(panel);
 	}
@@ -27,7 +27,7 @@ public class RelationshipsContainer extends Composite {
 	public void refresh(final Long relatedId) {
 		clear();
 
-		for (final Class<? extends AbstractDto> originalDtoClass : DtoRegistry.instance.getAllDtoClasses()) {
+		for (final Dto originalDtoClass : DtoRegistry.instance.getDtos()) {
 			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, relatedDtoClass));
 		}
 	}
@@ -47,15 +47,15 @@ public class RelationshipsContainer extends Composite {
 // side since there the RelatesTo annotation is read using reflection
 class SingleRelationshipPanel extends Composite {
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
-	private final Class<? extends AbstractDto> originatingDtoClass;
-	private final Class<? extends AbstractDto> relatedDtoClass;
-	private final AbstractDto originatingDto;
+	private final Dto originatingDtoClass;
+	private final Dto relatedDtoClass;
+//	private final AbstractDto originatingDto;
 	private final Long id;
 	private FlexTable table = new FlexTable();
 
-	public SingleRelationshipPanel(final Class<? extends AbstractDto> originatingDto, final Long id, final Class<? extends AbstractDto> relatedDto) {
+	public SingleRelationshipPanel(final Dto originatingDto, final Long id, final Dto relatedDto) {
 		this.originatingDtoClass = originatingDto;
-		this.originatingDto = DtoRegistry.instance.getDto(originatingDtoClass);
+//		this.originatingDto = DtoRegistry.instance.getDto(originatingDtoClass);
 		this.relatedDtoClass = relatedDto;
 		this.id = id;
 
@@ -65,19 +65,19 @@ class SingleRelationshipPanel extends Composite {
 	}
 
 	public void refresh() {
-		Prefetcher.instance.get(new Consumer<ListQueryResult<? extends AbstractDto>>() {
+		Prefetcher.instance.get(new Consumer<ListQueryResult<Dto>>() {
 			@Override
-			public void setValueAsynch(ListQueryResult<? extends AbstractDto> value) {
+			public void setValueAsynch(ListQueryResult<Dto> value) {
 				insertRelatedDtos(value);
 			}
-		}, new ServerCallback<ListQueryResult<? extends AbstractDto>>() {
+		}, new ServerCallback<ListQueryResult<Dto>>() {
 			@Override
-			public void doRpc(final Consumer<ListQueryResult<? extends AbstractDto>> internalCacheCallback) {
+			public void doRpc(final Consumer<ListQueryResult<Dto>> internalCacheCallback) {
 				LoadIndicator.get().startLoading();
 
-				commonService.getAllRelated(IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass), new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+				commonService.getAllRelated(originatingDtoClass.getModule(), id, relatedDtoClass.getModule(), new AsyncCallback<ListQueryResult<Dto>>() {
 					@Override
-					public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+					public void onSuccess(ListQueryResult<Dto> result) {
 						LoadIndicator.get().endLoading();
 						internalCacheCallback.setValueAsynch(result);
 					}
@@ -89,10 +89,10 @@ class SingleRelationshipPanel extends Composite {
 					}
 				});
 			}
-		}, 60 * 1000, IANA.mashal(originatingDtoClass), id, IANA.mashal(relatedDtoClass));
+		}, 60 * 1000, originatingDtoClass.getModule(), id, relatedDtoClass.getModule());
 	}
 
-	private void insertRelatedDtos(ListQueryResult<? extends AbstractDto> result) {
+	private void insertRelatedDtos(ListQueryResult<Dto> result) {
 		if (0 == result.getItemCount()) {
 			// hide this relationship since no entries have been found for this relationship
 			setVisible(false);
@@ -103,7 +103,7 @@ class SingleRelationshipPanel extends Composite {
 			table.setWidget(0, 0, getTitleLabel());
 
 			for (int i = 0; i < result.getResults().length; i++) {
-				final AbstractDto originatingDto = result.getResults()[i];
+				final Dto originatingDto = result.getResults()[i];
 				// display related item somewhat
 				// TODO display more columns
 				table.setWidget(1 + i, 0, new Hyperlink(originatingDto.getQuicksearchItem(), originatingDto.getHistoryToken() + " " + originatingDto.getId()));
@@ -112,7 +112,7 @@ class SingleRelationshipPanel extends Composite {
 	}
 
 	private Label getTitleLabel() {
-		final Label title = new Label(originatingDto.getTitle() + "s");
+		final Label title = new Label(originatingDtoClass.getTitle() + "s");
 		// TODO add style for this in custom css file
 		title.setStyleName("relationship_title");
 		return title;

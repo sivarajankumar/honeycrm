@@ -1,10 +1,5 @@
 package honeycrm.server;
 
-import honeycrm.client.DtoRegistry;
-import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.dto.RelatesTo;
-
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,10 +9,11 @@ import java.util.Set;
 public class RelationshipFieldTable {
 	private static final ReflectionHelper reflectionHelper = new ReflectionHelper();
 	public static final RelationshipFieldTable instance = new RelationshipFieldTable();
-	private final Map<Class<? extends AbstractDto>, Map<Class<? extends AbstractDto>, Set<String>>> map = new HashMap<Class<? extends AbstractDto>, Map<Class<? extends AbstractDto>, Set<String>>>();
+	private final Map<String, Map<String, Set<String>>> map = new HashMap<String, Map<String, Set<String>>>();
 
 	private RelationshipFieldTable() {
-		for (final Class<? extends AbstractDto> originatingDtoClass : DtoRegistry.instance.getAllDtoClasses()) {
+		// TODO
+/*		for (final Dto originatingDtoClass : DtoRegistry.instance.getDtos()) {
 			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingDtoClass, RelatesTo.class)) {
 				final Class<? extends AbstractDto> relatedDtoClass = field.getAnnotation(RelatesTo.class).value();
 
@@ -40,12 +36,12 @@ public class RelationshipFieldTable {
 					map.put(originatingDtoClass, relatedDtoMap);
 				}
 			}
-		}
+		}*/
 
 		System.out.println("Map contains " + map.size() + " elements");
 	}
 
-	public Set<String> getRelationshipFieldNames(final Class<? extends AbstractDto> originatingDto, final Class<? extends AbstractDto> relatedDto) {
+	public Set<String> getRelationshipFieldNames(final String originatingDto, final String relatedDto) {
 		if (map.containsKey(originatingDto) && map.get(originatingDto).containsKey(relatedDto)) {
 			return map.get(originatingDto).get(relatedDto);
 		} else {

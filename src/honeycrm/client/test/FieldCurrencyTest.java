@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.TextBox;
 
 public class FieldCurrencyTest extends AbstractClientTest {
 	public void testFormatting() {
-		final AbstractField field = new FieldCurrency(1, "Some label");
+		final AbstractField field = new FieldCurrency("revenue", "Some label");
 
 		field.getWidget(View.DETAIL, null);
 		field.getWidget(View.DETAIL, Integer.MAX_VALUE);
@@ -26,7 +26,7 @@ public class FieldCurrencyTest extends AbstractClientTest {
 	}
 
 	public void testGetData() {
-		final AbstractField field = new FieldCurrency(1, "Some label");
+		final AbstractField field = new FieldCurrency("income", "Some label");
 
 		final TextBox w = new TextBox();
 		w.setText(NumberFormat.getCurrencyFormat("EUR").format(Double.MAX_VALUE));

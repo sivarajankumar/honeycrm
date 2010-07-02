@@ -1,6 +1,6 @@
 package honeycrm.client;
 
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.view.AbstractView;
 import honeycrm.client.view.DetailView;
 import honeycrm.client.view.ModuleButtonBar;
@@ -14,7 +14,7 @@ public class TabModuleView extends AbstractView {
 	private final DetailView detailView;
 	private final SearchableListView listView;
 
-	public TabModuleView(final Class<? extends AbstractDto> clazz) {
+	public TabModuleView(final Dto clazz) {
 		super(clazz);
 
 		listView = new SearchableListView(clazz);

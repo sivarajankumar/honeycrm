@@ -11,7 +11,7 @@ public class FieldEmail extends AbstractField {
 	public FieldEmail() {
 	}
 
-	public FieldEmail(final int index, final String label) {
+	public FieldEmail(final String index, final String label) {
 		super(index, label);
 	}
 

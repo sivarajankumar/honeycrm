@@ -1,10 +1,9 @@
 package honeycrm.client.field;
 
 import honeycrm.client.DtoRegistry;
-import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -18,17 +17,17 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class FieldRelate extends AbstractField {
 	private static final long serialVersionUID = -1518485985368479493L;
-	private int marshalledClazz;
+	private String marshalledClazz;
 
 	public FieldRelate() {
 	}
 
-	public FieldRelate(final int id, final Class<? extends AbstractDto> clazz, final String label) {
+	public FieldRelate(final String id, final Dto clazz, final String label) {
 		super(id, label);
-		this.marshalledClazz = IANA.mashal(clazz);
+		this.marshalledClazz = clazz.getModule();
 	}
 
-	public int getRelatedClazz() {
+	public String getRelatedClazz() {
 		return marshalledClazz;
 	}
 
@@ -45,20 +44,20 @@ public class FieldRelate extends AbstractField {
 		} else {
 			// resolve the real name of the entity by its id and display a HyperLink as
 			// widget
-			final AbstractDto relatedViewable = DtoRegistry.instance.getDto(IANA.unmarshal(getRelatedClazz()));
+			final Dto relatedViewable = DtoRegistry.instance.getDto(getRelatedClazz());
 			final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
 
-			Prefetcher.instance.get(new Consumer<AbstractDto>() {
+			Prefetcher.instance.get(new Consumer<Dto>() {
 				@Override
-				public void setValueAsynch(AbstractDto name) {
+				public void setValueAsynch(Dto name) {
 					link.setText((name).getQuicksearchItem());
 				}
-			}, new ServerCallback<AbstractDto>() {
+			}, new ServerCallback<Dto>() {
 				@Override
-				public void doRpc(final Consumer<AbstractDto> internalCacheCallback) {
+				public void doRpc(final Consumer<Dto> internalCacheCallback) {
 					LoadIndicator.get().startLoading();
 
-					ServiceRegistry.commonService().get(getRelatedClazz(), (Long) value, new AsyncCallback<AbstractDto>() {
+					ServiceRegistry.commonService().get(getRelatedClazz(), (Long) value, new AsyncCallback<Dto>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							LoadIndicator.get().endLoading();
@@ -66,7 +65,7 @@ public class FieldRelate extends AbstractField {
 						}
 
 						@Override
-						public void onSuccess(AbstractDto result) {
+						public void onSuccess(Dto result) {
 							internalCacheCallback.setValueAsynch(result);
 							LoadIndicator.get().endLoading();
 						}

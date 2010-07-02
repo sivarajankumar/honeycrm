@@ -1,6 +1,13 @@
 package honeycrm.server.domain;
 
+import honeycrm.client.field.AbstractField;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldInteger;
+import honeycrm.client.field.FieldMark;
+
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.Inheritance;
@@ -18,6 +25,7 @@ import com.google.appengine.api.datastore.Key;
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @Searchable
 abstract public class AbstractEntity {
+	protected static Set<AbstractField> fields = new HashSet<AbstractField>();
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
 	@SearchableId
@@ -36,6 +44,10 @@ abstract public class AbstractEntity {
 	protected long views;
 
 	public AbstractEntity() {
+		fields.add(new FieldInteger("views", "Views"));
+		fields.add(new FieldDate("createdAt", "Created at"));
+		fields.add(new FieldDate("lastUpdatedAt", "Last updated at"));
+		fields.add(new FieldMark("marked", "Marked", this.getClass().getSimpleName().toLowerCase(), id.getId()));
 	}
 
 	public Key getId() {
@@ -76,5 +88,9 @@ abstract public class AbstractEntity {
 
 	public void setMarked(boolean marked) {
 		this.marked = marked;
+	}
+	
+	public Set<AbstractField> getFields() {
+		return fields;
 	}
 }

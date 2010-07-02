@@ -2,8 +2,7 @@ package honeycrm.server.test;
 
 import honeycrm.client.csv.AbstractCsv;
 import honeycrm.client.csv.CsvExporter;
-import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.dto.DtoContact;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.CollectionHelper;
 
 import java.util.LinkedList;
@@ -14,11 +13,15 @@ import junit.framework.TestCase;
 
 public class CsvExportTest extends TestCase {
 	public void testExport() {
-		final List<AbstractDto> list = new LinkedList<AbstractDto>();
-		list.add(new DtoContact("Foo"));
-		list.add(new DtoContact("Bar"));
+		final List<Dto> list = new LinkedList<Dto>();
+		final Dto foo = new Dto();
+		foo.set("name", "Foo");
+		final Dto bar = new Dto();
+		bar.set("name", "Bar");
+		list.add(foo);
+		list.add(bar);
 
-		final CsvExporter exporter = new CsvExporter(DtoContact.class);
+		final CsvExporter exporter = new CsvExporter();
 		final String csv = exporter.export(list);
 
 		assertNotNull(csv);

@@ -26,7 +26,7 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 	/**
 	 * Dto-wide unique id used to identify the property stored in the dto class that relates to this field.
 	 */
-	protected int id;
+	protected String id;
 	/**
 	 * The name of the field which is used as a label in list views, create forms, etc.
 	 */
@@ -35,23 +35,23 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 	public AbstractField() { // for gwt
 	}
 
-	public AbstractField(final int id, final String label, final String defaultValue, final int width, final boolean readOnly) {
+	public AbstractField(final String id, final String label, final String defaultValue, final int width, final boolean readOnly) {
 		this(id, label, defaultValue, width);
 		this.readOnly = readOnly;
 	}
 
-	public AbstractField(final int id, final String label, final String defaultValue, final int width) {
+	public AbstractField(final String id, final String label, final String defaultValue, final int width) {
 		this(id, label, defaultValue);
 		this.width = width;
 	}
 
-	public AbstractField(final int id, final String label, final String defaultValue) {
+	public AbstractField(final String id, final String label, final String defaultValue) {
 		this.id = id;
 		this.label = label;
 		this.defaultValue = defaultValue;
 	}
 
-	public AbstractField(final int id, final String label) {
+	public AbstractField(final String id, final String label) {
 		this(id, label, "");
 	}
 
@@ -62,7 +62,7 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 		return 0 != width;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
