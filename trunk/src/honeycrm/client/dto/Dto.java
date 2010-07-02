@@ -20,7 +20,7 @@ public class Dto implements Serializable {
 
 	private String[] listFieldIds;
 	private String[][] formFieldIds;
-	private String quickSearchItem;
+	private String[] quickSearchItems;
 	private String historyToken;
 	private String title;
 	private String module;
@@ -35,8 +35,7 @@ public class Dto implements Serializable {
 		if (data.containsKey(fieldId)) {
 			return data.get(fieldId);
 		} else {
-			Window.alert("Cannot get value " + fieldId + " from dto");
-			throw new RuntimeException();
+			return null;
 		}
 	}
 
@@ -67,7 +66,7 @@ public class Dto implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public AbstractField getFieldById(final String id) {
 		for (final AbstractField field : fields) {
 			if (field.getId().equals(id)) {
@@ -80,7 +79,7 @@ public class Dto implements Serializable {
 
 		return null;
 	}
-	
+
 	public void setId(final long id) {
 		set("id", id);
 	}
@@ -88,7 +87,7 @@ public class Dto implements Serializable {
 	public long getId() {
 		return NumberParser.convertToLong(data.get("id"));
 	}
-	
+
 	public String getHistoryToken() {
 		return historyToken;
 	}
@@ -96,14 +95,14 @@ public class Dto implements Serializable {
 	public void setHistoryToken(String historyToken) {
 		this.historyToken = historyToken;
 	}
-	
+
 	public static Dto getByModuleName(final List<Dto> dtos, final String moduleName) {
-		for (Dto dto: dtos) {
+		for (Dto dto : dtos) {
 			if (dto.getModule().equals(moduleName)) {
 				return dto;
 			}
 		}
-		
+
 		Window.alert("Could not resolve module " + moduleName + " by name");
 		throw new RuntimeException();
 	}
@@ -130,26 +129,40 @@ public class Dto implements Serializable {
 		internalFields.add("lastUpdatedAt");
 		internalFields.add("views");
 		internalFields.add("marked");
-		
+
 		return internalFields.contains(id);
 	}
 
-	public String getQuicksearchItem() {
-		return quickSearchItem;
+	public String getQuicksearch() {
+		String str = "";
+
+		for (int i = 0; i < quickSearchItems.length; i++) {
+			str += get(quickSearchItems[i]);
+
+			if (i < quickSearchItems.length - 1) {
+				str += " ";
+			}
+		}
+
+		return str;
 	}
-	
-	public void setQuicksearchItem(final String quickSearchItem) {
-		this.quickSearchItem = quickSearchItem;
+
+	public String[] getQuicksearchItems() {
+		return quickSearchItems;
+	}
+
+	public void setQuicksearchItems(final String[] quickSearchItem) {
+		this.quickSearchItems = quickSearchItem;
 	}
 
 	public void setMarked(boolean marked) {
 		set("marked", marked);
 	}
-	
+
 	public boolean getMarked() {
 		return (Boolean) get("marked");
 	}
-	
+
 	public Map<String, Serializable> getAllData() {
 		return data;
 	}

@@ -106,7 +106,7 @@ class SingleRelationshipPanel extends Composite {
 				final Dto originatingDto = result.getResults()[i];
 				// display related item somewhat
 				// TODO display more columns
-				table.setWidget(1 + i, 0, new Hyperlink(originatingDto.getQuicksearchItem(), originatingDto.getHistoryToken() + " " + originatingDto.getId()));
+				table.setWidget(1 + i, 0, new Hyperlink(originatingDto.getQuicksearch(), originatingDto.getHistoryToken() + " " + originatingDto.getId()));
 			}
 		}
 	}

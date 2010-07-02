@@ -1,10 +1,11 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.dto.DetailViewable;
-import honeycrm.client.dto.ListViewable;
 import honeycrm.client.field.FieldCurrency;
 import honeycrm.client.field.FieldDate;
 import honeycrm.client.field.FieldString;
+import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.ListViewable;
+import honeycrm.server.domain.decoration.Quicksearchable;
 
 import java.util.Date;
 
@@ -18,6 +19,7 @@ import org.compass.annotations.SearchableProperty;
 @Searchable
 @ListViewable( { "name", "address", "annualRevenue" })
 @DetailViewable( { "name,date", "annualRevenue", "address" })
+@Quicksearchable( { "name" })
 public class Account extends AbstractEntity {
 	@Persistent
 	@SearchableProperty

@@ -1,9 +1,10 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.dto.DetailViewable;
-import honeycrm.client.dto.ListViewable;
 import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldString;
+import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.ListViewable;
+import honeycrm.server.domain.decoration.Quicksearchable;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -15,6 +16,7 @@ import org.compass.annotations.SearchableProperty;
 @Searchable
 @ListViewable( { "active", "name" })
 @DetailViewable( { "name", "active" })
+@Quicksearchable( { "name" })
 public class Employee extends AbstractEntity {
 	@Persistent
 	@SearchableProperty

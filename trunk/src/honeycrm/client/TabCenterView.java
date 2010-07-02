@@ -158,12 +158,12 @@ public class TabCenterView extends DecoratedTabPanel {
 	/**
 	 * Shows the module tab for the module described by the given class.
 	 */
-	public void showModuleTabWithId(final Class<Dto> clazz, final long id) {
+	public void showModuleTabWithId(final String clazz, final long id) {
 		showModuleTab(clazz);
 		moduleViewMap.get(clazz).showDetailView(id);
 	}
 
-	public void showModuleTab(Class<Dto> clazz) {
+	public void showModuleTab(String clazz) {
 		assert tabPositionMap.containsKey(clazz) && moduleViewMap.containsKey(clazz);
 		if (!moduleViewMap.get(clazz).isListViewInitialized()) {
 			moduleViewMap.get(clazz).refreshListView(); 
@@ -171,7 +171,7 @@ public class TabCenterView extends DecoratedTabPanel {
 		selectTab(tabPositionMap.get(clazz));
 	}
 	
-	public void showCreateViewForModule(final Class<Dto> clazz) {
+	public void showCreateViewForModule(final String clazz) {
 		moduleViewMap.get(clazz).showCreateView();
 	}
 }

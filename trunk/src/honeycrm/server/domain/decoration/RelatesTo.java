@@ -1,4 +1,4 @@
-package honeycrm.client.dto;
+package honeycrm.server.domain.decoration;
 
 import honeycrm.server.domain.AbstractEntity;
 
