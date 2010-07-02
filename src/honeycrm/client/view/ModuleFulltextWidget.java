@@ -5,6 +5,9 @@ import honeycrm.client.FulltextSuggestOracle;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.Prefetcher;
+import honeycrm.client.prefetch.ServerCallback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,12 +24,11 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 	}
 
 	@Override
-	protected void startFulltextSearch(String queryString) {
-		LoadIndicator.get().startLoading();
+	protected void startFulltextSearch(final String queryString) {
+		Prefetcher.instance.get(new Consumer<ListQueryResult>() {
 
-		commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 			@Override
-			public void onSuccess(ListQueryResult result) {
+			public void setValueAsynch(final ListQueryResult result) {
 				LoadIndicator.get().endLoading();
 
 				if (null != result && result.getItemCount() > 0) {
@@ -54,12 +56,24 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 					showSuggestionList();
 				}
 			}
-
+		}, new ServerCallback<ListQueryResult>() {
 			@Override
-			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
-				Window.alert("fulltext search failed");
+			public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
+				LoadIndicator.get().startLoading();
+				
+				commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
+					@Override
+					public void onSuccess(ListQueryResult result) {
+						internalCacheCallback.setValueAsynch(result);
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						LoadIndicator.get().endLoading();
+						Window.alert("fulltext search failed");
+					}
+				});
 			}
-		});
+		}, 60 * 1000, dtoClazz.getModule(), queryString, 0, 10);
 	}
 }

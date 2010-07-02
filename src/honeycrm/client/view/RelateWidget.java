@@ -73,11 +73,9 @@ public class RelateWidget extends SuggestBox {
 
 				// TODO cache some results instead of doing requests over and over again
 				if (!query.isEmpty()) {
-					LoadIndicator.get().startLoading();
-
-					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
+					Prefetcher.instance.get(new Consumer<ListQueryResult>() {
 						@Override
-						public void onSuccess(ListQueryResult result) {
+						public void setValueAsynch(final ListQueryResult result) {
 							LoadIndicator.get().endLoading();
 
 							if (0 == result.getResults().length) {
@@ -91,23 +89,25 @@ public class RelateWidget extends SuggestBox {
 								}
 							}
 						}
-
+					}, new ServerCallback<ListQueryResult>() {
 						@Override
-						public void onFailure(Throwable caught) {
-							LoadIndicator.get().endLoading();
-							indicateNoResults();
+						public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
+							LoadIndicator.get().startLoading();
+
+							commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
+								@Override
+								public void onSuccess(ListQueryResult result) {
+									internalCacheCallback.setValueAsynch(result);
+								}
+
+								@Override
+								public void onFailure(Throwable caught) {
+									LoadIndicator.get().endLoading();
+									indicateNoResults();
+								}
+							});
 						}
-
-						private void indicateNoResults() {
-							MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
-
-							o.clear();
-							o.add("No Results");
-
-							// TODO indicate that no results have been returned, set background
-							// color to red or something like that..
-						}
-					});
+					}, 60 * 1000, marshalledClass, query, 0, 20);
 				}
 			}
 		});
@@ -138,6 +138,16 @@ public class RelateWidget extends SuggestBox {
 				});
 			}
 		});
+	}
+	
+	private void indicateNoResults() {
+		MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
+
+		o.clear();
+		o.add("No Results");
+
+		// TODO indicate that no results have been returned, set background
+		// color to red or something like that..
 	}
 
 	/**
