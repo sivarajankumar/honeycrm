@@ -65,19 +65,19 @@ class SingleRelationshipPanel extends Composite {
 	}
 
 	public void refresh() {
-		Prefetcher.instance.get(new Consumer<ListQueryResult<Dto>>() {
+		Prefetcher.instance.get(new Consumer<ListQueryResult>() {
 			@Override
-			public void setValueAsynch(ListQueryResult<Dto> value) {
+			public void setValueAsynch(ListQueryResult value) {
 				insertRelatedDtos(value);
 			}
-		}, new ServerCallback<ListQueryResult<Dto>>() {
+		}, new ServerCallback<ListQueryResult>() {
 			@Override
-			public void doRpc(final Consumer<ListQueryResult<Dto>> internalCacheCallback) {
+			public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
 				LoadIndicator.get().startLoading();
 
-				commonService.getAllRelated(originatingDtoClass.getModule(), id, relatedDtoClass.getModule(), new AsyncCallback<ListQueryResult<Dto>>() {
+				commonService.getAllRelated(originatingDtoClass.getModule(), id, relatedDtoClass.getModule(), new AsyncCallback<ListQueryResult>() {
 					@Override
-					public void onSuccess(ListQueryResult<Dto> result) {
+					public void onSuccess(ListQueryResult result) {
 						LoadIndicator.get().endLoading();
 						internalCacheCallback.setValueAsynch(result);
 					}
@@ -92,7 +92,7 @@ class SingleRelationshipPanel extends Composite {
 		}, 60 * 1000, originatingDtoClass.getModule(), id, relatedDtoClass.getModule());
 	}
 
-	private void insertRelatedDtos(ListQueryResult<Dto> result) {
+	private void insertRelatedDtos(ListQueryResult result) {
 		if (0 == result.getItemCount()) {
 			// hide this relationship since no entries have been found for this relationship
 			setVisible(false);

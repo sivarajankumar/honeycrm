@@ -18,7 +18,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 	public static final boolean ignoreCase = true;
 	private static final long serialVersionUID = -7000384067604090223L;
 
-	public ListQueryResult<Dto> fulltextSearch(final String query, int from, int to) {
+	public ListQueryResult fulltextSearch(final String query, int from, int to) {
 		final List<Dto> list = new LinkedList<Dto>();
 
 		try {
@@ -29,7 +29,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 			e.printStackTrace();
 		}
 
-		return new ListQueryResult<Dto>(list.toArray(new Dto[0]), list.size());
+		return new ListQueryResult(list.toArray(new Dto[0]), list.size());
 	}
 
 	private List<Dto> fulltextSearchForModule(final String query, final Class<? extends AbstractEntity> domainClass) {
@@ -59,8 +59,8 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 		return moduleList;
 	}
 
-	public ListQueryResult<Dto> fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
+	public ListQueryResult fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
 		final List<Dto> list = fulltextSearchForModule(query, registry.getDomain(dtoIndex));
-		return new ListQueryResult<Dto>(list.toArray(new Dto[0]), list.size());
+		return new ListQueryResult(list.toArray(new Dto[0]), list.size());
 	}
 }

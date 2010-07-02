@@ -19,13 +19,13 @@ public interface CommonService extends RemoteService {
 	// read
 	public Dto get(String dtoIndex, long id);
 	public Dto getByName(String dtoIndex, String name);
-	public ListQueryResult<Dto> getAll(final String dtoIndex, int from, int to);
-	public ListQueryResult<Dto> getAllMarked(final String dtoIndex, int from, int to);
-	public ListQueryResult<Dto> getAllByNamePrefix(final String dtoIndex, String prefix, int from, int to);
-	public ListQueryResult<Dto> search(String dtoIndex, Dto searchContact, int from, int to);
-	public ListQueryResult<Dto> fulltextSearch(String query, int from, int to);
-	public ListQueryResult<Dto> getAllRelated(final String originatingDtoIndex, final Long id, final String relatedDtoIndex);
-	public ListQueryResult<Dto> fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
+	public ListQueryResult getAll(final String dtoIndex, int from, int to);
+	public ListQueryResult getAllMarked(final String dtoIndex, int from, int to);
+	public ListQueryResult getAllByNamePrefix(final String dtoIndex, String prefix, int from, int to);
+	public ListQueryResult search(String dtoIndex, Dto searchContact, int from, int to);
+	public ListQueryResult fulltextSearch(String query, int from, int to);
+	public ListQueryResult getAllRelated(final String originatingDtoIndex, final Long id, final String relatedDtoIndex);
+	public ListQueryResult fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
 	
 	// update
 	public void update(Dto account, long id);

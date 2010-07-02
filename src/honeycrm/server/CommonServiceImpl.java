@@ -4,6 +4,7 @@ import honeycrm.client.CommonService;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.Account;
 
 import java.util.Collection;
 import java.util.Date;
@@ -39,13 +40,13 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public ListQueryResult<Dto> getAll(final String dtoIndex, int from, int to) {
+	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
 		// TODO using transactions currently breaks getAll()
 		// TODO do everything within the context of a transaction
 		// final Transaction t = m.currentTransaction();
 		// try {
 		// t.begin();
-		final ListQueryResult<Dto> result = reader.getAll(dtoIndex, from, to);
+		final ListQueryResult result = reader.getAll(dtoIndex, from, to);
 		// t.commit();
 		return result;
 		// } finally {
@@ -76,12 +77,12 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public ListQueryResult<Dto> search(String dtoIndex, Dto searchDto, int from, int to) {
+	public ListQueryResult search(String dtoIndex, Dto searchDto, int from, int to) {
 		return reader.search(dtoIndex, searchDto, from, to);
 	}
 
 	@Override
-	public ListQueryResult<Dto> getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
+	public ListQueryResult getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
 		log.fine("getAllByNamePrefix(" + dtoIndex + "," + prefix + ")");
 		return reader.getAllByNamePrefix(dtoIndex, prefix, from, to);
 	}
@@ -100,9 +101,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		final AbstractEntity existingObject = (AbstractEntity) getDomainObject(dto.getModule(), id);
 		
 		if (null != existingObject) {
-			final AbstractEntity updatedObject = copy.copy(dto, existingObject);
-			m.makePersistent(updatedObject);
-			m.flush();
+			m.makePersistent(copy.copy(dto, existingObject));
 		}
 	}
 
@@ -122,7 +121,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public ListQueryResult<Dto> fulltextSearch(String query, int from, int to) {
+	public ListQueryResult fulltextSearch(String query, int from, int to) {
 		return fulltext.fulltextSearch(query, from, to);
 	}
 
@@ -134,7 +133,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public ListQueryResult<Dto> getAllMarked(String dtoIndex, int from, int to) {
+	public ListQueryResult getAllMarked(String dtoIndex, int from, int to) {
 		return reader.getAllMarked(dtoIndex, from, to);
 	}
 
@@ -178,12 +177,12 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public ListQueryResult<Dto> getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex) {
+	public ListQueryResult getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex) {
 		return reader.getAllRelated(originatingDtoIndex, id, relatedDtoIndex);
 	}
 
 	@Override
-	public ListQueryResult<Dto> fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
+	public ListQueryResult fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
 		return fulltext.fulltextSearchForModule(dtoIndex, query, from, to);
 	}
 

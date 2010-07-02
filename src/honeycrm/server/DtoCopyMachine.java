@@ -32,11 +32,11 @@ public class DtoCopyMachine {
 		return copy(dto, null);
 	}
 	
-	public AbstractEntity copy(Dto dto, AbstractEntity existingObject) {
+	public AbstractEntity copy(Dto dto, AbstractEntity existingEntity) {
 		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
 		try {
-			final AbstractEntity entity = null == existingObject ? entityClass.newInstance() : existingObject;
+			final AbstractEntity entity = entityClass.newInstance();
 			final Field[] allFields = filterFields(reflectionHelper.getAllFields(entityClass));
 			
 			for (int i=0; i<allFields.length; i++) {
@@ -49,16 +49,24 @@ public class DtoCopyMachine {
 				if ("fields".equals(field.getName())) {
 					continue;
 				}
-				
+
 				if ("id".equals(field.getName())) {
-					// TODO support update!
-					continue;
+					if (null == existingEntity) {
+						continue;
+					} else {
+						// insert id of the existing entity in the newly created one
+						// this is an update
+						final Method setter = entityClass.getMethod("setId", Key.class);
+						setter.invoke(entity, existingEntity.getId());
+						continue;
+					}
 				}
 				
 				final Method setter = entityClass.getMethod(reflectionHelper.getMethodName("set", field), field.getType());
 				setter.invoke(entity, dto.get(field.getName()));
 			}
 			
+
 			return entity;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,9 +92,9 @@ public class DtoCopyMachine {
 				} else {
 					dto.set(field.getName(), (Serializable) fieldValue);
 				}
-				
-				fillinModuleSpecificData(dto, entityClass);
 			}
+
+			fillinModuleSpecificData(dto, entityClass);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -104,7 +112,7 @@ public class DtoCopyMachine {
 		dto.setFormFieldIds(moduleDto.getFormFieldIds());
 		dto.setHistoryToken(moduleDto.getHistoryToken());
 		dto.setListFieldIds(moduleDto.getListFieldIds());
-		dto.setQuicksearchItem(moduleDto.getQuicksearchItem());
+		dto.setQuicksearchItem(dto.get("name").toString());
 	}
 
 	/**

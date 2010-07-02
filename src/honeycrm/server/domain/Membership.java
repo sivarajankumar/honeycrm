@@ -46,8 +46,8 @@ public class Membership extends AbstractEntity {
 	private Date endDate;
 
 	public Membership() {
-		fields.add(new FieldRelate("memberId", new Dto(), "Member"));
-		fields.add(new FieldRelate("employeeId", new Dto(), "Employee"));
+		fields.add(new FieldRelate("memberId", "contact", "Member"));
+		fields.add(new FieldRelate("employeeId", "employee", "Employee"));
 		fields.add(new FieldCurrency("payment", "Contribution"));
 		fields.add(new FieldEnum("tiedToPurpose", "Tied to purpose", "Yes", "No", "Soon"));
 		fields.add(new FieldText("purpose", "Purpose"));

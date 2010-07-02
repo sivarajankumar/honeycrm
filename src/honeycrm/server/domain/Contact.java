@@ -21,7 +21,7 @@ import org.compass.annotations.SearchableProperty;
 @Searchable
 @ListViewable( { "marked", "name", "email", "phone", "accountID" })
 @DetailViewable( { "name,accountID", "responsibleId", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId",
-		"childId1,childId2" })
+		"child1Id,child2Id" })
 public class Contact extends AbstractEntity {
 	@Persistent
 	@SearchableProperty
@@ -75,7 +75,7 @@ public class Contact extends AbstractEntity {
 		fields.add(new FieldString("phone", "Phone"));
 		fields.add(new FieldString("city", "City"));
 		fields.add(new FieldEmail("email", "E-Mail"));
-		fields.add(new FieldRelate("accountID", new Dto(), "Account"));
+		fields.add(new FieldRelate("accountID", "account", "Account"));
 		fields.add(new FieldBoolean("doNotCall", "Do not call"));
 		fields.add(new FieldText("doNotCallExplanation", "Why not call"));
 		fields.add(new FieldBoolean("emailOptedOut", "No Mails"));
@@ -83,10 +83,10 @@ public class Contact extends AbstractEntity {
 		fields.add(new FieldText("bankAccountData", "Bank account data"));
 		fields.add(new FieldEnum("profession", "Profession", "Student", "Professor", "Scientific Assistant", "Other"));
 		fields.add(new FieldEnum("study", "Study area", "None", "Biology", "Physics", "Mathematics", "Computer science"));
-		fields.add(new FieldRelate("partnerId", new Dto(), "Partner"));
-		fields.add(new FieldRelate("childId1", new Dto(), "First Child"));
-		fields.add(new FieldRelate("childId2", new Dto(), "Second Child"));
-		fields.add(new FieldRelate("responsibleId", new Dto(), "Responsible"));
+		fields.add(new FieldRelate("partnerId", "contact", "Partner"));
+		fields.add(new FieldRelate("child1Id", "contact", "First Child"));
+		fields.add(new FieldRelate("child2Id", "contact", "Second Child"));
+		fields.add(new FieldRelate("responsibleId", "employee", "Responsible"));
 	}
 
 	public Contact(final String name) {

@@ -24,9 +24,9 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 	protected void startFulltextSearch(String queryString) {
 		LoadIndicator.get().startLoading();
 
-		commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult<Dto>>() {
+		commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 			@Override
-			public void onSuccess(ListQueryResult<Dto> result) {
+			public void onSuccess(ListQueryResult result) {
 				LoadIndicator.get().endLoading();
 
 				if (null != result && result.getItemCount() > 0) {
