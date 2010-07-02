@@ -1,8 +1,13 @@
 package honeycrm.client.view;
 
+import org.apache.bcel.verifier.exc.LoadingException;
+
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.RelationshipsContainer;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.Prefetcher;
+import honeycrm.client.prefetch.ServerCallback;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -62,21 +67,12 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		if (0 == id) {
 			throw new RuntimeException("Cannot refresh because id == 0");
 		} else {
-			LoadIndicator.get().startLoading();
-			table.setVisible(false);
-
-			commonService.get(dto.getModule(), id, new AsyncCallback<Dto>() {
+			Prefetcher.instance.get(new Consumer<Dto>() {
 				@Override
-				public void onFailure(Throwable caught) {
-					displayError(caught);
-					table.setVisible(true);
-				}
-
-				@Override
-				public void onSuccess(Dto result) {
+				public void setValueAsynch(Dto result) {
 					table.setVisible(true);
 					relationshipsContainer.refresh(id);
-					
+
 					if (null == result) {
 						Window.alert("Could not find account with id " + id);
 					} else {
@@ -88,7 +84,27 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 					}
 					LoadIndicator.get().endLoading();
 				}
-			});
+			}, new ServerCallback<Dto>() {
+				@Override
+				public void doRpc(final Consumer<Dto> internalCacheCallback) {
+					LoadIndicator.get().startLoading();
+					table.setVisible(false);
+					
+					commonService.get(dto.getModule(), id, new AsyncCallback<Dto>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							displayError(caught);
+							table.setVisible(true);
+							LoadIndicator.get().endLoading();
+						}
+
+						@Override
+						public void onSuccess(Dto result) {
+							internalCacheCallback.setValueAsynch(result);
+						}
+					});
+				}
+			}, 60 * 1000, dto.getModule(), id);
 		}
 	}
 
@@ -240,7 +256,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 			buttonBar.startEditing();
 		}
 	}
-	
+
 	public DetailViewButtonBar getButtonBar() {
 		return buttonBar;
 	}

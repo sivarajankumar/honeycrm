@@ -14,6 +14,7 @@ public class CacheEntry implements Serializable {
 	private Object value;
 	private long timestamp;
 	private long timeout;
+	private boolean valid;
 	private List<Consumer> callbacks = new LinkedList<Consumer>();
 
 	public CacheEntry() {
@@ -46,6 +47,8 @@ public class CacheEntry implements Serializable {
 
 	public void setValue(Object value) {
 		this.value = value;
+		
+		this.valid = true;
 		this.timestamp = System.currentTimeMillis();
 	}
 
@@ -58,5 +61,13 @@ public class CacheEntry implements Serializable {
 	 */
 	public boolean isOutOfDate() {
 		return System.currentTimeMillis() - timestamp > timeout;
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void makeInvalid() {
+		this.valid = false;
 	}
 }

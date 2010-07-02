@@ -5,6 +5,7 @@ import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.TabCenterView;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.prefetch.Prefetcher;
 
 import java.io.Serializable;
 
@@ -63,6 +64,9 @@ abstract public class AbstractView extends Composite {
 			commonService.update(dto, id, new AsyncCallback<Void>() {
 				@Override
 				public void onSuccess(Void result) {
+					// mark cache invalid to make sure the changed values will be displayed
+					Prefetcher.instance.invalidate(dto.getModule(), id);
+
 					TabCenterView.instance().get(dto.getModule()).saveCompleted();
 					LoadIndicator.get().endLoading();
 				}

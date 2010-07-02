@@ -23,7 +23,7 @@ import org.compass.annotations.SearchableProperty;
 @Searchable
 @ListViewable( { "marked", "donatorId", "employeeId", "reaction", "amount" })
 @DetailViewable( { "donatorId,kind", "amount", "donatedFor,employeeId", "reaction,reactedHow", "date", "receiptionDate,projectId" })
-@Quicksearchable( { "donatorId", "amount", "date" })
+@Quicksearchable( { "donatorId", "amount" })
 public class Donation extends AbstractEntity {
 	@Persistent
 	@RelatesTo(Employee.class)
