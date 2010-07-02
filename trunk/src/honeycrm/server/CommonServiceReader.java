@@ -78,21 +78,11 @@ public class CommonServiceReader extends AbstractCommonService {
 
 	public ListQueryResult getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)");
-		// TODO
-		// use
-		// toLowerCase
-		// in
-		// query
-		// as
-		// well
-		// to
-		// ignore
-		// case
 		query.declareParameters("String searchedName");
 		query.setRange(from, to);
 
 		final Collection collection = (Collection) query.execute(prefix);
-
+		System.out.println("getAllByNamePrefix('"+prefix+"')");
 		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
