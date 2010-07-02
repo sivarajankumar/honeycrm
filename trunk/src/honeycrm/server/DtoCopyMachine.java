@@ -38,6 +38,19 @@ public class DtoCopyMachine {
 			for (int i=0; i<allFields.length; i++) {
 				final Field field = allFields[i];
 				
+				if (null == dto.get(field.getName())) {
+					continue;
+				}
+				
+				if ("fields".equals(field.getName())) {
+					continue;
+				}
+				
+				if ("id".equals(field.getName())) {
+					// TODO support update!
+					continue;
+				}
+				
 				final Method setter = entityClass.getMethod(reflectionHelper.getMethodName("set", field), field.getType());
 				setter.invoke(entity, dto.get(field.getName()));
 			}
