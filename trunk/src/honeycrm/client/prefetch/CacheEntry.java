@@ -13,7 +13,7 @@ public class CacheEntry implements Serializable {
 	private boolean locked;
 	private Object value;
 	private long timestamp;
-	private final long timeout;
+	private long timeout;
 	private List<Consumer> callbacks = new LinkedList<Consumer>();
 
 	public CacheEntry() {

@@ -1,9 +1,6 @@
 package honeycrm.client;
 
 import honeycrm.client.admin.LogConsole;
-import honeycrm.client.dto.Dto;
-
-import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -15,7 +12,7 @@ public class TabLayout extends DockLayoutPanel implements ValueChangeHandler<Str
 	private final Header header = new Header();
 	private final TabCenterView center = TabCenterView.instance();
 
-	public TabLayout(List<Dto> dtos) {
+	public TabLayout() {
 		super(Unit.PX);
 		setStyleName("body");
 		center.setStyleName("tab_layout");

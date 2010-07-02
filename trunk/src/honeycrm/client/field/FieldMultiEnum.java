@@ -2,6 +2,7 @@ package honeycrm.client.field;
 
 import honeycrm.client.misc.CollectionHelper;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -74,7 +75,7 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 	
 	@Override
-	public Object getData(Widget widgetValue) {
+	public Serializable getData(Widget widgetValue) {
 		final ListBox box = (ListBox) widgetValue;
 		final Set<String> selectedValues = new HashSet<String>();
 

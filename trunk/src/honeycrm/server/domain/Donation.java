@@ -51,7 +51,7 @@ public class Donation extends AbstractEntity {
 	@Persistent
 	private double amount;
 
-	static {
+	public Donation() {
 		fields.add(new FieldRelate("employeeId", new Dto(), "Employee"));
 		fields.add(new FieldRelate("donatorId", new Dto(), "Donator"));
 		fields.add(new FieldRelate("projectId", new Dto(), "Project"));
@@ -64,9 +64,6 @@ public class Donation extends AbstractEntity {
 		fields.add(new FieldCurrency("amount", "Amount", "0"));		
 	}
 	
-	public Donation() {
-	}
-
 	public long getEmployeeId() {
 		return employeeId;
 	}

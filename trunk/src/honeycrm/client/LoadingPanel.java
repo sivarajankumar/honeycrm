@@ -103,6 +103,6 @@ public class LoadingPanel extends Composite {
 		// TODO this has no effect. i hope the user has a giant screen because currently scrolling
 		// is not working at all.
 		Window.enableScrolling(true);
-		RootLayoutPanel.get().add(new TabLayout(dtos));
+		RootLayoutPanel.get().add(new TabLayout());
 	}
 }

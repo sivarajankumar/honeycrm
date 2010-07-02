@@ -22,12 +22,9 @@ public class Employee extends AbstractEntity {
 	@Persistent
 	private boolean active;
 
-	static {
+	public Employee() {
 		fields.add(new FieldString("name", "Name"));
 		fields.add(new FieldBoolean("active", "Active"));
-	}
-
-	public Employee() {
 	}
 
 	public String getName() {

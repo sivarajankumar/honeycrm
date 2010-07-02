@@ -45,7 +45,7 @@ public class Project extends AbstractEntity {
 	@SearchableProperty
 	private String phase;
 
-	static {
+	public Project() {
 		fields.add(new FieldString("name", "Name"));
 		fields.add(new FieldRelate("employeeId", new Dto(), "Responsible"));
 		fields.add(new FieldText("description", "Description"));
@@ -54,9 +54,6 @@ public class Project extends AbstractEntity {
 		fields.add(new FieldDate("startDate", "Start date"));
 		fields.add(new FieldDate("endDate", "End date"));
 		fields.add(new FieldEnum("phase", "Phase", "not started", "in progress", "closed"));
-	}
-	
-	public Project() {
 	}
 
 	public String getName() {

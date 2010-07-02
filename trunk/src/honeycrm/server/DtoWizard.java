@@ -7,8 +7,10 @@ import honeycrm.server.domain.AbstractEntity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The wizard analyzes the domain classes and creates dto descriptions for them based on their fields and the annotations on the classes.
@@ -18,6 +20,7 @@ public class DtoWizard {
 	public static final DtoWizard instance = new DtoWizard();
 	private final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	private List<Dto> config;
+	private Map<String, Dto> moduleNameToDto;
 
 	private DtoWizard() {
 	}
@@ -36,6 +39,9 @@ public class DtoWizard {
 
 					for (final Field field : reflectionHelper.getAllFields(domainClass)) {
 						// TODO skip fields
+						if (field.getName().equals("id") || field.getName().startsWith("jdo") || field.getName().startsWith("$") || Modifier.isStatic(field.getModifiers())) {
+							continue;
+						}
 						dto.set(field.getName(), null);
 					}
 
@@ -68,10 +74,25 @@ public class DtoWizard {
 		}
 	}
 
+	private Map<String, Dto> internalGetModuleNameMap() {
+		final Map<String, Dto> map = new HashMap<String, Dto>();
+		for (final Dto dto: config) {
+			map.put(dto.getModule(), dto);
+		}
+		return map;
+	}
+	
 	public List<Dto> getDtoConfiguration() {
 		if (null == config) {
 			config = internalGetConfiguration();
 		}
 		return config;
+	}
+	
+	public Dto getModuleDtoByName(final String name) {
+		if (null == moduleNameToDto) {
+			moduleNameToDto = internalGetModuleNameMap();
+		}
+		return moduleNameToDto.get(name);
 	}
 }

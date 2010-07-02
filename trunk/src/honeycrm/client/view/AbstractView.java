@@ -6,6 +6,8 @@ import honeycrm.client.ServiceRegistry;
 import honeycrm.client.TabCenterView;
 import honeycrm.client.dto.Dto;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -38,7 +40,7 @@ abstract public class AbstractView extends Composite {
 				if (!Dto.isInternalReadOnlyField(id)) {
 					// TODO this position y, 2*x+1 depends on the current layout of the form..
 					final Widget widgetValue = table.getWidget(y, 2 * x + 1);
-					final Object value = tmpDto.getFieldById(id).getData(widgetValue);
+					final Serializable value = tmpDto.getFieldById(id).getData(widgetValue);
 					tmpDto.set(id, value);
 				}
 			}

@@ -1,5 +1,7 @@
 package honeycrm.client.field;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
@@ -43,7 +45,7 @@ public class FieldText extends AbstractField {
 	}
 
 	@Override
-	public Object getData(Widget w) {
+	public Serializable getData(Widget w) {
 		return ((TextArea) w).getText();
 	}
 }

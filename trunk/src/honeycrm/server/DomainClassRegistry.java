@@ -31,7 +31,7 @@ public class DomainClassRegistry {
 		dtoToDomain.put("product", Product.class);
 		dtoToDomain.put("service", Service.class);
 		dtoToDomain.put("offering", Offering.class);
-		
+	
 		for (final String dto: dtoToDomain.keySet()) {
 			domainToDto.put(dtoToDomain.get(dto), dto);
 		}

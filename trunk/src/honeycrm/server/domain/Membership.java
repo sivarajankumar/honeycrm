@@ -45,7 +45,7 @@ public class Membership extends AbstractEntity {
 	@Persistent
 	private Date endDate;
 
-	static {
+	public Membership() {
 		fields.add(new FieldRelate("memberId", new Dto(), "Member"));
 		fields.add(new FieldRelate("employeeId", new Dto(), "Employee"));
 		fields.add(new FieldCurrency("payment", "Contribution"));
@@ -54,9 +54,6 @@ public class Membership extends AbstractEntity {
 		fields.add(new FieldEnum("paymentMethod", "Payment method", "Direct Debit authorisation", "transaction"));
 		fields.add(new FieldDate("startDate", "Start date"));
 		fields.add(new FieldDate("endDate", "End date"));
-	}
-	
-	public Membership() {
 	}
 
 	public long getMemberId() {

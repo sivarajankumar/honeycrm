@@ -29,15 +29,12 @@ public class Offering extends AbstractEntity {
 	@Persistent
 	private Date deadline;
 
-	static {
+	public Offering() {
 		fields.add(new FieldTable("services", "Services"));
 		fields.add(new FieldRelate("contactId", new Dto(), "Contact"));
 		fields.add(new FieldDate("deadline", "Deadline"));
 	}
 	
-	public Offering() {
-	}
-
 	public List<Service> getServices() {
 		return services;
 	}

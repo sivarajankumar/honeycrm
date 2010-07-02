@@ -9,6 +9,8 @@ import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
 import honeycrm.client.view.RelateWidget;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -88,7 +90,7 @@ public class FieldRelate extends AbstractField {
 	}
 
 	@Override
-	public Object getData(Widget w) {
+	public Serializable getData(Widget w) {
 		return ((RelateWidget) w).getId();
 	}
 }
