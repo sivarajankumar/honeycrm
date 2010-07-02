@@ -3,3 +3,4 @@
 || google i/o 2010 video about ui overhaul ||  http://www.youtube.com/watch?v=g2XclEOJdIc&playnext_from=TL&videos=3iOGbt6Y2as ||
 || google i/o 2010 webtoolkit and html 5 || http://www.youtube.com/watch?v=aW--Wlf9EFs&feature=channel ||
 || google i/o 2010 the world of list view || http://www.youtube.com/watch?v=wDBM6wVEO70&feature=related ||
+|| blog containing good gwt related articles || http://www.techhui.com/profiles/blog/list?q=gwt ||
