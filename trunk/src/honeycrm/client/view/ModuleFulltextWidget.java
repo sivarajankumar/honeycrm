@@ -2,9 +2,8 @@ package honeycrm.client.view;
 
 import honeycrm.client.FulltextSearchWidget;
 import honeycrm.client.FulltextSuggestOracle;
-import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 
 import java.util.HashMap;
@@ -14,9 +13,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ModuleFulltextWidget extends FulltextSearchWidget {
-	private final Class<? extends AbstractDto> dtoClazz;
+	private final Dto dtoClazz;
 	
-	public ModuleFulltextWidget(final Class<? extends AbstractDto> clazz) {
+	public ModuleFulltextWidget(final Dto clazz) {
 		super();
 		this.dtoClazz = clazz;
 	}
@@ -25,16 +24,16 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 	protected void startFulltextSearch(String queryString) {
 		LoadIndicator.get().startLoading();
 
-		commonService.fulltextSearchForModule(IANA.mashal(dtoClazz), queryString, 0, 10, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult<Dto>>() {
 			@Override
-			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+			public void onSuccess(ListQueryResult<Dto> result) {
 				LoadIndicator.get().endLoading();
 
 				if (null != result && result.getItemCount() > 0) {
 					final FulltextSuggestOracle o = emptySuggestOracle();
 					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
 
-					for (final AbstractDto a : result.getResults()) {
+					for (final Dto a : result.getResults()) {
 						String label = a.getQuicksearchItem();
 
 						if (quicksearchLabels.containsKey(label)) {

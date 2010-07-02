@@ -1,7 +1,5 @@
 package honeycrm.server;
 
-import honeycrm.client.dto.AbstractDto;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -144,11 +142,12 @@ public class ReflectionHelper {
 	 * accessible properties except automatically added or those that are only necessary for
 	 * organizational purposes.
 	 */
-	public Field[] getDtoFields(final Class<? extends AbstractDto> dtoClass) {
+	public Field[] getDtoFields(final Class<?> dtoClass) {
 		final Set<String> badFieldNames = new HashSet<String>();
 		badFieldNames.add("serialVersionUID");
 		badFieldNames.add("INDEX_");
 		badFieldNames.add("$");
+		badFieldNames.add("jdo");
 
 		final List<Field> dtoFields = new LinkedList<Field>();
 		for (final Field field : dtoClass.getDeclaredFields()) {

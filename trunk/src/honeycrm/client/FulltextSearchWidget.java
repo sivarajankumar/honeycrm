@@ -1,6 +1,6 @@
 package honeycrm.client;
 
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class FulltextSearchWidget extends SuggestBox {
 	public static final int MIN_QUERY_LENGTH = 3;
 	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected String lastQueryString;
-	protected final Map<String, AbstractDto> nameToDto = new HashMap<String, AbstractDto>();
+	protected final Map<String, Dto> nameToDto = new HashMap<String, Dto>();
 
 	public FulltextSearchWidget() {
 		super(new FulltextSuggestOracle());
@@ -59,7 +59,7 @@ public class FulltextSearchWidget extends SuggestBox {
 
 		if (nameToDto.containsKey(label)) {
 			setText("");
-			final AbstractDto dto = nameToDto.get(label);
+			final Dto dto = nameToDto.get(label);
 			History.newItem(dto.getHistoryToken() + " " + dto.getId());
 		} else {
 			Window.alert("Cannot determine id of selected item: '" + label + "'");
@@ -69,16 +69,16 @@ public class FulltextSearchWidget extends SuggestBox {
 	protected void startFulltextSearch(final String queryString) {
 		LoadIndicator.get().startLoading();
 
-		commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+		commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult<Dto>>() {
 			@Override
-			public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+			public void onSuccess(ListQueryResult<Dto> result) {
 				LoadIndicator.get().endLoading();
 
 				if (null != result && result.getItemCount() > 0) {
 					final FulltextSuggestOracle o = emptySuggestOracle();
 					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
 
-					for (final AbstractDto a : result.getResults()) {
+					for (final Dto a : result.getResults()) {
 						String label = a.getQuicksearchItem();
 
 						if (quicksearchLabels.containsKey(label)) {

@@ -1,5 +1,16 @@
 package honeycrm.server.domain;
 
+import honeycrm.client.dto.DetailViewable;
+import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.ListViewable;
+import honeycrm.client.dto.RelatesTo;
+import honeycrm.client.field.FieldBoolean;
+import honeycrm.client.field.FieldEmail;
+import honeycrm.client.field.FieldEnum;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.field.FieldString;
+import honeycrm.client.field.FieldText;
+
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
@@ -8,6 +19,9 @@ import org.compass.annotations.SearchableProperty;
 
 @PersistenceCapable
 @Searchable
+@ListViewable( { "marked", "name", "email", "phone", "accountID" })
+@DetailViewable( { "name,accountID", "responsibleId", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId",
+		"childId1,childId2" })
 public class Contact extends AbstractEntity {
 	@Persistent
 	@SearchableProperty
@@ -22,6 +36,7 @@ public class Contact extends AbstractEntity {
 	@SearchableProperty
 	private String phone;
 	@Persistent
+	@RelatesTo(Account.class)
 	private long accountID;
 	@Persistent
 	private boolean emailOptedOut;
@@ -43,13 +58,36 @@ public class Contact extends AbstractEntity {
 	@SearchableProperty
 	private String study;
 	@Persistent
+	@RelatesTo(Contact.class)
 	private long partnerId;
 	@Persistent
+	@RelatesTo(Contact.class)
 	private long child1Id;
 	@Persistent
+	@RelatesTo(Contact.class)
 	private long child2Id;
 	@Persistent
+	@RelatesTo(Employee.class)
 	private long responsibleId;
+
+	static {
+		fields.add(new FieldString("name", "Name"));
+		fields.add(new FieldString("phone", "Phone"));
+		fields.add(new FieldString("city", "City"));
+		fields.add(new FieldEmail("email", "E-Mail"));
+		fields.add(new FieldRelate("accountID", new Dto(), "Account"));
+		fields.add(new FieldBoolean("doNotCall", "Do not call"));
+		fields.add(new FieldText("doNotCallExplanation", "Why not call"));
+		fields.add(new FieldBoolean("emailOptedOut", "No Mails"));
+		fields.add(new FieldString("mobile", "Mobile"));
+		fields.add(new FieldText("bankAccountData", "Bank account data"));
+		fields.add(new FieldEnum("profession", "Profession", "Student", "Professor", "Scientific Assistant", "Other"));
+		fields.add(new FieldEnum("study", "Study area", "None", "Biology", "Physics", "Mathematics", "Computer science"));
+		fields.add(new FieldRelate("partnerId", new Dto(), "Partner"));
+		fields.add(new FieldRelate("childId1", new Dto(), "First Child"));
+		fields.add(new FieldRelate("childId2", new Dto(), "Second Child"));
+		fields.add(new FieldRelate("responsibleId", new Dto(), "Responsible"));
+	}
 
 	public Contact() {
 	}

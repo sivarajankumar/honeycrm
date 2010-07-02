@@ -1,6 +1,9 @@
 package honeycrm.client;
 
+import honeycrm.client.dto.Dto;
+
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.user.client.Window;
@@ -66,7 +69,19 @@ public class LoadingPanel extends Composite {
 		ServiceRegistry.commonService().wakeupServer(new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
-				initRealUserInterface();
+				setStatus("Loading configuration..");
+				
+				ServiceRegistry.commonService().getDtoConfiguration(new AsyncCallback<List<Dto>>() {
+					@Override
+					public void onSuccess(List<Dto> result) {
+						initRealUserInterface(result);
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Could not get dto configuration from server side.");
+					}
+				});
 			}
 
 			@Override
@@ -80,12 +95,14 @@ public class LoadingPanel extends Composite {
 		status.setText(statusString);
 	}
 
-	private void initRealUserInterface() {
+	private void initRealUserInterface(List<Dto> dtos) {
+		DtoRegistry.instance.setDtos(dtos);
+		
 		setStatus("Initiating user interface..");
 		this.setVisible(false);
 		// TODO this has no effect. i hope the user has a giant screen because currently scrolling
 		// is not working at all.
 		Window.enableScrolling(true);
-		RootLayoutPanel.get().add(new TabLayout());
+		RootLayoutPanel.get().add(new TabLayout(dtos));
 	}
 }

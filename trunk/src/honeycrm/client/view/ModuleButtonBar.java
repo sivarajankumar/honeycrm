@@ -1,6 +1,6 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Widget;
  * This widget contains everything (buttons, fulltext search field) above the list view and detail view of the currently active module.
  */
 public class ModuleButtonBar extends AbstractView {
-	public ModuleButtonBar(final Class<? extends AbstractDto> dtoClazz) {
+	public ModuleButtonBar(final Dto dtoClazz) {
 		super(dtoClazz);
 
 		final FlowPanel panel = new FlowPanel();

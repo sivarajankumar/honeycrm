@@ -1,18 +1,11 @@
 package honeycrm.server;
 
-import honeycrm.client.IANA;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.misc.CollectionHelper;
 import honeycrm.server.domain.AbstractEntity;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import javax.jdo.Query;
@@ -26,7 +19,7 @@ import javax.jdo.Query;
 public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 
-	private int getItemCount(final int dtoIndex) {
+	private int getItemCount(final String dtoIndex) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		query.setResult("count(this)");
 		final Object result = query.execute();
@@ -40,40 +33,43 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult<? extends AbstractDto> getAll(final int dtoIndex, int from, int to) {
+	public ListQueryResult<Dto> getAll(final String dtoIndex, int from, int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		// order by number of views descending -> most viewed items at the top
 		// TODO allow user defined order as well i.e. sorting by arbitrary columns
 		query.setOrdering("views desc");
 		query.setRange(from, to);
 
-		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(dtoIndex, (Collection) query.execute()), getItemCount(dtoIndex));
+		return new ListQueryResult<Dto>(getArrayFromQueryResult(dtoIndex, (Collection) query.execute()), getItemCount(dtoIndex));
 	}
 
-	public AbstractDto get(final int dtoIndex, final long id) {
-		final Object domainObject = getDomainObject(dtoIndex, id);
+	public Dto get(final String dtoIndex, final long id) {
+		final AbstractEntity domainObject = getDomainObject(dtoIndex, id);
 
 		if (null == domainObject) {
 			return null;
 		} else {
-			return (AbstractDto) copy.copy(domainObject, getDtoClass(dtoIndex));
+			return copy.copy(domainObject);
 		}
 	}
 
-	public ListQueryResult<? extends AbstractDto> search(int dtoIndex, AbstractDto searchDto, int from, int to) {
+	public ListQueryResult<Dto> search(String dtoIndex, Dto searchDto, int from, int to) {
 		return searchWithOperator(dtoIndex, searchDto, from, to, BoolOperator.AND);
 	}
 
-	protected ListQueryResult<? extends AbstractDto> searchWithOperator(int dtoIndex, AbstractDto searchDto, int from, int to, final BoolOperator operator) {
-		if (null == searchDto)
+	protected ListQueryResult<Dto> searchWithOperator(String dtoIndex, Dto searchDto, int from, int to, final BoolOperator operator) {
+		// TODO 
+		return getAll(dtoIndex, from, to);
+		
+/*		if (null == searchDto)
 			// cannot do a proper search, do a getAll query instead
 			// however, the question remains why we received a searchDto which is null..
 			return getAll(dtoIndex, from, to);
 
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
-		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
+		final Class<Dto> dtoClass = getDtoClass(dtoIndex);
 		final List<String> queries = new LinkedList<String>();
-		AbstractDto[] array;
+		Dto[] array;
 
 		try {
 			for (final Field field : reflectionHelper.getDtoFields(dtoClass)) {
@@ -101,14 +97,13 @@ public class CommonServiceReader extends AbstractCommonService {
 		} catch (Exception e) {
 			// something went wrong, print stacktrace and return an empty list to the client.
 			e.printStackTrace();
-			array = (AbstractDto[]) Array.newInstance(dtoClass, 0);
+			array = (Dto[]) Array.newInstance(dtoClass, 0);
 		}
 
-		return new ListQueryResult<AbstractDto>(array, array.length);
+		return new ListQueryResult<Dto>(array, array.length);*/
 	}
 
-	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(int dtoIndex, String prefix, int from, int to) {
-		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
+	public ListQueryResult<Dto> getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)"); // TODO
 		// use
 		// toLowerCase
@@ -124,21 +119,20 @@ public class CommonServiceReader extends AbstractCommonService {
 
 		final Collection collection = (Collection) query.execute(prefix);
 
-		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
+		return new ListQueryResult<Dto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
-	public AbstractDto getByName(int dtoIndex, String name) {
-		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
+	public Dto getByName(String dtoIndex, String name) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name == \"" + name + "\"");
-		final Collection collection = (Collection) query.execute();
+		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
 
 		if (1 == collection.size()) {
-			return (AbstractDto) copy.copy(collection.iterator().next(), getDtoClass(dtoIndex));
+			return copy.copy(collection.iterator().next());
 		} else if (collection.isEmpty()) {
 			return null;
 		} else {
 			System.err.println("Search ambigious, expected one result. received multiple. Returning first result.");
-			return (AbstractDto) copy.copy(collection.iterator().next(), getDtoClass(dtoIndex));
+			return copy.copy(collection.iterator().next());
 		}
 	}
 
@@ -164,29 +158,28 @@ public class CommonServiceReader extends AbstractCommonService {
 	 * return result; }
 	 */
 
-	public ListQueryResult<? extends AbstractDto> getAllMarked(int dtoIndex, int from, int to) {
-		final Class<? extends AbstractDto> dtoClass = getDtoClass(dtoIndex);
+	public ListQueryResult<Dto> getAllMarked(String dtoIndex, int from, int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		query.setRange(from, to);
 		query.setFilter("marked == true");
 
-		final Collection collection = (Collection) query.execute();
-		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
+		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
+		return new ListQueryResult<Dto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
-	public ListQueryResult<? extends AbstractDto> getAllRelated(int originatingDtoIndex, Long id, int relatedDtoIndex) {
+	public ListQueryResult<Dto> getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex) {
 		final Set<AbstractEntity> result = new HashSet<AbstractEntity>();
 
 		/**
 		 * Get all related entities where the id fields contain the id of the originating entity e.g. return all contacts which have accountID == 23 where is the id of the originating account.
 		 */
-		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(IANA.unmarshal(originatingDtoIndex), IANA.unmarshal(relatedDtoIndex))) {
+		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(originatingDtoIndex, relatedDtoIndex)) {
 			final Query q = m.newQuery(getDomainClass(originatingDtoIndex));
 			q.setFilter(fieldName + " == " + id);
 			result.addAll((Collection<AbstractEntity>) q.execute());
 		}
 
-		return new ListQueryResult<AbstractDto>(getArrayFromQueryResult(originatingDtoIndex, result), result.size());
+		return new ListQueryResult<Dto>(getArrayFromQueryResult(originatingDtoIndex, result), result.size());
 	}
 
 	enum BoolOperator {

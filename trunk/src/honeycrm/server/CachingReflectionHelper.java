@@ -1,7 +1,5 @@
 package honeycrm.server;
 
-import honeycrm.client.dto.AbstractDto;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +18,7 @@ public class CachingReflectionHelper extends ReflectionHelper {
 	private static final Logger log = Logger.getLogger(CachingReflectionHelper.class.getName());
 	private static Cache cache;
 	private static Map<Class, Field[]> cacheGetAllFields = new HashMap<Class, Field[]>();
-	private static Map<Class<? extends AbstractDto>, Field[]> cacheGetDtoFields = new HashMap<Class<? extends AbstractDto>, Field[]>();
+	private static Map<Class<?>, Field[]> cacheGetDtoFields = new HashMap<Class<?>, Field[]>();
 
 	static { // setup the cache instance once
 		try {
@@ -56,7 +54,7 @@ public class CachingReflectionHelper extends ReflectionHelper {
 
 	// TODO need separate caches for each method..
 	@Override
-	public Field[] getDtoFields(Class<? extends AbstractDto> dtoClass) {
+	public Field[] getDtoFields(Class<?> dtoClass) {
 		// if (isCacheEnabled()) {
 		if (!cacheGetDtoFields.containsKey(dtoClass)) {
 			cacheGetDtoFields.put(dtoClass, super.getDtoFields(dtoClass));

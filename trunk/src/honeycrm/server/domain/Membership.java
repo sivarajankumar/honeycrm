@@ -1,5 +1,15 @@
 package honeycrm.server.domain;
 
+import honeycrm.client.dto.DetailViewable;
+import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.ListViewable;
+import honeycrm.client.dto.RelatesTo;
+import honeycrm.client.field.FieldCurrency;
+import honeycrm.client.field.FieldDate;
+import honeycrm.client.field.FieldEnum;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.field.FieldText;
+
 import java.util.Date;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -10,10 +20,14 @@ import org.compass.annotations.SearchableProperty;
 
 @PersistenceCapable
 @Searchable
+@ListViewable({"marked", "memberId", "employeeId", "startDate"})
+@DetailViewable({"memberId,employeeId", "tiedToPurpose,purpose", "payment,paymentMethod", "startDate,endDate"})
 public class Membership extends AbstractEntity {
 	@Persistent
+	@RelatesTo(Contact.class)
 	private long memberId; // relation to contacts
 	@Persistent
+	@RelatesTo(Employee.class)
 	private long employeeId; // relation to employees
 	@Persistent
 	private double payment;
@@ -31,6 +45,17 @@ public class Membership extends AbstractEntity {
 	@Persistent
 	private Date endDate;
 
+	static {
+		fields.add(new FieldRelate("memberId", new Dto(), "Member"));
+		fields.add(new FieldRelate("employeeId", new Dto(), "Employee"));
+		fields.add(new FieldCurrency("payment", "Contribution"));
+		fields.add(new FieldEnum("tiedToPurpose", "Tied to purpose", "Yes", "No", "Soon"));
+		fields.add(new FieldText("purpose", "Purpose"));
+		fields.add(new FieldEnum("paymentMethod", "Payment method", "Direct Debit authorisation", "transaction"));
+		fields.add(new FieldDate("startDate", "Start date"));
+		fields.add(new FieldDate("endDate", "End date"));
+	}
+	
 	public Membership() {
 	}
 

@@ -1,6 +1,6 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 public class ModuleExportButtonBar extends AbstractView {
-	public ModuleExportButtonBar(final Class<? extends AbstractDto> dtoClazz) {
+	public ModuleExportButtonBar(final Dto dtoClazz) {
 		super(dtoClazz);
 
 		final Button csvLink = getExportButton("CSV", "csv");

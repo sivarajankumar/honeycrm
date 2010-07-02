@@ -1,7 +1,6 @@
 package honeycrm.server;
 
-import honeycrm.client.IANA;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.util.Collection;
@@ -14,7 +13,6 @@ import javax.jdo.Query;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-
 /**
  * Implements very basic functionality for CommonServiceImpl class.
  */
@@ -22,21 +20,17 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	protected static final Logger log = Logger.getLogger(AbstractCommonService.class.getName());
 	private static final long serialVersionUID = -2405965558198509695L;
 	protected static final PersistenceManager m = PMF.get().getPersistenceManager();
-	protected static final CopyMachine copy = new CopyMachine();
+	protected static final DtoCopyMachine copy = new DtoCopyMachine();
 	protected static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	protected static final DomainClassRegistry registry = DomainClassRegistry.instance;
-	
-	protected Class<? extends AbstractDto> getDtoClass(final int dtoIndex) {
-		return IANA.unmarshal(dtoIndex);
+
+	protected Class<? extends AbstractEntity> getDomainClass(final String dtoIndex) {
+		return registry.getDomain(dtoIndex);
 	}
 
-	protected Class<? extends AbstractEntity> getDomainClass(final int dtoIndex) {
-		return registry.getDomain(IANA.unmarshal(dtoIndex));
-	}
-
-	protected Object getDomainObject(final int dtoIndex, final long id) {
+	protected AbstractEntity getDomainObject(final String dtoIndex, final long id) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "id == " + id);
-		final Collection collection = (Collection) query.execute();
+		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
 
 		if (1 == collection.size()) {
 			return collection.iterator().next();
@@ -45,17 +39,13 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 		}
 	}
 
-	protected AbstractDto[] getArrayFromQueryResult(final int dtoIndex, final Collection collection) {
-		if (collection.isEmpty()) {
-			return new AbstractDto[0];
-		} else {
-			final List<AbstractDto> list = new LinkedList<AbstractDto>();
+	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final Collection<AbstractEntity> collection) {
+		final List<Dto> list = new LinkedList<Dto>();
 
-			for (Object item : collection) {
-				list.add((AbstractDto) copy.copy(item, getDtoClass(dtoIndex)));
-			}
-
-			return list.toArray(new AbstractDto[0]);
+		for (AbstractEntity item : collection) {
+			list.add(copy.copy(item));
 		}
+
+		return list.toArray(new Dto[0]);
 	}
 }

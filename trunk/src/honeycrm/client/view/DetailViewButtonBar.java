@@ -1,6 +1,6 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -15,7 +15,7 @@ public class DetailViewButtonBar extends AbstractView {
 
 	private final DetailView detailview;
 
-	public DetailViewButtonBar(final Class<? extends AbstractDto> clazz, final DetailView detailview) {
+	public DetailViewButtonBar(final Dto clazz, final DetailView detailview) {
 		super(clazz);
 
 		this.detailview = detailview;

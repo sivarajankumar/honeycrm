@@ -16,7 +16,7 @@ public class FieldEnum extends AbstractField {
 	public FieldEnum() { // for gwt
 	}
 
-	public FieldEnum(final int id, final String label, final String... options) {
+	public FieldEnum(final String id, final String label, final String... options) {
 		super(id, label);
 		this.options = options;
 	}

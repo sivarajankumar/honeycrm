@@ -1,7 +1,7 @@
 package honeycrm.server.test;
 
 import honeycrm.client.csv.CsvImporter;
-import honeycrm.client.dto.DtoContact;
+import honeycrm.client.dto.Dto;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ public class CsvImportTest extends TestCase {
 				+ "\"78159143-432f-5063-dc07-4c1904c0f30c\",\"06/16/2010 07:05 pm\",\"06/16/2010 07:05 pm\",\"1\",\"1\",\"\",\"0\",\"seed_sally_id\",\"\",\"Jerrell\",\"Lachance\",\"VP Sales\",\"\",\"0\",\"(170) 360-1699\",\"(989) 323-1320\",\"(320) 473-5892\",\"\",\"\",\"123 Anywhere Street\",\"Denver\",\"CA\",\"64860\",\"USA\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"Other\",\"\",\"\",\"\",\"vegan.im.section@example.com\",\"Cumberland Trails Inc\",\"sally\"";
 
 		final CsvImporter importer = new CsvImporter();
-		final List<DtoContact> list = importer.parse(csv);
+		final List<Dto> list = importer.parse(csv);
 		
 		assertNotNull(list);
 		assertEquals(6, list.size());
 		
-		list.get(0).getName().equals("Irma Bustillos");
-		list.get(0).getEmail().equals("vegan.vegan.vegan@example.tw");
-		list.get(5).getName().equals("Jerrell Lachance");
+		list.get(0).get("name").equals("Irma Bustillos");
+		list.get(0).get("email").equals("vegan.vegan.vegan@example.tw");
+		list.get(5).get("name").equals("Jerrell Lachance");
 	}
 }

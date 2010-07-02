@@ -1,9 +1,8 @@
 package honeycrm.client.view;
 
-import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.RelationshipsContainer;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -34,7 +33,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	private FlexTable table = new FlexTable();
 	private long currentId = -1; // id of currently displayed item
 
-	public DetailView(final Class<? extends AbstractDto> clazz) {
+	public DetailView(final Dto clazz) {
 		super(clazz);
 
 		final VerticalPanel panel = new VerticalPanel();
@@ -66,7 +65,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 			LoadIndicator.get().startLoading();
 			table.setVisible(false);
 
-			commonService.get(IANA.mashal(clazz), id, new AsyncCallback<AbstractDto>() {
+			commonService.get(dto.getModule(), id, new AsyncCallback<Dto>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
@@ -74,7 +73,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 				}
 
 				@Override
-				public void onSuccess(AbstractDto result) {
+				public void onSuccess(Dto result) {
 					table.setVisible(true);
 					relationshipsContainer.refresh(id);
 					
@@ -95,12 +94,12 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 
 	// TODO only update the field contents instead of removing all fields an
 	// adding them
-	private void refreshFields(final AbstractDto viewable) {
+	private void refreshFields(final Dto viewable) {
 		resetFields(viewable, View.DETAIL);
 	}
 
-	private void resetFields(final AbstractDto tmpViewable, final View view) {
-		final int[][] fieldIds = tmpViewable.getFormFieldIds();
+	private void resetFields(final Dto tmpViewable, final View view) {
+		final String[][] fieldIds = tmpViewable.getFormFieldIds();
 		this.currentId = tmpViewable.getId();
 		this.dto = tmpViewable;
 
@@ -110,7 +109,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
-				final int id = fieldIds[y][x];
+				final String id = fieldIds[y][x];
 
 				final Widget widgetLabel = getLabelForField(id);
 				final Widget widgetValue = getWidgetByType(tmpViewable, id, view);
@@ -146,7 +145,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 					}
 				}
 
-				if (view == View.DETAIL || (view != View.DETAIL && !AbstractDto.isInternalReadOnlyField(id))) {
+				if (view == View.DETAIL || (view != View.DETAIL && !Dto.isInternalReadOnlyField(id))) {
 					// display the widget because we are in readonly mode or we
 					// are not in ro mode but it is no internal field
 					table.setWidget(y, 2 * x + 0, widgetLabel);
@@ -183,7 +182,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		if (isShowing()) {
 			LoadIndicator.get().startLoading();
 
-			commonService.delete(IANA.mashal(clazz), currentId, new AsyncCallback<Void>() {
+			commonService.delete(dto.getModule(), currentId, new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);

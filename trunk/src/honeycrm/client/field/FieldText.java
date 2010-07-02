@@ -10,7 +10,7 @@ public class FieldText extends AbstractField {
 	public FieldText() {
 	}
 
-	public FieldText(final int index, final String label) {
+	public FieldText(final String index, final String label) {
 		super(index, label);
 		this.width = 200;
 	}

@@ -3,7 +3,7 @@ package honeycrm.client.view;
 import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
@@ -21,10 +21,10 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public class RelateWidget extends SuggestBox {
 	private long id;
-	private final int marshalledClass;
+	private final String marshalledClass;
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 
-	public RelateWidget(final int marshalledClazz, final long id) {
+	public RelateWidget(final String marshalledClazz, final long id) {
 		super(new MultiWordSuggestOracle());
 		this.marshalledClass = marshalledClazz;
 		addHandlers();
@@ -40,17 +40,17 @@ public class RelateWidget extends SuggestBox {
 	private void setValueForId(final long id) {
 		LoadIndicator.get().startLoading();
 
-		Prefetcher.instance.get(new Consumer<AbstractDto>() {
+		Prefetcher.instance.get(new Consumer<Dto>() {
 			@Override
-			public void setValueAsynch(AbstractDto result) {
+			public void setValueAsynch(Dto result) {
 				setValue(result.getQuicksearchItem());
 			}
-		}, new ServerCallback<AbstractDto>() {
+		}, new ServerCallback<Dto>() {
 			@Override
-			public void doRpc(final Consumer<AbstractDto> internalCacheCallback) {
-				commonService.get(marshalledClass, id, new AsyncCallback<AbstractDto>() {
+			public void doRpc(final Consumer<Dto> internalCacheCallback) {
+				commonService.get(marshalledClass, id, new AsyncCallback<Dto>() {
 					@Override
-					public void onSuccess(final AbstractDto result) {
+					public void onSuccess(final Dto result) {
 						LoadIndicator.get().endLoading();
 						internalCacheCallback.setValueAsynch(result);
 					}
@@ -75,9 +75,9 @@ public class RelateWidget extends SuggestBox {
 				if (!query.isEmpty()) {
 					LoadIndicator.get().startLoading();
 
-					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult<? extends AbstractDto>>() {
+					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult<Dto>>() {
 						@Override
-						public void onSuccess(ListQueryResult<? extends AbstractDto> result) {
+						public void onSuccess(ListQueryResult<Dto> result) {
 							LoadIndicator.get().endLoading();
 
 							if (0 == result.getResults().length) {
@@ -86,7 +86,7 @@ public class RelateWidget extends SuggestBox {
 								final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
 								o.clear();
 
-								for (final AbstractDto a : result.getResults()) {
+								for (final Dto a : result.getResults()) {
 									o.add(a.getQuicksearchItem());
 								}
 							}
@@ -119,14 +119,14 @@ public class RelateWidget extends SuggestBox {
 				// available on submit
 				final String selected = event.getSelectedItem().getReplacementString();
 
-				commonService.getByName(marshalledClass, selected, new AsyncCallback<AbstractDto>() {
+				commonService.getByName(marshalledClass, selected, new AsyncCallback<Dto>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert("Could not get id of selected item = " + selected);
 					}
 
 					@Override
-					public void onSuccess(AbstractDto result) {
+					public void onSuccess(Dto result) {
 						if (null == result) {
 							// the related entity could not be found or the search returned more
 							// than one result.

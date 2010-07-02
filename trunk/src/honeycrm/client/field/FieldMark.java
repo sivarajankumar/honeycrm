@@ -1,21 +1,20 @@
 package honeycrm.client.field;
 
 import honeycrm.client.DtoRegistry;
-import honeycrm.client.IANA;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.view.MarkWidget;
 
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldMark extends AbstractField {
 	private static final long serialVersionUID = 2910540849623881202L;
-	private int dtoIndex;
+	private String dtoIndex;
 	private long dtoId;
 
 	public FieldMark() {
 	}
 	
-	public FieldMark(final int index, final String label, final int dtoIndex, final long id) {
+	public FieldMark(final String index, final String label, final String dtoIndex, final long id) {
 		super(index, label);
 		this.dtoIndex = dtoIndex;
 		this.dtoId = id;
@@ -23,11 +22,11 @@ public class FieldMark extends AbstractField {
 	
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
-		final AbstractDto dto = DtoRegistry.instance.getDto(IANA.unmarshal(dtoIndex));
+		final Dto dto = DtoRegistry.instance.getDto(dtoIndex);
 		// dto.setId(NumberParser.convertToLong(value));
 		dto.setId(dtoId);
 		
-		return new MarkWidget(dto.getClass(), dto);
+		return new MarkWidget(dto, dto);
 	}
 
 	@Override

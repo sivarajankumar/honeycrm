@@ -1,6 +1,6 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -13,45 +13,30 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
-
 
 public class SearchWidget extends AbstractView implements KeyPressHandler {
 	private final FlowPanel panel = new FlowPanel();
 	private final FlexTable table = new FlexTable();
-	
-	public SearchWidget(final Class<? extends AbstractDto> clazz, final SearchableListView listview) {
+
+	public SearchWidget(final Dto clazz, final SearchableListView listview) {
 		super(clazz);
 
-		final int[][] fieldIDs = dto.getSearchFields();
-		for (int y = 0; y < fieldIDs.length; y++) {
-			for (int x = 0; x < fieldIDs[y].length; x++) {
-				// final Label widgetLabel = new Label(dto.getFieldById(fieldIDs[y][x]).getLabel());
-				final Widget widgetValue = getWidgetByType(dto, fieldIDs[y][x], View.EDIT);
-				widgetValue.setWidth("400px");
+		final String[][] fieldIDs = new String[][] { new String[] { "name" } };
+		
+		final TextBox widgetValue = new TextBox();
+		widgetValue.setWidth("400px");
 
-				// attach key press event for starting search on hitting ENTER
-				if (widgetValue instanceof TextBox) {
-					((TextBox) widgetValue).addKeyPressHandler(new KeyPressHandler() {
-						@Override
-						public void onKeyPress(KeyPressEvent event) {
-							if (event.getCharCode() == KeyCodes.KEY_ENTER) {
-								startSearch(listview, table, fieldIDs);
-							}
-						}
-					});
+		widgetValue.addKeyPressHandler(new KeyPressHandler() {
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+					startSearch(listview, table, fieldIDs);
 				}
-				// TODO do this for other possible widgets as well
-
-				// table.setWidget(y, 2 * x + 0, widgetLabel);
-				table.setWidget(y, 2 * x + 1, widgetValue);
-				
-				break;
 			}
-			
-			//TODO: display full text search for this module
-			break;
-		}
+		});
+
+		// table.setWidget(y, 2 * x + 0, widgetLabel);
+		table.setWidget(0, 0, widgetValue);
 
 		final Button searchBtn = new Button("Search");
 		searchBtn.addClickHandler(new ClickHandler() {
@@ -86,18 +71,18 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 				showMarked = !showMarked;
 			}
 		});
-		
+
 		final Button advancedSearchBtn = new Button("Advanced Search");
 		advancedSearchBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 			}
 		});
 
 		// table.setStyleName("left");
 		// table.setStyleName("search_field");
-		
+
 		final HorizontalPanel buttonPanel = new HorizontalPanel();
 		buttonPanel.setStyleName("left");
 		buttonPanel.add(searchBtn);
@@ -107,13 +92,13 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 
 		panel.add(table);
 		panel.add(buttonPanel);
-		
+
 		initWidget(panel);
 	}
 
-	private void startSearch(final SearchableListView listview, final FlexTable table, final int[][] fieldIDs) {
+	private void startSearch(final SearchableListView listview, final FlexTable table, final String[][] fieldIDs) {
 		initializeDtoFromTable(fieldIDs, table, dto); // build query by writing input from textboxes into
-											// viewable instance
+		// viewable instance
 		listview.search(dto);
 	}
 
@@ -124,9 +109,7 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 	public void onKeyPress(KeyPressEvent event) {
 		Window.alert("fired");
 		/*
-		if (event.isAltKeyDown() && 's' == event.getCharCode()) {
-			panel.setOpen(!panel.isOpen());
-		}
-		*/
+		 * if (event.isAltKeyDown() && 's' == event.getCharCode()) { panel.setOpen(!panel.isOpen()); }
+		 */
 	}
 }

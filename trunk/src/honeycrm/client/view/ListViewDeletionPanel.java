@@ -1,8 +1,7 @@
 package honeycrm.client.view;
 
-import honeycrm.client.IANA;
 import honeycrm.client.LoadIndicator;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +26,7 @@ public class ListViewDeletionPanel extends AbstractView {
 	private final HashMap<Integer, Set<Long>> deleteIdsPerPage = new HashMap<Integer, Set<Long>>();
 	private final CheckBox deleteAllCheckbox = new CheckBox();
 
-	public ListViewDeletionPanel(final Class<? extends AbstractDto> clazz, final ListView listview) {
+	public ListViewDeletionPanel(final Dto clazz, final ListView listview) {
 		super(clazz);
 
 		this.listview = listview;
@@ -52,7 +51,7 @@ public class ListViewDeletionPanel extends AbstractView {
 
 			final Set<Long> ids = deleteIdsPerPage.get(currentPage);
 
-			commonService.deleteAll(IANA.mashal(clazz), ids, new AsyncCallback<Void>() {
+			commonService.deleteAll(dto.getModule(), ids, new AsyncCallback<Void>() {
 				@Override
 				public void onSuccess(Void result) {
 					LoadIndicator.get().endLoading();
@@ -125,7 +124,7 @@ public class ListViewDeletionPanel extends AbstractView {
 	public void deleteAll() {
 		LoadIndicator.get().startLoading();
 
-		commonService.deleteAll(IANA.mashal(clazz), new AsyncCallback<Void>() {
+		commonService.deleteAll(dto.getModule(), new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);

@@ -1,7 +1,6 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.dto.DtoService;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.view.AbstractView.View;
 
@@ -24,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class ServiceTableWidget extends ITableWidget {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
-	private final AbstractDto dto = new DtoService();
+	private final Dto dto = new Dto();
 	private final View view;
 	private final Label sum = new Label();
 
@@ -47,9 +46,9 @@ public class ServiceTableWidget extends ITableWidget {
 				public void onClick(ClickEvent event) {
 					final int rows = table.getRowCount();
 
-					for (int x = 0; x < dto.getListViewColumnIds().length; x++) {
-						final int index = dto.getListViewColumnIds()[x];
-						table.setWidget(rows, x, addChangeEvents(index, dto.getFieldById(index).getWidget(view, dto.getFieldValue(index))));
+					for (int x = 0; x < dto.getListFieldIds().length; x++) {
+						final String index = dto.getListFieldIds()[x];
+						table.setWidget(rows, x, addChangeEvents(index, dto.getFieldById(index).getWidget(view, dto.get(index))));
 					}
 				}
 			});
@@ -61,16 +60,16 @@ public class ServiceTableWidget extends ITableWidget {
 	}
 
 	private void initHeader() {
-		for (int x = 0; x < dto.getListViewColumnIds().length; x++) {
-			final AbstractField field = dto.getFieldById(dto.getListViewColumnIds()[x]);
+		for (int x = 0; x < dto.getListFieldIds().length; x++) {
+			final AbstractField field = dto.getFieldById(dto.getListFieldIds()[x]);
 			table.setWidget(0, x, field.getWidget(View.LIST_HEADER, field.getLabel()));
 		}
 	}
 
-	private Widget addChangeEvents(final int index, final Widget widget) {
+	private Widget addChangeEvents(final String index, final Widget widget) {
 		// only attach a change event for text boxes
 		if (widget instanceof TextBox) {
-			if (DtoService.INDEX_PRICE == index || DtoService.INDEX_QUANTITY == index || DtoService.INDEX_DISCOUNT == index) {
+			if ("price".equals(index) || "quantity".equals(index) || "discount".equals(index)) {
 				((TextBox) widget).addChangeHandler(new ChangeHandler() {
 					@Override
 					public void onChange(ChangeEvent event) {
@@ -92,24 +91,24 @@ public class ServiceTableWidget extends ITableWidget {
 	}
 
 	@Override
-	public List<? extends AbstractDto> getData() {
-		final List<DtoService> services = new LinkedList<DtoService>();
+	public List<Dto> getData() {
+		final List<Dto> services = new LinkedList<Dto>();
 
 		for (int y = HEADER_ROWS; y < table.getRowCount(); y++) {
-			final DtoService s = new DtoService();
+			final Dto s = new Dto();
 
-			for (int x = 0; x < dto.getListViewColumnIds().length; x++) {
+			for (int x = 0; x < dto.getListFieldIds().length; x++) {
 				if (table.getCellCount(y) > x) {
 					if (table.getWidget(y, x) instanceof TextBox) {
 						// TODO do this for other widgets as well
-						s.setFieldValue(dto.getListViewColumnIds()[x], dto.getFieldById(dto.getListViewColumnIds()[x]).getData(table.getWidget(y, x)));
+						s.set(dto.getListFieldIds()[x], dto.getFieldById(dto.getListFieldIds()[x]).getData(table.getWidget(y, x)));
 					} else {
 						throw new RuntimeException("Cannot yet handle widget type " + table.getWidget(y, x).getClass());
 					}
 				}
 			}
 
-			s.setSum((s.getPrice() - s.getDiscount()) * s.getQuantity());
+			s.set("sum", ((Double) s.get("price") - (Double) s.get("discount")) * (Double) s.get("quantity"));
 			services.add(s);
 		}
 
@@ -117,17 +116,17 @@ public class ServiceTableWidget extends ITableWidget {
 	}
 
 	@Override
-	public void setData(List<? extends AbstractDto> data) {
+	public void setData(List<Dto> data) {
 		if (null == data)
 			return;
 		
 		if (!data.isEmpty()) {
-			if (data.get(0) instanceof DtoService) {
+			if (data.get(0) instanceof Dto) {
 				final boolean wasTableAlreadyFilled = (table.getRowCount() == HEADER_ROWS + data.size());
 
 				for (int y = 0; y < data.size(); y++) {
-					for (int x = 0; x < data.get(y).getListViewColumnIds().length; x++) {
-						final int index = data.get(y).getListViewColumnIds()[x];
+					for (int x = 0; x < data.get(y).getListFieldIds().length; x++) {
+						final String index = data.get(y).getListFieldIds()[x];
 						final AbstractField field = data.get(y).getFieldById(index);
 
 						if (wasTableAlreadyFilled) {
@@ -135,12 +134,12 @@ public class ServiceTableWidget extends ITableWidget {
 							if (table.getWidget(HEADER_ROWS + y, x) instanceof TextBox) {
 								// TODO this is faaaaar to crappy!
 								// TODO this should be done by field currency somehow..
-								((TextBox) table.getWidget(HEADER_ROWS + y, x)).setText(((TextBox) field.getWidget(View.EDIT, data.get(y).getFieldValue(index))).getText());
+								((TextBox) table.getWidget(HEADER_ROWS + y, x)).setText(((TextBox) field.getWidget(View.EDIT, data.get(y).get(index))).getText());
 								// data.get(y).getFieldValue(index).toString());
 							}
 						} else {
 							// add a new widget and new click handler
-							table.setWidget(HEADER_ROWS + y, x, data.get(y).getFieldById(index).getWidget(view, data.get(y).getFieldValue(index)));
+							table.setWidget(HEADER_ROWS + y, x, data.get(y).getFieldById(index).getWidget(view, data.get(y).get(index)));
 							addChangeEvents(index, table.getWidget(HEADER_ROWS + y, x));
 						}
 					}
@@ -150,13 +149,13 @@ public class ServiceTableWidget extends ITableWidget {
 			}
 		}
 
-		sum.setText(NumberFormat.getCurrencyFormat("EUR").format(getSum((List<DtoService>) data)));
+		sum.setText(NumberFormat.getCurrencyFormat("EUR").format(getSum(data)));
 	}
 
-	private double getSum(List<DtoService> data) {
+	private double getSum(List<Dto> data) {
 		double currentSum = 0.0;
-		for (DtoService service : data) {
-			currentSum += (service.getPrice() - service.getDiscount()) * service.getQuantity();
+		for (Dto service : data) {
+			currentSum += ((Double)service.get("price") - (Double)service.get("discount")) * (Double)service.get("quantity");
 		}
 		return currentSum;
 	}

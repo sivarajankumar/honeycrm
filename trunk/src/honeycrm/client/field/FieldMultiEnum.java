@@ -23,7 +23,7 @@ public class FieldMultiEnum extends FieldEnum {
 	public FieldMultiEnum() {
 	}
 
-	public FieldMultiEnum(final int id, final String label, final String... options) {
+	public FieldMultiEnum(final String id, final String label, final String... options) {
 		super(id, label, options);
 	}
 

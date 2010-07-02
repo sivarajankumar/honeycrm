@@ -1,9 +1,6 @@
 package honeycrm.server;
 
-import honeycrm.client.IANA;
-import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.dto.DtoAccount;
-import honeycrm.client.dto.DtoContact;
+import honeycrm.client.dto.Dto;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.util.Date;
@@ -14,8 +11,8 @@ import java.util.Date;
 public class CommonServiceCreator extends AbstractCommonService {
 	private static final long serialVersionUID = -272641981474976416L;
 
-	public long create(int dtoIndex, AbstractDto dto) {
-		final AbstractEntity domainObject = (AbstractEntity) copy.copy(dto, getDomainClass(dtoIndex));
+	public long create(Dto dto) {
+		final AbstractEntity domainObject = copy.copy(dto);
 		// explicitly set id to null to force the database to create a new row
 		domainObject.setId(null);
 		return internalCreate(domainObject);
@@ -37,12 +34,10 @@ public class CommonServiceCreator extends AbstractCommonService {
 		}
 	}
 
-	public void addDemo(int dtoIndex) {
-		final Class<? extends AbstractDto> dtoClass = IANA.unmarshal(dtoIndex);
-
-		if (DtoAccount.class == dtoClass) {
+	public void addDemo(String dtoIndex) {
+		if ("account".equals(dtoIndex)) {
 			internalCreate(DemoDataProvider.account());
-		} else if (DtoContact.class == dtoClass) {
+		} else if ("contact".equals(dtoIndex)) {
 			internalCreate(DemoDataProvider.contact());
 		}
 	}

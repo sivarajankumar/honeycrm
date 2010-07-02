@@ -1,7 +1,6 @@
 package honeycrm.client;
 
-import honeycrm.client.dto.AbstractDto;
-import honeycrm.client.dto.DtoContact;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 
 import java.util.List;
@@ -15,35 +14,36 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("common")
 public interface CommonService extends RemoteService {
 	// create
-	public long create(int dtoIndex, AbstractDto viewable);
+	public long create(Dto viewable);
 
 	// read
-	public AbstractDto get(int dtoIndex, long id);
-	public AbstractDto getByName(int dtoIndex, String name);
-	public ListQueryResult<? extends AbstractDto> getAll(final int dtoIndex, int from, int to);
-	public ListQueryResult<? extends AbstractDto> getAllMarked(final int dtoIndex, int from, int to);
-	public ListQueryResult<? extends AbstractDto> getAllByNamePrefix(final int dtoIndex, String prefix, int from, int to);
-	public ListQueryResult<? extends AbstractDto> search(int dtoIndex, AbstractDto searchContact, int from, int to);
-	public ListQueryResult<? extends AbstractDto> fulltextSearch(String query, int from, int to);
-	public ListQueryResult<? extends AbstractDto> getAllRelated(final int originatingDtoIndex, final Long id, final int relatedDtoIndex);
-	public ListQueryResult<? extends AbstractDto> fulltextSearchForModule(final int dtoIndex, String query, int from, int to);
+	public Dto get(String dtoIndex, long id);
+	public Dto getByName(String dtoIndex, String name);
+	public ListQueryResult<Dto> getAll(final String dtoIndex, int from, int to);
+	public ListQueryResult<Dto> getAllMarked(final String dtoIndex, int from, int to);
+	public ListQueryResult<Dto> getAllByNamePrefix(final String dtoIndex, String prefix, int from, int to);
+	public ListQueryResult<Dto> search(String dtoIndex, Dto searchContact, int from, int to);
+	public ListQueryResult<Dto> fulltextSearch(String query, int from, int to);
+	public ListQueryResult<Dto> getAllRelated(final String originatingDtoIndex, final Long id, final String relatedDtoIndex);
+	public ListQueryResult<Dto> fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
 	
 	// update
-	public void update(int dtoIndex, AbstractDto account, long id);
-	public void mark(int dtoIndex, long id, boolean marked);
+	public void update(Dto account, long id);
+	public void mark(String dtoIndex, long id, boolean marked);
 
 	// delete
-	public void delete(int dtoIndex, long id);
-	public void deleteAll(int dtoIndex, Set<Long> ids);
-	public void deleteAll(int dtoIndex);
+	public void delete(String dtoIndex, long id);
+	public void deleteAll(String dtoIndex, Set<Long> ids);
+	public void deleteAll(String dtoIndex);
 	public void deleteAllItems();
-	public void addDemo(int dtoIndex);
+	public void addDemo(String dtoIndex);
 
 	// misc
 	public void wakeupServer();
+	public List<Dto> getDtoConfiguration();
 	
 	// import operations
-	public void importContacts(final List<DtoContact> contacts);
+	public void importContacts(final List<Dto> contacts);
 	
 	// email
 	public void feedback(final String message);

@@ -2,11 +2,12 @@ package honeycrm.client;
 
 import honeycrm.client.admin.AdminWidget;
 import honeycrm.client.admin.LogConsole;
-import honeycrm.client.dto.AbstractDto;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.reports.SampleReport;
 import honeycrm.client.view.EmailFeedbackWidget;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,24 +20,23 @@ import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
-
 // TODO update history token when a new tab is selected
 public class TabCenterView extends DecoratedTabPanel {
-	private static final TabCenterView instance = new TabCenterView();
+	private static TabCenterView instance = new TabCenterView();
 
 	// use list instead of set to make sure the sequence stays the same
-	private final Map<Class<? extends AbstractDto>, TabModuleView> moduleViewMap = new HashMap<Class<? extends AbstractDto>, TabModuleView>();
+	private final Map<String, TabModuleView> moduleViewMap = new HashMap<String, TabModuleView>();
 	/**
 	 * Store the position for each module in the tab panel (e.g. Contacts -> Tab 0, Accounts -> Tab
 	 * 1, ..)
 	 */
-	private final Map<Class<? extends AbstractDto>, Integer> tabPositionMap = new HashMap<Class<? extends AbstractDto>, Integer>();
+	private final Map<String, Integer> tabPositionMap = new HashMap<String, Integer>();
 	/**
 	 * Store which module is set at which position in the tab panel (e.g. Tab 0 -> Contacts, Tab 1
 	 * -> Accounts, ..). This is almost the reverse version of tabPositionMap. However
 	 * tabPositionMapReverse stores instances of Viewable instead storing classes.
 	 */
-	private final Map<Integer, AbstractDto> tabPositionMapReverse = new HashMap<Integer, AbstractDto>();
+	private final Map<Integer, String> tabPositionMapReverse = new HashMap<Integer, String>();
 	private final Map<Integer, Button> tabPosToCreateBtnMap = new HashMap<Integer, Button>();
 	
 	public static TabCenterView instance() {
@@ -48,9 +48,11 @@ public class TabCenterView extends DecoratedTabPanel {
 		
 		// this.setSize("640px", "300px");
 		
-		for (final Class<? extends AbstractDto> clazz : DtoRegistry.instance.getAllDtoClasses()) {
-			final AbstractDto dto = DtoRegistry.instance.getDto(clazz);
-			final TabModuleView view = new TabModuleView(clazz);
+		final List<Dto> dtos = DtoRegistry.instance.getDtos();
+		
+		for (final Dto dto : dtos) {
+//			final AbstractDto dto = DtoRegistry.instance.getDto(clazz);
+			final TabModuleView view = new TabModuleView(dto);
 
 			// refresh list view only for the first tab (which is the only visible tab at the beginning)
 			if (0 == tabPos) 
@@ -58,9 +60,9 @@ public class TabCenterView extends DecoratedTabPanel {
 			
 			// view.setSize("800px", "400px");
 			
-			moduleViewMap.put(clazz, view);
-			tabPositionMap.put(clazz, tabPos);
-			tabPositionMapReverse.put(tabPos++, dto);
+			moduleViewMap.put(dto.getModule(), view);
+			tabPositionMap.put(dto.getModule(), tabPos);
+			tabPositionMapReverse.put(tabPos++, dto.getModule());
 			
 			// TODO do not encapsulate view within ScrollPanel since it does not have the desired effect and messes up the layout.
 			// TODO nevertheless, we need scrolling within the tabs.
@@ -137,7 +139,7 @@ public class TabCenterView extends DecoratedTabPanel {
 				
 				if (tabPositionMapReverse.containsKey(event.getItem())) {
 					// add the history token for the module stored in this tab
-					History.newItem(tabPositionMapReverse.get(event.getItem()).getHistoryToken());
+					History.newItem(Dto.getByModuleName(dtos, tabPositionMapReverse.get(event.getItem())).getHistoryToken());
 				} else {
 					// TODO add history for special tabs like admin panel
 				}
@@ -149,19 +151,19 @@ public class TabCenterView extends DecoratedTabPanel {
 		selectTab(0);
 	}
 
-	public TabModuleView get(Class<? extends AbstractDto> clazz) {
-		return moduleViewMap.get(clazz);
+	public TabModuleView get(String moduleName) {
+		return moduleViewMap.get(moduleName);
 	}
 
 	/**
 	 * Shows the module tab for the module described by the given class.
 	 */
-	public void showModuleTabWithId(final Class<? extends AbstractDto> clazz, final long id) {
+	public void showModuleTabWithId(final Class<Dto> clazz, final long id) {
 		showModuleTab(clazz);
 		moduleViewMap.get(clazz).showDetailView(id);
 	}
 
-	public void showModuleTab(Class<? extends AbstractDto> clazz) {
+	public void showModuleTab(Class<Dto> clazz) {
 		assert tabPositionMap.containsKey(clazz) && moduleViewMap.containsKey(clazz);
 		if (!moduleViewMap.get(clazz).isListViewInitialized()) {
 			moduleViewMap.get(clazz).refreshListView(); 
@@ -169,7 +171,7 @@ public class TabCenterView extends DecoratedTabPanel {
 		selectTab(tabPositionMap.get(clazz));
 	}
 	
-	public void showCreateViewForModule(final Class<? extends AbstractDto> clazz) {
+	public void showCreateViewForModule(final Class<Dto> clazz) {
 		moduleViewMap.get(clazz).showCreateView();
 	}
 }
