@@ -1,6 +1,5 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.client.field.FieldDate;
 import honeycrm.client.field.FieldRelate;
 import honeycrm.client.field.FieldTable;

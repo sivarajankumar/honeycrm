@@ -73,7 +73,7 @@ public class FieldMultiEnum extends FieldEnum {
 	protected Widget internalGetListWidget(Object value) {
 		return internalGetDetailWidget(value);
 	}
-	
+
 	@Override
 	public Serializable getData(Widget widgetValue) {
 		final ListBox box = (ListBox) widgetValue;

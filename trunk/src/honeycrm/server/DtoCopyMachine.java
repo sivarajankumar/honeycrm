@@ -19,7 +19,7 @@ public class DtoCopyMachine {
 	private static final Set<String> badVariableNames = new HashSet<String>();
 	private static final Set<String> badVariablePrefixes = new HashSet<String>();
 	private static final DomainClassRegistry registry = DomainClassRegistry.instance;
-	
+
 	static {
 		badVariablePrefixes.add("$");
 		badVariablePrefixes.add("jdo");
@@ -31,21 +31,21 @@ public class DtoCopyMachine {
 	public AbstractEntity copy(Dto dto) {
 		return copy(dto, null);
 	}
-	
+
 	public AbstractEntity copy(Dto dto, AbstractEntity existingEntity) {
 		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
 		try {
 			final AbstractEntity entity = entityClass.newInstance();
 			final Field[] allFields = filterFields(reflectionHelper.getAllFields(entityClass));
-			
-			for (int i=0; i<allFields.length; i++) {
+
+			for (int i = 0; i < allFields.length; i++) {
 				final Field field = allFields[i];
-				
+
 				if (null == dto.get(field.getName())) {
 					continue;
 				}
-				
+
 				if ("fields".equals(field.getName())) {
 					continue;
 				}
@@ -61,11 +61,10 @@ public class DtoCopyMachine {
 						continue;
 					}
 				}
-				
+
 				final Method setter = entityClass.getMethod(reflectionHelper.getMethodName("set", field), field.getType());
 				setter.invoke(entity, dto.get(field.getName()));
 			}
-			
 
 			return entity;
 		} catch (Exception e) {
@@ -73,22 +72,22 @@ public class DtoCopyMachine {
 			return null;
 		}
 	}
-	
+
 	public Dto copy(AbstractEntity entity) {
 		final Dto dto = new Dto();
-		
+
 		final Class<?> entityClass = entity.getClass();
 		final Field[] allFields = filterFields(reflectionHelper.getAllFields(entityClass));
-		
+
 		try {
-			for (int i=0; i<allFields.length; i++) {
+			for (int i = 0; i < allFields.length; i++) {
 				final Field field = allFields[i];
 
 				final Method getter = entityClass.getMethod(reflectionHelper.getMethodName("get", field));
 				final Object fieldValue = getter.invoke(entity);
-				
+
 				if ("id".equals(field.getName())) {
-					dto.set(field.getName(), (int)((Key) fieldValue).getId());
+					dto.set(field.getName(), (int) ((Key) fieldValue).getId());
 				} else {
 					dto.set(field.getName(), (Serializable) fieldValue);
 				}
@@ -98,16 +97,15 @@ public class DtoCopyMachine {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return dto;
 	}
-	
-	
+
 	private void fillinModuleSpecificData(Dto dto, Class<?> entityClass) {
 		dto.setModule(entityClass.getSimpleName().toLowerCase());
 
 		final Dto moduleDto = DtoWizard.instance.getModuleDtoByName(dto.getModule());
-		
+
 		dto.setFields(moduleDto.getFields());
 		dto.setFormFieldIds(moduleDto.getFormFieldIds());
 		dto.setHistoryToken(moduleDto.getHistoryToken());
@@ -128,7 +126,7 @@ public class DtoCopyMachine {
 
 		return filteredFields.toArray(new Field[0]);
 	}
-	
+
 	/**
 	 * Returns true if the field with the given name should be skipped during copying / DTO-DB comparison. False otherwise.
 	 */

@@ -11,10 +11,9 @@ public class DtoWizardTest extends TestCase {
 	public void testCreation() {
 		final DtoWizard creator = DtoWizard.instance;
 		assertNotNull(creator);
-		
+
 		List<Dto> list = creator.getDtoConfiguration();
 		assertFalse(list.isEmpty());
-		
-		
+
 	}
 }

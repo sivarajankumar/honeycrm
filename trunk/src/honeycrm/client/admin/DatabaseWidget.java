@@ -11,7 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 
-
 public class DatabaseWidget extends Composite {
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	private final Button deleteAllBtn = new Button("Delete all items");

@@ -16,7 +16,7 @@ public class OfferingReports {
 			c.setTime(offering.getDeadline());
 
 			final int year = c.get(Calendar.YEAR);
-			
+
 			if (volumes.containsKey(year)) {
 				volumes.put(year, offering.getCosts() + volumes.get(year));
 			} else {

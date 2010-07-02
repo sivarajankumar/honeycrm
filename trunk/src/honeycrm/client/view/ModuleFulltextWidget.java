@@ -14,12 +14,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ModuleFulltextWidget extends FulltextSearchWidget {
 	private final Dto dtoClazz;
-	
+
 	public ModuleFulltextWidget(final Dto clazz) {
 		super();
 		this.dtoClazz = clazz;
 	}
-	
+
 	@Override
 	protected void startFulltextSearch(String queryString) {
 		LoadIndicator.get().startLoading();

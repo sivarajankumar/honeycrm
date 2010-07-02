@@ -14,13 +14,13 @@ public class DtoRegistry {
 	}
 
 	public Dto getDto(final String moduleName) {
-		return Dto.getByModuleName(dtos, moduleName); 
+		return Dto.getByModuleName(dtos, moduleName);
 	}
 
 	public void setDtos(List<Dto> dtos) {
 		this.dtos = dtos;
 	}
-	
+
 	public List<Dto> getDtos() {
 		return dtos;
 	}

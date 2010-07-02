@@ -1,7 +1,5 @@
 package honeycrm.client.view;
 
-import org.apache.bcel.verifier.exc.LoadingException;
-
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.RelationshipsContainer;
 import honeycrm.client.dto.Dto;
@@ -89,7 +87,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 				public void doRpc(final Consumer<Dto> internalCacheCallback) {
 					LoadIndicator.get().startLoading();
 					table.setVisible(false);
-					
+
 					commonService.get(dto.getModule(), id, new AsyncCallback<Dto>() {
 						@Override
 						public void onFailure(Throwable caught) {

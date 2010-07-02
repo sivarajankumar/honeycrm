@@ -6,8 +6,7 @@ import java.util.Set;
 
 public class CollectionHelper {
 	/**
-	 * Returns an array containing the elements of a first followed by the elements of b. TODO
-	 * implement this in a generic manner.
+	 * Returns an array containing the elements of a first followed by the elements of b. TODO implement this in a generic manner.
 	 */
 	public static int[][] merge(final int[][] a, final int[][] b) {
 		final int[][] c = new int[a.length + b.length][];

@@ -58,49 +58,22 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	protected ListQueryResult searchWithOperator(String dtoIndex, Dto searchDto, int from, int to, final BoolOperator operator) {
-		// TODO 
+		// TODO
 		return getAll(dtoIndex, from, to);
-		
-/*		if (null == searchDto)
-			// cannot do a proper search, do a getAll query instead
-			// however, the question remains why we received a searchDto which is null..
-			return getAll(dtoIndex, from, to);
 
-		final Query query = m.newQuery(getDomainClass(dtoIndex));
-		final Class<Dto> dtoClass = getDtoClass(dtoIndex);
-		final List<String> queries = new LinkedList<String>();
-		Dto[] array;
-
-		try {
-			for (final Field field : reflectionHelper.getDtoFields(dtoClass)) {
-				final Method getter = dtoClass.getMethod(reflectionHelper.getMethodName("get", field));
-				final Object value = getter.invoke(searchDto);
-
-				if (null != value) {
-					if (String.class == field.getType()) { // use ignore case starts with
-						// TODO to lower case
-						// TODO does this allow sql injection or is it prevented by gwt?
-						queries.add("this." + field.getName() + ".startsWith(\"" + value.toString() + "\")");
-					} else if (Long.class == field.getType() || long.class == field.getType()) { // use
-						// exact
-						// match
-						if (0 != (Long) value) {
-							queries.add(field.getName() + " == " + value);
-						}
-					} else {
-
-					}
-				}
-			}
-			query.setFilter(CollectionHelper.join(queries, operator.toString()));
-			array = getArrayFromQueryResult(dtoIndex, (Collection) query.execute());
-		} catch (Exception e) {
-			// something went wrong, print stacktrace and return an empty list to the client.
-			e.printStackTrace();
-			array = (Dto[]) Array.newInstance(dtoClass, 0);
-		}
-
-		return new ListQueryResult(array, array.length);*/
+		/*
+		 * if (null == searchDto) // cannot do a proper search, do a getAll query instead // however, the question remains why we received a searchDto which is null.. return getAll(dtoIndex, from, to);
+		 * 
+		 * final Query query = m.newQuery(getDomainClass(dtoIndex)); final Class<Dto> dtoClass = getDtoClass(dtoIndex); final List<String> queries = new LinkedList<String>(); Dto[] array;
+		 * 
+		 * try { for (final Field field : reflectionHelper.getDtoFields(dtoClass)) { final Method getter = dtoClass.getMethod(reflectionHelper.getMethodName("get", field)); final Object value = getter.invoke(searchDto);
+		 * 
+		 * if (null != value) { if (String.class == field.getType()) { // use ignore case starts with // TODO to lower case // TODO does this allow sql injection or is it prevented by gwt? queries.add("this." + field.getName() + ".startsWith(\"" + value.toString() + "\")"); } else if (Long.class == field.getType() || long.class == field.getType()) { // use // exact // match if (0 != (Long) value) { queries.add(field.getName() + " == " + value); } } else {
+		 * 
+		 * } } } query.setFilter(CollectionHelper.join(queries, operator.toString())); array = getArrayFromQueryResult(dtoIndex, (Collection) query.execute()); } catch (Exception e) { // something went wrong, print stacktrace and return an empty list to the client. e.printStackTrace(); array = (Dto[]) Array.newInstance(dtoClass, 0); }
+		 * 
+		 * return new ListQueryResult(array, array.length);
+		 */
 	}
 
 	public ListQueryResult getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {

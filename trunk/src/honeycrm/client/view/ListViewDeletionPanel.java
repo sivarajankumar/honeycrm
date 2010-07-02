@@ -12,16 +12,13 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 
-
 /**
- * Responsible for the selection and later deletion of items depending on the page currently
- * displayed in the listview.
+ * Responsible for the selection and later deletion of items depending on the page currently displayed in the listview.
  */
 public class ListViewDeletionPanel extends AbstractView {
 	private final ListView listview;
 	/**
-	 * Store the delete lists per list view page Each map entry represents one page storing a set of
-	 * ids that should be deleted.
+	 * Store the delete lists per list view page Each map entry represents one page storing a set of ids that should be deleted.
 	 */
 	private final HashMap<Integer, Set<Long>> deleteIdsPerPage = new HashMap<Integer, Set<Long>>();
 	private final CheckBox deleteAllCheckbox = new CheckBox();
@@ -110,8 +107,7 @@ public class ListViewDeletionPanel extends AbstractView {
 	}
 
 	/**
-	 * Prepare the map entry for its first use. Create a new empty set at the desired position if it
-	 * does not exist yet.
+	 * Prepare the map entry for its first use. Create a new empty set at the desired position if it does not exist yet.
 	 * 
 	 * @param page
 	 */

@@ -21,14 +21,13 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-
 // TODO track which items are already in the cache
 // TODO update cached items when forced to do so (everytime user opens a page the first time) AND in
 // the background (polling)
 // TODO update item count periodically
 public class ListView extends AbstractView {
 	private boolean initialized = false;
-	
+
 	/**
 	 * Map pages to listviewable arrays.
 	 */
@@ -36,8 +35,7 @@ public class ListView extends AbstractView {
 	protected static final int MAX_ENTRIES = 10;
 	private static final int HEADER_ROWS = 1;
 	/**
-	 * number of columns in front of the actual data containing columns (e.g. delete checkbox
-	 * column)
+	 * number of columns in front of the actual data containing columns (e.g. delete checkbox column)
 	 */
 	private static final int LEADING_COLS = 1;
 
@@ -182,7 +180,7 @@ public class ListView extends AbstractView {
 
 	private void refreshPage(final int page) {
 		initialized = true; // set this to true when a page has been refreshed for the first time
-		
+
 		final int offset = getOffsetForPage(page);
 
 		assert 0 <= offset;
@@ -255,7 +253,7 @@ public class ListView extends AbstractView {
 	public void deleteAll() {
 		deletePanel.deleteAll();
 	}
-	
+
 	public boolean isInitialized() {
 		return initialized;
 	}

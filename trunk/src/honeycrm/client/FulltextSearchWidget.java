@@ -16,7 +16,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
-
 public class FulltextSearchWidget extends SuggestBox {
 	public static final int MIN_QUERY_LENGTH = 3;
 	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
@@ -25,7 +24,7 @@ public class FulltextSearchWidget extends SuggestBox {
 
 	public FulltextSearchWidget() {
 		super(new FulltextSuggestOracle());
-		
+
 		setStyleName("header_search_field");
 
 		addKeyPressHandler(new KeyPressHandler() {
@@ -65,7 +64,7 @@ public class FulltextSearchWidget extends SuggestBox {
 			Window.alert("Cannot determine id of selected item: '" + label + "'");
 		}
 	}
-	
+
 	protected void startFulltextSearch(final String queryString) {
 		LoadIndicator.get().startLoading();
 

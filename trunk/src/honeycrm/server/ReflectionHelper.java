@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 /**
  * Helper class for all major, reusable reflection related services.
  */
@@ -66,8 +65,7 @@ public class ReflectionHelper {
 	/**
 	 * From http://snippets.dzone.com/posts/show/4831
 	 * 
-	 * Scans all classes accessible from the context class loader which belong to the given package
-	 * and subpackages.
+	 * Scans all classes accessible from the context class loader which belong to the given package and subpackages.
 	 * 
 	 * @param packageName
 	 *            The base package
@@ -106,8 +104,7 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Returns a map structure that contains classes and sets of the names of the corresponding
-	 * fields. The map contains the classes specified by package name and prefix.
+	 * Returns a map structure that contains classes and sets of the names of the corresponding fields. The map contains the classes specified by package name and prefix.
 	 */
 	public static Map<Class, Set<String>> getFieldNamesOfClassesWithPrefix(final String packageName, final String prefix) throws ClassNotFoundException, IOException {
 		final Map<Class, Set<String>> classesWithFieldNames = new HashMap<Class, Set<String>>();
@@ -138,9 +135,7 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Return all fields of the dto class that are from the original domain object, i.e. all
-	 * accessible properties except automatically added or those that are only necessary for
-	 * organizational purposes.
+	 * Return all fields of the dto class that are from the original domain object, i.e. all accessible properties except automatically added or those that are only necessary for organizational purposes.
 	 */
 	public Field[] getDtoFields(final Class<?> dtoClass) {
 		final Set<String> badFieldNames = new HashSet<String>();
@@ -197,10 +192,7 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Returns an array containing elements of both given arrays array1, array2 i.e. merges the
-	 * given arrays into one. TODO this is a code duplicate with ArrayHelper.merge(). But cannot
-	 * replace it with ArrayHelper code since it is situated in client code and Fields cannot be
-	 * instantiated in client code.
+	 * Returns an array containing elements of both given arrays array1, array2 i.e. merges the given arrays into one. TODO this is a code duplicate with ArrayHelper.merge(). But cannot replace it with ArrayHelper code since it is situated in client code and Fields cannot be instantiated in client code.
 	 */
 	private static Field[] merge(final Object[] array1, final Object[] array2) {
 		// TODO implement this in a more generic way (for objects in general) but somehow typesafe..

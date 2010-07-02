@@ -13,8 +13,7 @@ public class Header extends Composite {
 		panel.setStyleName("honey_header");
 
 		/*
-		 * logo | loadIndicator | header_links | | | | login | profile | help | searchPanel |
-		 * ------------------------------------------------------------------
+		 * logo | loadIndicator | header_links | | | | login | profile | help | searchPanel | ------------------------------------------------------------------
 		 */
 
 		Label logo = new Label("Honeeeeeeeyyyyy CRM");

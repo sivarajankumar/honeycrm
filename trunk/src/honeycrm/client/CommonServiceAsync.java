@@ -9,28 +9,48 @@ import java.util.Set;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-
 public interface CommonServiceAsync {
 	void getAll(final String dtoIndex, int from, int to, AsyncCallback<ListQueryResult> callback);
+
 	void get(String dtoIndex, long id, AsyncCallback<Dto> callback);
+
 	void search(String dtoIndex, Dto searchContact, int from, int to, AsyncCallback<ListQueryResult> callback);
+
 	void update(Dto account, long id, AsyncCallback<Void> callback);
+
 	void delete(String dtoIndex, long id, AsyncCallback<Void> callback);
+
 	void deleteAll(String dtoIndex, Set<Long> ids, AsyncCallback<Void> callback);
+
 	void addDemo(String dtoIndex, AsyncCallback<Void> callback);
+
 	void getAllByNamePrefix(String dtoIndex, String prefix, int from, int to, AsyncCallback<ListQueryResult> callback);
+
 	void getByName(String dtoIndex, String name, AsyncCallback<Dto> callback);
+
 	void fulltextSearch(String query, int from, int to, AsyncCallback<ListQueryResult> callback);
+
 	void mark(String dtoIndex, long id, boolean marked, AsyncCallback<Void> callback);
+
 	void getAllMarked(String dtoIndex, int from, int to, AsyncCallback<ListQueryResult> callback);
+
 	void deleteAll(String dtoIndex, AsyncCallback<Void> callback);
+
 	void create(Dto viewable, AsyncCallback<Long> callback);
+
 	void deleteAllItems(AsyncCallback<Void> callback);
+
 	void wakeupServer(AsyncCallback<Void> callback);
+
 	void getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex, AsyncCallback<ListQueryResult> callback);
+
 	void fulltextSearchForModule(String dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult> callback);
+
 	void importContacts(List<Dto> contacts, AsyncCallback<Void> callback);
+
 	void feedback(String message, AsyncCallback<Void> callback);
+
 	void getAnnuallyOfferingVolumes(AsyncCallback<Map<Integer, Double>> callback);
+
 	void getDtoConfiguration(AsyncCallback<List<Dto>> callback);
 }

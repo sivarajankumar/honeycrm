@@ -9,19 +9,19 @@ public class Prefetcher {
 	private Map<CacheKey, CacheEntry> cache = new HashMap<CacheKey, CacheEntry>();
 	private long hits = 0;
 	private long misses = 0;
-	
+
 	private Prefetcher() {
 	}
 
-	public void invalidate(final Object...parameters) {
+	public void invalidate(final Object... parameters) {
 		final CacheKey key = new CacheKey(parameters);
 
 		if (cache.containsKey(key)) {
 			cache.get(key).makeInvalid();
 		}
 	}
-	
-	public <T> void get(final Consumer<T> callback, final ServerCallback<T> serverCallback, final long timeout, final Object...parameters) {
+
+	public <T> void get(final Consumer<T> callback, final ServerCallback<T> serverCallback, final long timeout, final Object... parameters) {
 		final CacheKey key = new CacheKey(parameters);
 
 		if (!cache.containsKey(key)) {
@@ -31,7 +31,7 @@ public class Prefetcher {
 		final CacheEntry entry = cache.get(key);
 
 		entry.getCallbacks().add(callback);
-		
+
 		if (entry.isLocked()) {
 			// this entry is currently retrieved from the server.
 			// do nothing just add the client to the callbacks for this cache entry.
@@ -42,18 +42,18 @@ public class Prefetcher {
 				misses++;
 
 				entry.setLocked(true);
-				
+
 				serverCallback.doRpc(new Consumer<T>() {
 					@Override
 					public void setValueAsynch(T result) {
 						entry.setValue(result);
 						entry.setLocked(false);
-						
+
 						// call all clients back that registered while this item has been locked
-						for (final Consumer<T> currentPrefetcherCallback: entry.getCallbacks()) {
+						for (final Consumer<T> currentPrefetcherCallback : entry.getCallbacks()) {
 							currentPrefetcherCallback.setValueAsynch(result);
 						}
-						
+
 						entry.getCallbacks().clear();
 					}
 				});

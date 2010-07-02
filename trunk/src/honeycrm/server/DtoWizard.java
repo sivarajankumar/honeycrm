@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The wizard analyzes the domain classes and creates dto descriptions for them based on their fields and the annotations on the classes.
- * Magically it creates a client side description for the domain classes.
+ * The wizard analyzes the domain classes and creates dto descriptions for them based on their fields and the annotations on the classes. Magically it creates a client side description for the domain classes.
  */
 public class DtoWizard {
 	public static final DtoWizard instance = new DtoWizard();
@@ -29,7 +28,7 @@ public class DtoWizard {
 	private List<Dto> internalGetConfiguration() {
 		try {
 			final List<Dto> configuration = new LinkedList<Dto>();
-			
+
 			for (final Class<AbstractEntity> domainClass : (Class<AbstractEntity>[]) ReflectionHelper.getClasses("honeycrm.server.domain")) {
 				if (!Modifier.isAbstract(domainClass.getModifiers())) {
 					final String name = domainClass.getSimpleName().toLowerCase();
@@ -49,30 +48,30 @@ public class DtoWizard {
 					if (domainClass.isAnnotationPresent(ListViewable.class)) {
 						dto.setListFieldIds(domainClass.getAnnotation(ListViewable.class).value());
 					}
-					
+
 					if (domainClass.isAnnotationPresent(DetailViewable.class)) {
 						final String[] rows = domainClass.getAnnotation(DetailViewable.class).value();
 						final String[][] formFields = new String[rows.length][];
-						for (int i=0; i<rows.length; i++) {
+						for (int i = 0; i < rows.length; i++) {
 							formFields[i] = rows[i].split(",");
 						}
 						dto.setFormFieldIds(formFields);
 					}
-					
+
 					if (domainClass.isAnnotationPresent(Quicksearchable.class)) {
 						dto.setQuicksearchItems(domainClass.getAnnotation(Quicksearchable.class).value());
 					}
-					
+
 					dto.setTitle(domainClass.getSimpleName());
 					dto.setFields(domainClass.newInstance().getFields());
-					
+
 					// this can only be done for retrieved entities
 					// dto.setQuicksearchItem()
 
 					configuration.add(dto);
 				}
 			}
-			
+
 			return configuration;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,19 +81,19 @@ public class DtoWizard {
 
 	private Map<String, Dto> internalGetModuleNameMap() {
 		final Map<String, Dto> map = new HashMap<String, Dto>();
-		for (final Dto dto: config) {
+		for (final Dto dto : config) {
 			map.put(dto.getModule(), dto);
 		}
 		return map;
 	}
-	
+
 	public List<Dto> getDtoConfiguration() {
 		if (null == config) {
 			config = internalGetConfiguration();
 		}
 		return config;
 	}
-	
+
 	public Dto getModuleDtoByName(final String name) {
 		if (null == moduleNameToDto) {
 			moduleNameToDto = internalGetModuleNameMap();

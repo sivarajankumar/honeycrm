@@ -8,5 +8,6 @@ import com.google.gwt.user.client.ui.Composite;
 
 abstract public class ITableWidget extends Composite {
 	abstract public List<Dto> getData();
+
 	abstract public void setData(List<Dto> data);
 }

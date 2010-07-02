@@ -19,7 +19,7 @@ public class CommonServiceEmail extends AbstractCommonService {
 
 	public void feedback(final String message) {
 		log.fine("Start sending mail..");
-		
+
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 		Message msg = new MimeMessage(session);

@@ -25,7 +25,7 @@ public class CommonServiceCreator extends AbstractCommonService {
 		} else {
 			domainObject.setCreatedAt(new Date(System.currentTimeMillis()));
 			m.makePersistent(domainObject);
-			
+
 			if (null == domainObject.getId()) {
 				throw new RuntimeException("Could not create domain object: Key is still null");
 			} else {

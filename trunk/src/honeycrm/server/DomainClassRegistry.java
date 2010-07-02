@@ -19,7 +19,7 @@ public class DomainClassRegistry {
 	public static final DomainClassRegistry instance = new DomainClassRegistry();
 	private final Map<String, Class<? extends AbstractEntity>> dtoToDomain = new HashMap<String, Class<? extends AbstractEntity>>();
 	private final Map<Class<? extends AbstractEntity>, String> domainToDto = new HashMap<Class<? extends AbstractEntity>, String>();
-	
+
 	private DomainClassRegistry() {
 		// TODO do this automatically with reflection
 		dtoToDomain.put("contact", Contact.class);
@@ -31,22 +31,22 @@ public class DomainClassRegistry {
 		dtoToDomain.put("product", Product.class);
 		dtoToDomain.put("service", Service.class);
 		dtoToDomain.put("offering", Offering.class);
-	
-		for (final String dto: dtoToDomain.keySet()) {
+
+		for (final String dto : dtoToDomain.keySet()) {
 			domainToDto.put(dtoToDomain.get(dto), dto);
 		}
 	}
-	
+
 	public String getDto(final Class<? extends AbstractEntity> domainClass) {
 		assert domainToDto.containsKey(domainClass);
 		return domainToDto.get(domainClass);
 	}
-	
+
 	public Class<? extends AbstractEntity> getDomain(final String dto) {
 		assert dtoToDomain.containsKey(dto);
 		return dtoToDomain.get(dto);
 	}
-	
+
 	public Set<Class<? extends AbstractEntity>> getDomainClasses() {
 		return domainToDto.keySet();
 	}
