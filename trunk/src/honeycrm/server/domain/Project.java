@@ -47,7 +47,7 @@ public class Project extends AbstractEntity {
 
 	public Project() {
 		fields.add(new FieldString("name", "Name"));
-		fields.add(new FieldRelate("employeeId", new Dto(), "Responsible"));
+		fields.add(new FieldRelate("employeeId", "employee", "Responsible"));
 		fields.add(new FieldText("description", "Description"));
 		fields.add(new FieldCurrency("targetSum", "Target sum", "0"));
 		fields.add(new FieldCurrency("currentSum", "Current sum", "0"));

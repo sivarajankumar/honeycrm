@@ -69,9 +69,9 @@ public class FulltextSearchWidget extends SuggestBox {
 	protected void startFulltextSearch(final String queryString) {
 		LoadIndicator.get().startLoading();
 
-		commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult<Dto>>() {
+		commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 			@Override
-			public void onSuccess(ListQueryResult<Dto> result) {
+			public void onSuccess(ListQueryResult result) {
 				LoadIndicator.get().endLoading();
 
 				if (null != result && result.getItemCount() > 0) {

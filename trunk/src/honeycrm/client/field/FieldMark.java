@@ -27,6 +27,7 @@ public class FieldMark extends AbstractField {
 		final Dto dto = DtoRegistry.instance.getDto(dtoIndex);
 		// dto.setId(NumberParser.convertToLong(value));
 		dto.setId(dtoId);
+		dto.setMarked((Boolean) value);
 		
 		return new MarkWidget(dto, dto);
 	}

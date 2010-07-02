@@ -41,12 +41,7 @@ public class Dto implements Serializable {
 	}
 
 	public void set(final String fieldId, final Serializable value) {
-		//if (data.containsKey(fieldId)) {
-			data.put(fieldId, value);
-		//} else {
-		//	Window.alert("Cannot set value on field " + fieldId + " since field cannot be found in dto");
-		///	throw new RuntimeException("Cannot set value on field " + fieldId + " since field cannot be found in dto");
-		//}
+		data.put(fieldId, value);
 	}
 
 	public String getModule() {

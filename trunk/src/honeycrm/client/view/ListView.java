@@ -189,14 +189,14 @@ public class ListView extends AbstractView {
 
 		LoadIndicator.get().startLoading();
 
-		commonService.getAll(dto.getModule(), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult<Dto>>() {
+		commonService.getAll(dto.getModule(), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(ListQueryResult<Dto> result) {
+			public void onSuccess(ListQueryResult result) {
 				LoadIndicator.get().endLoading();
 				if (-1 == page) {
 					currentPage = 1;

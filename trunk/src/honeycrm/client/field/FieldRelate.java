@@ -24,9 +24,9 @@ public class FieldRelate extends AbstractField {
 	public FieldRelate() {
 	}
 
-	public FieldRelate(final String id, final Dto clazz, final String label) {
+	public FieldRelate(final String id, final String clazz, final String label) {
 		super(id, label);
-		this.marshalledClazz = clazz.getModule();
+		this.marshalledClazz = clazz;
 	}
 
 	public String getRelatedClazz() {

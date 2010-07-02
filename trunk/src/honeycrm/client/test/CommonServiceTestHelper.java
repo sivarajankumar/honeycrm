@@ -49,43 +49,25 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	}
 
 	@Override
-	public void fulltextSearch(String query, int from, int to, AsyncCallback<ListQueryResult<Dto>> callback) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void fulltextSearchForModule(String dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult<Dto>> callback) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void get(String dtoIndex, long id, AsyncCallback<Dto> callback) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void getAll(String dtoIndex, int from, int to, AsyncCallback<ListQueryResult<Dto>> callback) {
+	public void getAllByNamePrefix(String dtoIndex, String prefix, int from, int to, AsyncCallback<ListQueryResult> callback) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void getAllByNamePrefix(String dtoIndex, String prefix, int from, int to, AsyncCallback<ListQueryResult<Dto>> callback) {
+	public void getAllMarked(String dtoIndex, int from, int to, AsyncCallback<ListQueryResult> callback) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void getAllMarked(String dtoIndex, int from, int to, AsyncCallback<ListQueryResult<Dto>> callback) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex, AsyncCallback<ListQueryResult<Dto>> callback) {
+	public void getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex, AsyncCallback<ListQueryResult> callback) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -121,7 +103,7 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	}
 
 	@Override
-	public void search(String dtoIndex, Dto searchContact, int from, int to, AsyncCallback<ListQueryResult<Dto>> callback) {
+	public void search(String dtoIndex, Dto searchContact, int from, int to, AsyncCallback<ListQueryResult> callback) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -140,6 +122,24 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 
 	@Override
 	public void update(Dto account, long id, AsyncCallback<Void> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fulltextSearch(String query, int from, int to, AsyncCallback<ListQueryResult> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void fulltextSearchForModule(String dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAll(String dtoIndex, int from, int to, AsyncCallback<ListQueryResult> callback) {
 		// TODO Auto-generated method stub
 		
 	}

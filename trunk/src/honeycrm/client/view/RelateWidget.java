@@ -75,9 +75,9 @@ public class RelateWidget extends SuggestBox {
 				if (!query.isEmpty()) {
 					LoadIndicator.get().startLoading();
 
-					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult<Dto>>() {
+					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
 						@Override
-						public void onSuccess(ListQueryResult<Dto> result) {
+						public void onSuccess(ListQueryResult result) {
 							LoadIndicator.get().endLoading();
 
 							if (0 == result.getResults().length) {

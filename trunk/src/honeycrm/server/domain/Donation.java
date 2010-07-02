@@ -52,9 +52,9 @@ public class Donation extends AbstractEntity {
 	private double amount;
 
 	public Donation() {
-		fields.add(new FieldRelate("employeeId", new Dto(), "Employee"));
-		fields.add(new FieldRelate("donatorId", new Dto(), "Donator"));
-		fields.add(new FieldRelate("projectId", new Dto(), "Project"));
+		fields.add(new FieldRelate("employeeId", "employee", "Employee"));
+		fields.add(new FieldRelate("donatorId", "contact", "Donator"));
+		fields.add(new FieldRelate("projectId", "project", "Project"));
 		fields.add(new FieldEnum("donatedFor", "Donated for", "Foundation", "Project donation", "Unlinked donation"));
 		fields.add(new FieldEnum("kind", "Kind", "Subscription", "Unique"));
 		fields.add(new FieldDate("receiptionDate", "Receiption date"));

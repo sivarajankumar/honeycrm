@@ -31,7 +31,7 @@ public class Offering extends AbstractEntity {
 
 	public Offering() {
 		fields.add(new FieldTable("services", "Services"));
-		fields.add(new FieldRelate("contactId", new Dto(), "Contact"));
+		fields.add(new FieldRelate("contactId", "contact", "Contact"));
 		fields.add(new FieldDate("deadline", "Deadline"));
 	}
 	

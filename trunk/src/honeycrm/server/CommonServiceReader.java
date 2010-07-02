@@ -33,14 +33,14 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult<Dto> getAll(final String dtoIndex, int from, int to) {
+	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		// order by number of views descending -> most viewed items at the top
 		// TODO allow user defined order as well i.e. sorting by arbitrary columns
 		query.setOrdering("views desc");
 		query.setRange(from, to);
 
-		return new ListQueryResult<Dto>(getArrayFromQueryResult(dtoIndex, (Collection) query.execute()), getItemCount(dtoIndex));
+		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, (Collection) query.execute()), getItemCount(dtoIndex));
 	}
 
 	public Dto get(final String dtoIndex, final long id) {
@@ -53,11 +53,11 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult<Dto> search(String dtoIndex, Dto searchDto, int from, int to) {
+	public ListQueryResult search(String dtoIndex, Dto searchDto, int from, int to) {
 		return searchWithOperator(dtoIndex, searchDto, from, to, BoolOperator.AND);
 	}
 
-	protected ListQueryResult<Dto> searchWithOperator(String dtoIndex, Dto searchDto, int from, int to, final BoolOperator operator) {
+	protected ListQueryResult searchWithOperator(String dtoIndex, Dto searchDto, int from, int to, final BoolOperator operator) {
 		// TODO 
 		return getAll(dtoIndex, from, to);
 		
@@ -100,11 +100,12 @@ public class CommonServiceReader extends AbstractCommonService {
 			array = (Dto[]) Array.newInstance(dtoClass, 0);
 		}
 
-		return new ListQueryResult<Dto>(array, array.length);*/
+		return new ListQueryResult(array, array.length);*/
 	}
 
-	public ListQueryResult<Dto> getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
-		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)"); // TODO
+	public ListQueryResult getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
+		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)");
+		// TODO
 		// use
 		// toLowerCase
 		// in
@@ -119,7 +120,7 @@ public class CommonServiceReader extends AbstractCommonService {
 
 		final Collection collection = (Collection) query.execute(prefix);
 
-		return new ListQueryResult<Dto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
+		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
 	public Dto getByName(String dtoIndex, String name) {
@@ -158,16 +159,16 @@ public class CommonServiceReader extends AbstractCommonService {
 	 * return result; }
 	 */
 
-	public ListQueryResult<Dto> getAllMarked(String dtoIndex, int from, int to) {
+	public ListQueryResult getAllMarked(String dtoIndex, int from, int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		query.setRange(from, to);
 		query.setFilter("marked == true");
 
 		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
-		return new ListQueryResult<Dto>(getArrayFromQueryResult(dtoIndex, collection), collection.size());
+		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
-	public ListQueryResult<Dto> getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex) {
+	public ListQueryResult getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex) {
 		final Set<AbstractEntity> result = new HashSet<AbstractEntity>();
 
 		/**
@@ -179,7 +180,7 @@ public class CommonServiceReader extends AbstractCommonService {
 			result.addAll((Collection<AbstractEntity>) q.execute());
 		}
 
-		return new ListQueryResult<Dto>(getArrayFromQueryResult(originatingDtoIndex, result), result.size());
+		return new ListQueryResult(getArrayFromQueryResult(originatingDtoIndex, result), result.size());
 	}
 
 	enum BoolOperator {

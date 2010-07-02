@@ -22,14 +22,14 @@ public class SearchableListView extends PaginatingListView {
 	private void doSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.search(dto.getModule(), searchViewable, getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<Dto>>() {
+		commonService.search(dto.getModule(), searchViewable, getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(ListQueryResult<Dto> result) {
+			public void onSuccess(ListQueryResult result) {
 				insertSearchResults(page, result);
 			}
 		});
@@ -50,20 +50,20 @@ public class SearchableListView extends PaginatingListView {
 	private void doMarkedSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.getAllMarked(dto.getModule(), getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult<Dto>>() {
+		commonService.getAllMarked(dto.getModule(), getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
 			}
 
 			@Override
-			public void onSuccess(ListQueryResult<Dto> result) {
+			public void onSuccess(ListQueryResult result) {
 				insertSearchResults(page, result);
 			}
 		});
 	}
 
-	private void insertSearchResults(final int page, ListQueryResult<Dto> result) {
+	private void insertSearchResults(final int page, ListQueryResult result) {
 		LoadIndicator.get().endLoading();
 
 		// TODO
