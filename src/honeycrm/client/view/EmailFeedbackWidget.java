@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class EmailFeedbackWidget extends Composite {
 	private final TextArea box = getTextBox();
 	private final Label status = new Label("Status: ");
-	
+
 	public EmailFeedbackWidget() {
 		final VerticalPanel panel = new VerticalPanel();
 		panel.setStyleName("content");
@@ -25,7 +25,7 @@ public class EmailFeedbackWidget extends Composite {
 		panel.add(getSubmitButton());
 		initWidget(panel);
 	}
-	
+
 	private TextArea getTextBox() {
 		final TextArea textArea = new TextArea();
 		textArea.setText("Please enter your feedback:");
@@ -40,14 +40,14 @@ public class EmailFeedbackWidget extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				LoadIndicator.get().startLoading();
-			
-				ServiceRegistry.commonService().feedback(box.getText(),new AsyncCallback<Void>() {
+
+				ServiceRegistry.commonService().feedback(box.getText(), new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
 						LoadIndicator.get().endLoading();
 						status.setText("Status: Mail has been sent to mailing list. Thank you very much!");
 					}
-					
+
 					@Override
 					public void onFailure(Throwable caught) {
 						LoadIndicator.get().endLoading();
@@ -56,7 +56,7 @@ public class EmailFeedbackWidget extends Composite {
 				});
 			}
 		});
-		
+
 		return button;
 	}
 }

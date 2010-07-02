@@ -61,11 +61,11 @@ public class SampleReport extends Composite {
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Year");
 		data.addColumn(ColumnType.NUMBER, "Annually Volume");
-		
+
 		data.addRows(result.keySet().size());
-		
+
 		int i = 0;
-		for (final Integer year: result.keySet()) {
+		for (final Integer year : result.keySet()) {
 			data.setValue(i, 0, String.valueOf(year));
 			data.setValue(i, 1, result.get(year));
 			i++;

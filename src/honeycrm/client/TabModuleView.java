@@ -20,10 +20,10 @@ public class TabModuleView extends AbstractView {
 		listView = new SearchableListView(clazz);
 		detailView = new DetailView(clazz);
 		detailView.setStyleName("detail_view_content");
-		
+
 		final VerticalPanel content = new VerticalPanel();
 		content.setStyleName("tab_content");
-		
+
 		final FlowPanel viewPanel = new FlowPanel();
 		viewPanel.setStyleName("detail_view");
 		viewPanel.add(new HTML("<div class='view_header_label'>Detail View</div>"));
@@ -32,13 +32,13 @@ public class TabModuleView extends AbstractView {
 		final VerticalPanel listPanel = new VerticalPanel();
 		listPanel.setStyleName("list_view");
 		listPanel.add(listView);
-	
+
 		final FlowPanel hor = new FlowPanel();
 		hor.setStyleName("content");
 		hor.add(listPanel);
 		hor.add(viewPanel);
 		hor.add(new HTML("<div class='clear'></div>"));
-		
+
 		content.add(new ModuleButtonBar(clazz));
 		content.add(hor);
 
@@ -68,7 +68,7 @@ public class TabModuleView extends AbstractView {
 	public void showCreateView() {
 		detailView.getButtonBar().startCreating();
 	}
-	
+
 	public boolean isListViewInitialized() {
 		return listView.isInitialized();
 	}

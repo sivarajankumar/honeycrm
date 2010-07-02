@@ -28,7 +28,7 @@ import com.google.appengine.api.datastore.Key;
 abstract public class AbstractEntity {
 	@NotPersistent
 	protected Set<AbstractField> fields = new HashSet<AbstractField>();
-	
+
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
 	@SearchableId
@@ -92,7 +92,7 @@ abstract public class AbstractEntity {
 	public void setMarked(boolean marked) {
 		this.marked = marked;
 	}
-	
+
 	public Set<AbstractField> getFields() {
 		return fields;
 	}

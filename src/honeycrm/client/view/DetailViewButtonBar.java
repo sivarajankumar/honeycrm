@@ -69,7 +69,7 @@ public class DetailViewButtonBar extends AbstractView {
 		detailview.view();
 
 		// only show if detailview is displaying a valid item
-		editBtn.setVisible(detailview.isShowing()); 
+		editBtn.setVisible(detailview.isShowing());
 		deleteBtn.setVisible(detailview.isShowing());
 
 		saveBtn.setVisible(false);

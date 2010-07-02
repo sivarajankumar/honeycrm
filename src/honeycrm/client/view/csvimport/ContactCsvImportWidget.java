@@ -18,7 +18,7 @@ public class ContactCsvImportWidget extends Composite {
 	public ContactCsvImportWidget() {
 		final TextArea textArea = getTextArea();
 		final Label statusLabel = getStatusLabel();
-		
+
 		final VerticalPanel panel = new VerticalPanel();
 		panel.add(getHeaderLabel());
 		panel.add(textArea);
@@ -37,7 +37,7 @@ public class ContactCsvImportWidget extends Composite {
 		final Label label = new Label("Status: ");
 		return label;
 	}
-	
+
 	private TextArea getTextArea() {
 		final TextArea textArea = new TextArea();
 		textArea.setWidth("500px");
@@ -50,7 +50,7 @@ public class ContactCsvImportWidget extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				LoadIndicator.get().startLoading();
-				
+
 				final CsvImporter importer = new CsvImporter();
 				ServiceRegistry.commonService().importContacts(importer.parse(textArea.getText()), new AsyncCallback<Void>() {
 					@Override

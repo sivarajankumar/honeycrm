@@ -13,7 +13,7 @@ public class CsvImporter extends AbstractCsv {
 	 */
 	public List<Dto> parse(final String csvString) {
 		// TODO do some prechecks to find out whether the file is correct (thus proper col separators are used etc).
-		
+
 		final List<Dto> list = new LinkedList<Dto>();
 
 		final String[][] table = getData(csvString);
@@ -27,13 +27,13 @@ public class CsvImporter extends AbstractCsv {
 			newContact.set("email", table[y][positions.get("email1")]);
 			newContact.set("phone", table[y][positions.get("phone_work")]);
 			newContact.set("doNotCall", table[y][positions.get("do_not_call")].equals("1"));
-			
+
 			list.add(newContact);
 		}
-		
+
 		return list;
 	}
-	
+
 	private String[][] getData(final String csvString) {
 		final String[] lines = csvString.split(LINE_SEP);
 		final String[][] table = new String[lines.length][];
@@ -44,14 +44,14 @@ public class CsvImporter extends AbstractCsv {
 
 		return table;
 	}
-	
+
 	private String[] getCleanedRow(final String[] dirtyColumns) {
 		final String[] columns = new String[dirtyColumns.length];
-		
-		for (int i=0; i<dirtyColumns.length; i++) {
+
+		for (int i = 0; i < dirtyColumns.length; i++) {
 			columns[i] = getFieldContentWithoutFieldDelimiter(dirtyColumns[i]);
 		}
-		
+
 		return columns;
 	}
 

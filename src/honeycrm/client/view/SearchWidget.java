@@ -22,7 +22,7 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 		super(clazz);
 
 		final String[][] fieldIDs = new String[][] { new String[] { "name" } };
-		
+
 		final TextBox widgetValue = new TextBox();
 		widgetValue.setWidth("400px");
 

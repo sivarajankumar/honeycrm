@@ -33,7 +33,7 @@ public class ServiceTableWidget extends ITableWidget {
 		initHeader();
 
 		sum.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		
+
 		final VerticalPanel panel = new VerticalPanel();
 		panel.add(table);
 		panel.add(sum);
@@ -119,7 +119,7 @@ public class ServiceTableWidget extends ITableWidget {
 	public void setData(List<Dto> data) {
 		if (null == data)
 			return;
-		
+
 		if (!data.isEmpty()) {
 			if (data.get(0) instanceof Dto) {
 				final boolean wasTableAlreadyFilled = (table.getRowCount() == HEADER_ROWS + data.size());
@@ -155,7 +155,7 @@ public class ServiceTableWidget extends ITableWidget {
 	private double getSum(List<Dto> data) {
 		double currentSum = 0.0;
 		for (Dto service : data) {
-			currentSum += ((Double)service.get("price") - (Double)service.get("discount")) * (Double)service.get("quantity");
+			currentSum += ((Double) service.get("price") - (Double) service.get("discount")) * (Double) service.get("quantity");
 		}
 		return currentSum;
 	}

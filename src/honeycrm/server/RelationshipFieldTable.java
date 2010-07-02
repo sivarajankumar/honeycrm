@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 public class RelationshipFieldTable {
 	private static final ReflectionHelper reflectionHelper = new ReflectionHelper();
 	public static final RelationshipFieldTable instance = new RelationshipFieldTable();
@@ -22,7 +21,7 @@ public class RelationshipFieldTable {
 
 				final String strOrigin = DomainClassRegistry.instance.getDto(originatingDtoClass);
 				final String strRelated = DomainClassRegistry.instance.getDto(relatedDtoClass);
-				
+
 				if (map.containsKey(strOrigin)) {
 					if (map.get(strOrigin).containsKey(strRelated)) {
 						map.get(strOrigin).get(strRelated).add(field.getName());

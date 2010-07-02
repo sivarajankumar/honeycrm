@@ -13,7 +13,7 @@ public class FieldDate extends AbstractField {
 
 	public FieldDate() {
 	}
-	
+
 	public FieldDate(final String index, final String label) {
 		super(index, label);
 	}

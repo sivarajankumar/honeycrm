@@ -29,19 +29,19 @@ public class CacheStatsWidget extends Composite {
 				updateStats();
 			}
 		}.scheduleRepeating(1000);
-		
+
 		initWidget(panel);
 	}
 
 	private void updateStats() {
 		final long hits = Prefetcher.instance.getHits();
 		final long misses = Prefetcher.instance.getMisses();
-		final double hitsRel = 100 * ((double) hits / (double) (hits+misses));
-		final double missesRel = 100 *((double) misses / (double) (hits+misses));
-		
-		lblHits.setText("Hits: " + hitsRel + "% ("+ hits +")");
-		lblMisses.setText("Misses: " + missesRel + "% ("+ misses +")");
-		lblAccess.setText("Accesses: " + (hits+misses));
+		final double hitsRel = 100 * ((double) hits / (double) (hits + misses));
+		final double missesRel = 100 * ((double) misses / (double) (hits + misses));
+
+		lblHits.setText("Hits: " + hitsRel + "% (" + hits + ")");
+		lblMisses.setText("Misses: " + missesRel + "% (" + misses + ")");
+		lblAccess.setText("Accesses: " + (hits + misses));
 		lblAccess.setText("Last refreshed " + new Date(System.currentTimeMillis()));
 	}
 }

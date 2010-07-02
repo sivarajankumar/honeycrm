@@ -11,7 +11,7 @@ public class CommonServiceReporter extends AbstractCommonService {
 
 	public CommonServiceReporter() {
 	}
-	
+
 	public Map<Integer, Double> getAnnuallyOfferingVolumes() {
 		return new OfferingReports().getAnnuallyOfferingVolumes((Collection<Offering>) m.newQuery(Offering.class).execute());
 	}

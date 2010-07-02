@@ -15,7 +15,7 @@ public class ModuleExportButtonBar extends AbstractView {
 		final Button csvLink = getExportButton("CSV", "csv");
 		final Button xlsLink = getExportButton("XLS", "xls");
 		final Button pdfLink = getExportButton("PDF", "pdf");
-		
+
 		final FlowPanel panel = new FlowPanel();
 		panel.setStyleName("left");
 		panel.add(csvLink);

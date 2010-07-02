@@ -1,6 +1,5 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldEmail;
 import honeycrm.client.field.FieldEnum;

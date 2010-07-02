@@ -3,8 +3,7 @@ package honeycrm.client.dto;
 import java.io.Serializable;
 
 /**
- * Encapsulates the list query results together with the total item counter. For pagination support
- * it makes sense to transfer both values encapsulated in one container.
+ * Encapsulates the list query results together with the total item counter. For pagination support it makes sense to transfer both values encapsulated in one container.
  */
 public class ListQueryResult implements Serializable {
 	private Dto[] results;

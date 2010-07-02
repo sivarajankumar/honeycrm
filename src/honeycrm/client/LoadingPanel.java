@@ -70,13 +70,13 @@ public class LoadingPanel extends Composite {
 			@Override
 			public void onSuccess(Void result) {
 				setStatus("Loading configuration..");
-				
+
 				ServiceRegistry.commonService().getDtoConfiguration(new AsyncCallback<List<Dto>>() {
 					@Override
 					public void onSuccess(List<Dto> result) {
 						initRealUserInterface(result);
 					}
-					
+
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert("Could not get dto configuration from server side.");
@@ -97,7 +97,7 @@ public class LoadingPanel extends Composite {
 
 	private void initRealUserInterface(List<Dto> dtos) {
 		DtoRegistry.instance.setDtos(dtos);
-		
+
 		setStatus("Initiating user interface..");
 		this.setVisible(false);
 		// TODO this has no effect. i hope the user has a giant screen because currently scrolling

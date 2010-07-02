@@ -6,7 +6,6 @@ import honeycrm.client.dto.ListQueryResult;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-
 public class SearchableListView extends PaginatingListView {
 	private Dto searchViewable;
 

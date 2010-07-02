@@ -19,10 +19,10 @@ public class CsvImportTest extends TestCase {
 
 		final CsvImporter importer = new CsvImporter();
 		final List<Dto> list = importer.parse(csv);
-		
+
 		assertNotNull(list);
 		assertEquals(6, list.size());
-		
+
 		list.get(0).get("name").equals("Irma Bustillos");
 		list.get(0).get("email").equals("vegan.vegan.vegan@example.tw");
 		list.get(5).get("name").equals("Jerrell Lachance");

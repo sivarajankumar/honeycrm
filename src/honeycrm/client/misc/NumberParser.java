@@ -17,17 +17,17 @@ public class NumberParser {
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Convert a given object safely to a long value
 	 */
 	public static long convertToLong(final Object value) {
 		if (null == value)
 			return 0;
-		
+
 		if (value instanceof Long)
 			return (Long) value;
-			
+
 		try {
 			return Long.parseLong(value.toString());
 		} catch (NumberFormatException e) {

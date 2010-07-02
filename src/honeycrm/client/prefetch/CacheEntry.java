@@ -20,11 +20,11 @@ public class CacheEntry implements Serializable {
 	public CacheEntry() {
 		this.timeout = DEFAULT_TIMEOUT;
 	}
-	
+
 	public CacheEntry(long timeout) {
 		this.timeout = timeout;
 	}
-	
+
 	public List<Consumer> getCallbacks() {
 		return callbacks;
 	}
@@ -40,14 +40,14 @@ public class CacheEntry implements Serializable {
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
-	
+
 	public Object getValue() {
 		return value;
 	}
 
 	public void setValue(Object value) {
 		this.value = value;
-		
+
 		this.valid = true;
 		this.timestamp = System.currentTimeMillis();
 	}
@@ -55,7 +55,7 @@ public class CacheEntry implements Serializable {
 	public boolean isEmpty() {
 		return null == value;
 	}
-	
+
 	/**
 	 * returns true of the cache entry is too old. false otherwise.
 	 */

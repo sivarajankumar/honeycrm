@@ -103,9 +103,13 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 	}
 
 	abstract protected Widget internalGetListWidget(final Object value);
+
 	abstract protected Widget internalGetDetailWidget(final Object value);
+
 	abstract protected Widget internalGetCreateWidget(final Object value);
+
 	abstract protected Widget internalGetEditWidget(final Object value);
+
 	abstract public Serializable getData(final Widget w);
 
 	/**
@@ -124,16 +128,11 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 		if (hasSuggestedWidth()) {
 			widget.setWidth(getWidthString());
 		}
-		/*if (widget instanceof FocusWidget) {
-			// TODO why is this necessary again?
-			
-			// only do this if widget is still enabled. this prevents enabling checkboxes being rw after they have been disabled in getDetailWidget.
-			if (((FocusWidget)widget).isEnabled()) {
-				// call set enabled method when ever possible
-				// enable this field if it is not readonly. disable the field if it is readonly.
-				((FocusWidget) widget).setEnabled(!isReadOnly());
-			}
-		}*/
+		/*
+		 * if (widget instanceof FocusWidget) { // TODO why is this necessary again?
+		 * 
+		 * // only do this if widget is still enabled. this prevents enabling checkboxes being rw after they have been disabled in getDetailWidget. if (((FocusWidget)widget).isEnabled()) { // call set enabled method when ever possible // enable this field if it is not readonly. disable the field if it is readonly. ((FocusWidget) widget).setEnabled(!isReadOnly()); } }
+		 */
 		return widget;
 	}
 }

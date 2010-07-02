@@ -15,20 +15,20 @@ public class FieldMark extends AbstractField {
 
 	public FieldMark() {
 	}
-	
+
 	public FieldMark(final String index, final String label, final String dtoIndex, final long id) {
 		super(index, label);
 		this.dtoIndex = dtoIndex;
 		this.dtoId = id;
 	}
-	
+
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
 		final Dto dto = DtoRegistry.instance.getDto(dtoIndex);
 		// dto.setId(NumberParser.convertToLong(value));
 		dto.setId(dtoId);
 		dto.setMarked((Boolean) value);
-		
+
 		return new MarkWidget(dto, dto);
 	}
 
@@ -46,7 +46,7 @@ public class FieldMark extends AbstractField {
 	protected Widget internalGetListWidget(Object value) {
 		return internalGetCreateWidget(value);
 	};
-	
+
 	@Override
 	public Serializable getData(Widget w) {
 		throw new RuntimeException("Not Supported");

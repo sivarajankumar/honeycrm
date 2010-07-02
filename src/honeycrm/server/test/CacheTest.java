@@ -16,7 +16,7 @@ public class CacheTest extends TestCase {
 		final long someRandomLong = r.nextLong();
 
 		assertFalse(new Object[] { 1, 2 }.hashCode() == new Object[] { 1, 2 }.hashCode());
-		
+
 		final CacheKey c = new CacheKey(Dto.class, Dto.class, someRandomLong);
 		final CacheKey d = new CacheKey(Dto.class, Dto.class, someRandomLong);
 		final CacheKey e = new CacheKey(Dto.class, Dto.class, someRandomLong + 1);

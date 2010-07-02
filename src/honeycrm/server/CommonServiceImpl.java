@@ -4,7 +4,6 @@ import honeycrm.client.CommonService;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
-import honeycrm.server.domain.Account;
 
 import java.util.Collection;
 import java.util.Date;
@@ -14,7 +13,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.jdo.Query;
-
 
 /**
  * Is somewhat the business layer.
@@ -28,7 +26,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final CommonServiceEmail email = new CommonServiceEmail();
 	private static final CommonServiceReporter reporter = new CommonServiceReporter();
 	private static final DtoWizard wizard = DtoWizard.instance;
-	
+
 	@Override
 	public long create(Dto dto) {
 		return creator.create(dto);
@@ -69,7 +67,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		// displayed..
 		// TODO this should be avoided.
 		// increase number of views on every get request for a specific DTO
-		
+
 		// TODO do this asynchronous since it is currently to slow if we do it synchronously
 		// dto.setViews(dto.getViews() + 1);
 		// update(dtoIndex, dto, id);
@@ -98,8 +96,8 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	public void update(Dto dto, long id) {
 		dto.set("lastUpdatedAt", (new Date(System.currentTimeMillis())));
 
-		final AbstractEntity existingObject = (AbstractEntity) getDomainObject(dto.getModule(), id);
-		
+		final AbstractEntity existingObject = getDomainObject(dto.getModule(), id);
+
 		if (null != existingObject) {
 			m.makePersistent(copy.copy(dto, existingObject));
 		}
@@ -142,11 +140,11 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		final Query q = m.newQuery(getDomainClass(dtoIndex));
 
 		// delete step by step instead to avoid "can only delete 500 entities en block" errors in app engine.
-		for (final AbstractEntity entity: (Collection<AbstractEntity>) q.execute()) {
+		for (final AbstractEntity entity : (Collection<AbstractEntity>) q.execute()) {
 			m.deletePersistent(entity);
 		}
-		
-//		m.deletePersistentAll((Collection) q.execute());
+
+		// m.deletePersistentAll((Collection) q.execute());
 	}
 
 	@Override
@@ -155,9 +153,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		for (final Class<? extends AbstractEntity> entityClass : registry.getDomainClasses()) {
 			try {
 				m.deletePersistentAll((Collection) m.newQuery(entityClass).execute());
-				/*for (final AbstractEntity entity : ) {
-					m.deletePersistent(entity);
-				}*/
+				/*
+				 * for (final AbstractEntity entity : ) { m.deletePersistent(entity); }
+				 */
 			} catch (NullPointerException e) {
 				log.warning("A NullPointerException occured during the deletion of all entities");
 				e.printStackTrace();
@@ -167,10 +165,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	/**
-	 * Do nothing just call this empty method to wake up the server side. This is done to speedup
-	 * the up coming requests. Do an initial slow request by the client. When this is has been
-	 * answered the user interface will be rendered and the real requests will follow in quick
-	 * succession.
+	 * Do nothing just call this empty method to wake up the server side. This is done to speedup the up coming requests. Do an initial slow request by the client. When this is has been answered the user interface will be rendered and the real requests will follow in quick succession.
 	 */
 	@Override
 	public void wakeupServer() {
@@ -189,13 +184,13 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void importContacts(List<Dto> contacts) {
 		log.info("Starting importing " + contacts.size() + " contacts");
-		
+
 		int done = 0;
-		for (final Dto contact: contacts) {
+		for (final Dto contact : contacts) {
 			create(contact);
 			log.fine("Created " + (++done) + " contact(s)");
 		}
-		
+
 		log.fine("Finished importing " + contacts.size() + " contacts");
 	}
 
@@ -203,7 +198,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	public void feedback(String message) {
 		email.feedback(message);
 	}
-	
+
 	@Override
 	public Map<Integer, Double> getAnnuallyOfferingVolumes() {
 		return reporter.getAnnuallyOfferingVolumes();

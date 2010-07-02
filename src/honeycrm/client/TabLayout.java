@@ -29,7 +29,7 @@ public class TabLayout extends DockLayoutPanel implements ValueChangeHandler<Str
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
-		
+
 		if (2 == token.length) {
 			if ("create".equals(token[1])) {
 				center.showCreateViewForModule(token[0]);

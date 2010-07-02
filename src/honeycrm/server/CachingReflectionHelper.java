@@ -11,8 +11,7 @@ import net.sf.jsr107cache.CacheFactory;
 import net.sf.jsr107cache.CacheManager;
 
 /**
- * Caching wrapper around ReflectionHelper class. Caches expensive reflective operations when
- * possible.
+ * Caching wrapper around ReflectionHelper class. Caches expensive reflective operations when possible.
  */
 public class CachingReflectionHelper extends ReflectionHelper {
 	private static final Logger log = Logger.getLogger(CachingReflectionHelper.class.getName());
