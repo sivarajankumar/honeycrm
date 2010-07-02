@@ -2,6 +2,8 @@ package honeycrm.client.field;
 
 import honeycrm.client.misc.NumberParser;
 
+import java.io.Serializable;
+
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -97,7 +99,7 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	public Object getData(Widget w) {
+	public Serializable getData(Widget w) {
 		try {
 			return NumberFormat.getCurrencyFormat("EUR").parse(((TextBox) w).getText());
 		} catch (NumberFormatException e) {

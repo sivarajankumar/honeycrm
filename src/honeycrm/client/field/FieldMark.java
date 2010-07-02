@@ -4,6 +4,8 @@ import honeycrm.client.DtoRegistry;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.view.MarkWidget;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldMark extends AbstractField {
@@ -45,7 +47,7 @@ public class FieldMark extends AbstractField {
 	};
 	
 	@Override
-	public Object getData(Widget w) {
+	public Serializable getData(Widget w) {
 		throw new RuntimeException("Not Supported");
 	}
 }

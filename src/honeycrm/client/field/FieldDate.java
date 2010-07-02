@@ -1,5 +1,6 @@
 package honeycrm.client.field;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -45,7 +46,7 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	public Object getData(Widget w) {
+	public Serializable getData(Widget w) {
 		return ((DateBox) w).getValue();
 	}
 }

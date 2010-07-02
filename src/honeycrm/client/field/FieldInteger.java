@@ -1,5 +1,7 @@
 package honeycrm.client.field;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -49,7 +51,7 @@ public class FieldInteger extends AbstractField {
 	}
 
 	@Override
-	public Object getData(Widget w) {
+	public Serializable getData(Widget w) {
 		return ((TextBox) w).getText();
 	}
 }

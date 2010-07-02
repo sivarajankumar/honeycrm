@@ -27,15 +27,12 @@ public class Service extends AbstractEntity {
 	@Persistent
 	private double sum;
 
-	static {
+	public Service() {
 		fields.add(new FieldString("name", "Name", "", 200));
 		fields.add(new FieldCurrency("price", "Price", "0.0", 100));
 		fields.add(new FieldInteger("quantity", "Qty", "1", 100));
 		fields.add(new FieldCurrency("discount", "Discount", "0.0", 100));
 		fields.add(new FieldCurrency("sum", "Sum", "0.0", 100, true));
-	}
-
-	public Service() {
 	}
 
 	public String getName() {

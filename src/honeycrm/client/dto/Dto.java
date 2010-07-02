@@ -24,7 +24,7 @@ public class Dto implements Serializable {
 	private String historyToken;
 	private String title;
 	private String module;
-	private Map<String, Object> data = new HashMap<String, Object>();
+	private Map<String, Serializable> data = new HashMap<String, Serializable>();
 	private Set<AbstractField> fields = new HashSet<AbstractField>();
 
 	public Dto() {
@@ -40,7 +40,7 @@ public class Dto implements Serializable {
 		}
 	}
 
-	public void set(final String fieldId, final Object value) {
+	public void set(final String fieldId, final Serializable value) {
 		//if (data.containsKey(fieldId)) {
 			data.put(fieldId, value);
 		//} else {
@@ -155,7 +155,7 @@ public class Dto implements Serializable {
 		return (Boolean) get("marked");
 	}
 	
-	public Map<String, Object> getAllData() {
+	public Map<String, Serializable> getAllData() {
 		return data;
 	}
 }

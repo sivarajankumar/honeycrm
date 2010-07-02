@@ -30,14 +30,11 @@ public class Account extends AbstractEntity {
 	@Persistent
 	private double annualRevenue;
 
-	static {
+	public Account() {
 		fields.add(new FieldString("name", "Name"));
 		fields.add(new FieldString("address", "Address"));
 		fields.add(new FieldDate("date", "Date"));
 		fields.add(new FieldCurrency("annualRevenue", "Annual Revenue", "0"));
-	}
-	
-	public Account() {
 	}
 
 	public String getName() {

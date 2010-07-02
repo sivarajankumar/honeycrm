@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -25,7 +26,9 @@ import com.google.appengine.api.datastore.Key;
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @Searchable
 abstract public class AbstractEntity {
-	protected static Set<AbstractField> fields = new HashSet<AbstractField>();
+	@NotPersistent
+	protected Set<AbstractField> fields = new HashSet<AbstractField>();
+	
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
 	@SearchableId
@@ -47,7 +50,7 @@ abstract public class AbstractEntity {
 		fields.add(new FieldInteger("views", "Views"));
 		fields.add(new FieldDate("createdAt", "Created at"));
 		fields.add(new FieldDate("lastUpdatedAt", "Last updated at"));
-		fields.add(new FieldMark("marked", "Marked", this.getClass().getSimpleName().toLowerCase(), id.getId()));
+		fields.add(new FieldMark("marked", "Marked", this.getClass().getSimpleName().toLowerCase(), null == id ? -1 : id.getId()));
 	}
 
 	public Key getId() {

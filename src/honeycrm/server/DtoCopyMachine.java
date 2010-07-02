@@ -3,6 +3,7 @@ package honeycrm.server;
 import honeycrm.client.dto.Dto;
 import honeycrm.server.domain.AbstractEntity;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -10,6 +11,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import com.google.appengine.api.datastore.Key;
 
 public class DtoCopyMachine {
 	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
@@ -55,11 +58,17 @@ public class DtoCopyMachine {
 		try {
 			for (int i=0; i<allFields.length; i++) {
 				final Field field = allFields[i];
-				
+
 				final Method getter = entityClass.getMethod(reflectionHelper.getMethodName("get", field));
 				final Object fieldValue = getter.invoke(entity);
 				
-				dto.set(field.getName(), fieldValue);
+				if ("id".equals(field.getName())) {
+					dto.set(field.getName(), (int)((Key) fieldValue).getId());
+				} else {
+					dto.set(field.getName(), (Serializable) fieldValue);
+				}
+				
+				fillinModuleSpecificData(dto, entityClass);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,6 +78,18 @@ public class DtoCopyMachine {
 	}
 	
 	
+	private void fillinModuleSpecificData(Dto dto, Class<?> entityClass) {
+		dto.setModule(entityClass.getSimpleName().toLowerCase());
+
+		final Dto moduleDto = DtoWizard.instance.getModuleDtoByName(dto.getModule());
+		
+		dto.setFields(moduleDto.getFields());
+		dto.setFormFieldIds(moduleDto.getFormFieldIds());
+		dto.setHistoryToken(moduleDto.getHistoryToken());
+		dto.setListFieldIds(moduleDto.getListFieldIds());
+		dto.setQuicksearchItem(moduleDto.getQuicksearchItem());
+	}
+
 	/**
 	 * Method throwing away all fields that are irrelevant and should not be copied by this copy machine (e.g. automatically added fields for serialization).
 	 */

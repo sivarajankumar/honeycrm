@@ -5,6 +5,7 @@ import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.ServiceTableWidget;
 import honeycrm.client.view.AbstractView.View;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.Widget;
@@ -49,7 +50,7 @@ public class FieldTable extends AbstractField {
 	}
 
 	@Override
-	public Object getData(Widget w) {
-		return ((ITableWidget) w).getData();
+	public Serializable getData(Widget w) {
+		return (Serializable) ((ITableWidget) w).getData();
 	}
 }

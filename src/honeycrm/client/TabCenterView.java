@@ -42,7 +42,7 @@ public class TabCenterView extends DecoratedTabPanel {
 	public static TabCenterView instance() {
 		return instance;
 	}
-
+	
 	private TabCenterView() {
 		int tabPos = 0;
 		

@@ -106,7 +106,7 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 	abstract protected Widget internalGetDetailWidget(final Object value);
 	abstract protected Widget internalGetCreateWidget(final Object value);
 	abstract protected Widget internalGetEditWidget(final Object value);
-	abstract public Object getData(final Widget w);
+	abstract public Serializable getData(final Widget w);
 
 	/**
 	 * This returns a label containing the title of this field, all other properties (e.g., width, alignment) are set as for a normal content field.

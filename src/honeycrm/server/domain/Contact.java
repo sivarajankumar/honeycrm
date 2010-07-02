@@ -70,7 +70,7 @@ public class Contact extends AbstractEntity {
 	@RelatesTo(Employee.class)
 	private long responsibleId;
 
-	static {
+	public Contact() {
 		fields.add(new FieldString("name", "Name"));
 		fields.add(new FieldString("phone", "Phone"));
 		fields.add(new FieldString("city", "City"));
@@ -87,9 +87,6 @@ public class Contact extends AbstractEntity {
 		fields.add(new FieldRelate("childId1", new Dto(), "First Child"));
 		fields.add(new FieldRelate("childId2", new Dto(), "Second Child"));
 		fields.add(new FieldRelate("responsibleId", new Dto(), "Responsible"));
-	}
-
-	public Contact() {
 	}
 
 	public Contact(final String name) {

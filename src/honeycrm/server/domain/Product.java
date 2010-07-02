@@ -20,12 +20,9 @@ public class Product extends AbstractEntity {
 	@Persistent
 	private double price;
 
-	static {
+	public Product() {
 		fields.add(new FieldString("name", "Name"));
 		fields.add(new FieldCurrency("price", "Price"));
-	}
-
-	public Product() {
 	}
 
 	public String getName() {
