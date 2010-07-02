@@ -22,6 +22,7 @@ public class CsvImporter extends AbstractCsv {
 		// start at 1 to skip header row
 		for (int y = 1; y < table.length; y++) {
 			final Dto newContact = new Dto();
+			newContact.setModule("contact");
 
 			newContact.set("name", table[y][positions.get("first_name")] + " " + table[y][positions.get("last_name")]);
 			newContact.set("email", table[y][positions.get("email1")]);

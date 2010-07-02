@@ -52,7 +52,9 @@ public class FieldRelate extends AbstractField {
 			Prefetcher.instance.get(new Consumer<Dto>() {
 				@Override
 				public void setValueAsynch(Dto name) {
-					link.setText(name.getQuicksearch());
+					if (null != name) {
+						link.setText(name.getQuicksearch());
+					}
 				}
 			}, new ServerCallback<Dto>() {
 				@Override

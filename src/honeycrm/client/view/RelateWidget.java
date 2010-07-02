@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -23,12 +24,14 @@ public class RelateWidget extends SuggestBox {
 	private long id;
 	private final String marshalledClass;
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
-
+	private boolean timerRunning;
+	
 	public RelateWidget(final String marshalledClazz, final long id) {
 		super(new MultiWordSuggestOracle());
 		this.marshalledClass = marshalledClazz;
 		addHandlers();
 
+		
 		if (0 != id) {
 			// an id of 0 indicates that nothing has been selected yet. if something has been
 			// selected yet load the actual name of the related account.
@@ -43,7 +46,9 @@ public class RelateWidget extends SuggestBox {
 		Prefetcher.instance.get(new Consumer<Dto>() {
 			@Override
 			public void setValueAsynch(Dto result) {
-				setValue(result.getQuicksearch());
+				if (null != result) { 
+					setValue(result.getQuicksearch());
+				}
 			}
 		}, new ServerCallback<Dto>() {
 			@Override
@@ -69,45 +74,15 @@ public class RelateWidget extends SuggestBox {
 		addKeyPressHandler(new KeyPressHandler() {
 			@Override
 			public void onKeyPress(KeyPressEvent event) {
-				final String query = getText().trim();
-
-				// TODO cache some results instead of doing requests over and over again
-				if (!query.isEmpty()) {
-					Prefetcher.instance.get(new Consumer<ListQueryResult>() {
+				final String lastQuery = getText().trim() + event.getCharCode();
+				
+				if (!timerRunning) {
+					new Timer(){
 						@Override
-						public void setValueAsynch(final ListQueryResult result) {
-							LoadIndicator.get().endLoading();
-
-							if (0 == result.getResults().length) {
-								indicateNoResults();
-							} else {
-								final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
-								o.clear();
-
-								for (final Dto a : result.getResults()) {
-									o.add(a.getQuicksearch());
-								}
-							}
+						public void run() {
+							startDeferredSearch(lastQuery);
 						}
-					}, new ServerCallback<ListQueryResult>() {
-						@Override
-						public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
-							LoadIndicator.get().startLoading();
-
-							commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
-								@Override
-								public void onSuccess(ListQueryResult result) {
-									internalCacheCallback.setValueAsynch(result);
-								}
-
-								@Override
-								public void onFailure(Throwable caught) {
-									LoadIndicator.get().endLoading();
-									indicateNoResults();
-								}
-							});
-						}
-					}, 60 * 1000, marshalledClass, query, 0, 20);
+					}.schedule(300);
 				}
 			}
 		});
@@ -138,6 +113,49 @@ public class RelateWidget extends SuggestBox {
 				});
 			}
 		});
+	}
+	
+	private void startDeferredSearch(final String query) {
+		if (!query.isEmpty()) {
+			Prefetcher.instance.get(new Consumer<ListQueryResult>() {
+				@Override
+				public void setValueAsynch(final ListQueryResult result) {
+					LoadIndicator.get().endLoading();
+
+					if (0 == result.getResults().length) {
+						indicateNoResults();
+					} else {
+						final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
+						o.clear();
+
+						for (final Dto a : result.getResults()) {
+							o.add(a.getQuicksearch());
+						}
+					}
+				}
+			}, new ServerCallback<ListQueryResult>() {
+				@Override
+				public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
+					LoadIndicator.get().startLoading();
+
+					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
+						@Override
+						public void onSuccess(ListQueryResult result) {
+							internalCacheCallback.setValueAsynch(result);
+						}
+
+						@Override
+						public void onFailure(Throwable caught) {
+							LoadIndicator.get().endLoading();
+							indicateNoResults();
+						}
+					});
+					
+					// send request to server. allow user doing some more requests asap.
+					timerRunning = false;
+				}
+			}, 60 * 1000, marshalledClass, query, 0, 20);
+		}
 	}
 	
 	private void indicateNoResults() {
