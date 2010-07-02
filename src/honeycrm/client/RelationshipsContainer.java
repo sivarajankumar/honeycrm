@@ -28,7 +28,7 @@ public class RelationshipsContainer extends Composite {
 		clear();
 
 		for (final Dto originalDtoClass : DtoRegistry.instance.getDtos()) {
-			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, relatedDtoClass));
+			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, relatedDtoClass.getModule()));
 		}
 	}
 
@@ -48,14 +48,12 @@ public class RelationshipsContainer extends Composite {
 class SingleRelationshipPanel extends Composite {
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	private final Dto originatingDtoClass;
-	private final Dto relatedDtoClass;
-//	private final AbstractDto originatingDto;
+	private final String relatedDtoClass;
 	private final Long id;
 	private FlexTable table = new FlexTable();
 
-	public SingleRelationshipPanel(final Dto originatingDto, final Long id, final Dto relatedDto) {
+	public SingleRelationshipPanel(final Dto originatingDto, final Long id, final String relatedDto) {
 		this.originatingDtoClass = originatingDto;
-//		this.originatingDto = DtoRegistry.instance.getDto(originatingDtoClass);
 		this.relatedDtoClass = relatedDto;
 		this.id = id;
 
@@ -75,7 +73,7 @@ class SingleRelationshipPanel extends Composite {
 			public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
 				LoadIndicator.get().startLoading();
 
-				commonService.getAllRelated(originatingDtoClass.getModule(), id, relatedDtoClass.getModule(), new AsyncCallback<ListQueryResult>() {
+				commonService.getAllRelated(originatingDtoClass.getModule(), id, relatedDtoClass, new AsyncCallback<ListQueryResult>() {
 					@Override
 					public void onSuccess(ListQueryResult result) {
 						LoadIndicator.get().endLoading();
@@ -89,7 +87,7 @@ class SingleRelationshipPanel extends Composite {
 					}
 				});
 			}
-		}, 60 * 1000, originatingDtoClass.getModule(), id, relatedDtoClass.getModule());
+		}, 60 * 1000, originatingDtoClass.getModule(), id, relatedDtoClass);
 	}
 
 	private void insertRelatedDtos(ListQueryResult result) {
