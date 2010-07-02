@@ -112,7 +112,7 @@ public class DtoCopyMachine {
 		dto.setFormFieldIds(moduleDto.getFormFieldIds());
 		dto.setHistoryToken(moduleDto.getHistoryToken());
 		dto.setListFieldIds(moduleDto.getListFieldIds());
-		dto.setQuicksearchItem(dto.get("name").toString());
+		dto.setQuicksearchItems(moduleDto.getQuicksearchItems());
 	}
 
 	/**

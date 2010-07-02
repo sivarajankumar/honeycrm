@@ -43,7 +43,7 @@ public class RelateWidget extends SuggestBox {
 		Prefetcher.instance.get(new Consumer<Dto>() {
 			@Override
 			public void setValueAsynch(Dto result) {
-				setValue(result.getQuicksearchItem());
+				setValue(result.getQuicksearch());
 			}
 		}, new ServerCallback<Dto>() {
 			@Override
@@ -87,7 +87,7 @@ public class RelateWidget extends SuggestBox {
 								o.clear();
 
 								for (final Dto a : result.getResults()) {
-									o.add(a.getQuicksearchItem());
+									o.add(a.getQuicksearch());
 								}
 							}
 						}

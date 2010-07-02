@@ -1,9 +1,10 @@
 package honeycrm.server;
 
-import honeycrm.client.dto.DetailViewable;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.ListViewable;
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.ListViewable;
+import honeycrm.server.domain.decoration.Quicksearchable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -57,6 +58,11 @@ public class DtoWizard {
 						}
 						dto.setFormFieldIds(formFields);
 					}
+					
+					if (domainClass.isAnnotationPresent(Quicksearchable.class)) {
+						dto.setQuicksearchItems(domainClass.getAnnotation(Quicksearchable.class).value());
+					}
+					
 					dto.setTitle(domainClass.getSimpleName());
 					dto.setFields(domainClass.newInstance().getFields());
 					

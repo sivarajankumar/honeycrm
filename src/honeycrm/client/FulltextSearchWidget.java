@@ -79,7 +79,7 @@ public class FulltextSearchWidget extends SuggestBox {
 					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
 
 					for (final Dto a : result.getResults()) {
-						String label = a.getQuicksearchItem();
+						String label = a.getQuicksearch();
 
 						if (quicksearchLabels.containsKey(label)) {
 							quicksearchLabels.put(label, quicksearchLabels.get(label) + 1);

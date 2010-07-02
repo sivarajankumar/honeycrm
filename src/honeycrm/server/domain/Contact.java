@@ -1,15 +1,16 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.dto.DetailViewable;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.ListViewable;
-import honeycrm.client.dto.RelatesTo;
 import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldEmail;
 import honeycrm.client.field.FieldEnum;
 import honeycrm.client.field.FieldRelate;
 import honeycrm.client.field.FieldString;
 import honeycrm.client.field.FieldText;
+import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.ListViewable;
+import honeycrm.server.domain.decoration.Quicksearchable;
+import honeycrm.server.domain.decoration.RelatesTo;
 
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -22,6 +23,7 @@ import org.compass.annotations.SearchableProperty;
 @ListViewable( { "marked", "name", "email", "phone", "accountID" })
 @DetailViewable( { "name,accountID", "responsibleId", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId",
 		"child1Id,child2Id" })
+@Quicksearchable( { "name" })
 public class Contact extends AbstractEntity {
 	@Persistent
 	@SearchableProperty

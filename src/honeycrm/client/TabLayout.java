@@ -30,15 +30,14 @@ public class TabLayout extends DockLayoutPanel implements ValueChangeHandler<Str
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
 		
-		// TODO 
-/*		if (2 == token.length) {
+		if (2 == token.length) {
 			if ("create".equals(token[1])) {
-				center.showCreateViewForModule(AbstractDto.getDtoFromHistoryToken(token[0]).getClass());
+				center.showCreateViewForModule(token[0]);
 			} else {
-				center.showModuleTabWithId(AbstractDto.getDtoFromHistoryToken(token[0]).getClass(), Long.valueOf(token[1]));
+				center.showModuleTabWithId(token[0], Long.valueOf(token[1]));
 			}
 		} else if (1 == token.length) {
-			center.showModuleTab(AbstractDto.getDtoFromHistoryToken(token[0]).getClass());
-		}*/
+			center.showModuleTab(token[0]);
+		}
 	}
 }

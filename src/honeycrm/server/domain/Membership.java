@@ -1,14 +1,15 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.dto.DetailViewable;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.ListViewable;
-import honeycrm.client.dto.RelatesTo;
 import honeycrm.client.field.FieldCurrency;
 import honeycrm.client.field.FieldDate;
 import honeycrm.client.field.FieldEnum;
 import honeycrm.client.field.FieldRelate;
 import honeycrm.client.field.FieldText;
+import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.ListViewable;
+import honeycrm.server.domain.decoration.Quicksearchable;
+import honeycrm.server.domain.decoration.RelatesTo;
 
 import java.util.Date;
 
@@ -20,8 +21,9 @@ import org.compass.annotations.SearchableProperty;
 
 @PersistenceCapable
 @Searchable
-@ListViewable({"marked", "memberId", "employeeId", "startDate"})
-@DetailViewable({"memberId,employeeId", "tiedToPurpose,purpose", "payment,paymentMethod", "startDate,endDate"})
+@ListViewable( { "marked", "memberId", "employeeId", "startDate" })
+@DetailViewable( { "memberId,employeeId", "tiedToPurpose,purpose", "payment,paymentMethod", "startDate,endDate" })
+@Quicksearchable( { "memberId", "employeeId" })
 public class Membership extends AbstractEntity {
 	@Persistent
 	@RelatesTo(Contact.class)

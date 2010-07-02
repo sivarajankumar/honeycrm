@@ -1,9 +1,9 @@
-package honeycrm.client.dto;
+package honeycrm.server.domain.decoration;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DetailViewable {
+public @interface ListViewable {
 	String[] value();
 }
