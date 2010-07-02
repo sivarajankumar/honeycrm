@@ -1,5 +1,9 @@
 package honeycrm.server;
 
+import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.decoration.RelatesTo;
+
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,31 +16,33 @@ public class RelationshipFieldTable {
 	private final Map<String, Map<String, Set<String>>> map = new HashMap<String, Map<String, Set<String>>>();
 
 	private RelationshipFieldTable() {
-		// TODO
-/*		for (final Dto originatingDtoClass : DtoRegistry.instance.getDtos()) {
+		for (final Class<? extends AbstractEntity> originatingDtoClass : DomainClassRegistry.instance.getDomainClasses()) {
 			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingDtoClass, RelatesTo.class)) {
-				final Class<? extends AbstractDto> relatedDtoClass = field.getAnnotation(RelatesTo.class).value();
+				final Class<? extends AbstractEntity> relatedDtoClass = field.getAnnotation(RelatesTo.class).value();
 
-				if (map.containsKey(originatingDtoClass)) {
-					if (map.get(originatingDtoClass).containsKey(relatedDtoClass)) {
-						map.get(originatingDtoClass).get(relatedDtoClass).add(field.getName());
+				final String strOrigin = DomainClassRegistry.instance.getDto(originatingDtoClass);
+				final String strRelated = DomainClassRegistry.instance.getDto(relatedDtoClass);
+				
+				if (map.containsKey(strOrigin)) {
+					if (map.get(strOrigin).containsKey(strRelated)) {
+						map.get(strOrigin).get(strRelated).add(field.getName());
 					} else {
 						final Set<String> set = new HashSet<String>();
 						set.add(field.getName());
 
-						map.get(originatingDtoClass).put(relatedDtoClass, set);
+						map.get(strOrigin).put(strRelated, set);
 					}
 				} else {
 					final Set<String> set = new HashSet<String>();
 					set.add(field.getName());
 
-					final Map<Class<? extends AbstractDto>, Set<String>> relatedDtoMap = new HashMap<Class<? extends AbstractDto>, Set<String>>();
-					relatedDtoMap.put(relatedDtoClass, set);
+					final Map<String, Set<String>> relatedDtoMap = new HashMap<String, Set<String>>();
+					relatedDtoMap.put(strRelated, set);
 
-					map.put(originatingDtoClass, relatedDtoMap);
+					map.put(strOrigin, relatedDtoMap);
 				}
 			}
-		}*/
+		}
 
 		System.out.println("Map contains " + map.size() + " elements");
 	}
