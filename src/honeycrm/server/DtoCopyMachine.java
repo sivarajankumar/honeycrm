@@ -5,6 +5,7 @@ import honeycrm.server.domain.AbstractEntity;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
@@ -12,7 +13,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.jdo.PersistenceManager;
+
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 public class DtoCopyMachine {
 	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
@@ -32,6 +36,9 @@ public class DtoCopyMachine {
 		return copy(dto, null);
 	}
 
+	/**
+	 * Copy data from Dto into domain class. This is usually the case whenever the client sends data to the server (create, update)
+	 */
 	public AbstractEntity copy(Dto dto, AbstractEntity existingEntity) {
 		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
@@ -41,8 +48,9 @@ public class DtoCopyMachine {
 
 			for (int i = 0; i < allFields.length; i++) {
 				final Field field = allFields[i];
+				final Object value = dto.get(field.getName());
 
-				if (null == dto.get(field.getName())) {
+				if (null == value) {
 					continue;
 				}
 
@@ -62,8 +70,14 @@ public class DtoCopyMachine {
 					}
 				}
 
+				if (value instanceof List<?>) {
+					deleteOldChildItems(entityClass, existingEntity, field);
+					handleDtoLists(entityClass, entity, field, value);
+					continue;
+				}
+
 				final Method setter = entityClass.getMethod(reflectionHelper.getMethodName("set", field), field.getType());
-				setter.invoke(entity, dto.get(field.getName()));
+				setter.invoke(entity, value);
 			}
 
 			return entity;
@@ -73,6 +87,23 @@ public class DtoCopyMachine {
 		}
 	}
 
+	private void handleDtoLists(final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final Field field, final Object value) throws NoSuchMethodException,
+			IllegalAccessException, InvocationTargetException {
+		if (((List<?>) value).get(0) instanceof Dto) {
+			final List<AbstractEntity> serverList = new LinkedList<AbstractEntity>();
+
+			for (final Dto child : (List<Dto>) value) {
+				serverList.add(copy(child));
+			}
+
+			final Method setter = entityClass.getMethod(reflectionHelper.getMethodName("set", field), List.class);
+			setter.invoke(entity, serverList);
+		}
+	}
+
+	/**
+	 * Copy data from a domain class instance into a Dto. This is usually the case whenever the server responds to clients (read).
+	 */
 	public Dto copy(AbstractEntity entity) {
 		final Dto dto = new Dto();
 
@@ -84,12 +115,17 @@ public class DtoCopyMachine {
 				final Field field = allFields[i];
 
 				final Method getter = entityClass.getMethod(reflectionHelper.getMethodName("get", field));
-				final Object fieldValue = getter.invoke(entity);
+				final Object value = getter.invoke(entity);
+
+				if (value instanceof List<?>) {
+					handleDomainClassLists(dto, field, value);
+					continue;
+				}
 
 				if ("id".equals(field.getName())) {
-					dto.set(field.getName(), (int) ((Key) fieldValue).getId());
+					dto.set(field.getName(), (int) ((Key) value).getId());
 				} else {
-					dto.set(field.getName(), (Serializable) fieldValue);
+					dto.set(field.getName(), (Serializable) value);
 				}
 			}
 
@@ -99,6 +135,18 @@ public class DtoCopyMachine {
 		}
 
 		return dto;
+	}
+
+	private void handleDomainClassLists(final Dto dto, final Field field, final Object value) {
+		if (((List<?>) value).get(0) instanceof AbstractEntity) {
+			final List<Dto> serverList = new LinkedList<Dto>();
+
+			for (final AbstractEntity child : (List<AbstractEntity>) value) {
+				serverList.add(copy(child));
+			}
+
+			dto.set(field.getName(), (Serializable) serverList);
+		}
 	}
 
 	private void fillinModuleSpecificData(Dto dto, Class<?> entityClass) {
@@ -111,6 +159,30 @@ public class DtoCopyMachine {
 		dto.setHistoryToken(moduleDto.getHistoryToken());
 		dto.setListFieldIds(moduleDto.getListFieldIds());
 		dto.setQuicksearchItems(moduleDto.getQuicksearchItems());
+	}
+
+	/**
+	 * TODO This removes the child elements of an entity during an update to avoid duplicating them. This should not be under the responsibility of this class and has to be refactored in the future!
+	 */
+	private void deleteOldChildItems(final Class<? extends AbstractEntity> entityClass, final AbstractEntity existingEntity, final Field field) throws IllegalArgumentException, SecurityException,
+			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		if (null != existingEntity) {
+			// This is an update, before doing anything else we remove the existing items linked to this entity
+			// This avoids duplicating them on an update.
+			// Note this means that on each update the linked items of an entity are deleted and recreated. This should be avoided in future versions.
+			final List<?> existingItemsList = (List<?>) entityClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(existingEntity);
+
+			if (existingItemsList.get(0) instanceof AbstractEntity) {
+				// TODO this should not be created on each update call!
+				final PersistenceManager m = PMF.get().getPersistenceManager();
+
+				for (final AbstractEntity child : (List<AbstractEntity>) existingItemsList) {
+					// TODO why doesn't that work too? this throws an "this entity is currently managed by another manager" exception.
+					// m.deletePersistent(child);
+					m.deletePersistent(m.getObjectById(child.getClass(), KeyFactory.createKey(existingEntity.getId(), child.getClass().getSimpleName(), child.getId().getId())));
+				}
+			}
+		}
 	}
 
 	/**

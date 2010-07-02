@@ -1,7 +1,9 @@
 package honeycrm.client.view;
 
+import honeycrm.client.DtoRegistry;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.field.AbstractField;
+import honeycrm.client.misc.NumberParser;
 import honeycrm.client.view.AbstractView.View;
 
 import java.util.LinkedList;
@@ -23,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class ServiceTableWidget extends ITableWidget {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
-	private final Dto dto = new Dto();
+	private final Dto dto = DtoRegistry.instance.getDto("service");
 	private final View view;
 	private final Label sum = new Label();
 
@@ -96,6 +98,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 		for (int y = HEADER_ROWS; y < table.getRowCount(); y++) {
 			final Dto s = new Dto();
+			s.setModule("service");
 
 			for (int x = 0; x < dto.getListFieldIds().length; x++) {
 				if (table.getCellCount(y) > x) {
@@ -108,7 +111,7 @@ public class ServiceTableWidget extends ITableWidget {
 				}
 			}
 
-			s.set("sum", ((Double) s.get("price") - (Double) s.get("discount")) * (Double) s.get("quantity"));
+			s.set("sum", (NumberParser.convertToDouble(s.get("price")) - NumberParser.convertToDouble(s.get("discount"))) * (Integer) s.get("quantity"));
 			services.add(s);
 		}
 
@@ -155,7 +158,7 @@ public class ServiceTableWidget extends ITableWidget {
 	private double getSum(List<Dto> data) {
 		double currentSum = 0.0;
 		for (Dto service : data) {
-			currentSum += ((Double) service.get("price") - (Double) service.get("discount")) * (Double) service.get("quantity");
+			currentSum += (NumberParser.convertToDouble(service.get("price")) - NumberParser.convertToDouble(service.get("discount"))) * (Integer) service.get("quantity");
 		}
 		return currentSum;
 	}

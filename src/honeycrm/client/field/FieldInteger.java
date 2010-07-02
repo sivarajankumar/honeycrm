@@ -52,6 +52,6 @@ public class FieldInteger extends AbstractField {
 
 	@Override
 	public Serializable getData(Widget w) {
-		return ((TextBox) w).getText();
+		return Integer.valueOf(((TextBox) w).getText());
 	}
 }
