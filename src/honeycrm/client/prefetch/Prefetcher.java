@@ -13,6 +13,14 @@ public class Prefetcher {
 	private Prefetcher() {
 	}
 
+	public void invalidate(final Object...parameters) {
+		final CacheKey key = new CacheKey(parameters);
+
+		if (cache.containsKey(key)) {
+			cache.get(key).makeInvalid();
+		}
+	}
+	
 	public <T> void get(final Consumer<T> callback, final ServerCallback<T> serverCallback, final long timeout, final Object...parameters) {
 		final CacheKey key = new CacheKey(parameters);
 
@@ -28,7 +36,7 @@ public class Prefetcher {
 			// this entry is currently retrieved from the server.
 			// do nothing just add the client to the callbacks for this cache entry.
 		} else {
-			if (entry.isEmpty() || entry.isOutOfDate()) {
+			if (entry.isEmpty() || !entry.isValid() || entry.isOutOfDate()) {
 				// entry is not locked but is still empty.
 				// so we are the first who want to access the field. lock the entry and request data from server.
 				misses++;
