@@ -6,6 +6,7 @@ import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,14 +95,15 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	// TODO does not update the relate field anymore
 	@Override
 	public void update(Dto dto, long id) {
-		// TODO 
-		/*dto.set("lastUpdatedAt", (new Date(System.currentTimeMillis())));
+		dto.set("lastUpdatedAt", (new Date(System.currentTimeMillis())));
 
-		final AbstractEntity existingObject = (AbstractEntity) getDomainObject(dtoIndex, id);
-
+		final AbstractEntity existingObject = (AbstractEntity) getDomainObject(dto.getModule(), id);
+		
 		if (null != existingObject) {
-			m.makePersistent(copy.getUpdatedInstance(dto, existingObject));
-		}*/
+			final AbstractEntity updatedObject = copy.copy(dto, existingObject);
+			m.makePersistent(updatedObject);
+			m.flush();
+		}
 	}
 
 	@Override
