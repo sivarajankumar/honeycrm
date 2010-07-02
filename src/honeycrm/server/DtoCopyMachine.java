@@ -29,10 +29,14 @@ public class DtoCopyMachine {
 	}
 
 	public AbstractEntity copy(Dto dto) {
+		return copy(dto, null);
+	}
+	
+	public AbstractEntity copy(Dto dto, AbstractEntity existingObject) {
 		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
 		try {
-			final AbstractEntity entity = entityClass.newInstance();
+			final AbstractEntity entity = null == existingObject ? entityClass.newInstance() : existingObject;
 			final Field[] allFields = filterFields(reflectionHelper.getAllFields(entityClass));
 			
 			for (int i=0; i<allFields.length; i++) {
