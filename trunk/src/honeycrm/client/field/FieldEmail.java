@@ -1,5 +1,7 @@
 package honeycrm.client.field;
 
+import honeycrm.client.misc.StringAbbreviation;
+
 import java.io.Serializable;
 
 import com.google.gwt.user.client.ui.Anchor;
@@ -30,7 +32,9 @@ public class FieldEmail extends AbstractField {
 		} else {
 			// Display email as a mailto:a@b.com link to make sure the clients mail client will
 			// be opened.
-			return new Anchor(value.toString(), true, "mailto:" + value.toString());
+			final Anchor mailtoLink = new Anchor(StringAbbreviation.shorten(value.toString(), 10), true, "mailto:" + value.toString());;
+			mailtoLink.setTitle(value.toString());
+			return mailtoLink;
 		}
 	}
 
