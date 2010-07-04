@@ -32,7 +32,7 @@ public class ListView extends AbstractView {
 	 * Map pages to listviewable arrays.
 	 */
 	protected Map<Integer, Dto[]> cache = new HashMap<Integer, Dto[]>();
-	protected static final int MAX_ENTRIES = 10;
+	protected static final int MAX_ENTRIES = 15;
 	private static final int HEADER_ROWS = 1;
 	/**
 	 * number of columns in front of the actual data containing columns (e.g. delete checkbox column)
