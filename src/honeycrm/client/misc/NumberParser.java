@@ -17,6 +17,20 @@ public class NumberParser {
 			return 0;
 		}
 	}
+	
+	public static int convertToInteger(final Object value) {
+		if (null == value)
+			return 0;
+
+		if (value instanceof Integer)
+			return (Integer) value;
+
+		try {
+			return Integer.parseInt(value.toString());
+		} catch (NumberFormatException e) {
+			return 0;
+		}
+	}	
 
 	/**
 	 * Convert a given object safely to a long value

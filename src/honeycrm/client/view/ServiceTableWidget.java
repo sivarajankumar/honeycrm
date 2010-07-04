@@ -99,6 +99,7 @@ public class ServiceTableWidget extends ITableWidget {
 		for (int y = HEADER_ROWS; y < table.getRowCount(); y++) {
 			final Dto s = new Dto();
 			s.setModule("service");
+			s.copyModuleSpecificFields(DtoRegistry.instance.getDto("service"));
 
 			for (int x = 0; x < dto.getListFieldIds().length; x++) {
 				if (table.getCellCount(y) > x) {

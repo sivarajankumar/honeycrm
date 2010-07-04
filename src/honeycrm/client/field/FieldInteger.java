@@ -1,5 +1,7 @@
 package honeycrm.client.field;
 
+import honeycrm.client.misc.NumberParser;
+
 import java.io.Serializable;
 
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -40,7 +42,7 @@ public class FieldInteger extends AbstractField {
 	@Override
 	protected Widget internalGetEditWidget(Object value) {
 		TextBox widget6 = new TextBox();
-		widget6.setText(value.toString());
+		widget6.setText(String.valueOf(NumberParser.convertToInteger(value)));
 		widget6.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 		return widget6;
 	}
