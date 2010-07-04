@@ -166,4 +166,18 @@ public class Dto implements Serializable {
 	public Map<String, Serializable> getAllData() {
 		return data;
 	}
+
+	/**
+	 * Copies all the module specific fields from a given dto instance (that is the module template for this) into this dto instance.
+	 */
+	public void copyModuleSpecificFields(final Dto moduleDto) {
+		// TODO we should not store copies of all module specific data within the dto instances
+		// TODO instead the module name should be a reference into the module specific storage holding this (currently copied) data.
+		setModule(moduleDto.getModule());
+		setFields(moduleDto.getFields());
+		setFormFieldIds(moduleDto.getFormFieldIds());
+		setHistoryToken(moduleDto.getHistoryToken());
+		setListFieldIds(moduleDto.getListFieldIds());
+		setQuicksearchItems(moduleDto.getQuicksearchItems());
+	}
 }

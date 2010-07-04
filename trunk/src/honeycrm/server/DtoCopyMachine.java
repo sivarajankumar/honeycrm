@@ -129,7 +129,7 @@ public class DtoCopyMachine {
 				}
 			}
 
-			fillinModuleSpecificData(dto, entityClass);
+			dto.copyModuleSpecificFields(DtoWizard.instance.getModuleDtoByName(entityClass.getSimpleName().toLowerCase()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -147,18 +147,6 @@ public class DtoCopyMachine {
 
 			dto.set(field.getName(), (Serializable) serverList);
 		}
-	}
-
-	private void fillinModuleSpecificData(Dto dto, Class<?> entityClass) {
-		dto.setModule(entityClass.getSimpleName().toLowerCase());
-
-		final Dto moduleDto = DtoWizard.instance.getModuleDtoByName(dto.getModule());
-
-		dto.setFields(moduleDto.getFields());
-		dto.setFormFieldIds(moduleDto.getFormFieldIds());
-		dto.setHistoryToken(moduleDto.getHistoryToken());
-		dto.setListFieldIds(moduleDto.getListFieldIds());
-		dto.setQuicksearchItems(moduleDto.getQuicksearchItems());
 	}
 
 	/**
