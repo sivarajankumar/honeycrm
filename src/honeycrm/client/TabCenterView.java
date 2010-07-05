@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 // TODO update history token when a new tab is selected
 public class TabCenterView extends DecoratedTabPanel {
@@ -50,12 +51,12 @@ public class TabCenterView extends DecoratedTabPanel {
 		for (final Dto dto : dtos) {
 			// final AbstractDto dto = DtoRegistry.instance.getDto(clazz);
 			final TabModuleView view = new TabModuleView(dto);
+			// has not the desired effect see http://www.youtube.com/watch?v=k_eqtePmbZY
+			// view.setSize("99%", "500px"); // set size for scrolling
 
 			// refresh list view only for the first tab (which is the only visible tab at the beginning)
 			if (0 == tabPos)
 				view.refreshListView();
-
-			// view.setSize("800px", "400px");
 
 			moduleViewMap.put(dto.getModule(), view);
 			tabPositionMap.put(dto.getModule(), tabPos);
@@ -101,12 +102,13 @@ public class TabCenterView extends DecoratedTabPanel {
 			 * 
 			 * @Override public void onMouseOut(MouseOutEvent event) { createBtn.setVisible(false); } });
 			 */
-			add((view), titlePanel);
+
+			add(new ScrollPanel(view), titlePanel);
 		}
 
 		add(new AdminWidget(), "Admin");
 		add(new EmailFeedbackWidget(), "Feedback");
-		add(new SampleReport(), "Reports");
+		add(new SampleReport(), "Dashboard");
 
 		addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override
@@ -132,6 +134,8 @@ public class TabCenterView extends DecoratedTabPanel {
 		LogConsole.log("created center view");
 
 		selectTab(0);
+		// select last tab (dashboard) 
+	//	selectTab(getTabBar().getTabCount() - 1);
 	}
 
 	public TabModuleView get(String moduleName) {

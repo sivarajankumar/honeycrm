@@ -21,7 +21,7 @@ public class TabModuleView extends AbstractView {
 		detailView = new DetailView(clazz);
 		detailView.setStyleName("detail_view_content");
 
-		final VerticalPanel content = new VerticalPanel();
+		final FlowPanel content = new FlowPanel();
 		content.setStyleName("tab_content");
 
 		final FlowPanel viewPanel = new FlowPanel();
@@ -42,6 +42,11 @@ public class TabModuleView extends AbstractView {
 		content.add(new ModuleButtonBar(clazz));
 		content.add(hor);
 
+/*		FlowPanel h = new FlowPanel();
+		h.add(listView);
+		h.add(detailView);
+		
+		initWidget(h);*/
 		initWidget(content);
 	}
 
