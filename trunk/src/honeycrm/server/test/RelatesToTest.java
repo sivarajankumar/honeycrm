@@ -1,12 +1,13 @@
 package honeycrm.server.test;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import honeycrm.server.CachingReflectionHelper;
 import honeycrm.server.ReflectionHelper;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.RelatesTo;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import junit.framework.TestCase;
 
 public class RelatesToTest extends TestCase {

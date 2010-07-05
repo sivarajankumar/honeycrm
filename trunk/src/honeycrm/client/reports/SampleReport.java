@@ -3,10 +3,13 @@ package honeycrm.client.reports;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 
+import java.util.Date;
 import java.util.Map;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
@@ -18,32 +21,47 @@ import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 
 public class SampleReport extends Composite {
 	public SampleReport() {
+		final HorizontalPanel reportsPanel = new HorizontalPanel();
 		final VerticalPanel p = new VerticalPanel();
-		p.add(new Label("Reports"));
+
+		p.add(reportsPanel);
+		final Label status = new Label("Status: ");
+		p.add(status);
 		p.setStyleName("content");
+
 		initWidget(p);
 
-		LoadIndicator.get().startLoading();
-
-		ServiceRegistry.commonService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
+		new Timer() {
 			@Override
-			public void onSuccess(final Map<Integer, Double> result) {
-				LoadIndicator.get().endLoading();
+			public void run() {
+				LoadIndicator.get().startLoading();
 
-				VisualizationUtils.loadVisualizationApi(new Runnable() {
+				ServiceRegistry.commonService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
 					@Override
-					public void run() {
-						p.add(new LineChart(getAbstractTable(result), getAreaOptions()));
+					public void onSuccess(final Map<Integer, Double> result) {
+						LoadIndicator.get().endLoading();
+						
+						status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
+
+						VisualizationUtils.loadVisualizationApi(new Runnable() {
+							@Override
+							public void run() {
+								reportsPanel.clear();
+								reportsPanel.add(new LineChart(getAbstractTable(result), getAreaOptions()));
+								reportsPanel.add(new LineChart(getAbstractTable(result), getAreaOptions()));
+								reportsPanel.add(new LineChart(getAbstractTable(result), getAreaOptions()));
+							}
+						}, LineChart.PACKAGE);
 					}
-				}, LineChart.PACKAGE);
-			}
 
-			@Override
-			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
+					@Override
+					public void onFailure(Throwable caught) {
+						LoadIndicator.get().endLoading();
 
+					}
+				});
 			}
-		});
+		}.scheduleRepeating(10*1000);
 	}
 
 	private Options getAreaOptions() {
@@ -51,7 +69,7 @@ public class SampleReport extends Composite {
 		options.setEnableTooltip(true);
 		options.setTitleX("Year");
 		options.setTitle("EUR");
-		options.setWidth(700);
+		options.setWidth(400);
 		options.setHeight(240);
 		options.setTitle("Annually Opportunity Volumes");
 		return options;
