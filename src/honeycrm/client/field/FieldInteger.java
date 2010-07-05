@@ -34,7 +34,7 @@ public class FieldInteger extends AbstractField {
 
 	@Override
 	protected Widget internalGetDetailWidget(Object value) {
-		final Label widget1 = new Label(value.toString());
+		final Label widget1 = new Label(String.valueOf(NumberParser.convertToInteger(value)));
 		widget1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		return widget1;
 	}

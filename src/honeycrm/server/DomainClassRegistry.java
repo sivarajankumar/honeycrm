@@ -1,16 +1,8 @@
 package honeycrm.server;
 
 import honeycrm.server.domain.AbstractEntity;
-import honeycrm.server.domain.Account;
-import honeycrm.server.domain.Contact;
-import honeycrm.server.domain.Donation;
-import honeycrm.server.domain.Employee;
-import honeycrm.server.domain.Membership;
-import honeycrm.server.domain.Offering;
-import honeycrm.server.domain.Product;
-import honeycrm.server.domain.Project;
-import honeycrm.server.domain.Service;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -21,19 +13,20 @@ public class DomainClassRegistry {
 	private final Map<Class<? extends AbstractEntity>, String> domainToDto = new HashMap<Class<? extends AbstractEntity>, String>();
 
 	private DomainClassRegistry() {
-		// TODO do this automatically with reflection
-		dtoToDomain.put("contact", Contact.class);
-		dtoToDomain.put("account", Account.class);
-		dtoToDomain.put("employee", Employee.class);
-		dtoToDomain.put("membership", Membership.class);
-		dtoToDomain.put("donation", Donation.class);
-		dtoToDomain.put("project", Project.class);
-		dtoToDomain.put("product", Product.class);
-		dtoToDomain.put("service", Service.class);
-		dtoToDomain.put("offering", Offering.class);
-
-		for (final String dto : dtoToDomain.keySet()) {
-			domainToDto.put(dtoToDomain.get(dto), dto);
+		try {
+			for (final Class<AbstractEntity> domainClass : (Class<AbstractEntity>[]) ReflectionHelper.getClasses("honeycrm.server.domain")) {
+				if (!Modifier.isAbstract(domainClass.getModifiers())) {
+					final String name = domainClass.getSimpleName().toLowerCase();
+					dtoToDomain.put(name, domainClass);
+				}
+			}
+			
+			for (final String dto : dtoToDomain.keySet()) {
+				domainToDto.put(dtoToDomain.get(dto), dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Cannot initialize " + DomainClassRegistry.class.toString() + " class");
 		}
 	}
 
