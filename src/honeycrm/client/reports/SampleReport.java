@@ -2,6 +2,7 @@ package honeycrm.client.reports;
 
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
+import honeycrm.client.forecast.ForecastTest;
 
 import java.util.Date;
 import java.util.Map;
@@ -20,17 +21,17 @@ import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 
 public class SampleReport extends Composite {
-	public SampleReport() {
-		final HorizontalPanel reportsPanel = new HorizontalPanel();
-		final VerticalPanel p = new VerticalPanel();
+	private LineChart offeringsReport;
 
-		p.add(reportsPanel);
+	public SampleReport() {
 		final Label status = new Label("Status: ");
-		p.add(status);
+		final VerticalPanel p = new VerticalPanel();
 		p.setStyleName("content");
+		p.add(status);
+		p.add(new ForecastTest());
 
 		initWidget(p);
-
+		
 		new Timer() {
 			@Override
 			public void run() {
@@ -40,16 +41,19 @@ public class SampleReport extends Composite {
 					@Override
 					public void onSuccess(final Map<Integer, Double> result) {
 						LoadIndicator.get().endLoading();
-						
+
 						status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
 
-						VisualizationUtils.loadVisualizationApi(new Runnable() {
-							@Override
-							public void run() {
-								reportsPanel.clear();
-								reportsPanel.add(new LineChart(getAbstractTable(result), getAreaOptions()));
-							}
-						}, LineChart.PACKAGE);
+						if (null == offeringsReport) {
+							VisualizationUtils.loadVisualizationApi(new Runnable() {
+								@Override
+								public void run() {
+									p.add(offeringsReport = new LineChart(getAbstractTable(result), getAreaOptions()));
+								}
+							}, LineChart.PACKAGE);
+						} else {
+							offeringsReport.draw(getAbstractTable(result), getAreaOptions());
+						}
 					}
 
 					@Override
@@ -59,8 +63,8 @@ public class SampleReport extends Composite {
 					}
 				});
 			}
-		}.scheduleRepeating(10*1000);
-	}
+		}.schedule(10*1000);
+}
 
 	private Options getAreaOptions() {
 		Options options = Options.create();
