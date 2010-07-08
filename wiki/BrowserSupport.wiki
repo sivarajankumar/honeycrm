@@ -1,4 +1,4 @@
-#information about the supported browsers
+#summary information about the supported browsers
 
 honeycrm relies on google web toolkit thus it supports all browsers supported by it. we currently test honeycrm in the following browsers without any browser related problems:
 - Google Chrome 5
