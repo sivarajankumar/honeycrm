@@ -1,9 +1,10 @@
 package honeycrm.client.field;
 
-import honeycrm.client.DtoRegistry;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -46,7 +47,7 @@ public class FieldRelate extends AbstractField {
 		} else {
 			// resolve the real name of the entity by its id and display a HyperLink as
 			// widget
-			final Dto relatedViewable = DtoRegistry.instance.getDto(getRelatedClazz());
+			final ModuleDto relatedViewable = DtoModuleRegistry.instance().get(getRelatedClazz());
 			final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
 
 			Prefetcher.instance.get(new Consumer<Dto>() {

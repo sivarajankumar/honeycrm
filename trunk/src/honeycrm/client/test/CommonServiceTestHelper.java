@@ -3,6 +3,7 @@ package honeycrm.client.test;
 import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.dto.ModuleDto;
 
 import java.util.List;
 import java.util.Map;
@@ -85,12 +86,6 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	}
 
 	@Override
-	public void getDtoConfiguration(AsyncCallback<List<Dto>> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void importContacts(List<Dto> contacts, AsyncCallback<Void> callback) {
 		// TODO Auto-generated method stub
 
@@ -142,6 +137,12 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	public void getAll(String dtoIndex, int from, int to, AsyncCallback<ListQueryResult> callback) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void getDtoConfiguration(AsyncCallback<Map<String, ModuleDto>> callback) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

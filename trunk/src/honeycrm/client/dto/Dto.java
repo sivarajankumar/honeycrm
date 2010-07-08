@@ -18,14 +18,8 @@ import com.google.gwt.user.client.Window;
 public class Dto implements Serializable {
 	private static final long serialVersionUID = 2098126312789586977L;
 
-	private String[] listFieldIds;
-	private String[][] formFieldIds;
-	private String[] quickSearchItems;
-	private String historyToken;
-	private String title;
 	private String module;
 	private Map<String, Serializable> data = new HashMap<String, Serializable>();
-	private Set<AbstractField> fields = new HashSet<AbstractField>();
 
 	public Dto() {
 		data.put("id", null);
@@ -52,32 +46,15 @@ public class Dto implements Serializable {
 	}
 
 	public Set<AbstractField> getFields() {
-		return fields;
-	}
-
-	public void setFields(Set<AbstractField> fields) {
-		this.fields = fields;
+		return DtoModuleRegistry.instance().get(module).getFields();
 	}
 
 	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+		return DtoModuleRegistry.instance().get(module).getTitle();
 	}
 
 	public AbstractField getFieldById(final String id) {
-		for (final AbstractField field : fields) {
-			if (field.getId().equals(id)) {
-				return field;
-			}
-		}
-
-		// did not find a field with this id. should never reach this point.
-		assert false;
-
-		return null;
+		return DtoModuleRegistry.instance().get(module).getFieldById(id);
 	}
 
 	public void setId(final long id) {
@@ -89,11 +66,7 @@ public class Dto implements Serializable {
 	}
 
 	public String getHistoryToken() {
-		return historyToken;
-	}
-
-	public void setHistoryToken(String historyToken) {
-		this.historyToken = historyToken;
+		return DtoModuleRegistry.instance().get(module).getHistoryToken();
 	}
 
 	public static Dto getByModuleName(final List<Dto> dtos, final String moduleName) {
@@ -108,19 +81,11 @@ public class Dto implements Serializable {
 	}
 
 	public String[] getListFieldIds() {
-		return listFieldIds;
-	}
-
-	public void setListFieldIds(String[] listFields) {
-		this.listFieldIds = listFields;
+		return DtoModuleRegistry.instance().get(module).getListFieldIds();
 	}
 
 	public String[][] getFormFieldIds() {
-		return formFieldIds;
-	}
-
-	public void setFormFieldIds(String[][] formFields) {
-		this.formFieldIds = formFields;
+		return DtoModuleRegistry.instance().get(module).getFormFieldIds();
 	}
 
 	public static boolean isInternalReadOnlyField(String id) {
@@ -134,8 +99,9 @@ public class Dto implements Serializable {
 	}
 
 	public String getQuicksearch() {
+		final String[] quickSearchItems = getQuicksearchItems();
 		String str = "";
-
+		
 		for (int i = 0; i < quickSearchItems.length; i++) {
 			str += get(quickSearchItems[i]);
 
@@ -148,11 +114,7 @@ public class Dto implements Serializable {
 	}
 
 	public String[] getQuicksearchItems() {
-		return quickSearchItems;
-	}
-
-	public void setQuicksearchItems(final String[] quickSearchItem) {
-		this.quickSearchItems = quickSearchItem;
+		return DtoModuleRegistry.instance().get(module).getQuickSearchItems();
 	}
 
 	public void setMarked(boolean marked) {
@@ -165,19 +127,5 @@ public class Dto implements Serializable {
 
 	public Map<String, Serializable> getAllData() {
 		return data;
-	}
-
-	/**
-	 * Copies all the module specific fields from a given dto instance (that is the module template for this) into this dto instance.
-	 */
-	public void copyModuleSpecificFields(final Dto moduleDto) {
-		// TODO we should not store copies of all module specific data within the dto instances
-		// TODO instead the module name should be a reference into the module specific storage holding this (currently copied) data.
-		setModule(moduleDto.getModule());
-		setFields(moduleDto.getFields());
-		setFormFieldIds(moduleDto.getFormFieldIds());
-		setHistoryToken(moduleDto.getHistoryToken());
-		setListFieldIds(moduleDto.getListFieldIds());
-		setQuicksearchItems(moduleDto.getQuicksearchItems());
 	}
 }

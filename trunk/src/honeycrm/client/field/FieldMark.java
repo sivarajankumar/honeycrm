@@ -1,7 +1,7 @@
 package honeycrm.client.field;
 
-import honeycrm.client.DtoRegistry;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.view.MarkWidget;
 
 import java.io.Serializable;
@@ -24,12 +24,12 @@ public class FieldMark extends AbstractField {
 
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
-		final Dto dto = DtoRegistry.instance.getDto(dtoIndex);
+		final Dto dto = DtoModuleRegistry.instance().get(dtoIndex).createDto();
 		// dto.setId(NumberParser.convertToLong(value));
 		dto.setId(dtoId);
 		dto.setMarked((Boolean) value);
 
-		return new MarkWidget(dto, dto);
+		return new MarkWidget(dto);
 	}
 
 	@Override

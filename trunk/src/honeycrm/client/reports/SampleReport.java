@@ -48,8 +48,6 @@ public class SampleReport extends Composite {
 							public void run() {
 								reportsPanel.clear();
 								reportsPanel.add(new LineChart(getAbstractTable(result), getAreaOptions()));
-								reportsPanel.add(new LineChart(getAbstractTable(result), getAreaOptions()));
-								reportsPanel.add(new LineChart(getAbstractTable(result), getAreaOptions()));
 							}
 						}, LineChart.PACKAGE);
 					}

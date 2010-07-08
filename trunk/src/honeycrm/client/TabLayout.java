@@ -15,7 +15,7 @@ public class TabLayout extends DockLayoutPanel implements ValueChangeHandler<Str
 	public TabLayout() {
 		super(Unit.PX);
 		setStyleName("body");
-		center.setStyleName("tab_layout");
+		center.setStyleName("tab_layout");	
 
 		addNorth(header, 40);
 		add(center);

@@ -2,12 +2,13 @@ package honeycrm.client;
 
 import honeycrm.client.admin.AdminWidget;
 import honeycrm.client.admin.LogConsole;
-import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.reports.SampleReport;
 import honeycrm.client.view.EmailFeedbackWidget;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -46,11 +47,15 @@ public class TabCenterView extends DecoratedTabPanel {
 
 		// this.setSize("640px", "300px");
 
-		final List<Dto> dtos = DtoRegistry.instance.getDtos();
+		final Collection<ModuleDto> dtos = DtoModuleRegistry.instance().getDtos();
 
-		for (final Dto dto : dtos) {
+		for (final ModuleDto moduleDto : dtos) {
+			if (moduleDto.isHidden()) {
+				continue; // do not add this module to the tabs since it should be hidden
+			}
+			
 			// final AbstractDto dto = DtoRegistry.instance.getDto(clazz);
-			final TabModuleView view = new TabModuleView(dto);
+			final TabModuleView view = new TabModuleView(moduleDto.getModule());
 			// has not the desired effect see http://www.youtube.com/watch?v=k_eqtePmbZY
 			// view.setSize("99%", "500px"); // set size for scrolling
 
@@ -58,9 +63,9 @@ public class TabCenterView extends DecoratedTabPanel {
 			if (0 == tabPos)
 				view.refreshListView();
 
-			moduleViewMap.put(dto.getModule(), view);
-			tabPositionMap.put(dto.getModule(), tabPos);
-			tabPositionMapReverse.put(tabPos++, dto.getModule());
+			moduleViewMap.put(moduleDto.getModule(), view);
+			tabPositionMap.put(moduleDto.getModule(), tabPos);
+			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
 
 			// TODO do not encapsulate view within ScrollPanel since it does not have the desired effect and messes up the layout.
 			// TODO nevertheless, we need scrolling within the tabs.
@@ -82,7 +87,7 @@ public class TabCenterView extends DecoratedTabPanel {
 
 			tabPosToCreateBtnMap.put(tabPos - 1, createBtn);
 
-			final Label moduleTitle = new Label(dto.getTitle() + "s");
+			final Label moduleTitle = new Label(moduleDto.getTitle() + "s");
 			/*
 			 * moduleTitle.addClickHandler(new ClickHandler() {
 			 * 
@@ -124,7 +129,7 @@ public class TabCenterView extends DecoratedTabPanel {
 
 				if (tabPositionMapReverse.containsKey(event.getItem())) {
 					// add the history token for the module stored in this tab
-					History.newItem(Dto.getByModuleName(dtos, tabPositionMapReverse.get(event.getItem())).getHistoryToken());
+					History.newItem(DtoModuleRegistry.instance().get(tabPositionMapReverse.get(event.getItem())).getHistoryToken());
 				} else {
 					// TODO add history for special tabs like admin panel
 				}
@@ -135,7 +140,7 @@ public class TabCenterView extends DecoratedTabPanel {
 
 		selectTab(0);
 		// select last tab (dashboard) 
-	//	selectTab(getTabBar().getTabCount() - 1);
+		//	selectTab(getTabBar().getTabCount() - 1);
 	}
 
 	public TabModuleView get(String moduleName) {

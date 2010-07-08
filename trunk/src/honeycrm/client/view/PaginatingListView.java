@@ -1,9 +1,8 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.Dto;
 
 public class PaginatingListView extends ListView {
-	public PaginatingListView(final Dto clazz) {
+	public PaginatingListView(final String clazz) {
 		super(clazz);
 
 		panel.add(new ListViewPaginationBar(this, label));

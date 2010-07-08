@@ -13,8 +13,8 @@ import com.google.gwt.user.client.ui.CheckBox;
  * Checkbox that is responsible for marking special dtos.
  */
 public class MarkWidget extends AbstractView {
-	public MarkWidget(final Dto clazz, final Dto viewable) {
-		super(clazz);
+	public MarkWidget(final Dto viewable) {
+		super(viewable.getModule());
 
 		final long id = viewable.getId();
 		final CheckBox markBox = new CheckBox();
@@ -26,7 +26,7 @@ public class MarkWidget extends AbstractView {
 			public void onClick(ClickEvent event) {
 				LoadIndicator.get().startLoading();
 
-				commonService.mark(clazz.getModule(), id, markBox.getValue(), new AsyncCallback<Void>() {
+				commonService.mark(viewable.getModule(), id, markBox.getValue(), new AsyncCallback<Void>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						displayError(caught);
@@ -35,7 +35,7 @@ public class MarkWidget extends AbstractView {
 					@Override
 					public void onSuccess(Void result) {
 						// tell container that mark has been completed
-						TabCenterView.instance().get(dto.getModule()).refreshListView();
+						TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
 						LoadIndicator.get().endLoading();
 					}
 				});

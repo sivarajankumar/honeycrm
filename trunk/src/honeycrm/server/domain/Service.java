@@ -4,6 +4,7 @@ import honeycrm.client.field.FieldCurrency;
 import honeycrm.client.field.FieldInteger;
 import honeycrm.client.field.FieldString;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.Hidden;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
 
@@ -17,6 +18,7 @@ import org.compass.annotations.Searchable;
 @ListViewable( { "name", "price", "quantity", "discount", "sum" })
 @DetailViewable( { "name", "price" })
 @Quicksearchable( { "name" })
+@Hidden
 public class Service extends AbstractEntity {
 	@Persistent
 	private String name;

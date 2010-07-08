@@ -1,9 +1,10 @@
 package honeycrm.client;
 
-import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.user.client.Window;
@@ -71,9 +72,9 @@ public class LoadingPanel extends Composite {
 			public void onSuccess(Void result) {
 				setStatus("Loading configuration..");
 
-				ServiceRegistry.commonService().getDtoConfiguration(new AsyncCallback<List<Dto>>() {
+				ServiceRegistry.commonService().getDtoConfiguration(new AsyncCallback<Map<String, ModuleDto>>() {
 					@Override
-					public void onSuccess(List<Dto> result) {
+					public void onSuccess(Map<String, ModuleDto> result) {
 						initRealUserInterface(result);
 					}
 
@@ -95,8 +96,8 @@ public class LoadingPanel extends Composite {
 		status.setText(statusString);
 	}
 
-	private void initRealUserInterface(List<Dto> dtos) {
-		DtoRegistry.instance.setDtos(dtos);
+	private void initRealUserInterface(final Map<String, ModuleDto> dtoModuleData) {
+		DtoModuleRegistry.create(dtoModuleData);
 
 		setStatus("Initiating user interface..");
 		this.setVisible(false);
