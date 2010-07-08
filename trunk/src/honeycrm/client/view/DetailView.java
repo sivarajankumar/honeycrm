@@ -35,7 +35,6 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	 * table containing the labels and the actual field values (or input fields if we are in edit mode).
 	 */
 	private FlexTable table = new FlexTable();
-	private long currentId = -1; // id of currently displayed item
 
 	public DetailView(final String module) {
 		super(module);
@@ -59,7 +58,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	 * Forces reload of all fields of the domain object. This is neccessary for updating fields that are set on server side and not visible while editing.
 	 */
 	public void refresh() {
-		refresh(currentId);
+		refresh(dto.getId());
 	}
 
 	public void refresh(final long id) {
@@ -77,8 +76,9 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 					} else {
 						// detailview should be responsible for rendering only return the field
 						// types here
+						
 						refreshFields(result);
-						currentId = result.getId();
+						//currentId = result.getId();
 						buttonBar.startViewing();
 					}
 					LoadIndicator.get().endLoading();
@@ -109,14 +109,13 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 
 	// TODO only update the field contents instead of removing all fields an
 	// adding them
-	private void refreshFields(final Dto viewable) {
-		resetFields(viewable, View.DETAIL);
+	private void refreshFields(final Dto newDto) {
+		resetFields(newDto, View.DETAIL);
 	}
 
-	private void resetFields(final Dto tmpViewable, final View view) {
-		final String[][] fieldIds = tmpViewable.getFormFieldIds();
-		this.currentId = tmpViewable.getId();
-		this.dto = tmpViewable;
+	private void resetFields(final Dto newDto, final View view) {
+		final String[][] fieldIds = newDto.getFormFieldIds();
+		this.dto = newDto;
 
 		// remove previous cell contents
 		// TODO perhaps reuse widgets instead if this is faster.
@@ -199,11 +198,10 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		if (isShowing()) {
 			LoadIndicator.get().startLoading();
 
-			commonService.delete(moduleDto.getModule(), currentId, new AsyncCallback<Void>() {
+			commonService.delete(moduleDto.getModule(), dto.getId(), new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
-					currentId = -1;
 				}
 
 				@Override
@@ -218,19 +216,18 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	public void saveChanges() {
 		// when save has been completed the environment may request a refresh of the currently
 		// displayed fields so we do not have to do this.
-		save(table, currentId);
+		save(table, dto.getId());
 	}
 
 	/**
 	 * Returns true if this detailview is showing a proper entry. Otherwise false.
 	 */
 	public boolean isShowing() {
-		return currentId != -1 && currentId != 0;
+		return dto.getId() > 0;
 	}
 
 	public void startCreating() {
-		dto.setId(currentId = -1); // throw away previous id
-		resetFields(dto, View.CREATE);
+		resetFields(moduleDto.createDto(), View.CREATE);
 		relationshipsContainer.clear();
 	}
 
@@ -239,7 +236,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	 */
 	public void stopViewing() {
 		table.clear();
-		currentId = -1;
+		dto.setId(-1);
 		buttonBar.stopViewing();
 	}
 
