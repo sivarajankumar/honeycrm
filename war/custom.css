@@ -1,5 +1,10 @@
 /* GENERAL */
 
+div {
+	/* TODO current workaround for layout issues: force that scrollbars are displayed when necessary */
+	overflow: visible ! important;
+}
+
 body {
 	background-color: #1189FF ! important;
 }
