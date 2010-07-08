@@ -4,7 +4,9 @@ import honeycrm.client.FulltextSearchWidget;
 import honeycrm.client.FulltextSuggestOracle;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -16,11 +18,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ModuleFulltextWidget extends FulltextSearchWidget {
-	private final Dto dtoClazz;
+	private final ModuleDto dtoClazz;
 
-	public ModuleFulltextWidget(final Dto clazz) {
+	public ModuleFulltextWidget(final String clazz) {
 		super();
-		this.dtoClazz = clazz;
+		this.dtoClazz = DtoModuleRegistry.instance().get(clazz);
 	}
 
 	@Override

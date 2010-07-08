@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class SearchableListView extends PaginatingListView {
 	private Dto searchViewable;
 
-	public SearchableListView(final Dto clazz) {
+	public SearchableListView(final String clazz) {
 		super(clazz);
 	}
 
@@ -21,7 +21,7 @@ public class SearchableListView extends PaginatingListView {
 	private void doSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.search(dto.getModule(), searchViewable, getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
+		commonService.search(moduleDto.getModule(), searchViewable, getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);
@@ -49,7 +49,7 @@ public class SearchableListView extends PaginatingListView {
 	private void doMarkedSearchForPage(final int page) {
 		LoadIndicator.get().startLoading();
 
-		commonService.getAllMarked(dto.getModule(), getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
+		commonService.getAllMarked(moduleDto.getModule(), getOffsetForPage(page), getOffsetForPage(page) + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);

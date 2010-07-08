@@ -1,7 +1,12 @@
-package honeycrm.client;
+package honeycrm.client.view;
 
+import honeycrm.client.CommonServiceAsync;
+import honeycrm.client.LoadIndicator;
+import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -15,20 +20,19 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class RelationshipsContainer extends Composite {
-	private final Dto relatedDtoClass;
+public class RelationshipsContainer extends AbstractView {
 	private Panel panel = new VerticalPanel();
 
-	public RelationshipsContainer(final Dto relatedDtoClass) {
-		this.relatedDtoClass = relatedDtoClass;
+	public RelationshipsContainer(final String relatedDtoClass) {
+		super(relatedDtoClass);
 		initWidget(panel);
 	}
 
 	public void refresh(final Long relatedId) {
 		clear();
 
-		for (final Dto originalDtoClass : DtoRegistry.instance.getDtos()) {
-			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, relatedDtoClass.getModule()));
+		for (final ModuleDto originalDtoClass : DtoModuleRegistry.instance().getDtos()) {
+			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, moduleDto.getModule()));
 		}
 	}
 
@@ -47,12 +51,12 @@ public class RelationshipsContainer extends Composite {
 // side since there the RelatesTo annotation is read using reflection
 class SingleRelationshipPanel extends Composite {
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
-	private final Dto originatingDtoClass;
+	private final ModuleDto originatingDtoClass;
 	private final String relatedDtoClass;
 	private final Long id;
 	private FlexTable table = new FlexTable();
 
-	public SingleRelationshipPanel(final Dto originatingDto, final Long id, final String relatedDto) {
+	public SingleRelationshipPanel(final ModuleDto originatingDto, final Long id, final String relatedDto) {
 		this.originatingDtoClass = originatingDto;
 		this.relatedDtoClass = relatedDto;
 		this.id = id;

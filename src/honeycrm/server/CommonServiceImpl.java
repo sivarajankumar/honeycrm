@@ -3,6 +3,7 @@ package honeycrm.server;
 import honeycrm.client.CommonService;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.util.Collection;
@@ -205,7 +206,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public List<Dto> getDtoConfiguration() {
+	public Map<String, ModuleDto> getDtoConfiguration() {
 		return wizard.getDtoConfiguration();
 	}
 }

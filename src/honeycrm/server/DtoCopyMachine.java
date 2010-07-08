@@ -129,7 +129,9 @@ public class DtoCopyMachine {
 				}
 			}
 
-			dto.copyModuleSpecificFields(DtoWizard.instance.getModuleDtoByName(entityClass.getSimpleName().toLowerCase()));
+			dto.setModule(entityClass.getSimpleName().toLowerCase());
+
+			// dto.copyModuleSpecificFields(DtoWizard.instance.getModuleDtoByName(entityClass.getSimpleName().toLowerCase()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

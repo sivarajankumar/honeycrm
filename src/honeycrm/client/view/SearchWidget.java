@@ -1,7 +1,5 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.Dto;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -18,7 +16,7 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 	private final FlowPanel panel = new FlowPanel();
 	private final FlexTable table = new FlexTable();
 
-	public SearchWidget(final Dto clazz, final SearchableListView listview) {
+	public SearchWidget(final String clazz, final SearchableListView listview) {
 		super(clazz);
 
 		final String[][] fieldIDs = new String[][] { new String[] { "name" } };
@@ -97,9 +95,7 @@ public class SearchWidget extends AbstractView implements KeyPressHandler {
 	}
 
 	private void startSearch(final SearchableListView listview, final FlexTable table, final String[][] fieldIDs) {
-		initializeDtoFromTable(fieldIDs, table, dto); // build query by writing input from textboxes into
-		// viewable instance
-		listview.search(dto);
+		listview.search(initializeDtoFromTable(fieldIDs, table)); // build query by writing input from textboxes into dto
 	}
 
 	/**

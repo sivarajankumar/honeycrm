@@ -1,16 +1,14 @@
 package honeycrm.server;
 
-import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.Hidden;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,86 +16,66 @@ import java.util.Map;
  */
 public class DtoWizard {
 	public static final DtoWizard instance = new DtoWizard();
-	private final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
-	private List<Dto> config;
-	private Map<String, Dto> moduleNameToDto;
+	private Map<String, ModuleDto> moduleNameToDto;
 
 	private DtoWizard() {
 	}
 
-	private List<Dto> internalGetConfiguration() {
+	private Map<String, ModuleDto> internalGetConfiguration() {
 		try {
-			final List<Dto> configuration = new LinkedList<Dto>();
+			final Map<String, ModuleDto> configuration = new HashMap<String, ModuleDto>();
 
 			for (final Class<AbstractEntity> domainClass : (Class<AbstractEntity>[]) ReflectionHelper.getClasses("honeycrm.server.domain")) {
 				if (!Modifier.isAbstract(domainClass.getModifiers())) {
 					final String name = domainClass.getSimpleName().toLowerCase();
 
-					final Dto dto = new Dto();
-					dto.setModule(name);
-					dto.setHistoryToken(name);
+					final ModuleDto moduleDto = new ModuleDto();
+					moduleDto.setModule(name);
+					moduleDto.setHistoryToken(name);
+					moduleDto.setTitle(domainClass.getSimpleName());
+					moduleDto.setFields(domainClass.newInstance().getFields());
 
-					for (final Field field : reflectionHelper.getAllFields(domainClass)) {
-						// TODO skip fields
-						if (field.getName().equals("id") || field.getName().startsWith("jdo") || field.getName().startsWith("$") || Modifier.isStatic(field.getModifiers())) {
-							continue;
-						}
-						dto.set(field.getName(), null);
-					}
-
-					if (domainClass.isAnnotationPresent(ListViewable.class)) {
-						dto.setListFieldIds(domainClass.getAnnotation(ListViewable.class).value());
-					}
-
-					if (domainClass.isAnnotationPresent(DetailViewable.class)) {
-						final String[] rows = domainClass.getAnnotation(DetailViewable.class).value();
-						final String[][] formFields = new String[rows.length][];
-						for (int i = 0; i < rows.length; i++) {
-							formFields[i] = rows[i].split(",");
-						}
-						dto.setFormFieldIds(formFields);
-					}
-
-					if (domainClass.isAnnotationPresent(Quicksearchable.class)) {
-						dto.setQuicksearchItems(domainClass.getAnnotation(Quicksearchable.class).value());
-					}
-
-					dto.setTitle(domainClass.getSimpleName());
-					dto.setFields(domainClass.newInstance().getFields());
+					handleAnnotations(domainClass, moduleDto);
 
 					// this can only be done for retrieved entities
 					// dto.setQuicksearchItem()
 
-					configuration.add(dto);
+					configuration.put(name, moduleDto);
 				}
 			}
 
 			return configuration;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException("Cannot analyse domain class structure due to a " + e.getClass());
 		}
 	}
 
-	private Map<String, Dto> internalGetModuleNameMap() {
-		final Map<String, Dto> map = new HashMap<String, Dto>();
-		for (final Dto dto : config) {
-			map.put(dto.getModule(), dto);
+	private void handleAnnotations(final Class<AbstractEntity> domainClass, final ModuleDto moduleDto) {
+		moduleDto.setHidden(domainClass.isAnnotationPresent(Hidden.class));
+		
+		if (domainClass.isAnnotationPresent(ListViewable.class)) {
+			moduleDto.setListFieldIds(domainClass.getAnnotation(ListViewable.class).value());
 		}
-		return map;
+
+		if (domainClass.isAnnotationPresent(DetailViewable.class)) {
+			final String[] rows = domainClass.getAnnotation(DetailViewable.class).value();
+			final String[][] formFields = new String[rows.length][];
+			for (int i = 0; i < rows.length; i++) {
+				formFields[i] = rows[i].split(",");
+			}
+			moduleDto.setFormFieldIds(formFields);
+		}
+
+		if (domainClass.isAnnotationPresent(Quicksearchable.class)) {
+			moduleDto.setQuickSearchItems(domainClass.getAnnotation(Quicksearchable.class).value());
+		}
 	}
 
-	public List<Dto> getDtoConfiguration() {
-		if (null == config) {
-			config = internalGetConfiguration();
-		}
-		return config;
-	}
-
-	public Dto getModuleDtoByName(final String name) {
+	public Map<String, ModuleDto> getDtoConfiguration() {
 		if (null == moduleNameToDto) {
-			moduleNameToDto = internalGetModuleNameMap();
+			moduleNameToDto = internalGetConfiguration();
 		}
-		return moduleNameToDto.get(name);
+		return moduleNameToDto;
 	}
 }

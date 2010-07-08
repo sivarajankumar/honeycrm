@@ -1,13 +1,12 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.Dto;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
-public class DetailViewButtonBar extends AbstractView {
+public class DetailViewButtonBar extends Composite {
 	private Button saveBtn = new Button("Save");
 	private Button cancelBtn = new Button("Cancel");
 	private Button editBtn = new Button("Edit");
@@ -15,9 +14,7 @@ public class DetailViewButtonBar extends AbstractView {
 
 	private final DetailView detailview;
 
-	public DetailViewButtonBar(final Dto clazz, final DetailView detailview) {
-		super(clazz);
-
+	public DetailViewButtonBar(final DetailView detailview) {
 		this.detailview = detailview;
 
 		final HorizontalPanel panel = new HorizontalPanel();

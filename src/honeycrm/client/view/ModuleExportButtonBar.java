@@ -1,7 +1,5 @@
 package honeycrm.client.view;
 
-import honeycrm.client.dto.Dto;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
@@ -9,7 +7,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 public class ModuleExportButtonBar extends AbstractView {
-	public ModuleExportButtonBar(final Dto dtoClazz) {
+	public ModuleExportButtonBar(final String dtoClazz) {
 		super(dtoClazz);
 
 		final Button csvLink = getExportButton("CSV", "csv");
@@ -30,7 +28,7 @@ public class ModuleExportButtonBar extends AbstractView {
 		button.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem(dto.getHistoryToken() + " " + historyTokenAppendix);
+				History.newItem(moduleDto.getHistoryToken() + " " + historyTokenAppendix);
 			}
 		});
 		return button;

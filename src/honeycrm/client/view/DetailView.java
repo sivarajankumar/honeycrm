@@ -1,7 +1,6 @@
 package honeycrm.client.view;
 
 import honeycrm.client.LoadIndicator;
-import honeycrm.client.RelationshipsContainer;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
@@ -30,24 +29,26 @@ import com.google.gwt.user.client.ui.Widget;
 public class DetailView extends AbstractView implements DoubleClickHandler {
 	private final DetailViewButtonBar buttonBar;
 	private final RelationshipsContainer relationshipsContainer;
+	private Dto dto = moduleDto.createDto();
+
 	/**
 	 * table containing the labels and the actual field values (or input fields if we are in edit mode).
 	 */
 	private FlexTable table = new FlexTable();
 	private long currentId = -1; // id of currently displayed item
 
-	public DetailView(final Dto clazz) {
-		super(clazz);
+	public DetailView(final String module) {
+		super(module);
 
 		final VerticalPanel panel = new VerticalPanel();
 		panel.add(table);
-		panel.add(buttonBar = new DetailViewButtonBar(clazz, this));
+		panel.add(buttonBar = new DetailViewButtonBar(this));
 		panel.add(new HTML("<div class='clear'></div>"));
 
 		final HorizontalPanel hpanel = new HorizontalPanel();
 
 		hpanel.add(panel);
-		hpanel.add(relationshipsContainer = new RelationshipsContainer(clazz));
+		hpanel.add(relationshipsContainer = new RelationshipsContainer(module));
 
 		buttonBar.setStyleName("detail_view_buttons");
 
@@ -88,7 +89,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 					LoadIndicator.get().startLoading();
 					table.setVisible(false);
 
-					commonService.get(dto.getModule(), id, new AsyncCallback<Dto>() {
+					commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
 						@Override
 						public void onFailure(Throwable caught) {
 							displayError(caught);
@@ -102,7 +103,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 						}
 					});
 				}
-			}, 60 * 1000, dto.getModule(), id);
+			}, 60 * 1000, moduleDto.getModule(), id);
 		}
 	}
 
@@ -126,7 +127,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 				final String id = fieldIds[y][x];
 
 				final Widget widgetLabel = getLabelForField(id);
-				final Widget widgetValue = getWidgetByType(tmpViewable, id, view);
+				final Widget widgetValue = getWidgetByType(dto, id, view);
 
 				widgetLabel.setStyleName("detail_view_label");
 
@@ -188,6 +189,8 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		if (isShowing()) {
 			resetFields(dto, View.DETAIL);
 		} else {
+			// throw away the fields because we are not showing anything but should start viewing. this usually means the creation of a new entity has been cancelled.
+			table.clear();
 			// Window.alert("Do nothing because id is not defined");
 		}
 	}
@@ -196,7 +199,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		if (isShowing()) {
 			LoadIndicator.get().startLoading();
 
-			commonService.delete(dto.getModule(), currentId, new AsyncCallback<Void>() {
+			commonService.delete(moduleDto.getModule(), currentId, new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);

@@ -47,7 +47,7 @@ public class ListView extends AbstractView {
 	private final FlexTable table = new FlexTable();
 	private final ListViewDeletionPanel deletePanel;
 
-	public ListView(final Dto clazz) {
+	public ListView(final String clazz) {
 		super(clazz);
 
 		initHeader();
@@ -81,10 +81,10 @@ public class ListView extends AbstractView {
 	}
 
 	private void initHeader() {
-		final String[] fieldIds = dto.getListFieldIds();
+		final String[] fieldIds = moduleDto.getListFieldIds();
 
 		for (int i = 0; i < fieldIds.length; i++) {
-			table.setText(0, LEADING_COLS + i, dto.getFieldById(fieldIds[i]).getLabel());
+			table.setText(0, LEADING_COLS + i, moduleDto.getFieldById(fieldIds[i]).getLabel());
 		}
 	}
 
@@ -104,7 +104,7 @@ public class ListView extends AbstractView {
 		final ClickHandler showDetailViewHandler = new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				TabCenterView.instance().get(dto.getModule()).showDetailView(listViewable.getId());
+				TabCenterView.instance().get(moduleDto.getModule()).showDetailView(listViewable.getId());
 				// CenterView.get().showDetailView(clazz, listViewable.getId());
 
 				// TODO: clear all also colored rows when paginate
@@ -187,7 +187,7 @@ public class ListView extends AbstractView {
 
 		LoadIndicator.get().startLoading();
 
-		commonService.getAll(dto.getModule(), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
+		commonService.getAll(moduleDto.getModule(), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				displayError(caught);

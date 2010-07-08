@@ -13,10 +13,12 @@ import honeycrm.server.domain.decoration.RelatesTo;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
+@Searchable
 @PersistenceCapable
-@ListViewable( { "contactId", "amount", "probability" })
+@ListViewable( { "contactId", "probability", "amount" })
 @DetailViewable( { "contactId,amount", "phase,probability", "reasonClosed", "description" })
 @Quicksearchable( { "contactId", "amount" })
 public class Opportunity extends AbstractEntity {

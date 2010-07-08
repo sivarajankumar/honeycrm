@@ -2,6 +2,7 @@ package honeycrm.client;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.dto.ModuleDto;
 
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ public interface CommonService extends RemoteService {
 	// misc
 	public void wakeupServer();
 
-	public List<Dto> getDtoConfiguration();
+	public Map<String, ModuleDto> getDtoConfiguration();
 
 	// import operations
 	public void importContacts(final List<Dto> contacts);

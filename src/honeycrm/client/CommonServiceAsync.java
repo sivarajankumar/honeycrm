@@ -2,6 +2,7 @@ package honeycrm.client;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.dto.ModuleDto;
 
 import java.util.List;
 import java.util.Map;
@@ -52,5 +53,5 @@ public interface CommonServiceAsync {
 
 	void getAnnuallyOfferingVolumes(AsyncCallback<Map<Integer, Double>> callback);
 
-	void getDtoConfiguration(AsyncCallback<List<Dto>> callback);
+	void getDtoConfiguration(AsyncCallback<Map<String, ModuleDto>> callback);
 }

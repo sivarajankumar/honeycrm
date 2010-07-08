@@ -1,7 +1,8 @@
 package honeycrm.client.view;
 
-import honeycrm.client.DtoRegistry;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.view.AbstractView.View;
@@ -25,7 +26,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class ServiceTableWidget extends ITableWidget {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
-	private final Dto dto = DtoRegistry.instance.getDto("service");
+	private final ModuleDto moduleDto = DtoModuleRegistry.instance().get("service");
+	private final Dto dto = moduleDto.createDto();
 	private final View view;
 	private final Label sum = new Label();
 
@@ -99,7 +101,6 @@ public class ServiceTableWidget extends ITableWidget {
 		for (int y = HEADER_ROWS; y < table.getRowCount(); y++) {
 			final Dto s = new Dto();
 			s.setModule("service");
-			s.copyModuleSpecificFields(DtoRegistry.instance.getDto("service"));
 
 			for (int x = 0; x < dto.getListFieldIds().length; x++) {
 				if (table.getCellCount(y) > x) {
