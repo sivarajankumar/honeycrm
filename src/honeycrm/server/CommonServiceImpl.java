@@ -183,16 +183,16 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public void importContacts(List<Dto> contacts) {
-		log.info("Starting importing " + contacts.size() + " contacts");
+	public void importCSV(final String module, List<Dto> dtos) {
+		log.info("Starting importing " + dtos.size() + " " + module + "(s)");
 
 		int done = 0;
-		for (final Dto contact : contacts) {
-			create(contact);
-			log.fine("Created " + (++done) + " contact(s)");
+		for (final Dto dto : dtos) {
+			create(dto);
+			log.fine("Created " + (++done) + " " + module + "(s)");
 		}
 
-		log.fine("Finished importing " + contacts.size() + " contacts");
+		log.fine("Finished importing " + dtos.size() + " " + module + "(s)");
 	}
 
 	@Override

@@ -8,14 +8,21 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ContactCsvImportWidget extends Composite {
-	public ContactCsvImportWidget() {
+public class CsvImportWidget {
+	private final DecoratedPopupPanel popup = new DecoratedPopupPanel(); 
+	
+	private final String module;
+	
+	public CsvImportWidget(final String module) {
+		this.module = module;
+		
 		final TextArea textArea = getTextArea();
 		final Label statusLabel = getStatusLabel();
 
@@ -25,11 +32,13 @@ public class ContactCsvImportWidget extends Composite {
 		panel.add(statusLabel);
 		panel.add(getImportButton(textArea, statusLabel));
 
-		initWidget(panel);
+		popup.setWidget(panel);
+		popup.center();
+		popup.hide();
 	}
 
 	private Widget getHeaderLabel() {
-		final Label label = new Label("Contacts CSV Import");
+		final Label label = new Label("CSV Import: Insert some SugarCRM CSV export data here.");
 		return label;
 	}
 
@@ -40,19 +49,27 @@ public class ContactCsvImportWidget extends Composite {
 
 	private TextArea getTextArea() {
 		final TextArea textArea = new TextArea();
-		textArea.setWidth("500px");
+		textArea.setSize("500px", "400px");
 		return textArea;
 	}
 
-	private Button getImportButton(final TextArea textArea, final Label statusLabel) {
+	private Widget getImportButton(final TextArea textArea, final Label statusLabel) {
+		final Button cancelBtn = new Button("Cancel");
+		cancelBtn.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				popup.hide();
+			}
+		});
+		
 		final Button importBtn = new Button("Import");
 		importBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				LoadIndicator.get().startLoading();
 
-				final CsvImporter importer = new CsvImporter();
-				ServiceRegistry.commonService().importContacts(importer.parse(textArea.getText()), new AsyncCallback<Void>() {
+				final CsvImporter importer = CsvImporter.get(module);
+				ServiceRegistry.commonService().importCSV(module, importer.parse(textArea.getText()), new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
 						LoadIndicator.get().endLoading();
@@ -67,6 +84,15 @@ public class ContactCsvImportWidget extends Composite {
 				});
 			}
 		});
-		return importBtn;
+		
+		final HorizontalPanel panel = new HorizontalPanel();
+		panel.add(cancelBtn);
+		panel.add(importBtn);
+		
+		return panel;
+	}
+	
+	public void show() {
+		popup.show();
 	}
 }

@@ -86,12 +86,6 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	}
 
 	@Override
-	public void importContacts(List<Dto> contacts, AsyncCallback<Void> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void mark(String dtoIndex, long id, boolean marked, AsyncCallback<Void> callback) {
 		// TODO Auto-generated method stub
 
@@ -141,6 +135,12 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 
 	@Override
 	public void getDtoConfiguration(AsyncCallback<Map<String, ModuleDto>> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void importCSV(String module, List<Dto> dtos, AsyncCallback<Void> callback) {
 		// TODO Auto-generated method stub
 		
 	}

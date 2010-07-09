@@ -1,41 +1,98 @@
 package honeycrm.client.csv;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class CsvImporter extends AbstractCsv {
+import com.google.gwt.user.client.Window;
+
+abstract public class CsvImporter extends AbstractCsv {
+	private static final String GLUE = ",";
+
+	public static CsvImporter get(final String module) {
+		if ("contact".equals(module)) {
+			return new CsvImporterContacts();
+		} else if ("account".equals(module)) {
+			return new CsvImporterAccounts();
+		}
+
+		Window.alert("No CSV importer available for '" + module + "'");
+		throw new RuntimeException("No CSV importer available for '" + module + "'");
+	}
+
+	public List<Dto> parse(final String csvString) {
+		if (null != csvString && !csvString.isEmpty()) {
+			final String[][] table = getData(csvString);
+
+			if (table.length > 0) {
+				return internalParse(table, getColumnPositions(table[0]));
+			}
+		}
+
+		// return an empty list since the input has been empty
+		return new LinkedList<Dto>();
+	}
+
+	abstract protected String getModule();
+
+	abstract protected Map<String, String> getMapping();
+
 	/**
 	 * Parse a given csv string and create a list of contact dto objects of it.
 	 */
-	public List<Dto> parse(final String csvString) {
-		// TODO do some prechecks to find out whether the file is correct (thus proper col separators are used etc).
-
+	protected List<Dto> internalParse(final String[][] table, final Map<String, Integer> positions) {
 		final List<Dto> list = new LinkedList<Dto>();
 
-		final String[][] table = getData(csvString);
-		final Map<String, Integer> positions = getColumnPositions(table[0]);
+		final Map<String, String> map = getMapping();
 
+		final ModuleDto moduleDto = DtoModuleRegistry.instance().get(getModule());
+		
 		// start at 1 to skip header row
 		for (int y = 1; y < table.length; y++) {
-			final Dto newContact = new Dto();
-			newContact.setModule("contact");
+			final Dto dto = new Dto();
+			dto.setModule(getModule());
 
-			newContact.set("name", table[y][positions.get("first_name")] + " " + table[y][positions.get("last_name")]);
-			newContact.set("email", table[y][positions.get("email1")]);
-			newContact.set("phone", table[y][positions.get("phone_work")]);
-			newContact.set("doNotCall", table[y][positions.get("do_not_call")].equals("1"));
+			for (final String keyHoney : map.keySet()) {
+				final String importStr = getGluedValues(table, positions, y, map.get(keyHoney));
+				final Serializable typedValue = moduleDto.getFieldById(keyHoney).getTypedData(importStr);
+				
+				dto.set(keyHoney, typedValue);
+			}
 
-			list.add(newContact);
+			list.add(dto);
 		}
 
 		return list;
 	}
 
-	private String[][] getData(final String csvString) {
+	/**
+	 * keySugar may contain some GLUE (e.g. ",") to express that several fields should be concatenated during import. If we find such a key we have to split the different keys and then resolve and concatenate their values.
+	 */
+	private String getGluedValues(final String[][] table, final Map<String, Integer> positions, int y, final String keySugar) {
+		if (keySugar.contains(GLUE)) {
+			final String[] actualKeys = keySugar.split(GLUE);
+			String str = "";
+
+			for (int i = 0; i < actualKeys.length; i++) {
+				str += table[y][positions.get(actualKeys[i])];
+				
+				if (i < actualKeys.length -1) {
+					str += " ";
+				}
+			}
+			return str;
+		} else {
+			return table[y][positions.get(keySugar)];
+		}
+	}
+
+	protected String[][] getData(final String csvString) {
 		final String[] lines = csvString.split(LINE_SEP);
 		final String[][] table = new String[lines.length][];
 
@@ -59,7 +116,7 @@ public class CsvImporter extends AbstractCsv {
 	/**
 	 * returns a map that stores the positions of all fields in the header row i.e. {name: 10, address: 11, email: 12, ...}
 	 */
-	private Map<String, Integer> getColumnPositions(final String[] headerColumns) {
+	protected Map<String, Integer> getColumnPositions(final String[] headerColumns) {
 		final Map<String, Integer> map = new HashMap<String, Integer>();
 
 		int columnNumber = 0;

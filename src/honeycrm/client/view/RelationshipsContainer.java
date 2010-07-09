@@ -7,9 +7,11 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.field.FieldRelate;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
+import honeycrm.client.view.AbstractView.View;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,6 +21,7 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class RelationshipsContainer extends AbstractView {
 	private Panel panel = new VerticalPanel();
@@ -61,7 +64,12 @@ class SingleRelationshipPanel extends Composite {
 		this.relatedDtoClass = relatedDto;
 		this.id = id;
 
-		initWidget(table);
+		final VerticalPanel panel = new VerticalPanel();
+		panel.add(getTitleLabel());
+		panel.add(table);
+		panel.setVisible(false);
+
+		initWidget(panel);
 
 		refresh();
 	}
@@ -95,22 +103,46 @@ class SingleRelationshipPanel extends Composite {
 	}
 
 	private void insertRelatedDtos(ListQueryResult result) {
-		if (0 == result.getItemCount()) {
+		if (0 == result.getItemCount() || 0 == result.getResults().length) {
 			// hide this relationship since no entries have been found for this relationship
 			setVisible(false);
 		} else {
 			setVisible(true);
 
-			// set title
-			table.setWidget(0, 0, getTitleLabel());
+			final int headerRows = 1;
+			final int leadingCols = 1;
 
-			for (int i = 0; i < result.getResults().length; i++) {
-				final Dto originatingDto = result.getResults()[i];
-				// display related item somewhat
-				// TODO display more columns
-				table.setWidget(1 + i, 0, new Hyperlink(originatingDto.getQuicksearch(), originatingDto.getHistoryToken() + " " + originatingDto.getId()));
+			for (int col = 0; col < originatingDtoClass.getListFieldIds().length; col++) {
+				final String id = originatingDtoClass.getListFieldIds()[col];
+
+				if (!isDuplicateRelateField(id)) {
+					table.setWidget(0, leadingCols + col, new Label(originatingDtoClass.getFieldById(id).getLabel()));
+				}
+			}
+
+			for (int row = 0; row < result.getResults().length; row++) {
+				final Dto originatingDto = result.getResults()[row];
+
+				table.setWidget(headerRows + row, 0, new Hyperlink("open", originatingDto.getHistoryToken() + " " + originatingDto.getId()));
+
+				for (int col = 0; col < originatingDtoClass.getListFieldIds().length; col++) {
+					final String id = originatingDtoClass.getListFieldIds()[col];
+
+					if (!isDuplicateRelateField(id)) {
+						final Widget w = originatingDto.getFieldById(id).getWidget(View.DETAIL, originatingDto.get(id));
+						table.setWidget(headerRows + row, leadingCols + col, w);
+					}
+				}
 			}
 		}
+	}
+
+	// Returns true if the field with the given id is a relate field representing the original dto class itself.
+	// Assume we want to display all offerings for a contact. Therefore we want to display an offerings list containing
+	// a column displaying the contact. We want to identify and skip the contact column since we already know that this
+	// offering is linked to the contact.
+	private boolean isDuplicateRelateField(final String id) {
+		return originatingDtoClass.getFieldById(id) instanceof FieldRelate && ((FieldRelate) originatingDtoClass.getFieldById(id)).getRelatedClazz().equals(relatedDtoClass);
 	}
 
 	private Label getTitleLabel() {

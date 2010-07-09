@@ -47,11 +47,11 @@ public interface CommonServiceAsync {
 
 	void fulltextSearchForModule(String dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult> callback);
 
-	void importContacts(List<Dto> contacts, AsyncCallback<Void> callback);
-
 	void feedback(String message, AsyncCallback<Void> callback);
 
 	void getAnnuallyOfferingVolumes(AsyncCallback<Map<Integer, Double>> callback);
 
 	void getDtoConfiguration(AsyncCallback<Map<String, ModuleDto>> callback);
+
+	void importCSV(String module, List<Dto> dtos, AsyncCallback<Void> callback);
 }

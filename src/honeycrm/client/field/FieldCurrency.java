@@ -117,4 +117,9 @@ public class FieldCurrency extends AbstractField {
 	private NumberFormat formatRead() {
 		return NumberFormat.getCurrencyFormat("EUR");
 	}
+	
+	@Override
+	public Serializable getTypedData(Object value) {
+		return NumberParser.convertToDouble(value);
+	}
 }

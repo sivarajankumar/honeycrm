@@ -57,7 +57,7 @@ public interface CommonService extends RemoteService {
 	public Map<String, ModuleDto> getDtoConfiguration();
 
 	// import operations
-	public void importContacts(final List<Dto> contacts);
+	public void importCSV(final String module, final List<Dto> dtos);
 
 	// email
 	public void feedback(final String message);
