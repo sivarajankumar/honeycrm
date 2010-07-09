@@ -12,7 +12,6 @@ import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.RelatesTo;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
@@ -24,50 +23,34 @@ import org.compass.annotations.SearchableProperty;
 		"child1Id,child2Id" })
 @Quicksearchable( { "name" })
 public class Contact extends AbstractEntity {
-	@Persistent
 	@SearchableProperty
 	private String city;
-	@Persistent
 	@SearchableProperty
 	private String email;
-	@Persistent
 	@SearchableProperty
 	private String name;
-	@Persistent
 	@SearchableProperty
 	private String phone;
-	@Persistent
 	@RelatesTo(Account.class)
 	private long accountID;
-	@Persistent
 	private boolean emailOptedOut;
-	@Persistent
 	@SearchableProperty
 	private String mobile;
-	@Persistent
 	private boolean doNotCall;
-	@Persistent
 	@SearchableProperty
 	private String doNotCallExplanation;
-	@Persistent
 	@SearchableProperty
 	private String bankAccountData;
-	@Persistent
 	@SearchableProperty
 	private String profession;
-	@Persistent
 	@SearchableProperty
 	private String study;
-	@Persistent
 	@RelatesTo(Contact.class)
 	private long partnerId;
-	@Persistent
 	@RelatesTo(Contact.class)
 	private long child1Id;
-	@Persistent
 	@RelatesTo(Contact.class)
 	private long child2Id;
-	@Persistent
 	@RelatesTo(Employee.class)
 	private long responsibleId;
 

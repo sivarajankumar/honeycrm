@@ -16,8 +16,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -42,16 +40,11 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		final VerticalPanel panel = new VerticalPanel();
 		panel.add(table);
 		panel.add(buttonBar = new DetailViewButtonBar(this));
-		panel.add(new HTML("<div class='clear'></div>"));
-
-		final HorizontalPanel hpanel = new HorizontalPanel();
-
-		hpanel.add(panel);
-		hpanel.add(relationshipsContainer = new RelationshipsContainer(module));
+		panel.add(relationshipsContainer = new RelationshipsContainer(module));
 
 		buttonBar.setStyleName("detail_view_buttons");
 
-		initWidget(hpanel);
+		initWidget(panel);
 	}
 
 	/**

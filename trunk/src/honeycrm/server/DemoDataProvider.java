@@ -17,10 +17,10 @@ public class DemoDataProvider {
 		Account a = new Account();
 
 		a.setName(DemoDataHolder.getRandomName());
-		a.setDate(DemoDataHolder.getRandomDate());
 		a.setAnnualRevenue(r.nextLong() % 1000000000);
-		a.setAddress(DemoDataHolder.getRandomAddress());
-
+		a.setBillingAddress(DemoDataHolder.getRandomAddress());
+		a.setShippingAddress(DemoDataHolder.getRandomAddress());
+		
 		return a;
 	}
 

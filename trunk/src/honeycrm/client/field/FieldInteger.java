@@ -56,4 +56,9 @@ public class FieldInteger extends AbstractField {
 	public Serializable getData(Widget w) {
 		return Integer.valueOf(((TextBox) w).getText());
 	}
+
+	@Override
+	public Serializable getTypedData(Object value) {
+		return NumberParser.convertToInteger(value);
+	}
 }

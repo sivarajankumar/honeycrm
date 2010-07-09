@@ -1,7 +1,5 @@
 package honeycrm.client;
 
-import honeycrm.client.forecast.ForecastTest;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 

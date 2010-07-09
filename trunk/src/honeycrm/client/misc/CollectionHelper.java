@@ -32,6 +32,10 @@ public class CollectionHelper {
 
 		return joinedStr;
 	}
+	
+	public static String join(final String[] array, final String glue) {
+		return join(toSet(array), glue);
+	}
 
 	/**
 	 * Convert a string array into a set.
