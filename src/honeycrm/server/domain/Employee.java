@@ -1,13 +1,13 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.field.FieldBoolean;
-import honeycrm.client.field.FieldString;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
+import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
@@ -18,16 +18,14 @@ import org.compass.annotations.SearchableProperty;
 @DetailViewable( { "name", "active" })
 @Quicksearchable( { "name" })
 public class Employee extends AbstractEntity {
-	@Persistent
 	@SearchableProperty
+	@Label("Name")
+	@FieldStringAnnotation
 	private String name;
-	@Persistent
-	private boolean active;
 
-	public Employee() {
-		fields.add(new FieldString("name", "Name"));
-		fields.add(new FieldBoolean("active", "Active"));
-	}
+	@Label("Active")
+	@FieldBooleanAnnotation
+	private boolean active;
 
 	public String getName() {
 		return name;

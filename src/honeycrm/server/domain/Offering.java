@@ -1,18 +1,17 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.field.FieldDate;
-import honeycrm.client.field.FieldRelate;
-import honeycrm.client.field.FieldTable;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
-import honeycrm.server.domain.decoration.RelatesTo;
+import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 
 import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
 import org.compass.annotations.Searchable;
 
@@ -22,19 +21,17 @@ import org.compass.annotations.Searchable;
 @DetailViewable( { "contactId", "deadline", "services" })
 @Quicksearchable( { "contactId", "deadline" })
 public class Offering extends AbstractEntity {
-	@Persistent
+	@Label("Services")
+	@FieldTableAnnotation(Service.class)
 	private List<Service> services;
-	@Persistent
-	@RelatesTo(Contact.class)
+	
+	@Label("Contact")
+	@FieldRelateAnnotation(Contact.class)
 	private Long contactId;
-	@Persistent
+	
+	@FieldDateAnnotation
+	@Label("Deadline")
 	private Date deadline;
-
-	public Offering() {
-		fields.add(new FieldTable("services", "Services"));
-		fields.add(new FieldRelate("contactId", "contact", "Contact"));
-		fields.add(new FieldDate("deadline", "Deadline"));
-	}
 
 	public List<Service> getServices() {
 		return services;

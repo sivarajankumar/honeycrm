@@ -1,15 +1,15 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.field.FieldCurrency;
-import honeycrm.client.field.FieldInteger;
-import honeycrm.client.field.FieldString;
 import honeycrm.server.domain.decoration.DetailViewable;
 import honeycrm.server.domain.decoration.Hidden;
+import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
+import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
 import org.compass.annotations.Searchable;
 
@@ -20,24 +20,25 @@ import org.compass.annotations.Searchable;
 @Quicksearchable( { "name" })
 @Hidden
 public class Service extends AbstractEntity {
-	@Persistent
+	@FieldStringAnnotation
+	@Label("Name")
 	private String name;
-	@Persistent
-	private double price;
-	@Persistent
-	private int quantity;
-	@Persistent
-	private double discount;
-	@Persistent
-	private double sum;
 
-	public Service() {
-		fields.add(new FieldString("name", "Name", "", 200));
-		fields.add(new FieldCurrency("price", "Price", "0.0", 100));
-		fields.add(new FieldInteger("quantity", "Qty", "1", 100));
-		fields.add(new FieldCurrency("discount", "Discount", "0.0", 100));
-		fields.add(new FieldCurrency("sum", "Sum", "0.0", 100, true));
-	}
+	@FieldCurrencyAnnotation("0")
+	@Label("Price")
+	private double price;
+
+	@FieldIntegerAnnotation(1)
+	@Label("Qty")
+	private int quantity;
+
+	@FieldCurrencyAnnotation("0")
+	@Label("Discount")
+	private double discount;
+
+	@FieldCurrencyAnnotation("0")
+	@Label("Sum")
+	private double sum;
 
 	public String getName() {
 		return name;

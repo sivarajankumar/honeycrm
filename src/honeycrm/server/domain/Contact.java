@@ -1,15 +1,15 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.field.FieldBoolean;
-import honeycrm.client.field.FieldEmail;
-import honeycrm.client.field.FieldEnum;
-import honeycrm.client.field.FieldRelate;
-import honeycrm.client.field.FieldString;
-import honeycrm.client.field.FieldText;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
-import honeycrm.server.domain.decoration.RelatesTo;
+import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldEmailAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
 import javax.jdo.annotations.PersistenceCapable;
 
@@ -24,58 +24,77 @@ import org.compass.annotations.SearchableProperty;
 @Quicksearchable( { "name" })
 public class Contact extends AbstractEntity {
 	@SearchableProperty
+	@Label("City")
+	@FieldStringAnnotation
 	private String city;
+
 	@SearchableProperty
+	@Label("E Mail")
+	@FieldEmailAnnotation
 	private String email;
+
 	@SearchableProperty
+	@Label("Name")
+	@FieldStringAnnotation
 	private String name;
+
 	@SearchableProperty
+	@Label("Phone")
+	@FieldStringAnnotation
 	private String phone;
-	@RelatesTo(Account.class)
+
+	@Label("Account")
+	@FieldRelateAnnotation(Account.class)
 	private long accountID;
+
+	@FieldBooleanAnnotation
+	@Label("E Mail opted out")
 	private boolean emailOptedOut;
+
 	@SearchableProperty
+	@Label("Mobile Phone")
+	@FieldStringAnnotation
 	private String mobile;
+
+	@FieldBooleanAnnotation
+	@Label("Do not call")
 	private boolean doNotCall;
+
 	@SearchableProperty
+	@Label("Do not call explanation")
+	@FieldTextAnnotation
 	private String doNotCallExplanation;
+
 	@SearchableProperty
+	@Label("Bank account data")
+	@FieldTextAnnotation
 	private String bankAccountData;
+
 	@SearchableProperty
+	@Label("Profession")
+	@FieldEnumAnnotation( { "Student", "Professor", "Scientific Assistant", "Other" })
 	private String profession;
+
 	@SearchableProperty
+@Label("Study area")
+	@FieldEnumAnnotation( { "None", "Biology", "Physics", "Mathematics", "Computer science" })
 	private String study;
-	@RelatesTo(Contact.class)
+
+	@Label("Parter")
+	@FieldRelateAnnotation(Contact.class)
 	private long partnerId;
-	@RelatesTo(Contact.class)
+
+	@Label("First child")
+	@FieldRelateAnnotation(Contact.class)
 	private long child1Id;
-	@RelatesTo(Contact.class)
+
+	@Label("Second child")
+	@FieldRelateAnnotation(Contact.class)
 	private long child2Id;
-	@RelatesTo(Employee.class)
+
+	@Label("Responsible")
+	@FieldRelateAnnotation(Employee.class)
 	private long responsibleId;
-
-	public Contact() {
-		fields.add(new FieldString("name", "Name"));
-		fields.add(new FieldString("phone", "Phone"));
-		fields.add(new FieldString("city", "City"));
-		fields.add(new FieldEmail("email", "E-Mail"));
-		fields.add(new FieldRelate("accountID", "account", "Account"));
-		fields.add(new FieldBoolean("doNotCall", "Do not call"));
-		fields.add(new FieldText("doNotCallExplanation", "Why not call"));
-		fields.add(new FieldBoolean("emailOptedOut", "No Mails"));
-		fields.add(new FieldString("mobile", "Mobile"));
-		fields.add(new FieldText("bankAccountData", "Bank account data"));
-		fields.add(new FieldEnum("profession", "Profession", "Student", "Professor", "Scientific Assistant", "Other"));
-		fields.add(new FieldEnum("study", "Study area", "None", "Biology", "Physics", "Mathematics", "Computer science"));
-		fields.add(new FieldRelate("partnerId", "contact", "Partner"));
-		fields.add(new FieldRelate("child1Id", "contact", "First Child"));
-		fields.add(new FieldRelate("child2Id", "contact", "Second Child"));
-		fields.add(new FieldRelate("responsibleId", "employee", "Responsible"));
-	}
-
-	public Contact(final String name) {
-		this.name = name;
-	}
 
 	public String getCity() {
 		return city;

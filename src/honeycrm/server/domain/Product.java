@@ -1,13 +1,14 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.field.FieldCurrency;
-import honeycrm.client.field.FieldString;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.Hidden;
+import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
+import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
 import org.compass.annotations.Searchable;
 
@@ -16,16 +17,15 @@ import org.compass.annotations.Searchable;
 @ListViewable( { "name", "price" })
 @DetailViewable( { "name,price" })
 @Quicksearchable( { "name" })
+@Hidden
 public class Product extends AbstractEntity {
-	@Persistent
+	@FieldStringAnnotation
+	@Label("Name")
 	private String name;
-	@Persistent
+	
+	@FieldCurrencyAnnotation("0")
+	@Label("Price")
 	private double price;
-
-	public Product() {
-		fields.add(new FieldString("name", "Name"));
-		fields.add(new FieldCurrency("price", "Price"));
-	}
 
 	public String getName() {
 		return name;
