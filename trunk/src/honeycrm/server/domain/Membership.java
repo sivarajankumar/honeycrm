@@ -1,19 +1,18 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.field.FieldCurrency;
-import honeycrm.client.field.FieldDate;
-import honeycrm.client.field.FieldEnum;
-import honeycrm.client.field.FieldRelate;
-import honeycrm.client.field.FieldText;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
-import honeycrm.server.domain.decoration.RelatesTo;
+import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
 import java.util.Date;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
@@ -24,38 +23,40 @@ import org.compass.annotations.SearchableProperty;
 @DetailViewable( { "memberId,employeeId", "tiedToPurpose,purpose", "payment,paymentMethod", "startDate,endDate" })
 @Quicksearchable( { "memberId", "employeeId" })
 public class Membership extends AbstractEntity {
-	@Persistent
-	@RelatesTo(Contact.class)
+	@FieldRelateAnnotation(Contact.class)
+	@Label("Member")
 	private long memberId; // relation to contacts
-	@Persistent
-	@RelatesTo(Employee.class)
-	private long employeeId; // relation to employees
-	@Persistent
-	private double payment;
-	@Persistent
-	@SearchableProperty
-	private String tiedToPurpose; // yes, no, 'soon'
-	@Persistent
-	@SearchableProperty
-	private String purpose;
-	@Persistent
-	@SearchableProperty
-	private String paymentMethod; // Direct Debit authorisation / transaction
-	@Persistent
-	private Date startDate;
-	@Persistent
-	private Date endDate;
 
-	public Membership() {
-		fields.add(new FieldRelate("memberId", "contact", "Member"));
-		fields.add(new FieldRelate("employeeId", "employee", "Employee"));
-		fields.add(new FieldCurrency("payment", "Contribution"));
-		fields.add(new FieldEnum("tiedToPurpose", "Tied to purpose", "Yes", "No", "Soon"));
-		fields.add(new FieldText("purpose", "Purpose"));
-		fields.add(new FieldEnum("paymentMethod", "Payment method", "Direct Debit authorisation", "transaction"));
-		fields.add(new FieldDate("startDate", "Start date"));
-		fields.add(new FieldDate("endDate", "End date"));
-	}
+	@Label("Employee")
+	@FieldRelateAnnotation(Employee.class)
+	private long employeeId; // relation to employees
+
+	@FieldCurrencyAnnotation("0")
+	@Label("Contribution")
+	private double payment;
+
+	@SearchableProperty
+	@FieldEnumAnnotation( { "Yes", "No", "Soon" })
+	@Label("Tied to purpose")
+	private String tiedToPurpose; // yes, no, 'soon'
+
+	@SearchableProperty
+	@FieldTextAnnotation
+	@Label("Purpose")
+	private String purpose;
+
+	@SearchableProperty
+	@Label("Payment method")
+	@FieldEnumAnnotation( { "Direct Debit authorisation", "transaction" })
+	private String paymentMethod; // Direct Debit authorisation / transaction
+
+	@Label("Start date")
+	@FieldDateAnnotation
+	private Date startDate;
+
+	@Label("End date")
+	@FieldDateAnnotation
+	private Date endDate;
 
 	public long getMemberId() {
 		return memberId;

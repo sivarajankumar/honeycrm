@@ -1,20 +1,19 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.field.FieldCurrency;
-import honeycrm.client.field.FieldDate;
-import honeycrm.client.field.FieldEnum;
-import honeycrm.client.field.FieldRelate;
-import honeycrm.client.field.FieldString;
-import honeycrm.client.field.FieldText;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
-import honeycrm.server.domain.decoration.RelatesTo;
+import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
 import java.util.Date;
 
 import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
 
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
@@ -25,37 +24,40 @@ import org.compass.annotations.SearchableProperty;
 @DetailViewable( { "name,employeeId", "description,phase", "targetSum,currentSum", "startDate,endDate" })
 @Quicksearchable( { "name" })
 public class Project extends AbstractEntity {
-	@Persistent
 	@SearchableProperty
+	@FieldStringAnnotation
+	@Label("Name")
 	private String name;
-	@Persistent
-	@RelatesTo(Employee.class)
+
+	@Label("Responsible")
+	@FieldRelateAnnotation(Employee.class)
 	private long employeeId;
-	@Persistent
+
+	@Label("Description")
+	@FieldTextAnnotation
 	@SearchableProperty
 	private String description;
-	@Persistent
-	private double targetSum;
-	@Persistent
-	private double currentSum;
-	@Persistent
-	private Date startDate;
-	@Persistent
-	private Date endDate;
-	@Persistent
-	@SearchableProperty
-	private String phase;
 
-	public Project() {
-		fields.add(new FieldString("name", "Name"));
-		fields.add(new FieldRelate("employeeId", "employee", "Responsible"));
-		fields.add(new FieldText("description", "Description"));
-		fields.add(new FieldCurrency("targetSum", "Target sum", "0"));
-		fields.add(new FieldCurrency("currentSum", "Current sum", "0"));
-		fields.add(new FieldDate("startDate", "Start date"));
-		fields.add(new FieldDate("endDate", "End date"));
-		fields.add(new FieldEnum("phase", "Phase", "not started", "in progress", "closed"));
-	}
+	@Label("Target sum")
+	@FieldCurrencyAnnotation("0")
+	private double targetSum;
+
+	@Label("Current sum")
+	@FieldCurrencyAnnotation("0")
+	private double currentSum;
+
+	@Label("Start date")
+	@FieldDateAnnotation
+	private Date startDate;
+
+	@Label("End date")
+	@FieldDateAnnotation
+	private Date endDate;
+
+	@SearchableProperty
+	@Label("Phase")
+	@FieldEnumAnnotation( { "not started", "in progress", "closed" })
+	private String phase;
 
 	public String getName() {
 		return name;

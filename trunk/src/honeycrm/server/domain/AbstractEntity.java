@@ -1,9 +1,10 @@
 package honeycrm.server.domain;
 
 import honeycrm.client.field.AbstractField;
-import honeycrm.client.field.FieldDate;
-import honeycrm.client.field.FieldInteger;
-import honeycrm.client.field.FieldMark;
+import honeycrm.server.domain.decoration.Label;
+import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -26,9 +27,6 @@ import com.google.appengine.api.datastore.Key;
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @Searchable
 abstract public class AbstractEntity {
-	@NotPersistent
-	protected Set<AbstractField> fields = new HashSet<AbstractField>();
-
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
 	@SearchableId
@@ -37,21 +35,23 @@ abstract public class AbstractEntity {
 	// Additionally we have to use Long (not long) because of constrains of google app engine for
 	// allowed id types.
 	protected Key id;
-	@Persistent
+	
+	// TODO mark field has to be supported differently with mark FieldMark instance
+	@Label("Marked")
+	@FieldBooleanAnnotation
 	protected boolean marked;
-	@Persistent
-	protected Date createdAt;
-	@Persistent
-	protected Date lastUpdatedAt;
-	@Persistent
-	protected long views;
 
-	public AbstractEntity() {
-		fields.add(new FieldInteger("views", "Views"));
-		fields.add(new FieldDate("createdAt", "Created at"));
-		fields.add(new FieldDate("lastUpdatedAt", "Last updated at"));
-		fields.add(new FieldMark("marked", "Marked", this.getClass().getSimpleName().toLowerCase(), null == id ? -1 : id.getId()));
-	}
+	@Label("Created at")
+	@FieldDateAnnotation
+	protected Date createdAt;
+
+	@Label("Last updated at")
+	@FieldDateAnnotation
+	protected Date lastUpdatedAt;
+	
+	@Label("Views")
+	@FieldIntegerAnnotation(0)
+	protected long views;
 
 	public Key getId() {
 		return id;
@@ -91,9 +91,5 @@ abstract public class AbstractEntity {
 
 	public void setMarked(boolean marked) {
 		this.marked = marked;
-	}
-
-	public Set<AbstractField> getFields() {
-		return fields;
 	}
 }

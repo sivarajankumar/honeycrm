@@ -1,7 +1,7 @@
 package honeycrm.server;
 
 import honeycrm.server.domain.AbstractEntity;
-import honeycrm.server.domain.decoration.RelatesTo;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -16,8 +16,8 @@ public class RelationshipFieldTable {
 
 	private RelationshipFieldTable() {
 		for (final Class<? extends AbstractEntity> originatingDtoClass : DomainClassRegistry.instance.getDomainClasses()) {
-			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingDtoClass, RelatesTo.class)) {
-				final Class<? extends AbstractEntity> relatedDtoClass = field.getAnnotation(RelatesTo.class).value();
+			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingDtoClass, FieldRelateAnnotation.class)) {
+				final Class<? extends AbstractEntity> relatedDtoClass = field.getAnnotation(FieldRelateAnnotation.class).value();
 
 				final String strOrigin = DomainClassRegistry.instance.getDto(originatingDtoClass);
 				final String strRelated = DomainClassRegistry.instance.getDto(relatedDtoClass);

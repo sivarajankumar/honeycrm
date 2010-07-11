@@ -131,19 +131,19 @@ public class CommonServiceReader extends AbstractCommonService {
 		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
-	public ListQueryResult getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex) {
+	public ListQueryResult getAllRelated(String originating, Long id, String related) {
 		final Set<AbstractEntity> result = new HashSet<AbstractEntity>();
 
 		/**
 		 * Get all related entities where the id fields contain the id of the originating entity e.g. return all contacts which have accountID == 23 where is the id of the originating account.
 		 */
-		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(originatingDtoIndex, relatedDtoIndex)) {
-			final Query q = m.newQuery(getDomainClass(originatingDtoIndex));
+		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(originating, related)) {
+			final Query q = m.newQuery(getDomainClass(originating));
 			q.setFilter(fieldName + " == " + id);
 			result.addAll((Collection<AbstractEntity>) q.execute());
 		}
 
-		return new ListQueryResult(getArrayFromQueryResult(originatingDtoIndex, result), result.size());
+		return new ListQueryResult(getArrayFromQueryResult(originating, result), result.size());
 	}
 
 	enum BoolOperator {

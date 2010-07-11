@@ -19,6 +19,10 @@ public class FieldInteger extends AbstractField {
 	public FieldInteger(final String index, final String label) {
 		super(index, label);
 	}
+	
+	public FieldInteger(final String index, final String label, int defaultValue) {
+		super(index, label, String.valueOf(defaultValue));
+	}
 
 	public FieldInteger(String indexQuantity, String string, String string2, int i) {
 		super(indexQuantity, string, string2, i);
