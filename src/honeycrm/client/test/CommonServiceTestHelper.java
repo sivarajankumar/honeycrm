@@ -4,7 +4,9 @@ import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.profiling.ServiceCallStatistics;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -141,6 +143,12 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 
 	@Override
 	public void importCSV(String module, List<Dto> dtos, AsyncCallback<Void> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getServiceCallStatistics(AsyncCallback<Collection<ServiceCallStatistics>> callback) {
 		// TODO Auto-generated method stub
 		
 	}

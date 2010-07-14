@@ -3,7 +3,9 @@ package honeycrm.client;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.profiling.ServiceCallStatistics;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -64,4 +66,7 @@ public interface CommonService extends RemoteService {
 
 	// reports
 	public Map<Integer, Double> getAnnuallyOfferingVolumes();
+	
+	// profiling
+	public Collection<ServiceCallStatistics> getServiceCallStatistics();
 }

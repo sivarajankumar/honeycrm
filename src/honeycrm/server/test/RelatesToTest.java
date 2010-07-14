@@ -3,7 +3,7 @@ package honeycrm.server.test;
 import honeycrm.server.CachingReflectionHelper;
 import honeycrm.server.ReflectionHelper;
 import honeycrm.server.domain.AbstractEntity;
-import honeycrm.server.domain.decoration.RelatesTo;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -25,10 +25,10 @@ public class RelatesToTest extends TestCase {
 				for (final Field field : reflectionHelper.getAllFields(clazz)) {
 					final boolean isLong = Long.class.equals(field.getType()) || long.class.equals(field.getType());
 					final boolean hasCorrectName = field.getName().toLowerCase().contains("id");
-					final boolean isAnnotated = field.isAnnotationPresent(RelatesTo.class);
+					final boolean isAnnotated = field.isAnnotationPresent(FieldRelateAnnotation.class);
 
 					if (isLong && hasCorrectName && !isAnnotated) {
-						System.err.println(clazz.getSimpleName() + "." + field.getName() + " looks like a foreign key field with no " + RelatesTo.class.getSimpleName() + " annotation set.");
+						System.err.println(clazz.getSimpleName() + "." + field.getName() + " looks like a foreign key field with no " + FieldRelateAnnotation.class.getSimpleName() + " annotation set.");
 						failed = true;
 					}
 				}
