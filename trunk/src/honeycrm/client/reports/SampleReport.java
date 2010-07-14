@@ -2,7 +2,6 @@ package honeycrm.client.reports;
 
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
-import honeycrm.client.forecast.ForecastTest;
 
 import java.util.Date;
 import java.util.Map;
@@ -27,6 +26,7 @@ public class SampleReport extends Composite {
 		final VerticalPanel p = new VerticalPanel();
 		p.setStyleName("content");
 		p.add(status);
+		p.add(new ProfilingReport());
 		p.add(new ForecastTest());
 
 		initWidget(p);

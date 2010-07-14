@@ -1,4 +1,4 @@
-package honeycrm.client.forecast;
+package honeycrm.client.reports;
 
 import honeycrm.client.misc.NumberParser;
 

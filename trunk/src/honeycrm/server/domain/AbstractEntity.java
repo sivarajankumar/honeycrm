@@ -1,19 +1,15 @@
 package honeycrm.server.domain;
 
-import honeycrm.client.field.AbstractField;
 import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;

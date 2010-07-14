@@ -4,7 +4,10 @@ import honeycrm.client.CommonService;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.profiling.ServiceCallStatistics;
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.profiling.ProfilingStatisticsCollector;
+import honeycrm.server.profiling.ServiceCall;
 
 import java.util.Collection;
 import java.util.Date;
@@ -27,6 +30,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final CommonServiceEmail email = new CommonServiceEmail();
 	private static final CommonServiceReporter reporter = new CommonServiceReporter();
 	private static final DtoWizard wizard = DtoWizard.instance;
+	private static final ProfilingStatisticsCollector profiler = new ProfilingStatisticsCollector();
 
 	@Override
 	public long create(Dto dto) {
@@ -40,6 +44,8 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
+		ServiceCall call = new ServiceCall("getAll");
+		
 		// TODO using transactions currently breaks getAll()
 		// TODO do everything within the context of a transaction
 		// final Transaction t = m.currentTransaction();
@@ -47,6 +53,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		// t.begin();
 		final ListQueryResult result = reader.getAll(dtoIndex, from, to);
 		// t.commit();
+		
+		endAndPersist(call);
+		
 		return result;
 		// } finally {
 		// if (t.isActive()) {
@@ -57,8 +66,12 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public Dto get(final String dtoIndex, final long id) {
+		ServiceCall call = new ServiceCall("get");
+		
 		final Dto dto = reader.get(dtoIndex, id);
 
+		endAndPersist(call);
+		
 		if (null == dto) {
 			return null; // do not do anything more than that because we could not find the dto
 		}
@@ -73,6 +86,10 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		// dto.setViews(dto.getViews() + 1);
 		// update(dtoIndex, dto, id);
 		return dto;
+	}
+
+	private void endAndPersist(ServiceCall call) {
+		m.makePersistent(call.end());
 	}
 
 	@Override
@@ -95,6 +112,8 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	// TODO does not update the relate field anymore
 	@Override
 	public void update(Dto dto, long id) {
+		ServiceCall call = new ServiceCall("update");
+		
 		dto.set("lastUpdatedAt", (new Date(System.currentTimeMillis())));
 
 		final AbstractEntity existingObject = getDomainObject(dto.getModule(), id);
@@ -102,6 +121,8 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		if (null != existingObject) {
 			m.makePersistent(copy.copy(dto, existingObject));
 		}
+		
+		endAndPersist(call);
 	}
 
 	@Override
@@ -208,5 +229,10 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public Map<String, ModuleDto> getDtoConfiguration() {
 		return wizard.getDtoConfiguration();
+	}
+
+	@Override
+	public Collection<ServiceCallStatistics> getServiceCallStatistics() {
+		return profiler.get();
 	}
 }
