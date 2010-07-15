@@ -1,5 +1,7 @@
 package honeycrm.server.profiling;
 
+import honeycrm.client.profiling.ServiceCallStatistics;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -17,12 +19,16 @@ public class ServiceCall {
 	private String serviceName;
 
 	public ServiceCall(final String serviceName) {
-		this.serviceName = serviceName;
-		this.startTimestamp = System.currentTimeMillis();
+		if (ServiceCallStatistics.PROFILING_ENABLED) {
+			this.serviceName = serviceName;
+			this.startTimestamp = System.currentTimeMillis();
+		}
 	}
 
 	public ServiceCall end() {
-		this.executionTime = System.currentTimeMillis() - startTimestamp;
+		if (ServiceCallStatistics.PROFILING_ENABLED) {
+			this.executionTime = System.currentTimeMillis() - startTimestamp;
+		}
 		return this;
 	}
 
