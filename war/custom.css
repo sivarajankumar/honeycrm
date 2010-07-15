@@ -6,11 +6,11 @@ div {
 }
 
 body {
-	background-color: #1189FF ! important;
+	background-color: #e0eaea ! important;
 }
 
 .loading_panel {
-	color: white;
+	color: #002fff;
 	font-weight: bold;
 	margin-left: 10px;
 	margin-top: 10px;
@@ -33,7 +33,6 @@ body {
 .search_bar {
 	background-color: #92c1f0;
 	padding: 3px;	
-	width: 100%;
 }
 
 .demo_button {
@@ -55,7 +54,7 @@ body {
 
 .honey_header {
 	margin: 10px;	
-	color: white;
+	color: #005fff;
 }
 
 .header a {
@@ -116,8 +115,14 @@ body {
 
 .detail_view_label {
 /*	font-weight: bold;*/
+	/*font-style: italic;
+	text-align: right;*/
+	margin-right: 10px;
+}
+
+.detail_view_value {
+	margin-right: 15px;	
 	font-style: italic;
-	text-align: right;
 }
 
 .detail_view_content {
@@ -132,7 +137,7 @@ body {
 .view_header_label {
 	font-size: small;
 	background-color: #d0e4f6;
-	width: 100%;
+	width: 99%;
 	border-bottom: 1px solid #92c1f0;
 	height: 19px;
 	padding: 3px;
@@ -157,6 +162,7 @@ body {
 
 .under_list_panel {
 	width: 100%;	
+	margin-top: 5px;
 }
 
 .list_pagination_label {
