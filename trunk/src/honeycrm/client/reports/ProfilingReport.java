@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.VisualizationUtils;
@@ -18,7 +18,7 @@ import com.google.gwt.visualization.client.visualizations.ColumnChart.Options;
 
 public class ProfilingReport extends Composite {
 	public ProfilingReport() {
-		final VerticalPanel panel = new VerticalPanel();
+		final HorizontalPanel panel = new HorizontalPanel();
 
 		LoadIndicator.get().startLoading();
 
@@ -30,8 +30,10 @@ public class ProfilingReport extends Composite {
 				VisualizationUtils.loadVisualizationApi(new Runnable() {
 					@Override
 					public void run() {
-						final ColumnChart chart = new ColumnChart(getDataTable(result), getOptions());
-						panel.add(chart);
+						final ColumnChart chartCalls = new ColumnChart(getDataTableCalls(result), getOptions("Calls"));
+						final ColumnChart chartAvg = new ColumnChart(getDataTableAvg(result), getOptions("Avg"));
+						panel.add(chartCalls);
+						panel.add(chartAvg);
 						//chart.draw(getDataTable(result));
 //						panel.add(chart);
 					}
@@ -48,35 +50,45 @@ public class ProfilingReport extends Composite {
 		initWidget(panel);
 	}
 
-	private Options getOptions() {
+	private Options getOptions(final String title) {
 		Options options = Options.create();
 		options.setEnableTooltip(true);
-		options.setWidth(400);
+		options.setWidth(200);
 		options.setLegendFontSize(10);
 		options.setAxisFontSize(10);
-		options.setHeight(400);
-		options.setTitle("Service hotspots");
+		options.setHeight(200);
+		options.setTitle(title);
 		return options;
 	}
 
-	private AbstractDataTable getDataTable(final Collection<ServiceCallStatistics> result) {
+	private AbstractDataTable getDataTableCalls(final Collection<ServiceCallStatistics> result) {
 		final DataTable table = DataTable.create();
 
 		table.addColumn(ColumnType.STRING, "Service");
-		// table.addColumn(ColumnType.NUMBER, "Min");
-		// table.addColumn(ColumnType.NUMBER, "Max");
-		table.addColumn(ColumnType.NUMBER, "#Calls * Average (ms)");
-		// table.addColumn(ColumnType.NUMBER, "#Calls");
+		table.addColumn(ColumnType.NUMBER, "#Calls");
 		table.addRows(result.size());
 
 		int y = 0;
 		for (final ServiceCallStatistics stats : result) {
-			// table.setProperty(y, 0, "Calls", String.valueOf(stats.getCalls()));
 			table.setValue(y, 0, stats.getServiceName());
-			// table.setValue(y, 1, stats.getExecutionTimeMin());
-			// table.setValue(y, 2, stats.getExecutionTimeMax());
-			table.setValue(y, 1, stats.getCalls() * stats.getExecutionTimeAvg());
-			//table.setValue(y, 2, stats.getCalls());
+			table.setValue(y, 1, stats.getCalls());
+			y++;
+		}
+
+		return table;
+	}
+	
+	private AbstractDataTable getDataTableAvg(final Collection<ServiceCallStatistics> result) {
+		final DataTable table = DataTable.create();
+
+		table.addColumn(ColumnType.STRING, "Service");
+		table.addColumn(ColumnType.NUMBER, "Avg");
+		table.addRows(result.size());
+
+		int y = 0;
+		for (final ServiceCallStatistics stats : result) {
+			table.setValue(y, 0, stats.getServiceName());
+			table.setValue(y, 1, stats.getExecutionTimeAvg());
 			y++;
 		}
 
