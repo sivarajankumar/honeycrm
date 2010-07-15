@@ -2,6 +2,7 @@ package honeycrm.client.view.csvimport;
 
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
+import honeycrm.client.TabCenterView;
 import honeycrm.client.csv.CsvImporter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -74,6 +75,7 @@ public class CsvImportWidget {
 					public void onSuccess(Void result) {
 						LoadIndicator.get().endLoading();
 						statusLabel.setText("Status: Sucessfully imported contacts");
+						TabCenterView.instance().get(module).refreshListView();
 					}
 
 					@Override

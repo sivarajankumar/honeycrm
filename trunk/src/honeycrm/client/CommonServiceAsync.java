@@ -58,4 +58,8 @@ public interface CommonServiceAsync {
 	void importCSV(String module, List<Dto> dtos, AsyncCallback<Void> callback);
 
 	void getServiceCallStatistics(AsyncCallback<Collection<ServiceCallStatistics>> callback);
+
+	void bulkCreate(AsyncCallback<Void> callback);
+
+	void bulkRead(AsyncCallback<Void> callback);
 }

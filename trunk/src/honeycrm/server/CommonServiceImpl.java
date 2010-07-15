@@ -7,15 +7,19 @@ import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.profiling.ServiceCallStatistics;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.profiling.ProfilingStatisticsCollector;
+import honeycrm.server.profiling.ReadTest;
 import honeycrm.server.profiling.ServiceCall;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 /**
@@ -45,7 +49,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
 		ServiceCall call = new ServiceCall("getAll");
-		
+
 		// TODO using transactions currently breaks getAll()
 		// TODO do everything within the context of a transaction
 		// final Transaction t = m.currentTransaction();
@@ -53,9 +57,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		// t.begin();
 		final ListQueryResult result = reader.getAll(dtoIndex, from, to);
 		// t.commit();
-		
+
 		endAndPersist(call);
-		
+
 		return result;
 		// } finally {
 		// if (t.isActive()) {
@@ -67,11 +71,11 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public Dto get(final String dtoIndex, final long id) {
 		ServiceCall call = new ServiceCall("get");
-		
+
 		final Dto dto = reader.get(dtoIndex, id);
 
 		endAndPersist(call);
-		
+
 		if (null == dto) {
 			return null; // do not do anything more than that because we could not find the dto
 		}
@@ -89,7 +93,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	private void endAndPersist(ServiceCall call) {
-		m.makePersistent(call.end());
+		if (ServiceCallStatistics.PROFILING_ENABLED) {
+			m.makePersistent(call.end());
+		}
 	}
 
 	@Override
@@ -113,7 +119,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void update(Dto dto, long id) {
 		ServiceCall call = new ServiceCall("update");
-		
+
 		dto.set("lastUpdatedAt", (new Date(System.currentTimeMillis())));
 
 		final AbstractEntity existingObject = getDomainObject(dto.getModule(), id);
@@ -121,7 +127,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		if (null != existingObject) {
 			m.makePersistent(copy.copy(dto, existingObject));
 		}
-		
+
 		endAndPersist(call);
 	}
 
@@ -234,5 +240,40 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public Collection<ServiceCallStatistics> getServiceCallStatistics() {
 		return profiler.get();
+	}
+
+	@Override
+	public void bulkCreate() {
+		log.warning("Entered bulkCreate()");
+		final PersistenceManager m = PMF.get().getPersistenceManager();
+		final int count = 500; // app engine restriction
+
+		Collection<ReadTest> reads = new HashSet<ReadTest>();
+		final Random r = new Random();
+
+		for (int i = 0; i < count; i++) {
+			final ReadTest t = new ReadTest();
+			t.setFoo(r.nextLong());
+			reads.add(t);
+		}
+
+		log.warning("Started creation of " + count + " values");
+		final long before = System.currentTimeMillis();
+		m.makePersistentAll(reads);
+		log.warning("Creation of " + count + " values took " + (System.currentTimeMillis() - before) + " ms.");
+	}
+
+	@Override
+	public void bulkRead() {
+		final PersistenceManager m = PMF.get().getPersistenceManager();
+		
+		final long before = System.currentTimeMillis();
+		log.warning("Started full table scan");
+		System.out.flush();
+		final Query q = m.newQuery(ReadTest.class);
+		q.setRange(1, 1000);
+		final Collection<ReadTest> result = (Collection<ReadTest>) q.execute();
+		
+		log.warning("Finished full table scan: Read items in " + (System.currentTimeMillis() - before) + " ms.");
 	}
 }

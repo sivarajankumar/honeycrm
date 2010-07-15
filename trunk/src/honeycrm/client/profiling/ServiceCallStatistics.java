@@ -3,6 +3,7 @@ package honeycrm.client.profiling;
 import java.io.Serializable;
 
 public class ServiceCallStatistics implements Serializable {
+	public static final boolean PROFILING_ENABLED = false;
 	private static final long serialVersionUID = -9095096806226632747L;
 	private String serviceName;
 	private long calls;

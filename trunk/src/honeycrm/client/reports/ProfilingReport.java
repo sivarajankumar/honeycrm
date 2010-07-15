@@ -9,6 +9,8 @@ import java.util.Collection;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.VisualizationUtils;
@@ -18,8 +20,12 @@ import com.google.gwt.visualization.client.visualizations.ColumnChart.Options;
 
 public class ProfilingReport extends Composite {
 	public ProfilingReport() {
+		final VerticalPanel vpanel = new VerticalPanel();
 		final HorizontalPanel panel = new HorizontalPanel();
 
+		vpanel.add(new Label("Profiling is enabled? " + ServiceCallStatistics.PROFILING_ENABLED));
+		vpanel.add(panel);
+		
 		LoadIndicator.get().startLoading();
 
 		ServiceRegistry.commonService().getServiceCallStatistics(new AsyncCallback<Collection<ServiceCallStatistics>>() {
@@ -47,7 +53,7 @@ public class ProfilingReport extends Composite {
 			}
 		});
 
-		initWidget(panel);
+		initWidget(vpanel);
 	}
 
 	private Options getOptions(final String title) {

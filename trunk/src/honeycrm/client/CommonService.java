@@ -69,4 +69,6 @@ public interface CommonService extends RemoteService {
 	
 	// profiling
 	public Collection<ServiceCallStatistics> getServiceCallStatistics();
+	public void bulkCreate();
+	public void bulkRead();
 }
