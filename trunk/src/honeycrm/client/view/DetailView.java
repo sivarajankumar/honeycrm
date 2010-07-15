@@ -122,7 +122,8 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 				final Widget widgetValue = getWidgetByType(dto, id, view);
 
 				widgetLabel.setStyleName("detail_view_label");
-
+				widgetValue.setStyleName("detail_view_value");
+				
 				if (view == View.DETAIL) {
 					if (widgetValue instanceof Label) {
 						((Label) widgetValue).addClickHandler(new ClickHandler() {
