@@ -6,12 +6,13 @@ div {
 }
 
 body {
-	background-color: #e0eaea ! important;
+	/* use gray background color to increase the difference between blue tabs and the background */
+	background-color: #efefef ! important;
 }
 
 .loading_panel {
 	color: #002fff;
-	font-weight: bold;
+/*	font-weight: bold; */
 	margin-left: 10px;
 	margin-top: 10px;
 }

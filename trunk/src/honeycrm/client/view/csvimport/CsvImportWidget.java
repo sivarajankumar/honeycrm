@@ -74,14 +74,14 @@ public class CsvImportWidget {
 					@Override
 					public void onSuccess(Void result) {
 						LoadIndicator.get().endLoading();
-						statusLabel.setText("Status: Sucessfully imported contacts");
+						statusLabel.setText("Status: Import completed");
 						TabCenterView.instance().get(module).refreshListView();
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
 						LoadIndicator.get().endLoading();
-						statusLabel.setText("Status: Could not import contacts");
+						statusLabel.setText("Status: Import failed");
 					}
 				});
 			}
