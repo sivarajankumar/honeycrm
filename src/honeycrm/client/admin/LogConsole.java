@@ -1,7 +1,7 @@
 package honeycrm.client.admin;
 
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextArea;
 
 /**
  * Simple logging console allowing arbitrary widgets to log messages.
@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Label;
 public class LogConsole extends Composite {
 	public static final boolean ENABLED = false;
 	private static final LogConsole instance = new LogConsole();
-	private final Label logWidget = new Label();
+	private final TextArea logWidget = new TextArea();
 
 	public static LogConsole get() {
 		return instance;
@@ -25,7 +25,8 @@ public class LogConsole extends Composite {
 
 	private LogConsole() {
 		logWidget.setWidth("900px");
-		logWidget.setHeight("30px");
+/*		logWidget.setHeight("30px");*/
+		logWidget.setVisibleLines(20);
 
 		initWidget(logWidget);
 	}
