@@ -4,6 +4,7 @@ import honeycrm.client.view.AbstractView.View;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -120,17 +121,24 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 		} else if (w instanceof TextBox) {
 			return ((TextBox) w).getText();
 		} else {
-			return internalGetData(w);
-		}	
+			try {
+				return internalGetData(w);
+			} catch (RuntimeException e) {
+				// open a dialog and re-throw exception
+				Window.alert("Unexpected type: " + w.getClass());
+				throw e;
+			}
+		}
 	}
 
 	/**
 	 * Sub classes may override this method to handle other widget types.
 	 */
 	protected Serializable internalGetData(final Widget w) {
+		Window.alert("Unexpected type: " + w.getClass());
 		throw new RuntimeException("Unexpected type: " + w.getClass());
 	}
-	
+
 	public Serializable getTypedData(final Object value) {
 		return null == value ? "" : value.toString();
 	}

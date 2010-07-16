@@ -2,24 +2,16 @@ package honeycrm.client.view;
 
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.TabCenterView;
+import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLTable;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.DataTable;
@@ -33,51 +25,16 @@ import com.google.gwt.visualization.client.visualizations.Table.Options;
 // the background (polling)
 // TODO update item count periodically
 public class ListView extends AbstractView {
-	private boolean initialized = false;
-
-	/**
-	 * Map pages to listviewable arrays.
-	 */
-	protected Map<Integer, Dto[]> cache = new HashMap<Integer, Dto[]>();
 	protected static final int MAX_ENTRIES = 10;
-	private static final int HEADER_ROWS = 1;
-	/**
-	 * number of columns in front of the actual data containing columns (e.g. delete checkbox column)
-	 */
-	private static final int LEADING_COLS = 1;
 
-	protected int currentPage = -1;
-	protected int numberOfPages = -1;
-
-	protected final Label label = new Label();
-	protected final FlowPanel panel = new FlowPanel();
-	private final FlexTable table = new FlexTable();
-	// private final ListViewDeletionPanel deletePanel;
+	private boolean itemsHaveBeenLoadedOnce = false;
 	private final Table t = new Table();
 	private Map<Integer, Dto> rowNrToDto = new HashMap<Integer, Dto>();
 
 	public ListView(final String clazz) {
 		super(clazz);
 
-		initHeader();
-
-		// css settings
-		table.setBorderWidth(0);
-		table.setCellSpacing(0);
-		table.setCellPadding(0);
-		table.setWidth("100%");
-		table.setStyleName("list_table");
-		panel.setStyleName("fullWidth");
-		label.setStyleName("list_pagination_label");
-
-		HTMLTable.RowFormatter formatter = table.getRowFormatter();
-		formatter.setStyleName(0, "table_header");
-
-		// add css class for every row
-		for (int i = 1; i < MAX_ENTRIES; i++) {
-			formatter.setStyleName(i, "table_row");
-		}
-
+		final VerticalPanel panel = new VerticalPanel();
 		panel.add(t);
 		t.addSelectHandler(new SelectHandler() {
 			@Override
@@ -93,10 +50,6 @@ public class ListView extends AbstractView {
 				}
 			}
 		});
-		// panel.add(table);
-
-		// initialize the leading columns
-		// table.setWidget(0, 0, deletePanel = new ListViewDeletionPanel(clazz, this));
 
 		// do not refresh within the constructor -> this generates too much load during login
 		// refresh();
@@ -104,132 +57,35 @@ public class ListView extends AbstractView {
 		initWidget(panel);
 	}
 
-	private void initHeader() {
-		final String[] fieldIds = moduleDto.getListFieldIds();
-
-		for (int i = 0; i < fieldIds.length; i++) {
-			table.setText(0, LEADING_COLS + i, moduleDto.getFieldById(fieldIds[i]).getLabel());
-		}
-	}
-
-	protected void setNumberOfPages(final int itemCount) {
-		if (itemCount < MAX_ENTRIES) {
-			numberOfPages = 1;
-		} else {
-			numberOfPages = itemCount / MAX_ENTRIES;
-			if (itemCount > MAX_ENTRIES) {
-				++numberOfPages;
-			}
-		}
-		updatePageCounterLabel();
-	}
-
-	private void initializeRow(final int row, final Dto listViewable) {
-		final ClickHandler showDetailViewHandler = new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				TabCenterView.instance().get(moduleDto.getModule()).showDetailView(listViewable.getId());
-				// CenterView.get().showDetailView(clazz, listViewable.getId());
-
-				// TODO: clear all also colored rows when paginate
-				HTMLTable.RowFormatter formatterSet = table.getRowFormatter();
-				// clear all colored rows
-				for (int i = 1; i < MAX_ENTRIES; i++) {
-					formatterSet.setStyleName(i, "table_row");
-				}
-				// draw row
-				formatterSet.setStyleName(row + HEADER_ROWS, "table_row selected");
-			}
-		};
-
-		final String[] ids = listViewable.getListFieldIds();
-
-		// add the leading columns (e.g. delete checkbox) before actual data
-		// table.setWidget(HEADER_ROWS + row, 0, deletePanel.getDeleteCheckboxFor(listViewable.getId(), currentPage));
-
-		for (int i = 0; i < ids.length; i++) {
-			final Widget w = getWidgetByType(listViewable, ids[i], View.DETAIL);
-
-			// TODO mouse pointer should be changed on mouse over or label should look like link.
-			if (w instanceof Label) {
-				((Label) w).addClickHandler(showDetailViewHandler);
-				// table.setWidget(HEADER_ROWS + row, LEADING_COLS + i, w);
-			} else if (w instanceof Hyperlink) {
-				// TODO call history.newItem to manage transition..
-				// ((Hyperlink) w).addClickHandler(showDetailViewHandler);
-			}
-
-			table.setWidget(HEADER_ROWS + row, LEADING_COLS + i, w);
-		}
-	}
-
-	// 1. seite 0 - 9
-	// 2. seite 10 - 19
-	// (1-1)*20 = 0
-	// (2-1)*20 = 20
-	// (3-1)*20 = 40
-	protected void showPage(final int page) {
-		if (1 <= page && page <= numberOfPages) {
-			if (cache.containsKey(page)) {
-				final Dto[] values = cache.get(page);
-
-				for (int i = 0; i < values.length; i++) {
-					initializeRow(i, values[i]);
-				}
-
-				removeTrailingRows(values.length);
-
-				currentPage = page;
-				updatePageCounterLabel();
-			} else {
-				refreshPage(page);
-			}
-		}
-	}
-
-	/**
-	 * empty the trailingRowsCounter number of rows at the end of the table
-	 */
-	private void removeTrailingRows(final int numberOfValues) {
-		final boolean displayingTooManyRows = table.getRowCount() > numberOfValues + HEADER_ROWS;
-
-		if (displayingTooManyRows) {
-			final int trailingRowsCounter = table.getRowCount() - HEADER_ROWS - numberOfValues;
-
-			for (int i = 0; i < trailingRowsCounter; i++) {
-				table.removeRow(table.getRowCount() - 1);
-			}
-		}
-	}
-
 	private void refreshPage(final int page) {
-		initialized = true; // set this to true when a page has been refreshed for the first time
+		log("refreshPage " + page);
 
+		itemsHaveBeenLoadedOnce = true;
 		final int offset = getOffsetForPage(page);
 
 		assert 0 <= offset;
 
 		LoadIndicator.get().startLoading();
+		log("started loading");
 
 		commonService.getAll(moduleDto.getModule(), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
+				log("error");
 				displayError(caught);
 			}
 
 			@Override
 			public void onSuccess(ListQueryResult result) {
+				log("received result");
 				t.draw(getTableData(result), getOptions());
-
 				LoadIndicator.get().endLoading();
-				if (-1 == page) {
-					currentPage = 1;
-				}
-				setNumberOfPages(result.getItemCount());
-				cache.put(-1 == page ? 1 : page, result.getResults());
-				showPage(-1 == page ? 1 : page);
 			}
 		});
+	}
+
+	private void log(String string) {
+		LogConsole.log("[" + moduleDto.getModule() + "] " + string);
 	}
 
 	protected Options getOptions() {
@@ -238,34 +94,53 @@ public class ListView extends AbstractView {
 		options.setAlternatingRowStyle(true);
 		options.setPageSize(MAX_ENTRIES);
 		options.setAllowHtml(true);
-		options.set("pagingSymbols", "{prev:'prev',next:'next'}");
+		// options.set("pagingSymbols", "{prev:'prev',next:'next'}");
 		return options;
 	}
 
 	protected AbstractDataTable getTableData(ListQueryResult result) {
+		log("getTableData " + result.getResults().length + " results");
+
 		final DataTable data = DataTable.create();
 		data.addRows(result.getResults().length);
 
+		log("generating header");
 		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
 			final String id = moduleDto.getListFieldIds()[col];
 
 			data.addColumn(ColumnType.STRING);
 			data.setColumnLabel(col, moduleDto.getFieldById(id).getLabel());
+
+			log("set header col #" + col);
 		}
 
 		data.addColumn(ColumnType.NUMBER);
 		data.setColumnLabel(moduleDto.getListFieldIds().length, "Id");
 
+		log("set header colum for id");
+
+		log("inserting real data");
 		for (int row = 0; row < result.getResults().length; row++) {
+			log("inserting row #" + row);
 			final Dto dto = result.getResults()[row];
 
 			rowNrToDto.put(row, dto);
-			
-			for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
-				final String id = moduleDto.getListFieldIds()[col];
-				final Widget w = dto.getFieldById(id).getWidget(View.DETAIL, dto.get(id));
 
-				data.setValue(row, col, dto.getFieldById(id).getData(w).toString());
+			for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
+				log("inserting (row,col)=(" + row + "," + col + ")");
+
+				final String id = moduleDto.getListFieldIds()[col];
+				log("#1 -> got id " + id);
+
+				final Widget w = dto.getFieldById(id).getWidget(View.DETAIL, dto.get(id));
+				log("#2 -> got widget " + w.getClass());
+
+				try {
+					data.setValue(row, col, String.valueOf(dto.getFieldById(id).getData(w)));
+					log("#3 -> value is set");
+				} catch (RuntimeException e) {
+					log("an exception occured during getting data from widget and inserting into table. " + e.getMessage());
+				}
 			}
 
 			data.setValue(row, moduleDto.getListFieldIds().length, dto.getId());
@@ -278,51 +153,19 @@ public class ListView extends AbstractView {
 		return (-1 == page) ? (0) : (page - 1) * MAX_ENTRIES;
 	}
 
-	public int currentPage() {
-		return currentPage;
-	}
-
-	/*
-	 * Deletion
-	 */
-	public Set<Long> toggleAllForDeletion(final boolean shouldBeDeleted) {
-		final Set<Long> ids = new HashSet<Long>();
-
-		for (int y = HEADER_ROWS; y < table.getRowCount(); y++) {
-			assert table.getWidget(y, 0) instanceof CheckBox;
-
-			((CheckBox) table.getWidget(y, 0)).setValue(shouldBeDeleted);
-
-			if (shouldBeDeleted) {
-				// determine id of the corresponding list viewable item and add it to the set of IDs
-				// that will be deleted.
-				ids.add(cache.get(currentPage)[y - HEADER_ROWS].getId());
-			}
-		}
-
-		return ids;
-	}
-
-	/**
-	 * Pagination
-	 */
-	private void updatePageCounterLabel() {
-		label.setText("Page " + currentPage + " of " + numberOfPages);
-	}
-
 	public void refresh() {
-		refreshPage(currentPage);
+		refreshPage(1); // TODO refresh all items (was: refresh(currentPage);)
 	}
 
 	public void deleteSelected() {
-	//	deletePanel.deleteSelected();
+		// deletePanel.deleteSelected();
 	}
 
 	public void deleteAll() {
-	//	deletePanel.deleteAll();
+		// deletePanel.deleteAll();
 	}
 
 	public boolean isInitialized() {
-		return initialized;
+		return itemsHaveBeenLoadedOnce;
 	}
 }
