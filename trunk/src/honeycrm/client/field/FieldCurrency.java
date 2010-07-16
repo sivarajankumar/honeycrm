@@ -16,26 +16,32 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldCurrency extends AbstractField {
+	private static final int DEFAULT_WIDTH = 70;
 	private static final long serialVersionUID = -8253981703594953379L;
 
 	public FieldCurrency() {
+		this.width = DEFAULT_WIDTH;
 	}
 
 	// TODO find a way to inherit the constructors from the parent class to avoid declaring them here again
 	public FieldCurrency(final String index, final String label) {
 		super(index, label);
+		this.width = DEFAULT_WIDTH;
 	}
 
 	public FieldCurrency(final String index, final String label, final String defaultValue) {
 		super(index, label, defaultValue);
+		this.width = DEFAULT_WIDTH;
 	}
 
 	public FieldCurrency(String indexSum, String string, String string2, int i, boolean b) {
 		super(indexSum, string, string2, i, b);
+		this.width = DEFAULT_WIDTH;
 	}
 
 	public FieldCurrency(String indexDiscount, String string, String string2, int i) {
 		super(indexDiscount, string, string2, i);
+		this.width = DEFAULT_WIDTH;
 	}
 
 	@Override
@@ -100,11 +106,13 @@ public class FieldCurrency extends AbstractField {
 
 	@Override
 	public Serializable getData(Widget w) {
+		final String value = (String) super.getData(w);
+		
 		try {
-			return NumberFormat.getCurrencyFormat("EUR").parse(((TextBox) w).getText());
+			return NumberFormat.getCurrencyFormat("EUR").parse(value);
 		} catch (NumberFormatException e) {
 			// Gwt throw a number format exception.
-			return NumberParser.convertToDouble(((TextBox) w).getText());
+			return NumberParser.convertToDouble(value);
 		}
 	}
 

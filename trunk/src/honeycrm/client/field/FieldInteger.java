@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldInteger extends AbstractField {
+	private static final int DEFAULT_WIDTH = 70;
 	private static final long serialVersionUID = 8025061226197879958L;
 
 	public FieldInteger() {
@@ -18,10 +19,12 @@ public class FieldInteger extends AbstractField {
 
 	public FieldInteger(final String index, final String label) {
 		super(index, label);
+		this.width = DEFAULT_WIDTH;
 	}
 	
 	public FieldInteger(final String index, final String label, int defaultValue) {
 		super(index, label, String.valueOf(defaultValue));
+		this.width = DEFAULT_WIDTH;
 	}
 
 	public FieldInteger(String indexQuantity, String string, String string2, int i) {
@@ -58,7 +61,8 @@ public class FieldInteger extends AbstractField {
 
 	@Override
 	public Serializable getData(Widget w) {
-		return Integer.valueOf(((TextBox) w).getText());
+		final String value = (String) super.getData(w);
+		return NumberParser.convertToInteger(value);
 	}
 
 	@Override

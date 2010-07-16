@@ -45,7 +45,7 @@ public class FieldText extends AbstractField {
 	}
 
 	@Override
-	public Serializable getData(Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		return ((TextArea) w).getText();
 	}
 }

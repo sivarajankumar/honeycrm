@@ -2,8 +2,8 @@ package honeycrm.client;
 
 import honeycrm.client.view.AbstractView;
 import honeycrm.client.view.DetailView;
+import honeycrm.client.view.ListView;
 import honeycrm.client.view.ModuleButtonBar;
-import honeycrm.client.view.SearchableListView;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -11,12 +11,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TabModuleView extends AbstractView {
 	private final DetailView detailView;
-	private final SearchableListView listView;
+	private final ListView listView;
 
 	public TabModuleView(final String clazz) {
 		super(clazz);
 
-		listView = new SearchableListView(clazz);
+		listView = new ListView(clazz);
 		detailView = new DetailView(clazz);
 		detailView.setStyleName("detail_view_content");
 

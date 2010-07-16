@@ -93,7 +93,13 @@ public class FieldRelate extends AbstractField {
 	}
 
 	@Override
-	public Serializable getData(Widget w) {
-		return ((RelateWidget) w).getId();
+	protected Serializable internalGetData(Widget w) {
+		if (w instanceof RelateWidget) {
+			return ((RelateWidget) w).getId();
+		} else if (w instanceof Hyperlink) {
+			return ((Hyperlink) w).getHTML();
+		} else {
+			throw new RuntimeException("Unexpected type " + w.getClass());
+		}
 	}
 }

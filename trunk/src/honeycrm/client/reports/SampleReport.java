@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
@@ -30,7 +29,7 @@ public class SampleReport extends Composite {
 		p.add(new ForecastTest());
 
 		initWidget(p);
-		
+
 		new Timer() {
 			@Override
 			public void run() {
@@ -44,12 +43,7 @@ public class SampleReport extends Composite {
 						status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
 
 						if (null == offeringsReport) {
-							VisualizationUtils.loadVisualizationApi(new Runnable() {
-								@Override
-								public void run() {
-									p.add(offeringsReport = new LineChart(getAbstractTable(result), getAreaOptions()));
-								}
-							}, LineChart.PACKAGE);
+							p.add(offeringsReport = new LineChart(getAbstractTable(result), getAreaOptions()));
 						} else {
 							offeringsReport.draw(getAbstractTable(result), getAreaOptions());
 						}
@@ -62,8 +56,8 @@ public class SampleReport extends Composite {
 					}
 				});
 			}
-		}.schedule(10*1000);
-}
+		}.schedule(10 * 1000);
+	}
 
 	private Options getAreaOptions() {
 		Options options = Options.create();

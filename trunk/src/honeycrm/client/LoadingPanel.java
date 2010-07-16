@@ -15,6 +15,10 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.visualization.client.VisualizationUtils;
+import com.google.gwt.visualization.client.visualizations.ColumnChart;
+import com.google.gwt.visualization.client.visualizations.LineChart;
+import com.google.gwt.visualization.client.visualizations.Table;
 
 public class LoadingPanel extends Composite {
 	private Label status = new Label();
@@ -70,24 +74,40 @@ public class LoadingPanel extends Composite {
 		ServiceRegistry.commonService().wakeupServer(new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
-				setStatus("Loading configuration..");
+				loadVisualisation();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Could not wakeup server side. Please try again later.");
+			}
+		});
+	}
 
-				ServiceRegistry.commonService().getDtoConfiguration(new AsyncCallback<Map<String, ModuleDto>>() {
-					@Override
-					public void onSuccess(Map<String, ModuleDto> result) {
-						initRealUserInterface(result);
-					}
+	private void loadVisualisation() {
+		setStatus("Loading visualisation API..");
 
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Could not get dto configuration from server side.");
-					}
-				});
+		// only works online.. cannot test without internet
+		VisualizationUtils.loadVisualizationApi(new Runnable() {
+			@Override
+			public void run() {
+				loadConfiguration();
+			}
+		}, Table.PACKAGE, LineChart.PACKAGE, ColumnChart.PACKAGE);
+	}
+
+	private void loadConfiguration() {
+		setStatus("Loading configuration..");
+
+		ServiceRegistry.commonService().getDtoConfiguration(new AsyncCallback<Map<String, ModuleDto>>() {
+			@Override
+			public void onSuccess(Map<String, ModuleDto> result) {
+				initRealUserInterface(result);
 			}
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Could not wakeup server side. Please try again later.");
+				Window.alert("Could not get dto configuration from server side.");
 			}
 		});
 	}

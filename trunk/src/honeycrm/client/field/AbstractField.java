@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractField implements IsSerializable, Serializable {
@@ -110,7 +111,25 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 
 	abstract protected Widget internalGetEditWidget(final Object value);
 
-	abstract public Serializable getData(final Widget w);
+	/**
+	 * Sub classes may override this method to handle the default widgets differently (e.g. additional conversion).
+	 */
+	public Serializable getData(final Widget w) {
+		if (w instanceof Label) {
+			return ((Label) w).getText();
+		} else if (w instanceof TextBox) {
+			return ((TextBox) w).getText();
+		} else {
+			return internalGetData(w);
+		}	
+	}
+
+	/**
+	 * Sub classes may override this method to handle other widget types.
+	 */
+	protected Serializable internalGetData(final Widget w) {
+		throw new RuntimeException("Unexpected type: " + w.getClass());
+	}
 	
 	public Serializable getTypedData(final Object value) {
 		return null == value ? "" : value.toString();

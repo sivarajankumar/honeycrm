@@ -75,8 +75,8 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 
 	@Override
-	public Serializable getData(Widget widgetValue) {
-		final ListBox box = (ListBox) widgetValue;
+	protected Serializable internalGetData(Widget w) {
+		final ListBox box = (ListBox) w;
 		final Set<String> selectedValues = new HashSet<String>();
 
 		for (int i = 0; i < box.getItemCount(); i++) {
