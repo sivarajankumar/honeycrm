@@ -55,8 +55,8 @@ a, a:visited, a:hover {
   color: #002fff;
   background-color: #e0eaea;
   border: 1px solid #ffffff;
-  text-shadow: 2px 2px #ffffff;
-  /*background: url("images/hborder.png") repeat-x 0px -27px;
+  /*text-shadow: 2px 2px #ffffff;
+  background: url("images/hborder.png") repeat-x 0px -27px;
   border: 1px outset #ccc;*/
 }
 .gwt-Button:active {
