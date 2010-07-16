@@ -12,6 +12,7 @@ import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -20,6 +21,12 @@ import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.visualization.client.AbstractDataTable;
+import com.google.gwt.visualization.client.DataTable;
+import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
+import com.google.gwt.visualization.client.events.SelectHandler;
+import com.google.gwt.visualization.client.visualizations.Table;
+import com.google.gwt.visualization.client.visualizations.Table.Options;
 
 // TODO track which items are already in the cache
 // TODO update cached items when forced to do so (everytime user opens a page the first time) AND in
@@ -32,7 +39,7 @@ public class ListView extends AbstractView {
 	 * Map pages to listviewable arrays.
 	 */
 	protected Map<Integer, Dto[]> cache = new HashMap<Integer, Dto[]>();
-	protected static final int MAX_ENTRIES = 15;
+	protected static final int MAX_ENTRIES = 10;
 	private static final int HEADER_ROWS = 1;
 	/**
 	 * number of columns in front of the actual data containing columns (e.g. delete checkbox column)
@@ -45,7 +52,9 @@ public class ListView extends AbstractView {
 	protected final Label label = new Label();
 	protected final FlowPanel panel = new FlowPanel();
 	private final FlexTable table = new FlexTable();
-	private final ListViewDeletionPanel deletePanel;
+	// private final ListViewDeletionPanel deletePanel;
+	private final Table t = new Table();
+	private Map<Integer, Dto> rowNrToDto = new HashMap<Integer, Dto>();
 
 	public ListView(final String clazz) {
 		super(clazz);
@@ -69,10 +78,25 @@ public class ListView extends AbstractView {
 			formatter.setStyleName(i, "table_row");
 		}
 
-		panel.add(table);
+		panel.add(t);
+		t.addSelectHandler(new SelectHandler() {
+			@Override
+			public void onSelect(SelectEvent event) {
+				if (t.getSelections().get(0).isRow()) {
+					final int rowNr = t.getSelections().get(0).getRow();
+					if (rowNrToDto.containsKey(rowNr)) {
+						final Dto dto = rowNrToDto.get(rowNr);
+						TabCenterView.instance().get(moduleDto.getModule()).showDetailView(dto.getId());
+					} else {
+						Window.alert("Cannot get dto of row #" + rowNr);
+					}
+				}
+			}
+		});
+		// panel.add(table);
 
 		// initialize the leading columns
-		table.setWidget(0, 0, deletePanel = new ListViewDeletionPanel(clazz, this));
+		// table.setWidget(0, 0, deletePanel = new ListViewDeletionPanel(clazz, this));
 
 		// do not refresh within the constructor -> this generates too much load during login
 		// refresh();
@@ -121,7 +145,7 @@ public class ListView extends AbstractView {
 		final String[] ids = listViewable.getListFieldIds();
 
 		// add the leading columns (e.g. delete checkbox) before actual data
-		table.setWidget(HEADER_ROWS + row, 0, deletePanel.getDeleteCheckboxFor(listViewable.getId(), currentPage));
+		// table.setWidget(HEADER_ROWS + row, 0, deletePanel.getDeleteCheckboxFor(listViewable.getId(), currentPage));
 
 		for (int i = 0; i < ids.length; i++) {
 			final Widget w = getWidgetByType(listViewable, ids[i], View.DETAIL);
@@ -195,6 +219,8 @@ public class ListView extends AbstractView {
 
 			@Override
 			public void onSuccess(ListQueryResult result) {
+				t.draw(getTableData(result), getOptions());
+
 				LoadIndicator.get().endLoading();
 				if (-1 == page) {
 					currentPage = 1;
@@ -204,6 +230,48 @@ public class ListView extends AbstractView {
 				showPage(-1 == page ? 1 : page);
 			}
 		});
+	}
+
+	protected Options getOptions() {
+		final Options options = Options.create();
+		options.setWidth("440px");
+		options.setAlternatingRowStyle(true);
+		options.setPageSize(MAX_ENTRIES);
+		options.setAllowHtml(true);
+		options.set("pagingSymbols", "{prev:'prev',next:'next'}");
+		return options;
+	}
+
+	protected AbstractDataTable getTableData(ListQueryResult result) {
+		final DataTable data = DataTable.create();
+		data.addRows(result.getResults().length);
+
+		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
+			final String id = moduleDto.getListFieldIds()[col];
+
+			data.addColumn(ColumnType.STRING);
+			data.setColumnLabel(col, moduleDto.getFieldById(id).getLabel());
+		}
+
+		data.addColumn(ColumnType.NUMBER);
+		data.setColumnLabel(moduleDto.getListFieldIds().length, "Id");
+
+		for (int row = 0; row < result.getResults().length; row++) {
+			final Dto dto = result.getResults()[row];
+
+			rowNrToDto.put(row, dto);
+			
+			for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
+				final String id = moduleDto.getListFieldIds()[col];
+				final Widget w = dto.getFieldById(id).getWidget(View.DETAIL, dto.get(id));
+
+				data.setValue(row, col, dto.getFieldById(id).getData(w).toString());
+			}
+
+			data.setValue(row, moduleDto.getListFieldIds().length, dto.getId());
+		}
+
+		return data;
 	}
 
 	protected int getOffsetForPage(final int page) {
@@ -247,11 +315,11 @@ public class ListView extends AbstractView {
 	}
 
 	public void deleteSelected() {
-		deletePanel.deleteSelected();
+	//	deletePanel.deleteSelected();
 	}
 
 	public void deleteAll() {
-		deletePanel.deleteAll();
+	//	deletePanel.deleteAll();
 	}
 
 	public boolean isInitialized() {

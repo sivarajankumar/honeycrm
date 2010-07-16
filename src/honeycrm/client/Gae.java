@@ -5,7 +5,6 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 public class Gae implements EntryPoint {
 	public void onModuleLoad() {
-//		RootLayoutPanel.get().add(new ForecastTest());
 		RootLayoutPanel.get().add(new LoadingPanel());
 	}
 }

@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
@@ -39,17 +38,9 @@ public class ForecastTest extends Composite {
 			}
 		});
 
-		// only works online.. cannot test without internet
-		VisualizationUtils.loadVisualizationApi(new Runnable() {
-			@Override
-			public void run() {
-				if (null == chart) {
-					chart = new LineChart(getAbstractTable(1), getAreaOptions());
-				}
-				panel.add(chart);
-				panel.add(getAdjustmentPanel());
-			}
-		}, LineChart.PACKAGE);
+		chart = new LineChart(getAbstractTable(1), getAreaOptions());
+		panel.add(chart);
+		panel.add(getAdjustmentPanel());
 
 		initWidget(panel);
 	}
@@ -90,7 +81,7 @@ public class ForecastTest extends Composite {
 		data.addColumn(ColumnType.NUMBER, "Real overall expenses");
 		data.addColumn(ColumnType.NUMBER, "Simulated Revenue for foo");
 		data.addColumn(ColumnType.NUMBER, "Simulated overall revenue");
-		//data.addColumn(ColumnType.NUMBER, "Similated additional revenue");
+		// data.addColumn(ColumnType.NUMBER, "Similated additional revenue");
 
 		data.addRows(result.keySet().size());
 
@@ -101,13 +92,13 @@ public class ForecastTest extends Composite {
 			final double realRevenueFromFoo = Math.floor(result.get(x));
 			final double simulatedRevenueFromFoo = factor * realRevenueFromFoo;
 			final double additionalRevenue = simulatedRevenueFromFoo - realRevenueFromFoo;
-			
+
 			data.setValue(row, col++, realRevenueFromFoo);
 			data.setValue(row, col++, realRevenue);
 			data.setValue(row, col++, realExpenses.get(x));
 			data.setValue(row, col++, simulatedRevenueFromFoo);
 			data.setValue(row, col++, realRevenue + additionalRevenue);
-			//data.setValue(row, col++, additionalRevenue);
+			// data.setValue(row, col++, additionalRevenue);
 
 			row++;
 		}
@@ -130,12 +121,12 @@ public class ForecastTest extends Composite {
 		}
 		return data;
 	}
-	
+
 	private static Map<Integer, Double> getRealExpenses() {
 		final Map<Integer, Double> data = new HashMap<Integer, Double>();
 		for (int x = 0; x < 52; x++) {
-			data.put(x, 100.0/(x+1));
+			data.put(x, 100.0 / (x + 1));
 		}
-		return data;	
+		return data;
 	}
 }

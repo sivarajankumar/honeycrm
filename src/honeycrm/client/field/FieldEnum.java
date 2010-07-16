@@ -64,8 +64,8 @@ public class FieldEnum extends AbstractField {
 	}
 
 	@Override
-	public Serializable getData(Widget widgetValue) {
-		final ListBox box = (ListBox) widgetValue;
+	protected Serializable internalGetData(Widget w) {
+		final ListBox box = (ListBox) w;
 
 		if (box.getSelectedIndex() == -1) {
 			// nothing has been selected.

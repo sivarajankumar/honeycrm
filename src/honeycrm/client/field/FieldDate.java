@@ -46,7 +46,7 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	public Serializable getData(Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		return ((DateBox) w).getValue();
 	}
 }

@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
 import com.google.gwt.visualization.client.visualizations.ColumnChart;
 import com.google.gwt.visualization.client.visualizations.ColumnChart.Options;
@@ -25,7 +24,7 @@ public class ProfilingReport extends Composite {
 
 		vpanel.add(new Label("Profiling is enabled? " + ServiceCallStatistics.PROFILING_ENABLED));
 		vpanel.add(panel);
-		
+
 		LoadIndicator.get().startLoading();
 
 		ServiceRegistry.commonService().getServiceCallStatistics(new AsyncCallback<Collection<ServiceCallStatistics>>() {
@@ -33,18 +32,10 @@ public class ProfilingReport extends Composite {
 			public void onSuccess(final Collection<ServiceCallStatistics> result) {
 				LoadIndicator.get().endLoading();
 
-				VisualizationUtils.loadVisualizationApi(new Runnable() {
-					@Override
-					public void run() {
-						final ColumnChart chartCalls = new ColumnChart(getDataTableCalls(result), getOptions("Calls"));
-						final ColumnChart chartAvg = new ColumnChart(getDataTableAvg(result), getOptions("Avg"));
-						panel.add(chartCalls);
-						panel.add(chartAvg);
-						//chart.draw(getDataTable(result));
-//						panel.add(chart);
-					}
-				}, ColumnChart.PACKAGE);
-
+				final ColumnChart chartCalls = new ColumnChart(getDataTableCalls(result), getOptions("Calls"));
+				final ColumnChart chartAvg = new ColumnChart(getDataTableAvg(result), getOptions("Avg"));
+				panel.add(chartCalls);
+				panel.add(chartAvg);
 			}
 
 			@Override
@@ -83,7 +74,7 @@ public class ProfilingReport extends Composite {
 
 		return table;
 	}
-	
+
 	private AbstractDataTable getDataTableAvg(final Collection<ServiceCallStatistics> result) {
 		final DataTable table = DataTable.create();
 

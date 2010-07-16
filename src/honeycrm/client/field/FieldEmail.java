@@ -52,6 +52,6 @@ public class FieldEmail extends AbstractField {
 
 	@Override
 	public Serializable getData(Widget w) {
-		return ((TextBox) w).getText();
+		return ((Anchor) w).getHTML();
 	}
 }

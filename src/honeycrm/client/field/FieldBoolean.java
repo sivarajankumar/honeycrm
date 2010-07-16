@@ -42,7 +42,7 @@ public class FieldBoolean extends AbstractField {
 	}
 
 	@Override
-	public Serializable getData(Widget widget) {
-		return ((CheckBox) widget).getValue();
+	protected Serializable internalGetData(Widget w) {
+		return ((CheckBox) w).getValue();
 	}
 }
