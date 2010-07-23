@@ -1,6 +1,7 @@
 package honeycrm.client.reports;
 
 import honeycrm.client.LoadIndicator;
+import honeycrm.client.LoadingPanel;
 import honeycrm.client.ServiceRegistry;
 
 import java.util.Date;
@@ -21,42 +22,47 @@ public class SampleReport extends Composite {
 	private LineChart offeringsReport;
 
 	public SampleReport() {
-		final Label status = new Label("Status: ");
 		final VerticalPanel p = new VerticalPanel();
-		p.setStyleName("content");
-		p.add(status);
-		p.add(new ProfilingReport());
-		p.add(new ForecastTest());
 
-		initWidget(p);
+		if (LoadingPanel.SKIP_LOADING_VISUALISATIONS) {
+			
+		} else {
+			final Label status = new Label("Status: ");
+			p.setStyleName("content");
+			p.add(status);
+			p.add(new ProfilingReport());
+			p.add(new ForecastTest());
 
-		new Timer() {
-			@Override
-			public void run() {
-				LoadIndicator.get().startLoading();
+			new Timer() {
+				@Override
+				public void run() {
+					LoadIndicator.get().startLoading();
 
-				ServiceRegistry.commonService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
-					@Override
-					public void onSuccess(final Map<Integer, Double> result) {
-						LoadIndicator.get().endLoading();
+					ServiceRegistry.commonService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
+						@Override
+						public void onSuccess(final Map<Integer, Double> result) {
+							LoadIndicator.get().endLoading();
 
-						status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
+							status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
 
-						if (null == offeringsReport) {
-							p.add(offeringsReport = new LineChart(getAbstractTable(result), getAreaOptions()));
-						} else {
-							offeringsReport.draw(getAbstractTable(result), getAreaOptions());
+							if (null == offeringsReport) {
+								p.add(offeringsReport = new LineChart(getAbstractTable(result), getAreaOptions()));
+							} else {
+								offeringsReport.draw(getAbstractTable(result), getAreaOptions());
+							}
 						}
-					}
 
-					@Override
-					public void onFailure(Throwable caught) {
-						LoadIndicator.get().endLoading();
+						@Override
+						public void onFailure(Throwable caught) {
+							LoadIndicator.get().endLoading();
 
-					}
-				});
-			}
-		}.schedule(10 * 1000);
+						}
+					});
+				}
+			}.schedule(10 * 1000);
+		}
+		
+		initWidget(p);
 	}
 
 	private Options getAreaOptions() {

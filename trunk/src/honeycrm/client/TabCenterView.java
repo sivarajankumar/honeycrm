@@ -7,6 +7,7 @@ import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.reports.SampleReport;
 import honeycrm.client.view.EmailFeedbackWidget;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -164,6 +165,12 @@ public class TabCenterView extends DecoratedTabPanel {
 	}
 
 	public void showCreateViewForModule(final String clazz) {
+		showModuleTab(clazz);
 		moduleViewMap.get(clazz).showCreateView();
+	}
+
+	public void showCreateViewForModulePrefilled(String module, String fieldId, Serializable value) {
+		showModuleTab(module);
+		moduleViewMap.get(module).showCreateViewPrefilled(fieldId, value);
 	}
 }

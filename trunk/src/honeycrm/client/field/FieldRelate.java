@@ -36,7 +36,8 @@ public class FieldRelate extends AbstractField {
 
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
-		return new RelateWidget(getRelatedClazz(), 0);
+		final long id =  (null != value && value instanceof Long && (Long) value > 0) ? (Long) value : 0;
+		return new RelateWidget(getRelatedClazz(), id);
 	}
 
 	@Override

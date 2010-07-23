@@ -2,18 +2,21 @@ package honeycrm.client.dto;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 public class DtoModuleRegistry {
 	private static DtoModuleRegistry instance = null;
 	private final Map<String, ModuleDto> moduleDtos;
-
-	private DtoModuleRegistry(final Map<String, ModuleDto> dtoModuleData) {
+	private final Map<String, Map<String, Set<String>>> relationships;
+	
+	private DtoModuleRegistry(final Map<String, ModuleDto> dtoModuleData, final Map<String, Map<String, Set<String>>> relationships) {
 		this.moduleDtos = dtoModuleData;
+		this.relationships = relationships;
 	}
 
-	public static void create(final Map<String, ModuleDto> dtoModuleData) {
+	public static void create(final Map<String, ModuleDto> dtoModuleData, final Map<String, Map<String, Set<String>>> relationships) {
 		if (null == instance) {
-			instance = new DtoModuleRegistry(dtoModuleData);
+			instance = new DtoModuleRegistry(dtoModuleData, relationships);
 		}
 	}
 
@@ -31,5 +34,9 @@ public class DtoModuleRegistry {
 
 	public Collection<ModuleDto> getDtos() {
 		return moduleDtos.values();
+	}
+	
+	public Map<String, Map<String, Set<String>>> getRelationships() {
+		return relationships;
 	}
 }

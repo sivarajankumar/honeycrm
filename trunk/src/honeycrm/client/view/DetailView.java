@@ -6,6 +6,10 @@ import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -28,6 +32,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	private final DetailViewButtonBar buttonBar;
 	private final RelationshipsContainer relationshipsContainer;
 	private Dto dto = moduleDto.createDto();
+	private Map<String, Serializable> prefilledMap = new HashMap<String, Serializable>();
 
 	/**
 	 * table containing the labels and the actual field values (or input fields if we are in edit mode).
@@ -221,8 +226,25 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	}
 
 	public void startCreating() {
-		resetFields(moduleDto.createDto(), View.CREATE);
+		resetFields(addPrefilledData(moduleDto.createDto()), View.CREATE);
 		relationshipsContainer.clear();
+	}
+
+	/**
+	 * Set all the fields in the given dto instance stored in the map storing prefilled fields.
+	 */
+	private Dto addPrefilledData(Dto dto) {
+		for (int row=0; row<dto.getFormFieldIds().length; row++) {
+			for (int col=0; col<dto.getFormFieldIds()[row].length; col++) {
+				final String fieldId = dto.getFormFieldIds()[row][col];
+				
+				if (prefilledMap.containsKey(fieldId)) {
+					dto.set(fieldId, prefilledMap.get(fieldId));
+				}
+			}
+		}
+		
+		return dto;
 	}
 
 	/**
@@ -251,5 +273,9 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 
 	public DetailViewButtonBar getButtonBar() {
 		return buttonBar;
+	}
+
+	public void prefill(String fieldId, Serializable value) {
+		prefilledMap.put(fieldId, value);
 	}
 }

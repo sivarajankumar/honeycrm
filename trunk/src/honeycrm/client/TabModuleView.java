@@ -5,6 +5,8 @@ import honeycrm.client.view.DetailView;
 import honeycrm.client.view.ListView;
 import honeycrm.client.view.ModuleButtonBar;
 
+import java.io.Serializable;
+
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -75,5 +77,10 @@ public class TabModuleView extends AbstractView {
 
 	public boolean isListViewInitialized() {
 		return listView.isInitialized();
+	}
+
+	public void showCreateViewPrefilled(String fieldId, Serializable value) {
+		detailView.prefill(fieldId, value);
+		showCreateView();
 	}
 }

@@ -4,6 +4,7 @@ import honeycrm.client.csv.CsvImporter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.server.DtoWizard;
+import honeycrm.server.RelationshipFieldTable;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class CsvImportTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		// it is required that the dto module registry is properly setup
-		DtoModuleRegistry.create(DtoWizard.instance.getDtoConfiguration());
+		DtoModuleRegistry.create(DtoWizard.instance.getDtoConfiguration(), RelationshipFieldTable.instance.getMap());
 	}
 	
 	public void testContactsImport() {

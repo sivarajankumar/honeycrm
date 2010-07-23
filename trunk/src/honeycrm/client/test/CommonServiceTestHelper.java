@@ -165,4 +165,10 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 		
 	}
 
+	@Override
+	public void getRelationships(AsyncCallback<Map<String, Map<String, Set<String>>>> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

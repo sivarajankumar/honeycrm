@@ -1,6 +1,7 @@
 package honeycrm.client.view;
 
 import honeycrm.client.LoadIndicator;
+import honeycrm.client.LoadingPanel;
 import honeycrm.client.TabCenterView;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
@@ -9,8 +10,11 @@ import honeycrm.client.dto.ListQueryResult;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.AbstractDataTable;
@@ -21,35 +25,41 @@ import com.google.gwt.visualization.client.visualizations.Table;
 import com.google.gwt.visualization.client.visualizations.Table.Options;
 
 // TODO track which items are already in the cache
-// TODO update cached items when forced to do so (everytime user opens a page the first time) AND in
+// TODO update cached items when forced to do so (every time user opens a page the first time) AND in
 // the background (polling)
-// TODO update item count periodically
+// TODO implement pagination, deletion
+// TODO use google formatters instead of field classes of honeycrm 
 public class ListView extends AbstractView {
 	protected static final int MAX_ENTRIES = 10;
 
 	private boolean itemsHaveBeenLoadedOnce = false;
-	private final Table t = new Table();
+	private final Table t;
 	private Map<Integer, Dto> rowNrToDto = new HashMap<Integer, Dto>();
 
 	public ListView(final String clazz) {
 		super(clazz);
 
 		final VerticalPanel panel = new VerticalPanel();
-		panel.add(t);
-		t.addSelectHandler(new SelectHandler() {
-			@Override
-			public void onSelect(SelectEvent event) {
-				if (t.getSelections().get(0).isRow()) {
-					final int rowNr = t.getSelections().get(0).getRow();
-					if (rowNrToDto.containsKey(rowNr)) {
-						final Dto dto = rowNrToDto.get(rowNr);
-						TabCenterView.instance().get(moduleDto.getModule()).showDetailView(dto.getId());
-					} else {
-						Window.alert("Cannot get dto of row #" + rowNr);
+
+		if (LoadingPanel.SKIP_LOADING_VISUALISATIONS) {
+			t = null;
+		} else {
+			panel.add(t = new Table());
+			t.addSelectHandler(new SelectHandler() {
+				@Override
+				public void onSelect(SelectEvent event) {
+					if (t.getSelections().get(0).isRow()) {
+						final int rowNr = t.getSelections().get(0).getRow();
+						if (rowNrToDto.containsKey(rowNr)) {
+							final Dto dto = rowNrToDto.get(rowNr);
+							TabCenterView.instance().get(moduleDto.getModule()).showDetailView(dto.getId());
+						} else {
+							Window.alert("Cannot get dto of row #" + rowNr);
+						}
 					}
 				}
-			}
-		});
+			});
+		}
 
 		// do not refresh within the constructor -> this generates too much load during login
 		// refresh();
@@ -78,7 +88,9 @@ public class ListView extends AbstractView {
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				log("received result");
-				t.draw(getTableData(result), getOptions());
+				if (!LoadingPanel.SKIP_LOADING_VISUALISATIONS) {
+					t.draw(getTableData(result), getOptions());
+				}
 				LoadIndicator.get().endLoading();
 			}
 		});
@@ -114,8 +126,15 @@ public class ListView extends AbstractView {
 			log("set header col #" + col);
 		}
 
+		final int moduleColumnCount = moduleDto.getListFieldIds().length;
+
 		data.addColumn(ColumnType.NUMBER);
-		data.setColumnLabel(moduleDto.getListFieldIds().length, "Id");
+		data.setColumnLabel(0 + moduleColumnCount, "Id");
+
+		data.addColumn(ColumnType.STRING);
+		data.setColumnLabel(1 + moduleColumnCount, getDeleteAllCheckBox().getHTML());
+
+		// final CheckBox deleteAllBox = getDeleteAllCheckBox();
 
 		log("set header colum for id");
 
@@ -143,10 +162,24 @@ public class ListView extends AbstractView {
 				}
 			}
 
-			data.setValue(row, moduleDto.getListFieldIds().length, dto.getId());
+			data.setValue(row, 0 + moduleColumnCount, dto.getId());
+			data.setValue(row, 1 + moduleColumnCount, "<input type='checkbox' name='asdasdsad' />");
 		}
 
 		return data;
+	}
+
+	private CheckBox getDeleteAllCheckBox() {
+		final CheckBox box = new CheckBox();
+
+		box.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.alert("(un-) check all");
+			}
+		});
+
+		return box;
 	}
 
 	protected int getOffsetForPage(final int page) {
