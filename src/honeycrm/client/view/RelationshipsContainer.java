@@ -3,6 +3,7 @@ package honeycrm.client.view;
 import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.LoadIndicator;
 import honeycrm.client.ServiceRegistry;
+import honeycrm.client.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
@@ -13,10 +14,17 @@ import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
 import honeycrm.client.view.AbstractView.View;
 
+import java.util.Map;
+import java.util.Set;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -64,14 +72,61 @@ class SingleRelationshipPanel extends Composite {
 		this.relatedDtoClass = relatedDto;
 		this.id = id;
 
-		final VerticalPanel panel = new VerticalPanel();
-		panel.add(getTitleLabel());
-		panel.add(table);
-		panel.setVisible(false);
+		final HorizontalPanel hpanel = new HorizontalPanel();
+		hpanel.add(getTitleLabel());
 
-		initWidget(panel);
+		/*
+		 * only add the create button if this relationship has is represented by a single id field
+		 * e.g. no create button should be displayed in the contact <-> contact relationship because
+		 * there are three different fields in each contact referencing other contacts. just
+		 * clicking the create button it is not clear which of the fields should be pre-filled.
+		 */
+		if (hasRelationshipUniqueFieldName()) {
+			hpanel.add(getCreateBtn());
+		}
 
-		refresh();
+		final VerticalPanel vpanel = new VerticalPanel();
+
+		// only do something if this relationship really exists
+		if (doesRelationshipExist()) {
+			vpanel.add(hpanel);
+			vpanel.add(table);
+			// panel.setVisible(false);
+
+			refresh();
+		}
+
+		initWidget(vpanel);
+	}
+
+	private boolean doesRelationshipExist() {
+		final Map<String, Map<String, Set<String>>> r = DtoModuleRegistry.instance().getRelationships();
+		return r.containsKey(originatingDtoClass.getModule()) && r.get(originatingDtoClass.getModule()).containsKey(relatedDtoClass);
+	}
+
+	private boolean hasRelationshipUniqueFieldName() {
+		final Map<String, Map<String, Set<String>>> r = DtoModuleRegistry.instance().getRelationships();
+		// check whether the relationship exists before accessing the map. this way we can be sure
+		// we can make the get() calls without causing a null pointer exception.
+		return doesRelationshipExist() && 1 == r.get(originatingDtoClass.getModule()).get(relatedDtoClass).size();
+	}
+
+	private Widget getCreateBtn() {
+		final Button btn = new Button("Create");
+		btn.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				final Map<String, Map<String, Set<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
+
+				/**
+				 * e.g. contactId
+				 */
+				final String fieldId = relationships.get(originatingDtoClass.getModule()).get(relatedDtoClass).iterator().next();
+
+				TabCenterView.instance().showCreateViewForModulePrefilled(originatingDtoClass.getModule(), fieldId, id);
+			}
+		});
+		return btn;
 	}
 
 	public void refresh() {
@@ -103,11 +158,12 @@ class SingleRelationshipPanel extends Composite {
 	}
 
 	private void insertRelatedDtos(ListQueryResult result) {
-		if (0 == result.getItemCount() || 0 == result.getResults().length) {
-			// hide this relationship since no entries have been found for this relationship
-			setVisible(false);
-		} else {
-			setVisible(true);
+		/*
+		 * if (0 == result.getItemCount() || 0 == result.getResults().length) { // hide this
+		 * relationship since no entries have been found for this relationship // setVisible(false);
+		 * // } else
+		 */{
+			// setVisible(true);
 
 			final int headerRows = 1;
 			final int leadingCols = 1;
@@ -137,9 +193,12 @@ class SingleRelationshipPanel extends Composite {
 		}
 	}
 
-	// Returns true if the field with the given id is a relate field representing the original dto class itself.
-	// Assume we want to display all offerings for a contact. Therefore we want to display an offerings list containing
-	// a column displaying the contact. We want to identify and skip the contact column since we already know that this
+	// Returns true if the field with the given id is a relate field representing the original dto
+	// class itself.
+	// Assume we want to display all offerings for a contact. Therefore we want to display an
+	// offerings list containing
+	// a column displaying the contact. We want to identify and skip the contact column since we
+	// already know that this
 	// offering is linked to the contact.
 	private boolean isDuplicateRelateField(final String id) {
 		return originatingDtoClass.getFieldById(id) instanceof FieldRelate && ((FieldRelate) originatingDtoClass.getFieldById(id)).getRelatedClazz().equals(relatedDtoClass);

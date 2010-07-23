@@ -276,4 +276,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		
 		log.warning("Finished full table scan: Read items in " + (System.currentTimeMillis() - before) + " ms.");
 	}
+
+	@Override
+	public Map<String, Map<String, Set<String>>> getRelationships() {
+		return RelationshipFieldTable.instance.getMap();
+	}
 }

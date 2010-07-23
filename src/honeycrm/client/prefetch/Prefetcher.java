@@ -3,6 +3,7 @@ package honeycrm.client.prefetch;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO invalidate the right cache items on every update / create
 // TODO limit cache size and apply some deletion policy (e.g. last recently used).
 // TODO otherwise cache only ever grows.
 public class Prefetcher {

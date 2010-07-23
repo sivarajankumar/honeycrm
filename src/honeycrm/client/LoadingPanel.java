@@ -20,7 +20,12 @@ import com.google.gwt.visualization.client.visualizations.ColumnChart;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.Table;
 
+// TODO bundle all startup specific requests into one single request
 public class LoadingPanel extends Composite {
+	/**
+	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
+	 */
+	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
 	private Label status = new Label();
 
 	public LoadingPanel() {
@@ -85,15 +90,19 @@ public class LoadingPanel extends Composite {
 	}
 
 	private void loadVisualisation() {
-		setStatus("Loading visualisation API..");
-
-		// only works online.. cannot test without internet
-		VisualizationUtils.loadVisualizationApi(new Runnable() {
-			@Override
-			public void run() {
-				loadConfiguration();
-			}
-		}, Table.PACKAGE, LineChart.PACKAGE, ColumnChart.PACKAGE);
+		if (SKIP_LOADING_VISUALISATIONS) {
+			loadConfiguration();
+		} else {
+			setStatus("Loading visualisation API..");
+	
+			// only works online.. cannot test without internet
+			VisualizationUtils.loadVisualizationApi(new Runnable() {
+				@Override
+				public void run() {
+					loadConfiguration();
+				}
+			}, Table.PACKAGE, LineChart.PACKAGE, ColumnChart.PACKAGE);
+		}
 	}
 
 	private void loadConfiguration() {
@@ -101,8 +110,8 @@ public class LoadingPanel extends Composite {
 
 		ServiceRegistry.commonService().getDtoConfiguration(new AsyncCallback<Map<String, ModuleDto>>() {
 			@Override
-			public void onSuccess(Map<String, ModuleDto> result) {
-				initRealUserInterface(result);
+			public void onSuccess(final Map<String, ModuleDto> dtoConfiguration) {
+				loadRelationships(dtoConfiguration);
 			}
 
 			@Override
@@ -111,13 +120,29 @@ public class LoadingPanel extends Composite {
 			}
 		});
 	}
+	
+	private void loadRelationships(final Map<String, ModuleDto> dtoConfiguration) {
+		setStatus("Loading relationships");
+		
+		ServiceRegistry.commonService().getRelationships(new AsyncCallback<Map<String,Map<String,Set<String>>>>() {
+			@Override
+			public void onSuccess(final Map<String, Map<String, Set<String>>> relationships) {
+				initRealUserInterface(dtoConfiguration, relationships);					
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Could not get relationship informatino from server side.");
+			}
+		});
+	}
 
 	private void setStatus(final String statusString) {
 		status.setText(statusString);
 	}
 
-	private void initRealUserInterface(final Map<String, ModuleDto> dtoModuleData) {
-		DtoModuleRegistry.create(dtoModuleData);
+	private void initRealUserInterface(final Map<String, ModuleDto> dtoModuleData, final Map<String, Map<String, Set<String>>> relationships) {
+		DtoModuleRegistry.create(dtoModuleData, relationships);
 
 		setStatus("Initiating user interface..");
 		this.setVisible(false);

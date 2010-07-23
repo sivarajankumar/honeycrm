@@ -22,28 +22,32 @@ public class RelationshipFieldTable {
 				final String strOrigin = DomainClassRegistry.instance.getDto(originatingDtoClass);
 				final String strRelated = DomainClassRegistry.instance.getDto(relatedDtoClass);
 
-				if (map.containsKey(strOrigin)) {
-					if (map.get(strOrigin).containsKey(strRelated)) {
-						map.get(strOrigin).get(strRelated).add(field.getName());
-					} else {
-						final Set<String> set = new HashSet<String>();
-						set.add(field.getName());
-
-						map.get(strOrigin).put(strRelated, set);
-					}
-				} else {
-					final Set<String> set = new HashSet<String>();
-					set.add(field.getName());
-
-					final Map<String, Set<String>> relatedDtoMap = new HashMap<String, Set<String>>();
-					relatedDtoMap.put(strRelated, set);
-
-					map.put(strOrigin, relatedDtoMap);
-				}
+				insertIntoMap(field, strOrigin, strRelated);
 			}
 		}
 
 		System.out.println("Map contains " + map.size() + " elements");
+	}
+
+	private void insertIntoMap(final Field field, final String strOrigin, final String strRelated) {
+		if (map.containsKey(strOrigin)) {
+			if (map.get(strOrigin).containsKey(strRelated)) {
+				map.get(strOrigin).get(strRelated).add(field.getName());
+			} else {
+				final Set<String> set = new HashSet<String>();
+				set.add(field.getName());
+
+				map.get(strOrigin).put(strRelated, set);
+			}
+		} else {
+			final Set<String> set = new HashSet<String>();
+			set.add(field.getName());
+
+			final Map<String, Set<String>> relatedDtoMap = new HashMap<String, Set<String>>();
+			relatedDtoMap.put(strRelated, set);
+
+			map.put(strOrigin, relatedDtoMap);
+		}
 	}
 
 	public Set<String> getRelationshipFieldNames(final String originatingDto, final String relatedDto) {
@@ -53,5 +57,9 @@ public class RelationshipFieldTable {
 			// return an empty set since no information exists for this combination of originating and related dto
 			return new HashSet<String>();
 		}
+	}
+
+	public Map<String, Map<String, Set<String>>> getMap() {
+		return map;
 	}
 }

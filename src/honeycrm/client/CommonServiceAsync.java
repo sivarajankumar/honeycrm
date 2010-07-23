@@ -62,4 +62,6 @@ public interface CommonServiceAsync {
 	void bulkCreate(AsyncCallback<Void> callback);
 
 	void bulkRead(AsyncCallback<Void> callback);
+
+	void getRelationships(AsyncCallback<Map<String, Map<String, Set<String>>>> callback);
 }
