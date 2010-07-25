@@ -25,7 +25,7 @@ public class LoadingPanel extends Composite {
 	/**
 	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
 	 */
-	public static final boolean SKIP_LOADING_VISUALISATIONS = true;
+	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
 	private Label status = new Label();
 
 	public LoadingPanel() {
