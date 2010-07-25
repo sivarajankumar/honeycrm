@@ -1,70 +1,186 @@
 package honeycrm.client.view;
 
 import honeycrm.client.LoadIndicator;
-import honeycrm.client.LoadingPanel;
+import honeycrm.client.ServiceRegistry;
 import honeycrm.client.TabCenterView;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.Header;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.visualization.client.AbstractDataTable;
-import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
-import com.google.gwt.visualization.client.events.SelectHandler;
-import com.google.gwt.visualization.client.visualizations.Table;
-import com.google.gwt.visualization.client.visualizations.Table.Options;
+import com.google.gwt.view.client.ListViewAdapter;
+import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionModel.SelectionChangeHandler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 // TODO track which items are already in the cache
 // TODO update cached items when forced to do so (every time user opens a page the first time) AND in
 // the background (polling)
-// TODO implement pagination, deletion
 // TODO use google formatters instead of field classes of honeycrm 
 public class ListView extends AbstractView {
 	protected static final int MAX_ENTRIES = 15;
 
 	private boolean itemsHaveBeenLoadedOnce = false;
-	private final Table t;
-	private Map<Integer, Dto> rowNrToDto = new HashMap<Integer, Dto>();
+	private final VerticalPanel panel = new VerticalPanel();
+
+	private CellTable<Dto> ct;
+	private SimplePager<Dto> pager;
+	private ListViewAdapter<Dto> lva;
 
 	public ListView(final String clazz) {
 		super(clazz);
+		initListView();
+		initWidget(panel);
+	}
 
-		final VerticalPanel panel = new VerticalPanel();
+	private Button getDeleteButton() {
+		final Button btn = new Button("Delete");
+		btn.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if (Window.confirm("Do you want to delete the selected items?")) {
+					deleteSelected(getDeletedIds());
+				}
+			}
 
-		if (LoadingPanel.SKIP_LOADING_VISUALISATIONS) {
-			t = null;
-		} else {
-			panel.add(t = new Table());
-			t.addSelectHandler(new SelectHandler() {
-				@Override
-				public void onSelect(SelectEvent event) {
-					if (t.getSelections().get(0).isRow()) {
-						final int rowNr = t.getSelections().get(0).getRow();
-						if (rowNrToDto.containsKey(rowNr)) {
-							final Dto dto = rowNrToDto.get(rowNr);
-							TabCenterView.instance().get(moduleDto.getModule()).showDetailView(dto.getId());
-						} else {
-							Window.alert("Cannot get dto of row #" + rowNr);
-						}
+			private void deleteSelected(final Set<Long> ids) {
+				LoadIndicator.get().startLoading();
+
+				ServiceRegistry.commonService().deleteAll(moduleDto.getModule(), ids, new AsyncCallback<Void>() {
+					@Override
+					public void onSuccess(Void result) {
+						LoadIndicator.get().endLoading();
+						refresh();
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						displayError(caught);
+					}
+				});
+			}
+
+			private Set<Long> getDeletedIds() {
+				final Set<Long> ids = new HashSet<Long>();
+
+				for (final Dto dto : lva.getList()) {
+					if (null != dto.get("deleteFlag") && (Boolean) dto.get("deleteFlag")) {
+						ids.add(dto.getId());
 					}
 				}
+				return ids;
+			}
+		});
+		return btn;
+	}
+
+	private void initListView() {
+		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER);
+		lva = new ListViewAdapter<Dto>();
+
+		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>();
+		selectionModel.addSelectionChangeHandler(new SelectionChangeHandler() {
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				final Dto dto = selectionModel.getSelectedObject();
+				TabCenterView.instance().get(moduleDto.getModule()).showDetailView(dto.getId());
+			}
+		});
+
+		ct.setSelectionEnabled(true);
+		ct.setSelectionModel(selectionModel);
+		ct.setPageSize(MAX_ENTRIES);
+		lva.addView(ct);
+
+		pager.firstPage();
+		panel.add(ct);
+		panel.add(pager);
+		panel.add(getDeleteButton());
+
+		initListViewHeaderRow();
+	}
+
+	private void initListViewHeaderRow() {
+		addDeleteColumn();
+
+		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
+			final String id = moduleDto.getListFieldIds()[col];
+
+			final Column<Dto, String> column = new TextColumn<Dto>() {
+				@Override
+				public String getValue(Dto object) {
+					return String.valueOf(object.get(id));
+				}
+			};
+
+			// TODO what is that for?
+			column.setFieldUpdater(new FieldUpdater<Dto, String>() {
+				@Override
+				public void update(int index, Dto object, String value) {
+					object.set(id, value);
+				}
 			});
+
+			ct.addColumn(column, moduleDto.getFieldById(id).getLabel());
+		}
+	}
+
+	private void addDeleteColumn() {
+		final Column<Dto, Boolean> delCol = new Column<Dto, Boolean>(new CheckboxCell()) {
+			@Override
+			public Boolean getValue(Dto object) {
+				return false;
+			}
+		};
+		delCol.setFieldUpdater(new FieldUpdater<Dto, Boolean>() {
+			@Override
+			public void update(int index, Dto object, Boolean value) {
+				// mark this item for later deletion
+				object.set("deleteFlag", value);
+			}
+		});
+
+		// TODO how can we observe checkbox state changes?
+		final Header<Boolean> h = new Header<Boolean>(new CheckboxCell()) {
+			@Override
+			public Boolean getValue() {
+				LogConsole.log("get value");
+				return false;
+			}
+		};
+
+		ct.addColumn(delCol, h);
+	}
+
+	private void refreshListViewValues(ListQueryResult result) {
+		ArrayList<Dto> values = new ArrayList<Dto>();
+		for (final Dto dto : result.getResults()) {
+			values.add(dto);
 		}
 
-		// do not refresh within the constructor -> this generates too much load during login
-		// refresh();
+		// give the ListViewAdapter our data
+		lva.setList(values);
 
-		initWidget(panel);
+		ct.setDataSize(result.getItemCount(), true);
 	}
 
 	private void refreshPage(final int page) {
@@ -88,9 +204,7 @@ public class ListView extends AbstractView {
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				log("received result");
-				if (!LoadingPanel.SKIP_LOADING_VISUALISATIONS) {
-					t.draw(getTableData(result), getOptions());
-				}
+				refreshListViewValues(result);
 				LoadIndicator.get().endLoading();
 			}
 		});
@@ -98,75 +212,6 @@ public class ListView extends AbstractView {
 
 	private void log(String string) {
 		LogConsole.log("[" + moduleDto.getModule() + "] " + string);
-	}
-
-	protected Options getOptions() {
-		final Options options = Options.create();
-		options.setWidth("440px");
-		options.setAlternatingRowStyle(true);
-		options.setPageSize(MAX_ENTRIES);
-		options.setAllowHtml(true);
-		// options.set("pagingSymbols", "{prev:'prev',next:'next'}");
-		return options;
-	}
-
-	protected AbstractDataTable getTableData(ListQueryResult result) {
-		log("getTableData " + result.getResults().length + " results");
-
-		final DataTable data = DataTable.create();
-		data.addRows(result.getResults().length);
-
-		log("generating header");
-		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
-			final String id = moduleDto.getListFieldIds()[col];
-
-			data.addColumn(ColumnType.STRING);
-			data.setColumnLabel(col, moduleDto.getFieldById(id).getLabel());
-
-			log("set header col #" + col);
-		}
-
-		final int moduleColumnCount = moduleDto.getListFieldIds().length;
-
-		data.addColumn(ColumnType.NUMBER);
-		data.setColumnLabel(0 + moduleColumnCount, "Id");
-
-		data.addColumn(ColumnType.STRING);
-		data.setColumnLabel(1 + moduleColumnCount, getDeleteAllCheckBox().getHTML());
-
-		// final CheckBox deleteAllBox = getDeleteAllCheckBox();
-
-		log("set header colum for id");
-
-		log("inserting real data");
-		for (int row = 0; row < result.getResults().length; row++) {
-			log("inserting row #" + row);
-			final Dto dto = result.getResults()[row];
-
-			rowNrToDto.put(row, dto);
-
-			for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
-				log("inserting (row,col)=(" + row + "," + col + ")");
-
-				final String id = moduleDto.getListFieldIds()[col];
-				log("#1 -> got id " + id);
-
-				final Widget w = dto.getFieldById(id).getWidget(View.DETAIL, dto.get(id));
-				log("#2 -> got widget " + w.getClass());
-
-				try {
-					data.setValue(row, col, String.valueOf(dto.getFieldById(id).getData(w)));
-					log("#3 -> value is set");
-				} catch (RuntimeException e) {
-					log("an exception occured during getting data from widget and inserting into table. " + e.getMessage());
-				}
-			}
-
-			data.setValue(row, 0 + moduleColumnCount, dto.getId());
-			data.setValue(row, 1 + moduleColumnCount, "<input type='checkbox' name='asdasdsad' />");
-		}
-
-		return data;
 	}
 
 	private CheckBox getDeleteAllCheckBox() {

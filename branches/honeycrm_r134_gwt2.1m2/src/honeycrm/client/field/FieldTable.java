@@ -1,9 +1,9 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.view.AbstractView.View;
 import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.ServiceTableWidget;
-import honeycrm.client.view.AbstractView.View;
 
 import java.io.Serializable;
 import java.util.List;

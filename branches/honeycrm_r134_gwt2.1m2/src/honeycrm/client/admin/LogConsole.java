@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * Simple logging console allowing arbitrary widgets to log messages.
  */
 public class LogConsole extends Composite {
-	public static final boolean ENABLED = false;
+	public static final boolean ENABLED = true;
 	private static final LogConsole instance = new LogConsole();
 	private final TextArea logWidget = new TextArea();
 

@@ -3,8 +3,8 @@ package honeycrm.client;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle.MultiWordSuggestion;
+import com.google.gwt.user.client.ui.SuggestOracle;
 
 public class FulltextSuggestOracle extends SuggestOracle {
 	private final List<MultiWordSuggestion> suggestions = new LinkedList<MultiWordSuggestion>();
