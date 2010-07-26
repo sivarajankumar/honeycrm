@@ -36,7 +36,7 @@ public class ModuleButtonBar extends AbstractView {
 	
 	private Widget getImportButton(final String module) {
 		final Button button = new Button("Import");
-		button.setStyleName("gwt-Button left");
+		button.setStyleName("gwt-Button right");
 		
 		button.addClickHandler(new ClickHandler() {
 			@Override

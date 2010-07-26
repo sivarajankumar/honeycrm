@@ -99,6 +99,14 @@ body {
 	width: 400px; /* make this very big to assure it dominates the ui: users should encouraged to use this a lot */
 }
 
+.right {
+	float: right;
+}
+
+.gwt-TabPanelBottom {
+	padding: 0px ! important; 
+}
+
 /* everything that should be aligned to the left */
 .left {
 	float: left;
@@ -156,10 +164,9 @@ body {
 }
 
 .list_view {
-/*	width: 30%; */
 	float: left;
 	padding: 5px;
-	width: 450px;
+	width: 50%;
 }
 
 .under_list_panel {
@@ -234,6 +241,10 @@ tr.table_row:active {
 .gwt-HTML ul {
 	margin-top: 0px;
 	margin-bottom: 0px;
+}
+
+.tab_panel {
+	padding: 0px;
 }
 
 tr {
