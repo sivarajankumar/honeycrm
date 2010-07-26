@@ -19,7 +19,7 @@ import org.compass.annotations.SearchableProperty;
 
 @PersistenceCapable
 @Searchable
-@ListViewable( { "name", "phoneOffice" })
+@ListViewable( { "name", "website", "phoneOffice" })
 @DetailViewable( { "name,parentId", "responsibleId", "email,phoneOffice", "website,phoneOther", "rating,annualRevenue", "industry,employees", "tickerSymbol", "shippingAddress", "billingAddress" })
 @Quicksearchable( { "name" })
 public class Account extends AbstractEntity {
