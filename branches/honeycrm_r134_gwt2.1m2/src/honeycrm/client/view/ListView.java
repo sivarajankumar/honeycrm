@@ -6,11 +6,17 @@ import honeycrm.client.TabCenterView;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.misc.StringAbbreviation;
+import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.Prefetcher;
+import honeycrm.client.prefetch.ServerCallback;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -29,7 +35,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListViewAdapter;
+import com.google.gwt.view.client.PagingListView;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeHandler;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -39,8 +47,10 @@ import com.google.gwt.view.client.SingleSelectionModel;
 // the background (polling)
 // TODO use google formatters instead of field classes of honeycrm 
 public class ListView extends AbstractView {
-	protected static final int MAX_ENTRIES = 15;
+	protected static final int DEFAULT_MAX_ENTRIES = 10;
 
+	private int pageSize = DEFAULT_MAX_ENTRIES;
+	private int currentPage = -1;
 	private boolean showTitle;
 	private Button[] additionalButtons;
 	private boolean itemsHaveBeenLoadedOnce = false;
@@ -49,16 +59,12 @@ public class ListView extends AbstractView {
 	private CellTable<Dto> ct;
 	private SimplePager<Dto> pager;
 	private ListViewAdapter<Dto> lva;
-	
+
 	protected final Panel buttonBar = new HorizontalPanel();
 
 	public ListView(final String clazz) {
 		super(clazz);
 		initWidget(panel);
-	}
-	
-	public void setAdditionalButtons(Button ... additionalButtons) {
-		this.additionalButtons = additionalButtons;
 	}
 
 	private Button getDeleteButton() {
@@ -103,7 +109,22 @@ public class ListView extends AbstractView {
 	}
 
 	protected void initListView() {
-		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER);
+		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER) {
+			public void onRangeOrSizeChanged(final PagingListView<Dto> listView) {
+				super.onRangeOrSizeChanged(listView);
+
+				/**
+				 * retrieve items of the selected page
+				 */
+				final int newPage = 1 + listView.getPageStart() / listView.getPageSize();
+				final boolean changedPage = newPage != currentPage;
+
+				if (changedPage) {
+					refreshPage(newPage);
+				}
+			};
+		};
+
 		lva = new ListViewAdapter<Dto>();
 
 		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>();
@@ -117,27 +138,40 @@ public class ListView extends AbstractView {
 
 		ct.setSelectionEnabled(true);
 		ct.setSelectionModel(selectionModel);
-		ct.setPageSize(MAX_ENTRIES);
+		ct.setPageSize(pageSize);
 		lva.addView(ct);
 
 		pager.firstPage();
-		panel.add(buttonBar);
-		panel.add(ct);
-		panel.add(pager);
+
+		/**
+		 * Insert button bar before the rest of the table if the title should be shown. Display button bar right under the table otherwise.
+		 */
+		if (showTitle) {
+			panel.add(buttonBar);
+			insertTable();
+		} else {
+			insertTable();
+			panel.add(buttonBar);
+		}
 
 		initButtonBar();
 		initListViewHeaderRow();
+	}
+
+	private void insertTable() {
+		panel.add(ct);
+		panel.add(pager);
 	}
 
 	private void initButtonBar() {
 		if (showTitle) {
 			buttonBar.add(getTitleLabel());
 		}
-		
+
 		buttonBar.add(getDeleteButton());
-		
+
 		if (null != additionalButtons) {
-			for (final Button additionalButton: additionalButtons) {
+			for (final Button additionalButton : additionalButtons) {
 				buttonBar.add(additionalButton);
 			}
 		}
@@ -152,7 +186,13 @@ public class ListView extends AbstractView {
 			final Column<Dto, String> column = new TextColumn<Dto>() {
 				@Override
 				public String getValue(Dto object) {
+					// if (moduleDto.getFieldById(id) instanceof FieldRelate) {
+					// final Widget relateWidget = moduleDto.getFieldById(id).getWidget(View.LIST, object.get(id));
+					// return StringAbbreviation.shorten(String.valueOf(moduleDto.getFieldById(id).getData(relateWidget)), 10);
+					// return StringAbbreviation.shorten(String.valueOf(object.get(id)), 7);
+					// } else {
 					return String.valueOf(object.get(id));
+					// }
 				}
 			};
 
@@ -200,7 +240,7 @@ public class ListView extends AbstractView {
 			initListView();
 			itemsHaveBeenLoadedOnce = true;
 		}
-		
+
 		ArrayList<Dto> values = new ArrayList<Dto>();
 		for (final Dto dto : result.getResults()) {
 			values.add(dto);
@@ -208,8 +248,12 @@ public class ListView extends AbstractView {
 
 		// give the ListViewAdapter our data
 		lva.setList(values);
+		// lva.refresh();
 
+		// ct.setPageStart((currentPage - 1) * MAX_ENTRIES + 1);
+		// if (0 == ct.getDataSize()) {
 		ct.setDataSize(result.getItemCount(), true);
+		// }
 	}
 
 	private void refreshPage(final int page) {
@@ -222,16 +266,18 @@ public class ListView extends AbstractView {
 		LoadIndicator.get().startLoading();
 		log("started loading");
 
-		commonService.getAll(moduleDto.getModule(), offset, offset + MAX_ENTRIES, new AsyncCallback<ListQueryResult>() {
+		commonService.getAll(moduleDto.getModule(), offset, offset + pageSize, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				log("error");
 				displayError(caught);
+				LoadIndicator.get().endLoading();
 			}
 
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				log("received result");
+				currentPage = page;
 				refreshListViewValues(result);
 				LoadIndicator.get().endLoading();
 			}
@@ -242,21 +288,8 @@ public class ListView extends AbstractView {
 		LogConsole.log("[" + moduleDto.getModule() + "] " + string);
 	}
 
-	private CheckBox getDeleteAllCheckBox() {
-		final CheckBox box = new CheckBox();
-
-		box.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				Window.alert("(un-) check all");
-			}
-		});
-
-		return box;
-	}
-
 	protected int getOffsetForPage(final int page) {
-		return (-1 == page) ? (0) : (page - 1) * MAX_ENTRIES;
+		return (-1 == page) ? (0) : (page - 1) * pageSize;
 	}
 
 	public void refresh() {
@@ -274,9 +307,17 @@ public class ListView extends AbstractView {
 	public boolean isInitialized() {
 		return itemsHaveBeenLoadedOnce;
 	}
+	
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
 
 	public void setShowTitle(boolean showTitle) {
 		this.showTitle = showTitle;
+	}
+
+	public void setAdditionalButtons(Button... additionalButtons) {
+		this.additionalButtons = additionalButtons;
 	}
 
 	private Label getTitleLabel() {

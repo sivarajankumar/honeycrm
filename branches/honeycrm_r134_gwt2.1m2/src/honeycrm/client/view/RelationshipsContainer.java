@@ -63,6 +63,8 @@ class SingleRelationshipPanel extends ListView {
 		super(originatingDto.getModule());
 		
 		setShowTitle(true);
+		setPageSize(5);
+		
 		this.originatingDtoClass = originatingDto;
 		this.relatedDtoClass = relatedDto;
 		this.id = id;

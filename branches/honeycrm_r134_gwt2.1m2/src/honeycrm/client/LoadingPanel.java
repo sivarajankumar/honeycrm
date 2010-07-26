@@ -27,8 +27,7 @@ public class LoadingPanel extends Composite {
 	 */
 	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
 	private HTML status = new HTML();
-	private long startTime = System.currentTimeMillis();
-	private long lastFinishTime = System.currentTimeMillis();
+	private long lastFinishTime = -1;
 
 	public LoadingPanel() {
 		status.setSize("400px", "400px");
@@ -136,13 +135,14 @@ public class LoadingPanel extends Composite {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Could not get relationship informatino from server side.");
+				Window.alert("Could not get relationship information from server side.");
 			}
 		});
 	}
 
 	private void setStatus(final String statusString) {
-		status.setHTML(status.getHTML() + statusString + " +" + (System.currentTimeMillis() - lastFinishTime) + "ms<br />");
+		final String timing = (lastFinishTime > 0) ? (" +" + (System.currentTimeMillis() - lastFinishTime) + "ms<br />") : "<br />";
+		status.setHTML(status.getHTML() + timing + statusString);
 		lastFinishTime = System.currentTimeMillis();
 	}
 
