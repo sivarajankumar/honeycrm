@@ -18,7 +18,7 @@ import org.compass.annotations.SearchableProperty;
 
 @PersistenceCapable
 @Searchable
-@ListViewable( { "name", "email", "phone" })
+@ListViewable( { "name", "email" })
 @DetailViewable( { "name,accountID", "responsibleId", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId",
 		"child1Id,child2Id" })
 @Quicksearchable( { "name" })
