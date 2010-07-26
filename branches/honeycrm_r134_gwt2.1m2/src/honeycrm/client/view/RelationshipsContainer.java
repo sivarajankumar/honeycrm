@@ -37,6 +37,8 @@ public class RelationshipsContainer extends AbstractView {
 			public void onSuccess(Map<String, ListQueryResult> result) {
 				LoadIndicator.get().endLoading();
 
+				panel.clear();
+				
 				/**
 				 * Sort relationship names to guarantee same order across all modules.
 				 */
