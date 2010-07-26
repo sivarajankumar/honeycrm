@@ -13,7 +13,6 @@ import java.util.Set;
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -26,6 +25,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListViewAdapter;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
@@ -39,17 +41,24 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class ListView extends AbstractView {
 	protected static final int MAX_ENTRIES = 15;
 
+	private boolean showTitle;
+	private Button[] additionalButtons;
 	private boolean itemsHaveBeenLoadedOnce = false;
-	private final VerticalPanel panel = new VerticalPanel();
+	protected final VerticalPanel panel = new VerticalPanel();
 
 	private CellTable<Dto> ct;
 	private SimplePager<Dto> pager;
 	private ListViewAdapter<Dto> lva;
+	
+	protected final Panel buttonBar = new HorizontalPanel();
 
 	public ListView(final String clazz) {
 		super(clazz);
-		initListView();
 		initWidget(panel);
+	}
+	
+	public void setAdditionalButtons(Button ... additionalButtons) {
+		this.additionalButtons = additionalButtons;
 	}
 
 	private Button getDeleteButton() {
@@ -93,7 +102,7 @@ public class ListView extends AbstractView {
 		return btn;
 	}
 
-	private void initListView() {
+	protected void initListView() {
 		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER);
 		lva = new ListViewAdapter<Dto>();
 
@@ -102,7 +111,7 @@ public class ListView extends AbstractView {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				final Dto dto = selectionModel.getSelectedObject();
-				TabCenterView.instance().get(moduleDto.getModule()).showDetailView(dto.getId());
+				TabCenterView.instance().showModuleTabWithId(dto.getModule(), dto.getId());
 			}
 		});
 
@@ -112,11 +121,26 @@ public class ListView extends AbstractView {
 		lva.addView(ct);
 
 		pager.firstPage();
+		panel.add(buttonBar);
 		panel.add(ct);
 		panel.add(pager);
-		panel.add(getDeleteButton());
 
+		initButtonBar();
 		initListViewHeaderRow();
+	}
+
+	private void initButtonBar() {
+		if (showTitle) {
+			buttonBar.add(getTitleLabel());
+		}
+		
+		buttonBar.add(getDeleteButton());
+		
+		if (null != additionalButtons) {
+			for (final Button additionalButton: additionalButtons) {
+				buttonBar.add(additionalButton);
+			}
+		}
 	}
 
 	private void initListViewHeaderRow() {
@@ -171,7 +195,12 @@ public class ListView extends AbstractView {
 		ct.addColumn(delCol, h);
 	}
 
-	private void refreshListViewValues(ListQueryResult result) {
+	protected void refreshListViewValues(ListQueryResult result) {
+		if (!itemsHaveBeenLoadedOnce) {
+			initListView();
+			itemsHaveBeenLoadedOnce = true;
+		}
+		
 		ArrayList<Dto> values = new ArrayList<Dto>();
 		for (final Dto dto : result.getResults()) {
 			values.add(dto);
@@ -186,7 +215,6 @@ public class ListView extends AbstractView {
 	private void refreshPage(final int page) {
 		log("refreshPage " + page);
 
-		itemsHaveBeenLoadedOnce = true;
 		final int offset = getOffsetForPage(page);
 
 		assert 0 <= offset;
@@ -245,5 +273,16 @@ public class ListView extends AbstractView {
 
 	public boolean isInitialized() {
 		return itemsHaveBeenLoadedOnce;
+	}
+
+	public void setShowTitle(boolean showTitle) {
+		this.showTitle = showTitle;
+	}
+
+	private Label getTitleLabel() {
+		final Label title = new Label(moduleDto.getTitle() + "s");
+		// TODO add style for this in custom css file
+		title.setStyleName("relationship_title");
+		return title;
 	}
 }

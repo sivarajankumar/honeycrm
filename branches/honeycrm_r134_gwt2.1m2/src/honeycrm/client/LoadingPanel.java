@@ -10,8 +10,8 @@ import java.util.Set;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -26,9 +26,13 @@ public class LoadingPanel extends Composite {
 	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
 	 */
 	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
-	private Label status = new Label();
+	private HTML status = new HTML();
+	private long startTime = System.currentTimeMillis();
+	private long lastFinishTime = System.currentTimeMillis();
 
 	public LoadingPanel() {
+		status.setSize("400px", "400px");
+
 		final Panel vpanel = new VerticalPanel();
 		vpanel.setStyleName("loading_panel");
 		// TODO add nice loading image
@@ -81,7 +85,7 @@ public class LoadingPanel extends Composite {
 			public void onSuccess(Void result) {
 				loadVisualisation();
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Could not wakeup server side. Please try again later.");
@@ -94,7 +98,7 @@ public class LoadingPanel extends Composite {
 			loadConfiguration();
 		} else {
 			setStatus("Loading visualisation API..");
-	
+
 			// only works online.. cannot test without internet
 			VisualizationUtils.loadVisualizationApi(new Runnable() {
 				@Override
@@ -120,16 +124,16 @@ public class LoadingPanel extends Composite {
 			}
 		});
 	}
-	
+
 	private void loadRelationships(final Map<String, ModuleDto> dtoConfiguration) {
 		setStatus("Loading relationships");
-		
-		ServiceRegistry.commonService().getRelationships(new AsyncCallback<Map<String,Map<String,Set<String>>>>() {
+
+		ServiceRegistry.commonService().getRelationships(new AsyncCallback<Map<String, Map<String, Set<String>>>>() {
 			@Override
 			public void onSuccess(final Map<String, Map<String, Set<String>>> relationships) {
-				initRealUserInterface(dtoConfiguration, relationships);					
+				initRealUserInterface(dtoConfiguration, relationships);
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Could not get relationship informatino from server side.");
@@ -138,7 +142,8 @@ public class LoadingPanel extends Composite {
 	}
 
 	private void setStatus(final String statusString) {
-		status.setText(statusString);
+		status.setHTML(status.getHTML() + statusString + " +" + (System.currentTimeMillis() - lastFinishTime) + "ms<br />");
+		lastFinishTime = System.currentTimeMillis();
 	}
 
 	private void initRealUserInterface(final Map<String, ModuleDto> dtoModuleData, final Map<String, Map<String, Set<String>>> relationships) {

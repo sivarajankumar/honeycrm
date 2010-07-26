@@ -163,7 +163,7 @@ public class TabCenterView extends DecoratedTabPanel {
 		}
 		selectTab(tabPositionMap.get(clazz));
 	}
-
+	
 	public void showCreateViewForModule(final String clazz) {
 		showModuleTab(clazz);
 		moduleViewMap.get(clazz).showCreateView();
