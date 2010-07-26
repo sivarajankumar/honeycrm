@@ -45,8 +45,6 @@ public interface CommonServiceAsync {
 
 	void wakeupServer(AsyncCallback<Void> callback);
 
-	void getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex, AsyncCallback<ListQueryResult> callback);
-
 	void fulltextSearchForModule(String dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult> callback);
 
 	void feedback(String message, AsyncCallback<Void> callback);
@@ -64,4 +62,6 @@ public interface CommonServiceAsync {
 	void bulkRead(AsyncCallback<Void> callback);
 
 	void getRelationships(AsyncCallback<Map<String, Map<String, Set<String>>>> callback);
+
+	void getAllRelated(Long id, String relatedDtoIndex, AsyncCallback<Map<String, ListQueryResult>> callback);
 }

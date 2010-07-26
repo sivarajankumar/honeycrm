@@ -70,12 +70,6 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	}
 
 	@Override
-	public void getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex, AsyncCallback<ListQueryResult> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void getAnnuallyOfferingVolumes(AsyncCallback<Map<Integer, Double>> callback) {
 		// TODO Auto-generated method stub
 
@@ -167,6 +161,12 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 
 	@Override
 	public void getRelationships(AsyncCallback<Map<String, Map<String, Set<String>>>> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAllRelated(Long id, String relatedDtoIndex, AsyncCallback<Map<String, ListQueryResult>> callback) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -200,11 +200,6 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public ListQueryResult getAllRelated(String originatingDtoIndex, Long id, String relatedDtoIndex) {
-		return reader.getAllRelated(originatingDtoIndex, id, relatedDtoIndex);
-	}
-
-	@Override
 	public ListQueryResult fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
 		return fulltext.fulltextSearchForModule(dtoIndex, query, from, to);
 	}
@@ -280,5 +275,10 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public Map<String, Map<String, Set<String>>> getRelationships() {
 		return RelationshipFieldTable.instance.getMap();
+	}
+
+	@Override
+	public Map<String, ListQueryResult> getAllRelated(Long id, String relatedDtoIndex) {
+		return reader.getAllRelated(id, relatedDtoIndex);
 	}
 }

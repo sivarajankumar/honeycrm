@@ -33,8 +33,8 @@ public interface CommonService extends RemoteService {
 
 	public ListQueryResult fulltextSearch(String query, int from, int to);
 
-	public ListQueryResult getAllRelated(final String originatingDtoIndex, final Long id, final String relatedDtoIndex);
-
+	public Map<String, ListQueryResult> getAllRelated(final Long id, final String relatedDtoIndex);
+	
 	public ListQueryResult fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
 
 	// update

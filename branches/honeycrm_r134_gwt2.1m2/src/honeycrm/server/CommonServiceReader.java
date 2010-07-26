@@ -5,7 +5,9 @@ import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.Query;
@@ -131,7 +133,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
-	public ListQueryResult getAllRelated(String originating, Long id, String related) {
+	private ListQueryResult getAllRelated(String originating, Long id, String related) {
 		final Set<AbstractEntity> result = new HashSet<AbstractEntity>();
 
 		/**
@@ -161,4 +163,16 @@ public class CommonServiceReader extends AbstractCommonService {
 		};
 	}
 
+	public Map<String, ListQueryResult> getAllRelated(final Long id, final String related) {
+		final Map<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
+		final Map<String, Map<String, Set<String>>> relations = RelationshipFieldTable.instance.getMap();
+		
+		for (final String originating: relations.keySet()) {
+			if (relations.get(originating).containsKey(related)) {
+				map.put(originating, getAllRelated(originating, id, related));
+			}
+		}
+		
+		return map;
+	}
 }

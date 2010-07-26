@@ -6,17 +6,11 @@ import honeycrm.client.TabCenterView;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.field.FieldRelate;
-import honeycrm.client.misc.StringAbbreviation;
-import honeycrm.client.prefetch.Consumer;
-import honeycrm.client.prefetch.Prefetcher;
-import honeycrm.client.prefetch.ServerCallback;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -30,12 +24,10 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListViewAdapter;
 import com.google.gwt.view.client.PagingListView;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
@@ -47,7 +39,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 // the background (polling)
 // TODO use google formatters instead of field classes of honeycrm 
 public class ListView extends AbstractView {
-	protected static final int DEFAULT_MAX_ENTRIES = 10;
+	protected static final int DEFAULT_MAX_ENTRIES = 15;
 
 	private int pageSize = DEFAULT_MAX_ENTRIES;
 	private int currentPage = -1;
@@ -110,17 +102,23 @@ public class ListView extends AbstractView {
 
 	protected void initListView() {
 		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER) {
+			@Override
 			public void onRangeOrSizeChanged(final PagingListView<Dto> listView) {
 				super.onRangeOrSizeChanged(listView);
 
 				/**
-				 * retrieve items of the selected page
+				 * only do something if items have already been loaded
 				 */
-				final int newPage = 1 + listView.getPageStart() / listView.getPageSize();
-				final boolean changedPage = newPage != currentPage;
+				if (itemsHaveBeenLoadedOnce) {
+					/**
+					 * retrieve items of the selected page
+					 */
+					final int newPage = 1 + listView.getPageStart() / listView.getPageSize();
+					final boolean changedPage = newPage != currentPage;
 
-				if (changedPage) {
-					refreshPage(newPage);
+					if (changedPage) {
+						refreshPage(newPage);
+					}
 				}
 			};
 		};
@@ -256,7 +254,7 @@ public class ListView extends AbstractView {
 		// }
 	}
 
-	private void refreshPage(final int page) {
+	protected void refreshPage(final int page) {
 		log("refreshPage " + page);
 
 		final int offset = getOffsetForPage(page);
@@ -307,7 +305,7 @@ public class ListView extends AbstractView {
 	public boolean isInitialized() {
 		return itemsHaveBeenLoadedOnce;
 	}
-	
+
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
