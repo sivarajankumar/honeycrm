@@ -5,6 +5,9 @@ import honeycrm.client.ServiceRegistry;
 import honeycrm.client.TabCenterView;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.prefetch.Consumer;
+import honeycrm.client.prefetch.Prefetcher;
+import honeycrm.client.prefetch.ServerCallback;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -30,31 +33,40 @@ public class RelationshipsContainer extends AbstractView {
 	public void refresh(final Long relatedId) {
 		clear();
 
-		LoadIndicator.get().startLoading();
-
-		ServiceRegistry.commonService().getAllRelated(relatedId, moduleDto.getModule(), new AsyncCallback<Map<String, ListQueryResult>>() {
+		Prefetcher.instance.get(new Consumer<Map<String, ListQueryResult>>() {
 			@Override
-			public void onSuccess(Map<String, ListQueryResult> result) {
-				LoadIndicator.get().endLoading();
-
+			public void setValueAsynch(Map<String, ListQueryResult> value) {
 				panel.clear();
 				
 				/**
 				 * Sort relationship names to guarantee same order across all modules.
 				 */
-				final List<String> originatingNames = new LinkedList<String>(result.keySet());
+				final List<String> originatingNames = new LinkedList<String>(value.keySet());
 				Collections.sort(originatingNames);
 
 				for (final String originating : originatingNames) {
-					panel.add(new SingleRelationshipPanel(originating, relatedId, moduleDto.getModule(), result.get(originating)));
+					panel.add(new SingleRelationshipPanel(originating, relatedId, moduleDto.getModule(), value.get(originating)));
 				}
 			}
-
+		}, new ServerCallback<Map<String, ListQueryResult>>() {
 			@Override
-			public void onFailure(Throwable caught) {
-				displayError(caught);
+			public void doRpc(final Consumer<Map<String, ListQueryResult>> internalCacheCallback) {
+				LoadIndicator.get().startLoading();
+
+				ServiceRegistry.commonService().getAllRelated(relatedId, moduleDto.getModule(), new AsyncCallback<Map<String, ListQueryResult>>() {
+					@Override
+					public void onSuccess(Map<String, ListQueryResult> result) {
+						LoadIndicator.get().endLoading();
+						internalCacheCallback.setValueAsynch(result);
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						displayError(caught);
+					}
+				});
 			}
-		});
+		}, 60*1000, relatedId, moduleDto.getModule());
 	}
 
 	/**

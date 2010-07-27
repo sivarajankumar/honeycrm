@@ -1,28 +1,30 @@
 package honeycrm.client;
 
-import honeycrm.client.view.AbstractView;
 import honeycrm.client.view.DetailView;
 import honeycrm.client.view.ListView;
 import honeycrm.client.view.ModuleButtonBar;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
-public class TabModuleView extends AbstractView {
+public class TabModuleView extends DockLayoutPanel {
 	private final DetailView detailView;
 	private final ListView listView;
 
 	public TabModuleView(final String clazz) {
-		super(clazz);
-
+		super(Unit.PX);
+		// super(clazz);
+		
 		listView = new ListView(clazz);
+		listView.addStyleName("list_view");
 		detailView = new DetailView(clazz);
-		detailView.setStyleName("detail_view_content");
+		detailView.addStyleName("detail_view_content");
 
-		final FlowPanel content = new FlowPanel();
+/*		final FlowPanel content = new FlowPanel();
 		content.setStyleName("tab_content");
 
 		final FlowPanel viewPanel = new FlowPanel();
@@ -33,22 +35,32 @@ public class TabModuleView extends AbstractView {
 		final VerticalPanel listPanel = new VerticalPanel();
 		listPanel.setStyleName("list_view");
 		listPanel.add(listView);
-
-		final FlowPanel hor = new FlowPanel();
+*/
+		final SplitLayoutPanel splitPanel = new SplitLayoutPanel();
+		splitPanel.addWest(new ScrollPanel(listView), 500);
+		splitPanel.add(new ScrollPanel(detailView));
+		//splitPanel.addStyleName("content");
+		// splitPanel.forceLayout();
+	//	splitPanel.setLayoutData()
+		
+/*		final FlowPanel hor = new FlowPanel();
 		hor.setStyleName("content");
 		hor.add(listPanel);
 		hor.add(viewPanel);
 		hor.add(new HTML("<div class='clear'></div>"));
-
-		content.add(new ModuleButtonBar(clazz));
-		content.add(hor);
-
+*/
+		addNorth(new ModuleButtonBar(clazz), 40);
+	
+		add(splitPanel);
+//		content.add(new ModuleButtonBar(clazz));
+		// add(splitPanel);
+		
 /*		FlowPanel h = new FlowPanel();
 		h.add(listView);
 		h.add(detailView);
 		
 		initWidget(h);*/
-		initWidget(content);
+//		initWidget(content);
 	}
 
 	public void showDetailView(long id) {

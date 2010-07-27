@@ -7,40 +7,42 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.ColumnChart;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.Table;
 
 // TODO bundle all startup specific requests into one single request
-public class LoadingPanel extends Composite {
+public class LoadingPanel extends DockLayoutPanel {
 	/**
 	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
 	 */
-	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
+	public static final boolean SKIP_LOADING_VISUALISATIONS = true;
 	private HTML status = new HTML();
 	private long lastFinishTime = -1;
 
 	public LoadingPanel() {
+		super(Unit.PX);
 		status.setSize("400px", "400px");
 
-		final Panel vpanel = new VerticalPanel();
-		vpanel.setStyleName("loading_panel");
+		status.setStyleName("loading_panel");
 		// TODO add nice loading image
-		vpanel.add(status);
-		initWidget(vpanel);
-
+		add(status);
+		
+		// initWidget(vpanel);
+		
 		prefetchImages();
 	}
-
+	
 	/**
 	 * Pre-fetch all google web toolkit default images
 	 */
@@ -150,10 +152,23 @@ public class LoadingPanel extends Composite {
 		DtoModuleRegistry.create(dtoModuleData, relationships);
 
 		setStatus("Initiating user interface..");
-		this.setVisible(false);
+		remove(status);
 		// TODO this has no effect. i hope the user has a giant screen because currently scrolling
 		// is not working at all.
 		Window.enableScrolling(true);
-		RootLayoutPanel.get().add(new TabLayout());
+		
+		addNorth(new Header(), 40);
+		
+		SplitLayoutPanel p = new SplitLayoutPanel();
+		p.addWest(new Label("south"), 400);
+		p.add(new Label("rechts"));
+		p.forceLayout();
+		
+		final TabLayoutPanel tab = new TabLayoutPanel(20, Unit.PX);
+		tab.add(p, "Tab1");
+		tab.add(new Label("zwei"), "tab2");
+		// add(tab);
+		
+		add(TabCenterView.instance());
 	}
 }

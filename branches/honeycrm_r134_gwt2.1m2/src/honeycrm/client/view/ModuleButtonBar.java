@@ -4,9 +4,9 @@ import honeycrm.client.view.csvimport.CsvImportWidget;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -20,9 +20,11 @@ public class ModuleButtonBar extends AbstractView {
 		panel.setStyleName("search_bar");
 		panel.add(new ModuleFulltextWidget(module));
 		panel.add(getAdvancedSearchButton());
-		panel.add(new ModuleExportButtonBar(module));
+		panel.add(getExportButton("CSV", "csv"));
+		panel.add(getExportButton("XLS", "xls"));
+		panel.add(getExportButton("PDF", "pdf"));
 		panel.add(getImportButton(module));
-		panel.add(new HTML("<div class='clear'></div>"));
+// 		panel.add(new HTML("<div class='clear'></div>"));
 
 		initWidget(panel);
 	}
@@ -30,13 +32,13 @@ public class ModuleButtonBar extends AbstractView {
 	private Widget getAdvancedSearchButton() {
 		// TODO implement on click event properly
 		final Button button = new Button("Advanced Search");
-		button.setStyleName("gwt-Button left");
+		button.addStyleName("left");
 		return button;
 	}
 	
 	private Widget getImportButton(final String module) {
 		final Button button = new Button("Import");
-		button.setStyleName("gwt-Button right");
+		button.addStyleName("right");
 		
 		button.addClickHandler(new ClickHandler() {
 			@Override
@@ -46,5 +48,17 @@ public class ModuleButtonBar extends AbstractView {
 		});
 		
 		return button;		
+	}
+	
+	private Button getExportButton(final String label, final String historyTokenAppendix) {
+		final Button button = new Button(label);
+		button.addStyleName("right");
+		button.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				History.newItem(moduleDto.getHistoryToken() + " " + historyTokenAppendix);
+			}
+		});
+		return button;
 	}
 }

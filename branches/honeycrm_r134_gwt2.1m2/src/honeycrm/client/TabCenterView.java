@@ -12,19 +12,21 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 // TODO update history token when a new tab is selected
-public class TabCenterView extends DecoratedTabPanel {
+public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler<String> {
 	private static TabCenterView instance = new TabCenterView();
 
 	// use list instead of set to make sure the sequence stays the same
@@ -44,7 +46,11 @@ public class TabCenterView extends DecoratedTabPanel {
 	}
 
 	private TabCenterView() {
+		super(30, Unit.PX);
 		int tabPos = 0;
+		
+		addStyleName("body");
+		addStyleName("tab_layout");
 
 		// this.setSize("640px", "300px");
 
@@ -109,7 +115,8 @@ public class TabCenterView extends DecoratedTabPanel {
 			 * @Override public void onMouseOut(MouseOutEvent event) { createBtn.setVisible(false); } });
 			 */
 
-			add(new ScrollPanel(view), titlePanel);
+			// add(view, moduleDto.getTitle() + "s");
+			add((view), titlePanel);
 		}
 
 		add(new AdminWidget(), "Admin");
@@ -139,6 +146,9 @@ public class TabCenterView extends DecoratedTabPanel {
 
 		LogConsole.log("created center view");
 
+		History.addValueChangeHandler(this);
+        History.fireCurrentHistoryState();
+		
 		selectTab(0);
 		// select last tab (dashboard) 
 		//	selectTab(getTabBar().getTabCount() - 1);
@@ -172,5 +182,20 @@ public class TabCenterView extends DecoratedTabPanel {
 	public void showCreateViewForModulePrefilled(String module, String fieldId, Serializable value) {
 		showModuleTab(module);
 		moduleViewMap.get(module).showCreateViewPrefilled(fieldId, value);
+	}
+
+	@Override
+	public void onValueChange(ValueChangeEvent<String> event) {
+		final String[] token = event.getValue().split("\\s+");
+
+		if (2 == token.length) {
+			if ("create".equals(token[1])) {
+				showCreateViewForModule(token[0]);
+			} else {
+				showModuleTabWithId(token[0], Long.valueOf(token[1]));
+			}
+		} else if (1 == token.length) {
+			showModuleTab(token[0]);
+		}
 	}
 }
