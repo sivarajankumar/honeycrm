@@ -62,6 +62,11 @@ body {
 	width: 98%
 }
 
+.create_button {
+	margin-right: 5px ! important;	
+	font-weight: normal ! important;
+}
+
 .header a {
 	color: white;	
 }
@@ -98,6 +103,7 @@ body {
 
 .module_search {
 	float: left;
+	margin-right: 5px;
 }	
 	
 

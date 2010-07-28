@@ -11,6 +11,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.visualization.client.AbstractDataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
@@ -62,7 +63,7 @@ public class SampleReport extends Composite {
 			}.schedule(10 * 1000);
 		}
 		
-		initWidget(p);
+		initWidget(new ScrollPanel(p));
 	}
 
 	private Options getAreaOptions() {

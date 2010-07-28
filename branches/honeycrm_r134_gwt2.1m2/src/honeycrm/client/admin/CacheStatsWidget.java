@@ -32,7 +32,7 @@ public class CacheStatsWidget extends Composite {
 			public void run() {
 				updateStats();
 			}
-		}.scheduleRepeating(1000);
+		}.scheduleRepeating(10*1000);
 
 		initWidget(panel);
 	}

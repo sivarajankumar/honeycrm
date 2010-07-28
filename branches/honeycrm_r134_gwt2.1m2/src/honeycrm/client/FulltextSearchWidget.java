@@ -6,6 +6,7 @@ import honeycrm.client.dto.ListQueryResult;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -30,6 +31,12 @@ public class FulltextSearchWidget extends SuggestBox {
 		addKeyPressHandler(new KeyPressHandler() {
 			@Override
 			public void onKeyPress(KeyPressEvent event) {
+				if (KeyCodes.KEY_ESCAPE == event.getNativeEvent().getKeyCode()) {
+					setText("");
+					emptySuggestOracle();
+					return;
+				}
+				
 				final String queryString = (getText() + event.getCharCode()).trim();
 
 				if (!queryString.equals(lastQueryString)) {

@@ -9,6 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,11 +20,11 @@ public class EmailFeedbackWidget extends Composite {
 
 	public EmailFeedbackWidget() {
 		final VerticalPanel panel = new VerticalPanel();
-		panel.setStyleName("content");
+		// panel.setStyleName("content");
 		panel.add(box);
 		panel.add(status);
 		panel.add(getSubmitButton());
-		initWidget(panel);
+		initWidget(new ScrollPanel(panel));
 	}
 
 	private TextArea getTextBox() {

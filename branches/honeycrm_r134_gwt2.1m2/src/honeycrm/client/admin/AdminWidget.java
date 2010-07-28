@@ -1,17 +1,18 @@
 package honeycrm.client.admin;
 
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class AdminWidget extends Composite {
 	public AdminWidget() {
-		final FlexTable table = new FlexTable();
+		final Panel table = new VerticalPanel();
 
-		int row = 0;
 		for (final Composite widget : new Composite[] { new LocaleSettingsWidget(), new DatabaseWidget(), new CacheStatsWidget(), LogConsole.get() }) {
-			table.setWidget(row++, 0, widget);
+			table.add(widget);
 		}
 
-		initWidget(table);
+		initWidget(new ScrollPanel(table));
 	}
 }

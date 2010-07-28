@@ -13,17 +13,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 // TODO update history token when a new tab is selected
 public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler<String> {
@@ -39,20 +38,19 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 	 * Store which module is set at which position in the tab panel (e.g. Tab 0 -> Contacts, Tab 1 -> Accounts, ..). This is almost the reverse version of tabPositionMap. However tabPositionMapReverse stores instances of Viewable instead storing classes.
 	 */
 	private final Map<Integer, String> tabPositionMapReverse = new HashMap<Integer, String>();
-	private final Map<Integer, Button> tabPosToCreateBtnMap = new HashMap<Integer, Button>();
+	private final Map<Integer, Widget> tabPosToCreateBtnMap = new HashMap<Integer, Widget>();
+
 
 	public static TabCenterView instance() {
 		return instance;
 	}
 
 	private TabCenterView() {
-		super(30, Unit.PX);
+		super(25, Unit.PX);
 		int tabPos = 0;
 		
 		addStyleName("with_margin");
 		addStyleName("tab_layout");
-
-		// this.setSize("640px", "300px");
 
 		final Collection<ModuleDto> dtos = DtoModuleRegistry.instance().getDtos();
 
@@ -61,61 +59,25 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 				continue; // do not add this module to the tabs since it should be hidden
 			}
 			
-			// final AbstractDto dto = DtoRegistry.instance.getDto(clazz);
 			final TabModuleView view = new TabModuleView(moduleDto.getModule());
-			// has not the desired effect see http://www.youtube.com/watch?v=k_eqtePmbZY
-			// view.setSize("99%", "500px"); // set size for scrolling
 
 			// refresh list view only for the first tab (which is the only visible tab at the beginning)
 			if (0 == tabPos)
 				view.refreshListView();
 
+			final Hyperlink createBtn = new Hyperlink("Create", moduleDto.getModule() + " create");
+			createBtn.addStyleName("create_button");
+
 			moduleViewMap.put(moduleDto.getModule(), view);
 			tabPositionMap.put(moduleDto.getModule(), tabPos);
 			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
-
-			// TODO do not encapsulate view within ScrollPanel since it does not have the desired effect and messes up the layout.
-			// TODO nevertheless, we need scrolling within the tabs.
-			// final ScrollPanel scroll = new ScrollPanel(view);
-			// scroll.setStyleName("tab_content");
-
-			final Button createBtn = new Button("Create");
-			createBtn.setVisible(false);
-			createBtn.addClickHandler(new ClickHandler() {
-				@Override
-				public void onClick(ClickEvent event) {
-					view.showCreateView();
-				}
-			});/*
-				 * createBtn.addMouseOverHandler(new MouseOverHandler() {
-				 * 
-				 * @Override public void onMouseOver(MouseOverEvent event) { setVisible(true); } });
-				 */
-
 			tabPosToCreateBtnMap.put(tabPos - 1, createBtn);
 
 			final Label moduleTitle = new Label(moduleDto.getTitle() + "s");
-			/*
-			 * moduleTitle.addClickHandler(new ClickHandler() {
-			 * 
-			 * @Override public void onClick(ClickEvent event) { createBtn.setVisible(true); } }); moduleTitle.addMouseOverHandler(new MouseOverHandler() {
-			 * 
-			 * @Override public void onMouseOver(MouseOverEvent event) { createBtn.setVisible(true); } }); moduleTitle.addMouseOutHandler(new MouseOutHandler() {
-			 * 
-			 * @Override public void onMouseOut(MouseOutEvent event) { createBtn.setVisible(false); } });
-			 */
-
 			final HorizontalPanel titlePanel = new HorizontalPanel();
-			titlePanel.add(moduleTitle);
 			titlePanel.add(createBtn);
-
-			/*
-			 * moduleTitle.addMouseOutHandler(new MouseOutHandler() {
-			 * 
-			 * @Override public void onMouseOut(MouseOutEvent event) { createBtn.setVisible(false); } });
-			 */
-
-			// add(view, moduleDto.getTitle() + "s");
+			titlePanel.add(moduleTitle);
+			
 			add((view), titlePanel);
 		}
 
@@ -150,8 +112,6 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
         // History.fireCurrentHistoryState();
 		
 		selectTab(0);
-		// select last tab (dashboard) 
-		//	selectTab(getTabBar().getTabCount() - 1);
 	}
 
 	public TabModuleView get(String moduleName) {

@@ -18,7 +18,7 @@ public class Header extends Composite {
 
 		p.add(addStyle(new Label("Honeeeeeeeyyyyy CRM"), "header_logo"));
 		p.add(addStyle(new FulltextSearchWidget(), "header_search"));
-		p.add(getHeaderLinks("Search", "Help", "Profile", "Login"));
+		p.add(getHeaderLinks("Global Search", "Help", "Profile", "Login"));
 		p.add(LoadIndicator.get());
 		p.add(new HTML("<div class='clear'></div>"));
 
