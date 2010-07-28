@@ -8,14 +8,12 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.ColumnChart;
 import com.google.gwt.visualization.client.visualizations.LineChart;
@@ -159,16 +157,8 @@ public class LoadingPanel extends DockLayoutPanel {
 		
 		addNorth(new Header(), 40);
 		
-		SplitLayoutPanel p = new SplitLayoutPanel();
-		p.addWest(new Label("south"), 400);
-		p.add(new Label("rechts"));
-		p.forceLayout();
-		
-		final TabLayoutPanel tab = new TabLayoutPanel(20, Unit.PX);
-		tab.add(p, "Tab1");
-		tab.add(new Label("zwei"), "tab2");
-		// add(tab);
-		
 		add(TabCenterView.instance());
+		
+		History.fireCurrentHistoryState();
 	}
 }

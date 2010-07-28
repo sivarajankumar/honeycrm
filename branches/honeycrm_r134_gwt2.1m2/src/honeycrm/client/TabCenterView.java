@@ -49,7 +49,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 		super(30, Unit.PX);
 		int tabPos = 0;
 		
-		addStyleName("body");
+		addStyleName("with_margin");
 		addStyleName("tab_layout");
 
 		// this.setSize("640px", "300px");
@@ -147,7 +147,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 		LogConsole.log("created center view");
 
 		History.addValueChangeHandler(this);
-        History.fireCurrentHistoryState();
+        // History.fireCurrentHistoryState();
 		
 		selectTab(0);
 		// select last tab (dashboard) 

@@ -23,6 +23,7 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 	public ModuleFulltextWidget(final String clazz) {
 		super();
 		this.dtoClazz = DtoModuleRegistry.instance().get(clazz);
+		addStyleName("module_search");
 	}
 
 	@Override

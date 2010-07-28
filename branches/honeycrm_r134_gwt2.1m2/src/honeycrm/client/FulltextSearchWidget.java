@@ -25,8 +25,8 @@ public class FulltextSearchWidget extends SuggestBox {
 	public FulltextSearchWidget() {
 		super(new FulltextSuggestOracle());
 
-		setStyleName("header_search_field");
-
+		addStyleName("wide_search_field");
+		
 		addKeyPressHandler(new KeyPressHandler() {
 			@Override
 			public void onKeyPress(KeyPressEvent event) {

@@ -2,28 +2,31 @@
 
 div {
 	/* TODO current workaround for layout issues: force that scrollbars are displayed when necessary */
-	overflow: visible ! important;
+	/* overflow: visible ! important; disabled because it renders the splitlayoutpanel unusable */ 
 }
 
 body {
 	/* use gray background color to increase the difference between blue tabs and the background */
 	background-color: #efefef ! important;
+/*	margin: 10px ! important; */
 }
 
 .loading_panel {
 	color: #002fff;
+	font-size: smaller;
 /*	font-weight: bold; */
 	margin-left: 10px;
-	margin-top: 10px;
+/*	margin-top: 10px; */
 }
 
-.body {
-	margin-right: 10px;
-	margin-left: 10px;
+.with_margin {
+	margin: 10px;
+/*	margin-right: 10px;
+	margin-left: 10px; */
 }
 
 .tab_layout {
-	width: 100%;
+/*	width: 100%; */
 }
 
 .content {
@@ -56,6 +59,7 @@ body {
 .honey_header {
 	margin: 10px;	
 	color: #005fff;
+	width: 98%
 }
 
 .header a {
@@ -64,19 +68,18 @@ body {
 
 .header_logo {
 	float: left;
-	width: 20%;
+/*	width: 20%;*/
 }
 
 .loadIndicator {
-	float: left;
-	width: 10%; 
+	float: right; 
+	width: 20%; 
 	font-weight: bold; 
 	text-align: center;
 }
 
 .header_links {
 	float: right;
-	width: 70%;	
 }
 
 .header_link {
@@ -86,8 +89,17 @@ body {
 
 .header_search {
 	float: right;
-	margin-left: 10px;	
+	margin-left: 10px;
 }
+
+.wide_search_field {
+	width: 400px; /* make this very big to assure it dominates the ui: users should encouraged to use this a lot */
+}
+
+.module_search {
+	float: left;
+}	
+	
 
 .header_search_label {
 	float: left;
@@ -96,7 +108,6 @@ body {
 
 .header_search_field {
 	float: left;
-	width: 400px; /* make this very big to assure it dominates the ui: users should encouraged to use this a lot */
 }
 
 .right {
@@ -135,7 +146,7 @@ body {
 }
 
 .detail_view_content {
-	padding-bottom: 5px;
+	padding: 5px;
 	width: 100%;
 }
 
@@ -164,9 +175,9 @@ body {
 }
 
 .list_view {
-	float: left;
+/*	float: left;*/
 	padding: 5px;
-	width: 40%;
+/*	width: 40%; */
 }
 
 .under_list_panel {
