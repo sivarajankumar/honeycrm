@@ -67,7 +67,8 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 
 			final Hyperlink createBtn = new Hyperlink("Create", moduleDto.getModule() + " create");
 			createBtn.addStyleName("create_button");
-
+			createBtn.setVisible(false);
+			
 			moduleViewMap.put(moduleDto.getModule(), view);
 			tabPositionMap.put(moduleDto.getModule(), tabPos);
 			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());

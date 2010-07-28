@@ -10,6 +10,7 @@ import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,11 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RelationshipsContainer extends AbstractView {
-	private Panel panel = new VerticalPanel();
+	private final Panel panel = new VerticalPanel();
+	/**
+	 * Map storing the single relationship panel instances. instead of recreating them on every refresh we will reuse the instances and just call updateList on them.
+	 */
+	private final Map<String, SingleRelationshipPanel> map = new HashMap<String, SingleRelationshipPanel>();
 
 	public RelationshipsContainer(final String relatedDtoClass) {
 		super(relatedDtoClass);
@@ -31,13 +36,9 @@ public class RelationshipsContainer extends AbstractView {
 	}
 
 	public void refresh(final Long relatedId) {
-		clear();
-
 		Prefetcher.instance.get(new Consumer<Map<String, ListQueryResult>>() {
 			@Override
 			public void setValueAsynch(Map<String, ListQueryResult> value) {
-				panel.clear();
-				
 				/**
 				 * Sort relationship names to guarantee same order across all modules.
 				 */
@@ -45,7 +46,16 @@ public class RelationshipsContainer extends AbstractView {
 				Collections.sort(originatingNames);
 
 				for (final String originating : originatingNames) {
-					panel.add(new SingleRelationshipPanel(originating, relatedId, moduleDto.getModule(), value.get(originating)));
+					if (map.isEmpty() || !map.containsKey(originating)) {
+						// insert a new relationship panel for this dto module into the map 
+						final SingleRelationshipPanel relPanel = new SingleRelationshipPanel(originating, relatedId, moduleDto.getModule(), value.get(originating));
+						map.put(originating, relPanel);
+						
+						// attach the new panel
+						panel.add(relPanel);
+					} else {
+						map.get(originating).updateList(value.get(originating));
+					}
 				}
 			}
 		}, new ServerCallback<Map<String, ListQueryResult>>() {
@@ -85,7 +95,7 @@ public class RelationshipsContainer extends AbstractView {
 class SingleRelationshipPanel extends ListView {
 	private final String relatedDtoClass;
 	private final Long id;
-	private final ListQueryResult list;
+	private ListQueryResult list;
 
 	public SingleRelationshipPanel(final String originatingDto, final Long id, final String relatedDto, ListQueryResult listQueryResult) {
 		super(originatingDto);
@@ -104,6 +114,11 @@ class SingleRelationshipPanel extends ListView {
 			setAdditionalButtons(getCreateBtn());
 		}
 
+		refresh();
+	}
+	
+	public void updateList(final ListQueryResult list) {
+		this.list = list;
 		refresh();
 	}
 

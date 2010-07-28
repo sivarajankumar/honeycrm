@@ -60,12 +60,14 @@ public class ListView extends AbstractView {
 	}
 
 	private Button getDeleteButton() {
-		final Button btn = new Button("Delete");
+		final Button btn = new Button("Delete selected");
 		btn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if (Window.confirm("Do you want to delete the selected items?")) {
-					deleteSelected(getDeletedIds());
+				if (getDeletedIds().size() > 0) {
+					if (Window.confirm("Do you want to delete the selected items?")) {
+						deleteSelected(getDeletedIds());
+					}
 				}
 			}
 

@@ -74,9 +74,9 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 					} else {
 						// detailview should be responsible for rendering only return the field
 						// types here
-						
+
 						refreshFields(result);
-						//currentId = result.getId();
+						// currentId = result.getId();
 						buttonBar.startViewing();
 					}
 					LoadIndicator.get().endLoading();
@@ -117,53 +117,77 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 
 		// remove previous cell contents
 		// TODO perhaps reuse widgets instead if this is faster.
-		table.clear();
+		// table.clear();
 
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final String id = fieldIds[y][x];
 
-				final Widget widgetLabel = getLabelForField(id);
+				final int labelX = 2 * x + 0, labelY = y;
+				final int valueX = 2 * x + 1, valueY = y;
+
+				final Widget widgetLabel = getWidgetLabel(id, labelX, labelY);
 				final Widget widgetValue = getWidgetByType(dto, id, view);
 
 				widgetLabel.setStyleName("detail_view_label");
 				widgetValue.setStyleName("detail_view_value");
-				
-				if (view == View.DETAIL) {
-					if (widgetValue instanceof Label) {
-						((Label) widgetValue).addClickHandler(new ClickHandler() {
-							@Override
-							public void onClick(ClickEvent event) {
-								// the value of this field has been clicked. we assume the user
-								// wanted to express that he would like to start editing the entity
-								// so we start editing of this entity for him
-								// TODO only do the following if this was a double click event. how
-								// to check for this?
-								// TODO additionally put the cursor into the text box of the field
-								// that has been clicked
-								buttonBar.startEditing();
-							}
-						});
-					}
-				} else {
-					if (widgetValue instanceof TextBox) {
-						((TextBox) widgetValue).addKeyDownHandler(new KeyDownHandler() {
-							@Override
-							public void onKeyDown(KeyDownEvent event) {
-								if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
-									saveChanges();
-								}
-							}
-						});
-					}
-				}
+
+				addEvents(view, widgetValue);
 
 				if (view == View.DETAIL || (view != View.DETAIL && !Dto.isInternalReadOnlyField(id))) {
 					// display the widget because we are in readonly mode or we
 					// are not in ro mode but it is no internal field
-					table.setWidget(y, 2 * x + 0, widgetLabel);
-					table.setWidget(y, 2 * x + 1, widgetValue);
+					table.setWidget(labelY, labelX, widgetLabel);
+					table.setWidget(valueY, valueX, widgetValue);
 				}
+			}
+		}
+	}
+
+	/**
+	 * Return the label widget and reuse the label that already has been attached whenever possible.
+	 */
+	private Widget getWidgetLabel(final String id, final int labelX, final int labelY) {
+		final Widget widgetLabel;
+		if (table.isCellPresent(labelY, labelX)) {
+			if (table.getWidget(labelY, labelX) != null) {
+				widgetLabel = table.getWidget(labelY, labelX);
+			} else {
+				widgetLabel = getLabelForField(id);
+			}
+		} else {
+			widgetLabel = getLabelForField(id);
+		}
+		return widgetLabel;
+	}
+
+	private void addEvents(final View view, final Widget widgetValue) {
+		if (view == View.DETAIL) {
+			if (widgetValue instanceof Label) {
+				((Label) widgetValue).addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						// the value of this field has been clicked. we assume the user
+						// wanted to express that he would like to start editing the entity
+						// so we start editing of this entity for him
+						// TODO only do the following if this was a double click event. how
+						// to check for this?
+						// TODO additionally put the cursor into the text box of the field
+						// that has been clicked
+						buttonBar.startEditing();
+					}
+				});
+			}
+		} else {
+			if (widgetValue instanceof TextBox) {
+				((TextBox) widgetValue).addKeyDownHandler(new KeyDownHandler() {
+					@Override
+					public void onKeyDown(KeyDownEvent event) {
+						if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
+							saveChanges();
+						}
+					}
+				});
 			}
 		}
 	}
@@ -234,16 +258,16 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	 * Set all the fields in the given dto instance stored in the map storing prefilled fields.
 	 */
 	private Dto addPrefilledData(Dto dto) {
-		for (int row=0; row<dto.getFormFieldIds().length; row++) {
-			for (int col=0; col<dto.getFormFieldIds()[row].length; col++) {
+		for (int row = 0; row < dto.getFormFieldIds().length; row++) {
+			for (int col = 0; col < dto.getFormFieldIds()[row].length; col++) {
 				final String fieldId = dto.getFormFieldIds()[row][col];
-				
+
 				if (prefilledMap.containsKey(fieldId)) {
 					dto.set(fieldId, prefilledMap.get(fieldId));
 				}
 			}
 		}
-		
+
 		return dto;
 	}
 
