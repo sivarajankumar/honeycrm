@@ -6,6 +6,7 @@ import honeycrm.client.TabCenterView;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.field.FieldRelate;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -185,14 +186,21 @@ public class ListView extends AbstractView {
 
 			final Column<Dto, String> column = new TextColumn<Dto>() {
 				@Override
-				public String getValue(Dto object) {
-					// if (moduleDto.getFieldById(id) instanceof FieldRelate) {
-					// final Widget relateWidget = moduleDto.getFieldById(id).getWidget(View.LIST, object.get(id));
-					// return StringAbbreviation.shorten(String.valueOf(moduleDto.getFieldById(id).getData(relateWidget)), 10);
-					// return StringAbbreviation.shorten(String.valueOf(object.get(id)), 7);
-					// } else {
-					return String.valueOf(object.get(id));
-					// }
+				public String getValue(final Dto object) {
+					if (moduleDto.getFieldById(id) instanceof FieldRelate) {
+						if (0 == (Long) object.get(id)) {
+							return "";
+						} else {
+							// TODO display something else if "name" does not exist
+							if (null == ((Dto)object.get(id+"_resolved")).get("name")) {
+								return "fail!";
+							} else {
+								return (String) ((Dto) object.get(id + "_resolved")).get("name");
+							}
+						}
+					} else {
+						return String.valueOf(object.get(id));
+					}
 				}
 			};
 

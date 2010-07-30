@@ -1,11 +1,8 @@
 package honeycrm.server;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.server.domain.AbstractEntity;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -37,15 +34,5 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 		} else {
 			return null;
 		}
-	}
-
-	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final Collection<AbstractEntity> collection) {
-		final List<Dto> list = new LinkedList<Dto>();
-
-		for (AbstractEntity item : collection) {
-			list.add(copy.copy(item));
-		}
-
-		return list.toArray(new Dto[0]);
 	}
 }

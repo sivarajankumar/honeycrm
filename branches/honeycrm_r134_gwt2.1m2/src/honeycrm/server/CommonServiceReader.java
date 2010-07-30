@@ -3,10 +3,14 @@ package honeycrm.server;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +25,50 @@ import javax.jdo.Query;
 public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 
+	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final Collection<AbstractEntity> collection) {
+		final List<Dto> list = new LinkedList<Dto>();
+
+		for (final AbstractEntity item : collection) {
+			final Dto dto = copy.copy(item);
+			
+			resolveRelatedEntities(item, dto);
+			
+			list.add(dto);
+		}
+
+		return list.toArray(new Dto[0]);
+	}
+
+	private void resolveRelatedEntities(final AbstractEntity item, final Dto dto) {
+		try {
+			final Class<? extends AbstractEntity> originatingClass = item.getClass();
+			
+			/**
+			 * iterate over all fields annotated as being relate fields.
+			 */
+			for (final Field field: reflectionHelper.getAllFieldsWithAnnotation(originatingClass, FieldRelateAnnotation.class)) {
+				final Class<? extends AbstractEntity> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
+				final String relatedModuleName = relatedClass.getSimpleName().toLowerCase();
+
+				final Long id = (Long) originatingClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(item);
+				
+				if (id > 0) {
+					/**
+					 * retrieve the referenced entity and copy its dto representation as an additional field into the originating dto object.
+					 */
+					final AbstractEntity relatedEntity = getDomainObject(relatedModuleName, id);
+					
+					if (null != relatedEntity) {
+						final Dto relatedDto = copy.copy(relatedEntity);
+						dto.set(field.getName() + "_resolved", relatedDto);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private int getItemCount(final String dtoIndex) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		query.setResult("count(this)");
