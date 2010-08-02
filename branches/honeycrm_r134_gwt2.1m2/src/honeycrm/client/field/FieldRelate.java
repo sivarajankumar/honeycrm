@@ -57,8 +57,8 @@ public class FieldRelate extends AbstractField {
 			details.addMouseOverHandler(new MouseOverHandler() {
 				@Override
 				public void onMouseOver(MouseOverEvent event) {
-					int left = details.getAbsoluteLeft() + 15;
-					int top = details.getAbsoluteTop() +15;
+					int left = link.getAbsoluteLeft();
+					int top = link.getAbsoluteTop() + 16;
 					popup.setPopupPosition(left, top);
 					popup.show();
 				}
