@@ -33,8 +33,8 @@ public class FieldMark extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(Object value) {
-		return internalGetCreateWidget(value);
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
+		return internalGetCreateWidget(dto.get(fieldId));
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class FieldMark extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetListWidget(Object value) {
-		return internalGetCreateWidget(value);
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetCreateWidget(dto.get(fieldId));
 	};
 
 	@Override

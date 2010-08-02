@@ -1,5 +1,6 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.NumberParser;
 
 import java.io.Serializable;
@@ -40,8 +41,8 @@ public class FieldInteger extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(Object value) {
-		final Label widget1 = new Label(String.valueOf(NumberParser.convertToInteger(value)));
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
+		final Label widget1 = new Label(String.valueOf(NumberParser.convertToInteger(dto.get(fieldId))));
 		widget1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		return widget1;
 	}
@@ -55,8 +56,8 @@ public class FieldInteger extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetListWidget(Object value) {
-		return internalGetDetailWidget(value);
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetDetailWidget(dto, fieldId);
 	}
 
 	@Override

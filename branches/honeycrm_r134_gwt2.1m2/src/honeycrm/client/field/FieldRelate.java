@@ -1,96 +1,115 @@
 package honeycrm.client.field;
 
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.ServiceRegistry;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.DtoModuleRegistry;
-import honeycrm.client.dto.ModuleDto;
-import honeycrm.client.prefetch.Consumer;
-import honeycrm.client.prefetch.Prefetcher;
-import honeycrm.client.prefetch.ServerCallback;
+import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.view.RelateWidget;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldRelate extends AbstractField {
 	private static final long serialVersionUID = -1518485985368479493L;
-	private String marshalledClazz;
+	private String relatedModule;
 
 	public FieldRelate() {
 	}
 
-	public FieldRelate(final String id, final String clazz, final String label) {
+	public FieldRelate(final String id, final String relatedModule, final String label) {
 		super(id, label);
-		this.marshalledClazz = clazz;
+		this.relatedModule = relatedModule;
 	}
 
-	public String getRelatedClazz() {
-		return marshalledClazz;
+	public String getRelatedModule() {
+		return relatedModule;
 	}
 
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
-		final long id =  (null != value && value instanceof Long && (Long) value > 0) ? (Long) value : 0;
-		return new RelateWidget(getRelatedClazz(), id);
+		final long id = (null != value && value instanceof Long && (Long) value > 0) ? (Long) value : 0;
+		return new RelateWidget(getRelatedModule(), id);
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(final Object value) {
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
+		final Serializable value = dto.get(fieldId);
 		if (0 == (Long) value) {
 			// return an empty label because no account has been selected yet
 			return new Label();
 		} else {
-			// resolve the real name of the entity by its id and display a HyperLink as
-			// widget
-			final ModuleDto relatedViewable = DtoModuleRegistry.instance().get(getRelatedClazz());
-			final Hyperlink link = new Hyperlink("", relatedViewable.getHistoryToken() + " " + value);
+			final Dto related = ((Dto) dto.get(fieldId + "_resolved"));
+			final PopupPanel popup = getDetailsPopup(related, fieldId);
+			final Hyperlink link = new Hyperlink(related.getQuicksearch(), related.getHistoryToken() + " " + value);
+			final Label details = new Label(" [details]");
 
-			Prefetcher.instance.get(new Consumer<Dto>() {
+			details.addMouseOverHandler(new MouseOverHandler() {
 				@Override
-				public void setValueAsynch(Dto name) {
-					if (null != name) {
-						link.setText(name.getQuicksearch());
-					}
+				public void onMouseOver(MouseOverEvent event) {
+					int left = details.getAbsoluteLeft() + 15;
+					int top = details.getAbsoluteTop() +15;
+					popup.setPopupPosition(left, top);
+					popup.show();
 				}
-			}, new ServerCallback<Dto>() {
+			});
+
+			details.addMouseOutHandler(new MouseOutHandler() {
 				@Override
-				public void doRpc(final Consumer<Dto> internalCacheCallback) {
-					LoadIndicator.get().startLoading();
-
-					ServiceRegistry.commonService().get(getRelatedClazz(), (Long) value, new AsyncCallback<Dto>() {
-						@Override
-						public void onFailure(Throwable caught) {
-							LoadIndicator.get().endLoading();
-							Window.alert("Could not get item with id " + value.toString());
-						}
-
-						@Override
-						public void onSuccess(Dto result) {
-							internalCacheCallback.setValueAsynch(result);
-							LoadIndicator.get().endLoading();
-						}
-					});
+				public void onMouseOut(MouseOutEvent event) {
+					popup.hide();
 				}
-			}, 60 * 1000, getRelatedClazz(), value);
+			});
 
-			return link;
+			final Panel panel = new HorizontalPanel();
+			panel.add(link);
+			panel.add(details);
+
+			return panel;
 		}
+	}
+
+	private PopupPanel getDetailsPopup(final Dto related, final String fieldId) {
+		final PopupPanel popup = new PopupPanel(true);
+	
+		String html = "";
+		
+		final List<String> sortedFieldNames = CollectionHelper.toList(related.getAllData().keySet());
+		Collections.sort(sortedFieldNames);
+		
+		for (final String key: sortedFieldNames) {
+			final Serializable value = related.get(key);
+
+			// TODO shouldn't this be encapsulated in the dto class in a method like getAll detail preview
+			if (!"name".equals(key) && null != value && value instanceof String && !value.toString().isEmpty()) {
+				final String label = related.getFieldById(key).getLabel();
+				html += "<li>" + label + ": " + value.toString() + "</li>";
+			}
+		}
+		
+		popup.add(new HTML("<ul>" + html + "</ul>"));
+
+		return popup;
 	}
 
 	@Override
 	protected Widget internalGetEditWidget(Object value) {
-		return new RelateWidget(getRelatedClazz(), (null == value) ? 0 : (Long) value);
+		return new RelateWidget(getRelatedModule(), (null == value) ? 0 : (Long) value);
 	}
 
 	@Override
-	protected Widget internalGetListWidget(Object value) {
-		return internalGetDetailWidget(value);
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetDetailWidget(dto, fieldId);
 	}
 
 	@Override

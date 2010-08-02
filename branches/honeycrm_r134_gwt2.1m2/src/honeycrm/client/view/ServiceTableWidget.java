@@ -52,7 +52,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 					for (int x = 0; x < dto.getListFieldIds().length; x++) {
 						final String index = dto.getListFieldIds()[x];
-						table.setWidget(rows, x, addChangeEvents(index, dto.getFieldById(index).getWidget(view, dto.get(index))));
+						table.setWidget(rows, x, addChangeEvents(index, dto.getFieldById(index).getWidget(view, dto, index)));
 					}
 				}
 			});
@@ -66,7 +66,7 @@ public class ServiceTableWidget extends ITableWidget {
 	private void initHeader() {
 		for (int x = 0; x < dto.getListFieldIds().length; x++) {
 			final AbstractField field = dto.getFieldById(dto.getListFieldIds()[x]);
-			table.setWidget(0, x, field.getWidget(View.LIST_HEADER, field.getLabel()));
+			table.setWidget(0, x, field.getWidget(View.LIST_HEADER, dto, dto.getListFieldIds()[x]));
 		}
 	}
 
@@ -139,12 +139,12 @@ public class ServiceTableWidget extends ITableWidget {
 							if (table.getWidget(HEADER_ROWS + y, x) instanceof TextBox) {
 								// TODO this is faaaaar to crappy!
 								// TODO this should be done by field currency somehow..
-								((TextBox) table.getWidget(HEADER_ROWS + y, x)).setText(((TextBox) field.getWidget(View.EDIT, data.get(y).get(index))).getText());
+								((TextBox) table.getWidget(HEADER_ROWS + y, x)).setText(((TextBox) field.getWidget(View.EDIT, data.get(y), (index))).getText());
 								// data.get(y).getFieldValue(index).toString());
 							}
 						} else {
 							// add a new widget and new click handler
-							table.setWidget(HEADER_ROWS + y, x, data.get(y).getFieldById(index).getWidget(view, data.get(y).get(index)));
+							table.setWidget(HEADER_ROWS + y, x, data.get(y).getFieldById(index).getWidget(view, data.get(y), (index)));
 							addChangeEvents(index, table.getWidget(HEADER_ROWS + y, x));
 						}
 					}

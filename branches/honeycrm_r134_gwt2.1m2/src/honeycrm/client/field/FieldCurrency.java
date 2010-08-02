@@ -1,5 +1,6 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.NumberParser;
 
 import java.io.Serializable;
@@ -53,12 +54,12 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(Object value) {
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
 		Label w = new Label();
 		// use a currency constant defined in
 		// com/google/gwt/i18n/client/constants/CurrencyCodeMapConstants.properties which can be found
 		// in gwt-user.jar
-		w.setText(formatRead().format(NumberParser.convertToDouble(value)));
+		w.setText(formatRead().format(NumberParser.convertToDouble(dto.get(fieldId))));
 		w.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		return w;
 	}
@@ -100,8 +101,8 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetListWidget(Object value) {
-		return internalGetDetailWidget(value);
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetDetailWidget(dto, fieldId);
 	}
 
 	@Override

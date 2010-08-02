@@ -25,7 +25,7 @@ public class Dto implements Serializable {
 		data.put("id", null);
 	}
 
-	public Object get(final String fieldId) {
+	public Serializable get(final String fieldId) {
 		if (data.containsKey(fieldId)) {
 			return data.get(fieldId);
 		} else {

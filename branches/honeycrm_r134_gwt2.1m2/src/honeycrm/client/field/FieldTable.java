@@ -26,8 +26,8 @@ public class FieldTable extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(Object value) {
-		return getTableWidget(value, View.DETAIL);
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
+		return getTableWidget(dto.get(fieldId), View.DETAIL);
 	}
 
 	@Override
@@ -36,8 +36,8 @@ public class FieldTable extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetListWidget(Object value) {
-		return internalGetDetailWidget(value);
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetDetailWidget(dto, fieldId);
 	}
 
 	/**

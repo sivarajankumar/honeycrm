@@ -1,9 +1,12 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
+
 import java.io.Serializable;
 import java.util.Date;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -20,16 +23,18 @@ public class FieldDate extends AbstractField {
 
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
-		DateBox widget3 = new DateBox();
-		return widget3;
+	    DateBox dateBox = new DateBox();
+		dateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG)));
+	    return dateBox;
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(Object value) {
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
+		final Serializable value = dto.get(fieldId);
 		if (null == value) {
 			return new Label();
 		} else {
-			return new Label(DateTimeFormat.getMediumDateFormat().format((Date) value));
+			return new Label(DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG).format((Date) value));
 		}
 	}
 
@@ -37,12 +42,13 @@ public class FieldDate extends AbstractField {
 	protected Widget internalGetEditWidget(Object value) {
 		DateBox widget2 = new DateBox();
 		widget2.setValue((Date) value);
+		widget2.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG)));
 		return widget2;
 	}
 
 	@Override
-	protected Widget internalGetListWidget(Object value) {
-		return internalGetDetailWidget(value);
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetDetailWidget(dto, fieldId);
 	}
 
 	@Override

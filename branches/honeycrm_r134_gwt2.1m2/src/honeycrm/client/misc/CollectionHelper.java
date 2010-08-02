@@ -1,7 +1,9 @@
 package honeycrm.client.misc;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CollectionHelper {
@@ -48,5 +50,12 @@ public class CollectionHelper {
 			}
 		}
 		return set;
+	}
+	
+	/**
+	 * Convert an arbitrary collection (e.g. set) into a list. This is necessary for sorting collections for example. Only lists can be sorted.
+	 */
+	public static List<String> toList(final Collection<String> set) {
+		return new ArrayList<String>(set);
 	}
 }

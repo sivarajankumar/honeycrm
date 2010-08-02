@@ -1,5 +1,6 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.client.view.AbstractView.View;
 
 import java.io.Serializable;
@@ -87,26 +88,26 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 		return width + "px";
 	}
 
-	public Widget getWidget(final View view, final Object value) {
+	public Widget getWidget(final View view, final Dto dto, final String fieldId) {
 		switch (view) {
 		case DETAIL:
-			return decorateWidget(internalGetDetailWidget(value));
+			return decorateWidget(internalGetDetailWidget(dto, (fieldId)));
 		case EDIT:
-			return decorateWidget(internalGetEditWidget(value));
+			return decorateWidget(internalGetEditWidget(dto.get(fieldId)));
 		case LIST:
-			return decorateWidget(internalGetListWidget(value));
+			return decorateWidget(internalGetListWidget(dto, (fieldId)));
 		case CREATE:
-			return decorateWidget(internalGetCreateWidget(value));
+			return decorateWidget(internalGetCreateWidget(dto.get(fieldId)));
 		case LIST_HEADER:
-			return getHeaderWidget(value);
+			return getHeaderWidget(dto.get(fieldId));
 		default:
 			throw new RuntimeException("Unknown view: " + view);
 		}
 	}
 
-	abstract protected Widget internalGetListWidget(final Object value);
+	abstract protected Widget internalGetListWidget(final Dto dto, final String fieldId);
 
-	abstract protected Widget internalGetDetailWidget(final Object value);
+	abstract protected Widget internalGetDetailWidget(final Dto dto, final String fieldId);
 
 	abstract protected Widget internalGetCreateWidget(final Object value);
 
@@ -145,11 +146,14 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 
 	/**
 	 * This returns a label containing the title of this field, all other properties (e.g., width, alignment) are set as for a normal content field.
+	 * TODO this method should not receive a value as parameter since it does not need it
 	 */
 	private Label getHeaderWidget(final Object value) {
-		final Label label = (Label) decorateWidget(internalGetDetailWidget(value));
-		label.setText(getLabel());
-		return label;
+		return (Label) decorateWidget(new Label(getLabel()));
+		
+		// final Label label = (Label) decorateWidget(internalGetDetailWidget(value));
+		// label.setText(getLabel());
+		// return label;
 	}
 
 	/**

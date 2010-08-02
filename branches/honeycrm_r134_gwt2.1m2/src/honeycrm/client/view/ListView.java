@@ -105,24 +105,32 @@ public class ListView extends AbstractView {
 
 	protected void initListView() {
 		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER) {
+			private long lastPageChange = System.currentTimeMillis();
+
 			@Override
 			public void onRangeOrSizeChanged(final PagingListView<Dto> listView) {
-				super.onRangeOrSizeChanged(listView);
-
 				/**
 				 * only do something if items have already been loaded
 				 */
 				if (itemsHaveBeenLoadedOnce) {
+					final long diff = System.currentTimeMillis() - lastPageChange;
+					final boolean isLastPageChangeLongAgo = diff > 2 * 1000;
+
+					// if (isLastPageChangeLongAgo) {
 					/**
 					 * retrieve items of the selected page
 					 */
 					final int newPage = 1 + listView.getPageStart() / listView.getPageSize();
-					final boolean changedPage = newPage != currentPage;
+					final boolean changedPage = newPage != currentPage/* && isLastPageChangeLongAgo */;
 
 					if (changedPage) {
+						lastPageChange = System.currentTimeMillis();
 						refreshPage(newPage);
 					}
 				}
+				// }
+
+				super.onRangeOrSizeChanged(listView);
 			};
 		};
 
@@ -192,7 +200,7 @@ public class ListView extends AbstractView {
 							return "";
 						} else {
 							// TODO display something else if "name" does not exist
-							if (null == ((Dto)object.get(id+"_resolved")).get("name")) {
+							if (null == ((Dto) object.get(id + "_resolved")).get("name")) {
 								return "fail!";
 							} else {
 								return (String) ((Dto) object.get(id + "_resolved")).get("name");
@@ -254,13 +262,29 @@ public class ListView extends AbstractView {
 			values.add(dto);
 		}
 
+		ct.setDataSize(result.getItemCount(), true);
+		
 		// give the ListViewAdapter our data
-		lva.setList(values);
+		if (null == lva.getList() || 0 == lva.getList().size()) {
+			// lva.setList(values);
+			ct.setData(0, values.size(), values);
+		} else {
+			ct.setData(1 * pageSize, values.size(), values);
+/*			if (lva.getList().size() == values.size()) {
+				// do not call set list again. overwrite list items instead.
+				for (int i = 0; i < values.size(); i++) {
+					lva.getList().set(0, values.get(i));
+				}
+			} else {
+				Window.alert("Fail! unequal list sizes.");
+			}*/
+		}
+
+		// lva.setList(values);
 		// lva.refresh();
 
 		// ct.setPageStart((currentPage - 1) * MAX_ENTRIES + 1);
 		// if (0 == ct.getDataSize()) {
-		ct.setDataSize(result.getItemCount(), true);
 		// }
 	}
 

@@ -108,7 +108,7 @@ abstract public class AbstractView extends Composite {
 	 * Returns the widget for displaying fieldId of tmpViewable for the view.
 	 */
 	protected Widget getWidgetByType(final Dto tmpDto, final String fieldId, final View view) {
-		return tmpDto.getFieldById(fieldId).getWidget(view, tmpDto.get(fieldId));
+		return tmpDto.getFieldById(fieldId).getWidget(view, tmpDto, fieldId);
 	}
 
 	/**

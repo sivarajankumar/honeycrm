@@ -1,5 +1,6 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.CollectionHelper;
 
 import java.io.Serializable;
@@ -39,7 +40,8 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(Object value) {
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
+		final Serializable value = dto.get(fieldId);
 		if (value.toString().isEmpty()) {
 			return new Label("");
 		} else {
@@ -70,8 +72,8 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 
 	@Override
-	protected Widget internalGetListWidget(Object value) {
-		return internalGetDetailWidget(value);
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetDetailWidget(dto, fieldId);
 	}
 
 	@Override

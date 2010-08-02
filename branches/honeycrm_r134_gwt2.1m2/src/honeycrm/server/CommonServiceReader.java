@@ -99,7 +99,9 @@ public class CommonServiceReader extends AbstractCommonService {
 		if (null == domainObject) {
 			return null;
 		} else {
-			return copy.copy(domainObject);
+			final Dto dto = copy.copy(domainObject);
+			resolveRelatedEntities(domainObject, dto);
+			return dto;
 		}
 	}
 

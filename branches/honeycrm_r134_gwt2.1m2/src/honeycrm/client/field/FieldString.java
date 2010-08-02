@@ -1,5 +1,9 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
+
+import java.io.Serializable;
+
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -25,7 +29,8 @@ public class FieldString extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(Object value) {
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
+		final Serializable value = dto.get(fieldId);
 		return new Label((null == value) ? "" : value.toString());
 	}
 
@@ -37,7 +42,7 @@ public class FieldString extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetListWidget(Object value) {
-		return internalGetDetailWidget(value);
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetDetailWidget(dto, fieldId);
 	}
 }
