@@ -1,5 +1,7 @@
 #summary Plugins useful to developers.
 
 || name || description || url || update site ||
+|| hammurapi ||  || http://www.hammurapi.biz/hammurapi-biz/ef/xmenu/hammurapi-group/products/hammurapi/index.html || jar standalone http://www.hammurapi.biz/products/hammurapi/hammurapi-5.7.0-setup.jar ||
+|| PMD ||  || http://pmd.sourceforge.net/integrations.html || http://pmd.sf.net/eclipse ||
 || find bugs ||  || http://findbugs.sourceforge.net/ || http://findbugs.cs.umd.edu/eclipse-daily ||
 || ucdetector || unused code detector || http://www.ucdetector.org/ || http://ucdetector.sourceforge.net/update ||
