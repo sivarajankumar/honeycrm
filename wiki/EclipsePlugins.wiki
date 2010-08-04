@@ -1,0 +1,5 @@
+#summary Plugins useful to developers.
+
+|| name || description || url || update site ||
+|| find bugs ||  || http://findbugs.sourceforge.net/ || http://findbugs.cs.umd.edu/eclipse-daily ||
+|| ucdetector || unused code detector || http://www.ucdetector.org/ || http://ucdetector.sourceforge.net/update ||
