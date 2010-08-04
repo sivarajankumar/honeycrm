@@ -45,7 +45,7 @@ public class FieldRelate extends AbstractField {
 	@Override
 	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
 		final Serializable value = dto.get(fieldId);
-		if (0 == (Long) value) {
+		if (null == value || 0 == (Long) value) {
 			// return an empty label because no account has been selected yet
 			return new Label();
 		} else {

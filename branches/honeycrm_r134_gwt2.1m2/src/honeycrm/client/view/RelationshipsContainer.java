@@ -83,7 +83,7 @@ public class RelationshipsContainer extends AbstractView {
 	 * Visually throw away all panels.
 	 */
 	public void clear() {
-		panel.clear();
+		panel.setVisible(false);
 	}
 }
 

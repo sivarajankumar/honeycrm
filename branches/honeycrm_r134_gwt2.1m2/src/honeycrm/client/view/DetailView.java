@@ -1,6 +1,7 @@
 package honeycrm.client.view;
 
 import honeycrm.client.LoadIndicator;
+import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
@@ -12,14 +13,13 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * This widget is responsible for displaying detail / edit / create - views for entities.
  */
-public class DetailView extends AbstractView implements DoubleClickHandler {
+public class DetailView extends AbstractView {
 	private final DetailViewButtonBar buttonBar;
 	private final RelationshipsContainer relationshipsContainer;
 	private Dto dto = moduleDto.createDto();
@@ -44,7 +44,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 
 		final VerticalPanel panel = new VerticalPanel();
 		panel.add(table);
-		panel.add(buttonBar = new DetailViewButtonBar(this));
+		panel.add(buttonBar = new DetailViewButtonBar(module, this));
 		panel.add(relationshipsContainer = new RelationshipsContainer(module));
 
 		buttonBar.setStyleName("detail_view_buttons");
@@ -108,10 +108,14 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	// TODO only update the field contents instead of removing all fields an
 	// adding them
 	private void refreshFields(final Dto newDto) {
-		resetFields(newDto, View.DETAIL);
+		resetFields(newDto, View.DETAIL, null);
 	}
 
 	private void resetFields(final Dto newDto, final View view) {
+		resetFields(newDto, view, null);
+	}
+
+	private void resetFields(final Dto newDto, final View view, final String focussedField) {
 		final String[][] fieldIds = newDto.getFormFieldIds();
 		this.dto = newDto;
 
@@ -132,7 +136,8 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 				widgetLabel.setStyleName("detail_view_label");
 				widgetValue.setStyleName("detail_view_value");
 
-				addEvents(view, widgetValue);
+				addEvents(view, widgetLabel, widgetValue, id);
+				addFocus(view, widgetValue, id, focussedField);
 
 				if (view == View.DETAIL || (view != View.DETAIL && !Dto.isInternalReadOnlyField(id))) {
 					// display the widget because we are in readonly mode or we
@@ -141,6 +146,13 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 					table.setWidget(valueY, valueX, widgetValue);
 				}
 			}
+		}
+	}
+
+	private void addFocus(View view, Widget widgetValue, String id, String focussedField) {
+		if (View.EDIT == view && null != focussedField && id.equals(focussedField) && widgetValue instanceof FocusWidget) {
+			// TODO Cursor is still not put into the widget (e.g. text box) even with focus properly set.
+			((FocusWidget) widgetValue).setFocus(true);
 		}
 	}
 
@@ -161,20 +173,16 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		return widgetLabel;
 	}
 
-	private void addEvents(final View view, final Widget widgetValue) {
+	private void addEvents(final View view, final Widget widgetLabel, final Widget widgetValue, final String focussedField) {
 		if (view == View.DETAIL) {
-			if (widgetValue instanceof Label) {
-				((Label) widgetValue).addClickHandler(new ClickHandler() {
+			if (widgetLabel instanceof Label) {
+				((Label) widgetLabel).addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						// the value of this field has been clicked. we assume the user
+						// the label of this field has been clicked. we assume the user
 						// wanted to express that he would like to start editing the entity
 						// so we start editing of this entity for him
-						// TODO only do the following if this was a double click event. how
-						// to check for this?
-						// TODO additionally put the cursor into the text box of the field
-						// that has been clicked
-						buttonBar.startEditing();
+						buttonBar.startEditing(focussedField);
 					}
 				});
 			}
@@ -195,12 +203,12 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	/**
 	 * Start editing mode.
 	 */
-	public void startEditing() {
+	public void startEditing(final String focussedField) {
 		if (isShowing()) {
-			resetFields(dto, View.EDIT);
-			relationshipsContainer.clear();
+			resetFields(dto, View.EDIT, focussedField);
+			relationshipsContainer.setVisible(false);
 		} else {
-			// Window.alert("Do nothing because id is not defined");
+			LogConsole.log("startEditing(): Do nothing because id is not defined");
 		}
 	}
 
@@ -210,10 +218,11 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 	public void view() {
 		if (isShowing()) {
 			resetFields(dto, View.DETAIL);
+			relationshipsContainer.setVisible(true);
 		} else {
 			// throw away the fields because we are not showing anything but should start viewing. this usually means the creation of a new entity has been cancelled.
 			table.clear();
-			// Window.alert("Do nothing because id is not defined");
+			LogConsole.log("view(): Do nothing because id is not defined");
 		}
 	}
 
@@ -251,7 +260,7 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 
 	public void startCreating() {
 		resetFields(addPrefilledData(moduleDto.createDto()), View.CREATE);
-		relationshipsContainer.clear();
+		relationshipsContainer.setVisible(false);
 	}
 
 	/**
@@ -280,26 +289,18 @@ public class DetailView extends AbstractView implements DoubleClickHandler {
 		buttonBar.stopViewing();
 	}
 
-	@Override
-	public void onDoubleClick(DoubleClickEvent event) {
-		// TODO this event is never received
-		if (isShowing()) {
-			// the value of this field has been clicked. we assume the user
-			// wanted to express that he would like to start editing the entity
-			// so we start editing of this entity for him
-			// TODO only do the following if this was a double click event. how
-			// to check for this?
-			// TODO additionally put the cursor into the text box of the field
-			// that has been clicked
-			buttonBar.startEditing();
-		}
-	}
-
 	public DetailViewButtonBar getButtonBar() {
 		return buttonBar;
 	}
 
 	public void prefill(String fieldId, Serializable value) {
 		prefilledMap.put(fieldId, value);
+	}
+
+	/**
+	 * Returns the dto representation of the item that is currently displayed.
+	 */
+	public Dto getCurrentDto() {
+		return dto;
 	}
 }

@@ -8,6 +8,7 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.field.FieldRelate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -105,32 +106,24 @@ public class ListView extends AbstractView {
 
 	protected void initListView() {
 		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER) {
-			private long lastPageChange = System.currentTimeMillis();
-
 			@Override
 			public void onRangeOrSizeChanged(final PagingListView<Dto> listView) {
+				super.onRangeOrSizeChanged(listView);
+
 				/**
 				 * only do something if items have already been loaded
 				 */
 				if (itemsHaveBeenLoadedOnce) {
-					final long diff = System.currentTimeMillis() - lastPageChange;
-					final boolean isLastPageChangeLongAgo = diff > 2 * 1000;
-
-					// if (isLastPageChangeLongAgo) {
-					/**
-					 * retrieve items of the selected page
-					 */
 					final int newPage = 1 + listView.getPageStart() / listView.getPageSize();
-					final boolean changedPage = newPage != currentPage/* && isLastPageChangeLongAgo */;
+					final boolean changedPage = newPage != currentPage;
 
 					if (changedPage) {
-						lastPageChange = System.currentTimeMillis();
+						/**
+						 * retrieve items of the selected page
+						 */
 						refreshPage(newPage);
 					}
 				}
-				// }
-
-				super.onRangeOrSizeChanged(listView);
 			};
 		};
 
@@ -196,14 +189,17 @@ public class ListView extends AbstractView {
 				@Override
 				public String getValue(final Dto object) {
 					if (moduleDto.getFieldById(id) instanceof FieldRelate) {
-						if (0 == (Long) object.get(id)) {
+						final Serializable value = object.get(id);
+						
+						if (null == value || 0 == (Long) value) {
 							return "";
 						} else {
 							// TODO display something else if "name" does not exist
-							if (null == ((Dto) object.get(id + "_resolved")).get("name")) {
+							final Serializable resolved = object.get(id + "_resolved");
+							if (null == resolved || null == ((Dto) resolved).get("name")) {
 								return "fail!";
 							} else {
-								return (String) ((Dto) object.get(id + "_resolved")).get("name");
+								return (String) ((Dto) resolved).get("name");
 							}
 						}
 					} else {
@@ -263,22 +259,18 @@ public class ListView extends AbstractView {
 		}
 
 		ct.setDataSize(result.getItemCount(), true);
+/*		final int start = (currentPage - 1) * pageSize;
 		
+		ct.setPageStart(start);
+		ct.setData(start, result.getItemCount(), values);
+*/
 		// give the ListViewAdapter our data
-		if (null == lva.getList() || 0 == lva.getList().size()) {
-			// lva.setList(values);
-			ct.setData(0, values.size(), values);
-		} else {
-			ct.setData(1 * pageSize, values.size(), values);
-/*			if (lva.getList().size() == values.size()) {
-				// do not call set list again. overwrite list items instead.
-				for (int i = 0; i < values.size(); i++) {
-					lva.getList().set(0, values.get(i));
-				}
-			} else {
-				Window.alert("Fail! unequal list sizes.");
-			}*/
-		}
+		lva.setList(values);
+		lva.refresh();
+		
+		/*
+		 * if (null == lva.getList() || 0 == lva.getList().size()) { ct.setData(0, values.size(), values); } else { ct.setData(1 * pageSize, values.size(), values); /* if (lva.getList().size() == values.size()) { // do not call set list again. overwrite list items instead. for (int i = 0; i < values.size(); i++) { lva.getList().set(0, values.get(i)); } } else { Window.alert("Fail! unequal list sizes."); } }
+		 */
 
 		// lva.setList(values);
 		// lva.refresh();

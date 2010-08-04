@@ -1,12 +1,15 @@
 package honeycrm.client.view;
 
+import honeycrm.client.dto.ExtraButton;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 
-public class DetailViewButtonBar extends Composite {
+public class DetailViewButtonBar extends AbstractView {
 	private Button saveBtn = new Button("Save");
 	private Button cancelBtn = new Button("Cancel");
 	private Button editBtn = new Button("Edit");
@@ -14,7 +17,9 @@ public class DetailViewButtonBar extends Composite {
 
 	private final DetailView detailview;
 
-	public DetailViewButtonBar(final DetailView detailview) {
+	public DetailViewButtonBar(final String module, final DetailView detailview) {
+		super(module);
+
 		this.detailview = detailview;
 
 		final HorizontalPanel panel = new HorizontalPanel();
@@ -34,7 +39,9 @@ public class DetailViewButtonBar extends Composite {
 		cancelBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				startViewing();
+				if (Window.confirm("Do you really want to cancel your changes?")) {
+					startViewing();
+				}
 			}
 		});
 
@@ -54,9 +61,23 @@ public class DetailViewButtonBar extends Composite {
 			}
 		});
 
+		addExtraButtons(panel);
 		stopViewing();
-
 		initWidget(panel);
+	}
+
+	private void addExtraButtons(final Panel panel) {
+		for (final ExtraButton extraButton : moduleDto.getExtraButtons()) {
+			final Button b = new Button(extraButton.getLabel());
+			b.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					extraButton.getAction().doAction(detailview.getCurrentDto());
+				}
+			});
+			
+			panel.add(b);
+		}
 	}
 
 	/**
@@ -90,8 +111,12 @@ public class DetailViewButtonBar extends Composite {
 	}
 
 	public void startEditing() {
+		startEditing(null);
+	}
+
+	public void startEditing(final String focussedField) {
 		if (detailview.isShowing()) {
-			detailview.startEditing();
+			detailview.startEditing(focussedField);
 
 			saveBtn.setVisible(true);
 			cancelBtn.setVisible(true);

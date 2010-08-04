@@ -18,6 +18,7 @@ import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
@@ -128,7 +129,11 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 	}
 
 	public void showModuleTab(String clazz) {
-		assert tabPositionMap.containsKey(clazz) && moduleViewMap.containsKey(clazz);
+		if (!tabPositionMap.containsKey(clazz) || !moduleViewMap.containsKey(clazz)) {
+			Window.alert("Cannot switch to module: '" + clazz + "'");
+			return;
+		}
+		
 		if (!moduleViewMap.get(clazz).isListViewInitialized()) {
 			moduleViewMap.get(clazz).refreshListView();
 		}

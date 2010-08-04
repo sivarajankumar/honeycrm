@@ -1,5 +1,7 @@
 package honeycrm.server;
 
+import honeycrm.client.actions.AbstractAction;
+import honeycrm.client.dto.ExtraButton;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.field.FieldBoolean;
@@ -15,6 +17,7 @@ import honeycrm.client.field.FieldTable;
 import honeycrm.client.field.FieldText;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.DetailViewable;
+import honeycrm.server.domain.decoration.HasExtraButton;
 import honeycrm.server.domain.decoration.Hidden;
 import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
@@ -139,6 +142,7 @@ public class DtoWizard {
 
 	private void handleAnnotations(final Class<AbstractEntity> domainClass, final ModuleDto moduleDto) {
 		moduleDto.setHidden(domainClass.isAnnotationPresent(Hidden.class));
+		moduleDto.setExtraButtons(getExtraButtons(domainClass));
 
 		if (domainClass.isAnnotationPresent(ListViewable.class)) {
 			moduleDto.setListFieldIds(domainClass.getAnnotation(ListViewable.class).value());
@@ -156,6 +160,26 @@ public class DtoWizard {
 		if (domainClass.isAnnotationPresent(Quicksearchable.class)) {
 			moduleDto.setQuickSearchItems(domainClass.getAnnotation(Quicksearchable.class).value());
 		}
+	}
+
+	private ExtraButton[] getExtraButtons(final Class<AbstractEntity> domainClass) {
+		// TODO handle multiple buttons
+		try {
+			if (domainClass.isAnnotationPresent(HasExtraButton.class)) {
+				final String label = domainClass.getAnnotation(HasExtraButton.class).label();
+				final Class<? extends AbstractAction> action = domainClass.getAnnotation(HasExtraButton.class).action();
+
+				final ExtraButton b = new ExtraButton();
+				b.setLabel(label);
+				b.setAction(action.newInstance());
+				
+				return new ExtraButton[]{b};
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ExtraButton[0];
 	}
 
 	public Map<String, ModuleDto> getDtoConfiguration() {

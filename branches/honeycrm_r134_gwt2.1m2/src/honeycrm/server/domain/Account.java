@@ -57,7 +57,6 @@ public class Account extends AbstractEntity {
 	@FieldStringAnnotation
 	private String tickerSymbol;
 	
-//	@RelatesTo()
 	@Label("Member Of")
 	@FieldRelateAnnotation(Account.class)
 	private long parentId;
@@ -66,7 +65,6 @@ public class Account extends AbstractEntity {
 	@FieldEmailAnnotation
 	private String email;
 	
-//	@RelatesTo(Employee.class)
 	@Label("Responsible")
 	@FieldRelateAnnotation(Employee.class)
 	private long responsibleId;

@@ -30,9 +30,9 @@ public class CommonServiceReader extends AbstractCommonService {
 
 		for (final AbstractEntity item : collection) {
 			final Dto dto = copy.copy(item);
-			
+
 			resolveRelatedEntities(item, dto);
-			
+
 			list.add(dto);
 		}
 
@@ -42,22 +42,22 @@ public class CommonServiceReader extends AbstractCommonService {
 	private void resolveRelatedEntities(final AbstractEntity item, final Dto dto) {
 		try {
 			final Class<? extends AbstractEntity> originatingClass = item.getClass();
-			
+
 			/**
 			 * iterate over all fields annotated as being relate fields.
 			 */
-			for (final Field field: reflectionHelper.getAllFieldsWithAnnotation(originatingClass, FieldRelateAnnotation.class)) {
+			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingClass, FieldRelateAnnotation.class)) {
 				final Class<? extends AbstractEntity> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
 				final String relatedModuleName = relatedClass.getSimpleName().toLowerCase();
 
 				final Long id = (Long) originatingClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(item);
-				
-				if (id > 0) {
+
+				if (null != id && id > 0) {
 					/**
 					 * retrieve the referenced entity and copy its dto representation as an additional field into the originating dto object.
 					 */
 					final AbstractEntity relatedEntity = getDomainObject(relatedModuleName, id);
-					
+
 					if (null != relatedEntity) {
 						final Dto relatedDto = copy.copy(relatedEntity);
 						dto.set(field.getName() + "_resolved", relatedDto);
@@ -68,7 +68,7 @@ public class CommonServiceReader extends AbstractCommonService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private int getItemCount(final String dtoIndex) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		query.setResult("count(this)");
@@ -129,13 +129,23 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	public ListQueryResult getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
-		final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)");
-		query.declareParameters("String searchedName");
-		query.setRange(from, to);
+		if (prefix.trim().isEmpty()) {
+			return new ListQueryResult(new Dto[0], 0);
+		} else {
+			try {
+				// TODO make sure the domain object has a name field before searching on it
+				final Query query = m.newQuery(getDomainClass(dtoIndex), "name.startsWith(searchedName)");
+				query.declareParameters("String searchedName");
+				query.setRange(from, to);
 
-		final Collection collection = (Collection) query.execute(prefix);
-		System.out.println("getAllByNamePrefix('"+prefix+"')");
-		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
+				final Collection collection = (Collection) query.execute(prefix);
+				System.out.println("getAllByNamePrefix('" + prefix + "')");
+				return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
+			} catch (RuntimeException e) {
+				log.warning("Exception occured during getAllByNamePrefix(" + dtoIndex + "," + prefix + "," + from + "," + to + ")");
+				return new ListQueryResult(new Dto[0], 0);
+			}
+		}
 	}
 
 	public Dto getByName(String dtoIndex, String name) {
@@ -216,13 +226,13 @@ public class CommonServiceReader extends AbstractCommonService {
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String related) {
 		final Map<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
 		final Map<String, Map<String, Set<String>>> relations = RelationshipFieldTable.instance.getMap();
-		
-		for (final String originating: relations.keySet()) {
+
+		for (final String originating : relations.keySet()) {
 			if (relations.get(originating).containsKey(related)) {
 				map.put(originating, getAllRelated(originating, id, related));
 			}
 		}
-		
+
 		return map;
 	}
 }

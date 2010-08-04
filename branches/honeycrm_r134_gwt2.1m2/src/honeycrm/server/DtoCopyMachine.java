@@ -23,6 +23,7 @@ public class DtoCopyMachine {
 	private static final Set<String> badVariableNames = new HashSet<String>();
 	private static final Set<String> badVariablePrefixes = new HashSet<String>();
 	private static final DomainClassRegistry registry = DomainClassRegistry.instance;
+	private static PersistenceManager m = null;
 
 	static {
 		badVariablePrefixes.add("$");
@@ -123,7 +124,11 @@ public class DtoCopyMachine {
 				}
 
 				if ("id".equals(field.getName())) {
-					dto.set(field.getName(), (int) ((Key) value).getId());
+					try {
+						dto.set(field.getName(), (int) ((Key) value).getId());
+					} catch (NullPointerException e) {
+						System.out.println("npe!");
+					}
 				} else {
 					dto.set(field.getName(), (Serializable) value);
 				}
@@ -138,15 +143,13 @@ public class DtoCopyMachine {
 	}
 
 	private void handleDomainClassLists(final Dto dto, final Field field, final Object value) {
-		if (((List<?>) value).get(0) instanceof AbstractEntity) {
-			final List<Dto> serverList = new LinkedList<Dto>();
+		final List<Dto> serverList = new LinkedList<Dto>();
 
-			for (final AbstractEntity child : (List<AbstractEntity>) value) {
-				serverList.add(copy(child));
-			}
-
-			dto.set(field.getName(), (Serializable) serverList);
+		for (final AbstractEntity child : (List<AbstractEntity>) value) {
+			serverList.add(copy(child));
 		}
+
+		dto.set(field.getName(), (Serializable) serverList);
 	}
 
 	/**
@@ -160,16 +163,21 @@ public class DtoCopyMachine {
 			// Note this means that on each update the linked items of an entity are deleted and recreated. This should be avoided in future versions.
 			final List<?> existingItemsList = (List<?>) entityClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(existingEntity);
 
-			if (existingItemsList.get(0) instanceof AbstractEntity) {
-				// TODO this should not be created on each update call!
-				final PersistenceManager m = PMF.get().getPersistenceManager();
-
-				for (final AbstractEntity child : (List<AbstractEntity>) existingItemsList) {
+			//if (existingItemsList.get(0) instanceof AbstractEntity) {
+			if (null == m) {	
+				m = PMF.get().getPersistenceManager();
+			}
+			
+			for (final AbstractEntity child : (List<AbstractEntity>) existingItemsList) {
+				if (null == child.getId()) {
+					System.out.println("epic fail: prevented npe");
+				} else {
 					// TODO why doesn't that work too? this throws an "this entity is currently managed by another manager" exception.
 					// m.deletePersistent(child);
 					m.deletePersistent(m.getObjectById(child.getClass(), KeyFactory.createKey(existingEntity.getId(), child.getClass().getSimpleName(), child.getId().getId())));
 				}
 			}
+			//}
 		}
 	}
 

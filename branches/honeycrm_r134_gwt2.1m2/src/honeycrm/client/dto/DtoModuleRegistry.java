@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.user.client.Window;
+
 public class DtoModuleRegistry {
 	private static DtoModuleRegistry instance = null;
 	private final Map<String, ModuleDto> moduleDtos;
@@ -28,6 +30,7 @@ public class DtoModuleRegistry {
 		if (moduleDtos.containsKey(moduleName)) {
 			return moduleDtos.get(moduleName);
 		} else {
+			Window.alert("Module '" + moduleName + "' cannot be found in " + DtoModuleRegistry.class);
 			throw new RuntimeException("Module '" + moduleName + "' cannot be found in " + DtoModuleRegistry.class);
 		}
 	}

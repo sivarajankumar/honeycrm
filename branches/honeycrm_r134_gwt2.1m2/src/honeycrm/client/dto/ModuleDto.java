@@ -16,6 +16,7 @@ public class ModuleDto implements Serializable {
 	private String[] listFieldIds;
 	private String[][] formFieldIds;
 	private String[] quickSearchItems;
+	private ExtraButton[] extraButtons;
 	private String historyToken;
 	private String title;
 	private String module;
@@ -79,13 +80,21 @@ public class ModuleDto implements Serializable {
 	public void setModule(String module) {
 		this.module = module;
 	}
-	
+
 	public boolean isHidden() {
 		return hidden;
 	}
 
 	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
+	}
+
+	public ExtraButton[] getExtraButtons() {
+		return extraButtons;
+	}
+
+	public void setExtraButtons(ExtraButton[] extraButtons) {
+		this.extraButtons = extraButtons;
 	}
 
 	public AbstractField getFieldById(final String id) {

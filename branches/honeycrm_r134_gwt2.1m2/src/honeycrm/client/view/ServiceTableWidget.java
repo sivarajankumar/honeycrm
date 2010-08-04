@@ -130,9 +130,9 @@ public class ServiceTableWidget extends ITableWidget {
 				final boolean wasTableAlreadyFilled = (table.getRowCount() == HEADER_ROWS + data.size());
 
 				for (int y = 0; y < data.size(); y++) {
-					for (int x = 0; x < data.get(y).getListFieldIds().length; x++) {
-						final String index = data.get(y).getListFieldIds()[x];
-						final AbstractField field = data.get(y).getFieldById(index);
+					for (int x = 0; x < moduleDto.getListFieldIds().length; x++) {
+						final String index = moduleDto.getListFieldIds()[x];
+						final AbstractField field = moduleDto.getFieldById(index);
 
 						if (wasTableAlreadyFilled) {
 							// update widget because it already exists
@@ -144,7 +144,7 @@ public class ServiceTableWidget extends ITableWidget {
 							}
 						} else {
 							// add a new widget and new click handler
-							table.setWidget(HEADER_ROWS + y, x, data.get(y).getFieldById(index).getWidget(view, data.get(y), (index)));
+							table.setWidget(HEADER_ROWS + y, x, field.getWidget(view, data.get(y), (index)));
 							addChangeEvents(index, table.getWidget(HEADER_ROWS + y, x));
 						}
 					}
