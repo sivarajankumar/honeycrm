@@ -1,8 +1,6 @@
 package honeycrm.client.view;
 
-import honeycrm.client.FulltextSearchWidget;
-import honeycrm.client.FulltextSuggestOracle;
-import honeycrm.client.LoadIndicator;
+import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;

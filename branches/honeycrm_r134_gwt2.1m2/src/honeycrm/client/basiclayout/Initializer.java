@@ -1,7 +1,8 @@
-package honeycrm.client;
+package honeycrm.client.basiclayout;
 
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.misc.ServiceRegistry;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -20,7 +21,7 @@ import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.Table;
 
 // TODO bundle all startup specific requests into one single request
-public class LoadingPanel extends DockLayoutPanel {
+public class Initializer extends DockLayoutPanel {
 	/**
 	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
 	 */
@@ -28,7 +29,7 @@ public class LoadingPanel extends DockLayoutPanel {
 	private HTML status = new HTML();
 	private long lastFinishTime = -1;
 
-	public LoadingPanel() {
+	public Initializer() {
 		super(Unit.PX);
 		status.setSize("400px", "400px");
 

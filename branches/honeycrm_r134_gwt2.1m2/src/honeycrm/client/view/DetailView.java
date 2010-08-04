@@ -1,7 +1,7 @@
 package honeycrm.client.view;
 
-import honeycrm.client.LoadIndicator;
 import honeycrm.client.admin.LogConsole;
+import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;

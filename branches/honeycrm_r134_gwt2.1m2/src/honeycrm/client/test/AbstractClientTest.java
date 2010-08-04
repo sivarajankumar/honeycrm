@@ -1,6 +1,6 @@
 package honeycrm.client.test;
 
-import honeycrm.client.ServiceRegistry;
+import honeycrm.client.misc.ServiceRegistry;
 
 import com.google.gwt.junit.client.GWTTestCase;
 

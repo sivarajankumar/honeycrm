@@ -1,12 +1,12 @@
 package honeycrm.client.view;
 
 import honeycrm.client.CommonServiceAsync;
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.ServiceRegistry;
-import honeycrm.client.TabCenterView;
+import honeycrm.client.basiclayout.LoadIndicator;
+import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.prefetch.Prefetcher;
 
 import java.io.Serializable;

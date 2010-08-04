@@ -1,6 +1,5 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.actions.CreateContractAction;
 import honeycrm.client.actions.AbstractAction;
 
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package honeycrm.client;
+package honeycrm.client.basiclayout;
 
 import honeycrm.client.view.DetailView;
 import honeycrm.client.view.ListView;

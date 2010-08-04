@@ -1,7 +1,7 @@
 package honeycrm.client.reports;
 
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.ServiceRegistry;
+import honeycrm.client.basiclayout.LoadIndicator;
+import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.profiling.ServiceCallStatistics;
 
 import java.util.Collection;

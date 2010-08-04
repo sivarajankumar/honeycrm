@@ -1,14 +1,14 @@
 package honeycrm.client.actions;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import honeycrm.client.ServiceRegistry;
-import honeycrm.client.TabCenterView;
 import honeycrm.client.admin.LogConsole;
+import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.misc.ServiceRegistry;
+
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class CreateContractAction extends AbstractAction {
 	private static final long serialVersionUID = -1517848188241541631L;

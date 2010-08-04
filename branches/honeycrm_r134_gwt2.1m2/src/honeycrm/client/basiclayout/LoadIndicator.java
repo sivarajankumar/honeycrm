@@ -1,4 +1,4 @@
-package honeycrm.client;
+package honeycrm.client.basiclayout;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;

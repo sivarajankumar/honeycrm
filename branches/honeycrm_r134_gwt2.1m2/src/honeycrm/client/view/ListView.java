@@ -1,12 +1,12 @@
 package honeycrm.client.view;
 
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.ServiceRegistry;
-import honeycrm.client.TabCenterView;
 import honeycrm.client.admin.LogConsole;
+import honeycrm.client.basiclayout.LoadIndicator;
+import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.field.FieldRelate;
+import honeycrm.client.misc.ServiceRegistry;
 
 import java.io.Serializable;
 import java.util.ArrayList;

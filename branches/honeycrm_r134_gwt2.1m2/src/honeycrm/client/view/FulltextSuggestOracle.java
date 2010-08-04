@@ -1,4 +1,4 @@
-package honeycrm.client;
+package honeycrm.client.view;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,9 +1,9 @@
 package honeycrm.client.view.csvimport;
 
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.ServiceRegistry;
-import honeycrm.client.TabCenterView;
+import honeycrm.client.basiclayout.LoadIndicator;
+import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.csv.CsvImporter;
+import honeycrm.client.misc.ServiceRegistry;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

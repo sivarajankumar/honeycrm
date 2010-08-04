@@ -1,10 +1,10 @@
 package honeycrm.client.view;
 
 import honeycrm.client.CommonServiceAsync;
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.ServiceRegistry;
+import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;

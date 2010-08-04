@@ -1,7 +1,7 @@
 package honeycrm.client.view;
 
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.ServiceRegistry;
+import honeycrm.client.basiclayout.LoadIndicator;
+import honeycrm.client.misc.ServiceRegistry;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

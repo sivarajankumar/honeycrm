@@ -1,4 +1,7 @@
-package honeycrm.client;
+package honeycrm.client.misc;
+
+import honeycrm.client.CommonService;
+import honeycrm.client.CommonServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 

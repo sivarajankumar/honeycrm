@@ -1,7 +1,7 @@
 package honeycrm.client.view;
 
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.TabCenterView;
+import honeycrm.client.basiclayout.LoadIndicator;
+import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 
 import com.google.gwt.event.dom.client.ClickEvent;

@@ -1,4 +1,4 @@
-package honeycrm.client;
+package honeycrm.client.basiclayout;
 
 import honeycrm.client.admin.AdminWidget;
 import honeycrm.client.admin.LogConsole;

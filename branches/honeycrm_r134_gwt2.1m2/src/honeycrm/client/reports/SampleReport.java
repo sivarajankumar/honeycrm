@@ -1,8 +1,8 @@
 package honeycrm.client.reports;
 
-import honeycrm.client.LoadIndicator;
-import honeycrm.client.LoadingPanel;
-import honeycrm.client.ServiceRegistry;
+import honeycrm.client.basiclayout.Initializer;
+import honeycrm.client.basiclayout.LoadIndicator;
+import honeycrm.client.misc.ServiceRegistry;
 
 import java.util.Date;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class SampleReport extends Composite {
 	public SampleReport() {
 		final VerticalPanel p = new VerticalPanel();
 
-		if (LoadingPanel.SKIP_LOADING_VISUALISATIONS) {
+		if (Initializer.SKIP_LOADING_VISUALISATIONS) {
 			
 		} else {
 			final Label status = new Label("Status: ");
