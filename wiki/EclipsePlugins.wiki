@@ -1,7 +1,7 @@
 #summary Plugins useful to developers.
 
 || name || description || url || update site ||
-|| PMD || '''provides tons of hints''': which classes are to complex, which variable names are bad, where are data flow anomalies, etc. '''impressive!'''.  analyses source, detects violation of conventions (e.g. max. lines of code, max. number of methods, variable names, use of modifiers) and recommends solutions || http://pmd.sourceforge.net/integrations.html || http://pmd.sf.net/eclipse ||
+|| PMD || *provides tons of hints*: which classes are to complex, which variable names are bad, where are data flow anomalies, etc. *impressive!*  analyses source, detects violation of conventions (e.g. max. lines of code, max. number of methods, variable names, use of modifiers) and recommends solutions || http://pmd.sourceforge.net/integrations.html || http://pmd.sf.net/eclipse ||
 || hammurapi ||  || http://www.hammurapi.biz/hammurapi-biz/ef/xmenu/hammurapi-group/products/hammurapi/index.html || jar standalone http://www.hammurapi.biz/products/hammurapi/hammurapi-5.7.0-setup.jar ||
 || find bugs ||  || http://findbugs.sourceforge.net/ || http://findbugs.cs.umd.edu/eclipse-daily ||
-|| ucdetector || unused code detector || http://www.ucdetector.org/ || http://ucdetector.sourceforge.net/update ||
+|| ucdetector || unused code detector. parses project source code and generates reports about unused methods. || http://www.ucdetector.org/ || http://ucdetector.sourceforge.net/update ||
