@@ -44,7 +44,7 @@ public class Offering extends AbstractEntity {
 		return services;
 	}
 
-	public void setServices(final List<Service> services) {
+	public void setServices(List<Service> services) {
 		this.services = services;
 	}
 
@@ -52,7 +52,7 @@ public class Offering extends AbstractEntity {
 		return deadline;
 	}
 
-	public void setDeadline(final Date deadline) {
+	public void setDeadline(Date deadline) {
 		this.deadline = deadline;
 	}
 
@@ -60,7 +60,7 @@ public class Offering extends AbstractEntity {
 		return contactID;
 	}
 
-	public void setContactID(final Long contactID) {
+	public void setContactID(Long contactID) {
 		this.contactID = contactID;
 	}
 
@@ -68,7 +68,7 @@ public class Offering extends AbstractEntity {
 		return contractID;
 	}
 
-	public void setContractID(final Long contractID) {
+	public void setContractID(Long contractID) {
 		this.contractID = contractID;
 	}
 

@@ -11,12 +11,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CacheStatsWidget extends Composite {
-	private final Label lblHits = new Label();
-	private final Label lblMisses = new Label();
-	private final Label lblAccess = new Label();
-	private final Label lblCount = new Label();
-	private final Label lblDate = new Label();
-	private final PrefetcherStats stats = Prefetcher.instance.getStats();
+	final Label lblHits = new Label();
+	final Label lblMisses = new Label();
+	final Label lblAccess = new Label();
+	final Label lblCount = new Label();
+	final Label lblDate = new Label();
+	final PrefetcherStats stats = Prefetcher.instance.getStats();
 
 	public CacheStatsWidget() {
 		final VerticalPanel panel = new VerticalPanel();

@@ -11,7 +11,7 @@ public class NumberParserTest extends TestCase {
 		assertEquals(0.0, NumberParser.convertToDouble(null));
 		assertEquals(Double.MIN_VALUE, NumberParser.convertToDouble(Double.MIN_VALUE));
 
-		final double d = new Random().nextDouble();
+		double d = new Random().nextDouble();
 		assertEquals(d, NumberParser.convertToDouble(String.valueOf(d)));
 	}
 }

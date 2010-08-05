@@ -41,7 +41,7 @@ public class OfferingReportsTest extends TestCase {
 			final Calendar c = Calendar.getInstance();
 			c.set(Calendar.YEAR, random.nextInt() % 3 + 100);
 
-			final Offering o = new Offering();
+			Offering o = new Offering();
 			o.setDeadline(c.getTime());
 			o.setServices(new LinkedList<Service>());
 			sum += getServices(o.getServices());

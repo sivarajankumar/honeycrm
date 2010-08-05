@@ -14,8 +14,8 @@ import javax.jdo.PersistenceManagerFactory;
 // import org.compass.gps.impl.SingleCompassGps;
 
 // TODO disabled compass / lucene until it works when deployed on appengine
-final public class PMF {
-	private static final PersistenceManagerFactory PMF;
+public class PMF {
+	private static final PersistenceManagerFactory pmf;
 	// private static final Compass compass;
 	// private static final CompassGps compassGps;
 
@@ -28,7 +28,7 @@ final public class PMF {
 		map.put("javax.jdo.option.RetainValues", "true");
 		map.put("datanucleus.appengine.autoCreateDatastoreTxns", "true");
 
-		PMF = JDOHelper.getPersistenceManagerFactory(map);
+		pmf = JDOHelper.getPersistenceManagerFactory(map);
 
 		// pmf =
 		// JDOHelper.getPersistenceManagerFactory("transactions-optional");
@@ -47,7 +47,7 @@ final public class PMF {
 	}
 
 	public static PersistenceManagerFactory get() {
-		return PMF;
+		return pmf;
 	}
 
 	// public static Compass compass() {

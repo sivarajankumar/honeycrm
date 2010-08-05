@@ -1,5 +1,6 @@
 package honeycrm.client.view;
 
+import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
@@ -21,6 +22,7 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public class FulltextSearchWidget extends SuggestBox {
 	public static final int MIN_QUERY_LENGTH = 3;
+	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected String lastQueryString;
 	protected final Map<String, Dto> nameToDto = new HashMap<String, Dto>();
 
@@ -28,30 +30,16 @@ public class FulltextSearchWidget extends SuggestBox {
 		super(new FulltextSuggestOracle());
 
 		addStyleName("wide_search_field");
-
-		addKeyPressHandler(getKeyPressHandler());
-		addSelectionHandler(getSeletionHandler());
-	}
-
-	private SelectionHandler<Suggestion> getSeletionHandler() {
-		return new SelectionHandler<Suggestion>() {
+		
+		addKeyPressHandler(new KeyPressHandler() {
 			@Override
-			public void onSelection(final SelectionEvent<Suggestion> event) {
-				redirectToDetailView(event);
-			}
-		};
-	}
-
-	private KeyPressHandler getKeyPressHandler() {
-		return new KeyPressHandler() {
-			@Override
-			public void onKeyPress(final KeyPressEvent event) {
+			public void onKeyPress(KeyPressEvent event) {
 				if (KeyCodes.KEY_ESCAPE == event.getNativeEvent().getKeyCode()) {
 					setText("");
 					emptySuggestOracle();
 					return;
 				}
-
+				
 				final String queryString = (getText() + event.getCharCode()).trim();
 
 				if (!queryString.equals(lastQueryString)) {
@@ -64,10 +52,18 @@ public class FulltextSearchWidget extends SuggestBox {
 					lastQueryString = queryString;
 				}
 			}
-		};
+		});
+
+		addSelectionHandler(new SelectionHandler<Suggestion>() {
+			@Override
+			public void onSelection(SelectionEvent<Suggestion> event) {
+				redirectToDetailView(event);
+			}
+
+		});
 	}
 
-	protected void redirectToDetailView(final SelectionEvent<Suggestion> event) {
+	protected void redirectToDetailView(SelectionEvent<Suggestion> event) {
 		final String label = event.getSelectedItem().getReplacementString();
 
 		if (nameToDto.containsKey(label)) {
@@ -82,17 +78,17 @@ public class FulltextSearchWidget extends SuggestBox {
 	protected void startFulltextSearch(final String queryString) {
 		LoadIndicator.get().startLoading();
 
-		ServiceRegistry.commonService().fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
+		commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 			@Override
-			public void onSuccess(final ListQueryResult resultList) {
+			public void onSuccess(ListQueryResult result) {
 				LoadIndicator.get().endLoading();
 
-				if (null != resultList && resultList.getItemCount() > 0) {
-					final FulltextSuggestOracle oracle = emptySuggestOracle();
+				if (null != result && result.getItemCount() > 0) {
+					final FulltextSuggestOracle o = emptySuggestOracle();
 					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
 
-					for (final Dto result : resultList.getResults()) {
-						String label = result.getQuicksearch();
+					for (final Dto a : result.getResults()) {
+						String label = a.getQuicksearch();
 
 						if (quicksearchLabels.containsKey(label)) {
 							quicksearchLabels.put(label, quicksearchLabels.get(label) + 1);
@@ -104,9 +100,9 @@ public class FulltextSearchWidget extends SuggestBox {
 
 						// insert this label into the name to id translation map to make sure that
 						// later the id can be determined by looking up the name in this map.
-						nameToDto.put(label, result);
+						nameToDto.put(label, a);
 
-						oracle.add(label);
+						o.add(label);
 					}
 
 					showSuggestionList();
@@ -114,7 +110,7 @@ public class FulltextSearchWidget extends SuggestBox {
 			}
 
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				LoadIndicator.get().endLoading();
 				Window.alert("fulltext search failed");
 			}
@@ -125,10 +121,10 @@ public class FulltextSearchWidget extends SuggestBox {
 	 * Empty the current suggestion oracle and return it.
 	 */
 	protected FulltextSuggestOracle emptySuggestOracle() {
-		final FulltextSuggestOracle oracle = (FulltextSuggestOracle) getSuggestOracle();
+		final FulltextSuggestOracle o = (FulltextSuggestOracle) getSuggestOracle();
 		// final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
-		oracle.clear();
-		return oracle;
+		o.clear();
+		return o;
 	}
 
 }

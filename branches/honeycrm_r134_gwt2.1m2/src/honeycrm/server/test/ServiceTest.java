@@ -13,13 +13,13 @@ public class ServiceTest extends GWTTestCase {
 
 		commonService.deleteAllItems(new AsyncCallback<Void>() {
 			@Override
-			public void onSuccess(final Void result) {
+			public void onSuccess(Void result) {
 				assertNotNull(result);
 				finishTest();
 			}
 
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				fail();
 			}
 		});

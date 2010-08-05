@@ -37,18 +37,18 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final ProfilingStatisticsCollector profiler = new ProfilingStatisticsCollector();
 
 	@Override
-	public long create(final Dto dto) {
+	public long create(Dto dto) {
 		return creator.create(dto);
 	}
 
 	@Override
-	public void addDemo(final String dtoIndex) {
+	public void addDemo(String dtoIndex) {
 		creator.addDemo(dtoIndex);
 	}
 
 	@Override
-	public ListQueryResult getAll(final String dtoIndex, final int from, final int to) {
-		final ServiceCall call = new ServiceCall("getAll");
+	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
+		ServiceCall call = new ServiceCall("getAll");
 
 		// TODO using transactions currently breaks getAll()
 		// TODO do everything within the context of a transaction
@@ -70,7 +70,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public Dto get(final String dtoIndex, final long id) {
-		final ServiceCall call = new ServiceCall("get");
+		ServiceCall call = new ServiceCall("get");
 
 		final Dto dto = reader.get(dtoIndex, id);
 
@@ -92,33 +92,33 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		return dto;
 	}
 
-	private void endAndPersist(final ServiceCall call) {
+	private void endAndPersist(ServiceCall call) {
 		if (ServiceCallStatistics.PROFILING_ENABLED) {
 			m.makePersistent(call.end());
 		}
 	}
 
 	@Override
-	public ListQueryResult search(final String dtoIndex, final Dto searchDto, final int from, final int to) {
+	public ListQueryResult search(String dtoIndex, Dto searchDto, int from, int to) {
 		return reader.search(dtoIndex, searchDto, from, to);
 	}
 
 	@Override
-	public ListQueryResult getAllByNamePrefix(final String dtoIndex, final String prefix, final int from, final int to) {
+	public ListQueryResult getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
 		log.fine("getAllByNamePrefix(" + dtoIndex + "," + prefix + ")");
 		return reader.getAllByNamePrefix(dtoIndex, prefix, from, to);
 	}
 
 	@Override
-	public Dto getByName(final String dtoIndex, final String name) {
+	public Dto getByName(String dtoIndex, String name) {
 		return reader.getByName(dtoIndex, name);
 	}
 
 	// create classes for delete and update operations when code grows
 	// TODO does not update the relate field anymore
 	@Override
-	public void update(final Dto dto, final long id) {
-		final ServiceCall call = new ServiceCall("update");
+	public void update(Dto dto, long id) {
+		ServiceCall call = new ServiceCall("update");
 
 		dto.set("lastUpdatedAt", (new Date(System.currentTimeMillis())));
 
@@ -132,7 +132,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public void delete(final String dtoIndex, final long id) {
+	public void delete(String dtoIndex, long id) {
 		final Object object = getDomainObject(dtoIndex, id);
 		if (null != object) {
 			m.deletePersistent(object);
@@ -140,31 +140,31 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public void deleteAll(final String dtoIndex, final Set<Long> ids) {
+	public void deleteAll(String dtoIndex, Set<Long> ids) {
 		for (final Long id : ids) {
 			delete(dtoIndex, id);
 		}
 	}
 
 	@Override
-	public ListQueryResult fulltextSearch(final String query, final int from, final int to) {
+	public ListQueryResult fulltextSearch(String query, int from, int to) {
 		return fulltext.fulltextSearch(query, from, to);
 	}
 
 	@Override
-	public void mark(final String dtoIndex, final long id, final boolean marked) {
-		final Dto dto = get(dtoIndex, id);
-		dto.setMarked(marked);
-		update(dto, id);
+	public void mark(String dtoIndex, long id, boolean marked) {
+		Dto viewable = get(dtoIndex, id);
+		viewable.setMarked(marked);
+		update(viewable, id);
 	}
 
 	@Override
-	public ListQueryResult getAllMarked(final String dtoIndex, final int from, final int to) {
+	public ListQueryResult getAllMarked(String dtoIndex, int from, int to) {
 		return reader.getAllMarked(dtoIndex, from, to);
 	}
 
 	@Override
-	public void deleteAll(final String dtoIndex) {
+	public void deleteAll(String dtoIndex) {
 		final Query q = m.newQuery(getDomainClass(dtoIndex));
 
 		// delete step by step instead to avoid "can only delete 500 entities en block" errors in app engine.
@@ -184,7 +184,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 				/*
 				 * for (final AbstractEntity entity : ) { m.deletePersistent(entity); }
 				 */
-			} catch (final NullPointerException e) {
+			} catch (NullPointerException e) {
 				log.warning("A NullPointerException occured during the deletion of all entities");
 				e.printStackTrace();
 			}
@@ -200,12 +200,12 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public ListQueryResult fulltextSearchForModule(final String dtoIndex, final String query, final int from, final int to) {
+	public ListQueryResult fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
 		return fulltext.fulltextSearchForModule(dtoIndex, query, from, to);
 	}
 
 	@Override
-	public void importCSV(final String module, final List<Dto> dtos) {
+	public void importCSV(final String module, List<Dto> dtos) {
 		log.info("Starting importing " + dtos.size() + " " + module + "(s)");
 
 		int done = 0;
@@ -218,7 +218,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public void feedback(final String message) {
+	public void feedback(String message) {
 		email.feedback(message);
 	}
 
@@ -243,7 +243,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		final PersistenceManager m = PMF.get().getPersistenceManager();
 		final int count = 500; // app engine restriction
 
-		final Collection<ReadTest> reads = new HashSet<ReadTest>();
+		Collection<ReadTest> reads = new HashSet<ReadTest>();
 		final Random r = new Random();
 
 		for (int i = 0; i < count; i++) {
@@ -261,14 +261,14 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void bulkRead() {
 		final PersistenceManager m = PMF.get().getPersistenceManager();
-
+		
 		final long before = System.currentTimeMillis();
 		log.warning("Started full table scan");
 		System.out.flush();
 		final Query q = m.newQuery(ReadTest.class);
 		q.setRange(1, 1000);
 		final Collection<ReadTest> result = (Collection<ReadTest>) q.execute();
-
+		
 		log.warning("Finished full table scan: Read items in " + (System.currentTimeMillis() - before) + " ms.");
 	}
 
@@ -278,7 +278,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public Map<String, ListQueryResult> getAllRelated(final Long id, final String relatedDtoIndex) {
+	public Map<String, ListQueryResult> getAllRelated(Long id, String relatedDtoIndex) {
 		return reader.getAllRelated(id, relatedDtoIndex);
 	}
 }

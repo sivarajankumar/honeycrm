@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-final public class RelationshipFieldTable {
+public class RelationshipFieldTable {
 	private static final ReflectionHelper reflectionHelper = new ReflectionHelper();
 	public static final RelationshipFieldTable instance = new RelationshipFieldTable();
 	private final Map<String, Map<String, Set<String>>> map = new HashMap<String, Map<String, Set<String>>>();

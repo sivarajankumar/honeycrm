@@ -18,22 +18,22 @@ public class FieldBoolean extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(final Object value) {
-		final CheckBox widget = new CheckBox();
+	protected Widget internalGetCreateWidget(Object value) {
+		CheckBox widget = new CheckBox();
 		return widget;
 	}
 
 	@Override
 	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
-		final CheckBox widget7 = new CheckBox();
+		CheckBox widget7 = new CheckBox();
 		widget7.setValue((Boolean) dto.get(fieldId));
 		widget7.setEnabled(false);
 		return widget7;
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(final Object value) {
-		final CheckBox widget = new CheckBox();
+	protected Widget internalGetEditWidget(Object value) {
+		CheckBox widget = new CheckBox();
 		widget.setValue((Boolean) value);
 		return widget;
 	}
@@ -44,7 +44,7 @@ public class FieldBoolean extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(final Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		return ((CheckBox) w).getValue();
 	}
 }

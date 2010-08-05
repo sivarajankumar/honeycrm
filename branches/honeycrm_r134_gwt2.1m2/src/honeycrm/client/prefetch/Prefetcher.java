@@ -8,9 +8,9 @@ import java.util.Map;
 // TODO otherwise cache only ever grows.
 public class Prefetcher {
 	public static final Prefetcher instance = new Prefetcher();
-	private final Map<CacheKey, CacheEntry> cache = new HashMap<CacheKey, CacheEntry>();
-	private final PrefetcherStats stats = new PrefetcherStats();
-
+	private Map<CacheKey, CacheEntry> cache = new HashMap<CacheKey, CacheEntry>();
+	private PrefetcherStats stats = new PrefetcherStats();
+	
 	private Prefetcher() {
 	}
 
@@ -47,7 +47,7 @@ public class Prefetcher {
 
 				serverCallback.doRpc(new Consumer<T>() {
 					@Override
-					public void setValueAsynch(final T result) {
+					public void setValueAsynch(T result) {
 						entry.setValue(result);
 						entry.setLocked(false);
 
@@ -67,7 +67,7 @@ public class Prefetcher {
 			}
 		}
 	}
-
+	
 	public PrefetcherStats getStats() {
 		return stats;
 	}
@@ -80,7 +80,7 @@ public class Prefetcher {
 		public void increaseHits() {
 			hits++;
 		}
-
+		
 		public void increaseItemCount() {
 			this.itemCount++;
 		}
@@ -92,7 +92,7 @@ public class Prefetcher {
 		public long getItemCount() {
 			return itemCount;
 		}
-
+		
 		public long getHits() {
 			return hits;
 		}

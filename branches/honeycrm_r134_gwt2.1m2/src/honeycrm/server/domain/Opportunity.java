@@ -52,7 +52,7 @@ public class Opportunity extends AbstractEntity {
 		return contactId;
 	}
 
-	public void setContactId(final long contactId) {
+	public void setContactId(long contactId) {
 		this.contactId = contactId;
 	}
 
@@ -60,7 +60,7 @@ public class Opportunity extends AbstractEntity {
 		return amount;
 	}
 
-	public void setAmount(final double amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
@@ -68,7 +68,7 @@ public class Opportunity extends AbstractEntity {
 		return probability;
 	}
 
-	public void setProbability(final int probability) {
+	public void setProbability(int probability) {
 		this.probability = probability;
 	}
 
@@ -76,7 +76,7 @@ public class Opportunity extends AbstractEntity {
 		return phase;
 	}
 
-	public void setPhase(final String phase) {
+	public void setPhase(String phase) {
 		this.phase = phase;
 	}
 
@@ -84,7 +84,7 @@ public class Opportunity extends AbstractEntity {
 		return reasonClosed;
 	}
 
-	public void setReasonClosed(final String reasonClosed) {
+	public void setReasonClosed(String reasonClosed) {
 		this.reasonClosed = reasonClosed;
 	}
 
@@ -92,7 +92,7 @@ public class Opportunity extends AbstractEntity {
 		return description;
 	}
 
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 }

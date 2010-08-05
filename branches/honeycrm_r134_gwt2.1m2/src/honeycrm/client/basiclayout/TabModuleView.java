@@ -18,13 +18,13 @@ public class TabModuleView extends DockLayoutPanel {
 	public TabModuleView(final String clazz) {
 		super(Unit.PX);
 		// super(clazz);
-
+		
 		listView = new ListView(clazz);
 		listView.addStyleName("list_view");
 		detailView = new DetailView(clazz);
 		detailView.addStyleName("detail_view_content");
 
-		/*		final FlowPanel content = new FlowPanel();
+/*		final FlowPanel content = new FlowPanel();
 		content.setStyleName("tab_content");
 
 		final FlowPanel viewPanel = new FlowPanel();
@@ -35,35 +35,35 @@ public class TabModuleView extends DockLayoutPanel {
 		final VerticalPanel listPanel = new VerticalPanel();
 		listPanel.setStyleName("list_view");
 		listPanel.add(listView);
-		 */
+*/
 		final SplitLayoutPanel splitPanel = new SplitLayoutPanel();
 		splitPanel.addWest(new ScrollPanel(listView), 500);
 		splitPanel.add(new ScrollPanel(detailView));
 		//splitPanel.addStyleName("content");
 		// splitPanel.forceLayout();
-		//	splitPanel.setLayoutData()
-
-		/*		final FlowPanel hor = new FlowPanel();
+	//	splitPanel.setLayoutData()
+		
+/*		final FlowPanel hor = new FlowPanel();
 		hor.setStyleName("content");
 		hor.add(listPanel);
 		hor.add(viewPanel);
 		hor.add(new HTML("<div class='clear'></div>"));
-		 */
+*/
 		addNorth(new ModuleButtonBar(clazz), 40);
-
+	
 		add(splitPanel);
-		//		content.add(new ModuleButtonBar(clazz));
+//		content.add(new ModuleButtonBar(clazz));
 		// add(splitPanel);
-
-		/*		FlowPanel h = new FlowPanel();
+		
+/*		FlowPanel h = new FlowPanel();
 		h.add(listView);
 		h.add(detailView);
-
+		
 		initWidget(h);*/
-		//		initWidget(content);
+//		initWidget(content);
 	}
 
-	public void showDetailView(final long id) {
+	public void showDetailView(long id) {
 		// update url accordingly
 		// History.newItem(viewable.getHistoryToken() + " " + id);
 		detailView.refresh(id);
@@ -91,7 +91,7 @@ public class TabModuleView extends DockLayoutPanel {
 		return listView.isInitialized();
 	}
 
-	public void showCreateViewPrefilled(final String fieldId, final Serializable value) {
+	public void showCreateViewPrefilled(String fieldId, Serializable value) {
 		detailView.prefill(fieldId, value);
 		showCreateView();
 	}

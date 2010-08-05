@@ -12,7 +12,7 @@ public class DtoWizardTest extends TestCase {
 		final DtoWizard creator = DtoWizard.instance;
 		assertNotNull(creator);
 
-		final Map<String, ModuleDto> list = creator.getDtoConfiguration();
+		Map<String, ModuleDto> list = creator.getDtoConfiguration();
 		assertFalse(list.isEmpty());
 
 	}

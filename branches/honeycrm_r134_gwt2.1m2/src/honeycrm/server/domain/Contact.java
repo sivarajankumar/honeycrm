@@ -20,7 +20,7 @@ import org.compass.annotations.SearchableProperty;
 @Searchable
 @ListViewable( { "name", "email" })
 @DetailViewable( { "name,accountID", "responsibleId", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId",
-"child1Id,child2Id" })
+		"child1Id,child2Id" })
 @Quicksearchable( { "name" })
 public class Contact extends AbstractEntity {
 	@SearchableProperty
@@ -76,7 +76,7 @@ public class Contact extends AbstractEntity {
 	private String profession;
 
 	@SearchableProperty
-	@Label("Study area")
+@Label("Study area")
 	@FieldEnumAnnotation( { "None", "Biology", "Physics", "Mathematics", "Computer science" })
 	private String study;
 
@@ -112,19 +112,19 @@ public class Contact extends AbstractEntity {
 		return phone;
 	}
 
-	public void setCity(final String city) {
+	public void setCity(String city) {
 		this.city = city;
 	}
 
-	public void setEmail(final String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	public void setName(final String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public void setPhone(final String phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
@@ -132,7 +132,7 @@ public class Contact extends AbstractEntity {
 		return accountID;
 	}
 
-	public void setAccountID(final long accountID) {
+	public void setAccountID(long accountID) {
 		this.accountID = accountID;
 	}
 
@@ -140,7 +140,7 @@ public class Contact extends AbstractEntity {
 		return emailOptedOut;
 	}
 
-	public void setEmailOptedOut(final boolean emailOptedOut) {
+	public void setEmailOptedOut(boolean emailOptedOut) {
 		this.emailOptedOut = emailOptedOut;
 	}
 
@@ -148,7 +148,7 @@ public class Contact extends AbstractEntity {
 		return mobile;
 	}
 
-	public void setMobile(final String mobile) {
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
@@ -156,7 +156,7 @@ public class Contact extends AbstractEntity {
 		return doNotCall;
 	}
 
-	public void setDoNotCall(final boolean doNotCall) {
+	public void setDoNotCall(boolean doNotCall) {
 		this.doNotCall = doNotCall;
 	}
 
@@ -164,7 +164,7 @@ public class Contact extends AbstractEntity {
 		return doNotCallExplanation;
 	}
 
-	public void setDoNotCallExplanation(final String doNotCallExplanation) {
+	public void setDoNotCallExplanation(String doNotCallExplanation) {
 		this.doNotCallExplanation = doNotCallExplanation;
 	}
 
@@ -172,7 +172,7 @@ public class Contact extends AbstractEntity {
 		return bankAccountData;
 	}
 
-	public void setBankAccountData(final String bankAccountData) {
+	public void setBankAccountData(String bankAccountData) {
 		this.bankAccountData = bankAccountData;
 	}
 
@@ -180,7 +180,7 @@ public class Contact extends AbstractEntity {
 		return profession;
 	}
 
-	public void setProfession(final String profession) {
+	public void setProfession(String profession) {
 		this.profession = profession;
 	}
 
@@ -188,7 +188,7 @@ public class Contact extends AbstractEntity {
 		return study;
 	}
 
-	public void setStudy(final String study) {
+	public void setStudy(String study) {
 		this.study = study;
 	}
 
@@ -196,7 +196,7 @@ public class Contact extends AbstractEntity {
 		return partnerId;
 	}
 
-	public void setPartnerId(final long partnerId) {
+	public void setPartnerId(long partnerId) {
 		this.partnerId = partnerId;
 	}
 
@@ -204,7 +204,7 @@ public class Contact extends AbstractEntity {
 		return child1Id;
 	}
 
-	public void setChild1Id(final long child1Id) {
+	public void setChild1Id(long child1Id) {
 		this.child1Id = child1Id;
 	}
 
@@ -212,7 +212,7 @@ public class Contact extends AbstractEntity {
 		return child2Id;
 	}
 
-	public void setChild2Id(final long child2Id) {
+	public void setChild2Id(long child2Id) {
 		this.child2Id = child2Id;
 	}
 
@@ -220,7 +220,7 @@ public class Contact extends AbstractEntity {
 		return responsibleId;
 	}
 
-	public void setResponsibleId(final long responsibleId) {
+	public void setResponsibleId(long responsibleId) {
 		this.responsibleId = responsibleId;
 	}
 }

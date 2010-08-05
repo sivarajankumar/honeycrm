@@ -44,7 +44,7 @@ public class Header extends Composite {
 
 		return p;
 	}
-
+	
 	private Widget addStyle(final Widget widget, final String ... styles) {
 		for (final String style: styles) {
 			widget.addStyleName(style);

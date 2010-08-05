@@ -23,7 +23,7 @@ public class FieldMark extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(final Object value) {
+	protected Widget internalGetCreateWidget(Object value) {
 		final Dto dto = DtoModuleRegistry.instance().get(dtoIndex).createDto();
 		// dto.setId(NumberParser.convertToLong(value));
 		dto.setId(dtoId);
@@ -38,7 +38,7 @@ public class FieldMark extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(final Object value) {
+	protected Widget internalGetEditWidget(Object value) {
 		return internalGetCreateWidget(value);
 	}
 
@@ -48,7 +48,7 @@ public class FieldMark extends AbstractField {
 	};
 
 	@Override
-	public Serializable getData(final Widget w) {
+	public Serializable getData(Widget w) {
 		throw new RuntimeException("Not Supported");
 	}
 }

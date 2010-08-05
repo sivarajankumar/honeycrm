@@ -27,7 +27,7 @@ public class Account extends AbstractEntity {
 	@Label("Name")
 	@FieldStringAnnotation
 	private String name;
-
+	
 	@SearchableProperty
 	@Label("Shipping Address")
 	@FieldStringAnnotation
@@ -37,52 +37,52 @@ public class Account extends AbstractEntity {
 	@Label("Billing Address")
 	@FieldStringAnnotation
 	private String billingAddress;
-
+	
 	@SearchableProperty
 	@Label("Rating")
 	@FieldEnumAnnotation({ "A", "B", "C", "D", "E", "F"})
 	private String rating;
-
+	
 	@SearchableProperty
 	@Label("Website")
 	@FieldStringAnnotation
 	private String website;
-
+	
 	@Label("Employees")
 	@FieldIntegerAnnotation(0)
 	private int employees;
-
+	
 	@SearchableProperty
 	@Label("Ticker Symbol")
 	@FieldStringAnnotation
 	private String tickerSymbol;
-
+	
 	@Label("Member Of")
 	@FieldRelateAnnotation(Account.class)
 	private long parentId;
-
+	
 	@Label("E Mail")
 	@FieldEmailAnnotation
 	private String email;
-
+	
 	@Label("Responsible")
 	@FieldRelateAnnotation(Employee.class)
 	private long responsibleId;
-
+	
 	@Label("Phone Office")
 	@FieldStringAnnotation
 	private String phoneOffice;
-
+	
 	@Label("Phone Other")
 	@FieldStringAnnotation
 	private String phoneOther;
-
+	
 	@Label("Industry")
 	@FieldMultiEnumAnnotation({"Apparel", "Banking", "Biotechnology", "Chemicals", "Communications", "Construction", "Consulting", "Education", "Electronics", "Energy",
-		"Engineering", "Entertainment", "Environmental", "Finance", "Government", "Healthcare", "Hospitality", "Insurance", "Machinery", "Manufacturing", "Media", "Not For Profit",
-		"Recreation", "Retail", "Shipping", "Technology", "Telecommunications", "Transportation", "Utilities", "Other"})
-		private String industry;
-
+				"Engineering", "Entertainment", "Environmental", "Finance", "Government", "Healthcare", "Hospitality", "Insurance", "Machinery", "Manufacturing", "Media", "Not For Profit",
+				"Recreation", "Retail", "Shipping", "Technology", "Telecommunications", "Transportation", "Utilities", "Other"})
+	private String industry;
+	
 	@Label("Annual Revenue")
 	@FieldCurrencyAnnotation("0")
 	private double annualRevenue;
@@ -91,7 +91,7 @@ public class Account extends AbstractEntity {
 		return name;
 	}
 
-	public void setName(final String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -99,7 +99,7 @@ public class Account extends AbstractEntity {
 		return annualRevenue;
 	}
 
-	public void setAnnualRevenue(final double annualRevenue) {
+	public void setAnnualRevenue(double annualRevenue) {
 		this.annualRevenue = annualRevenue;
 	}
 
@@ -107,7 +107,7 @@ public class Account extends AbstractEntity {
 		return shippingAddress;
 	}
 
-	public void setShippingAddress(final String shippingAddress) {
+	public void setShippingAddress(String shippingAddress) {
 		this.shippingAddress = shippingAddress;
 	}
 
@@ -115,7 +115,7 @@ public class Account extends AbstractEntity {
 		return billingAddress;
 	}
 
-	public void setBillingAddress(final String billingAddress) {
+	public void setBillingAddress(String billingAddress) {
 		this.billingAddress = billingAddress;
 	}
 
@@ -123,7 +123,7 @@ public class Account extends AbstractEntity {
 		return rating;
 	}
 
-	public void setRating(final String rating) {
+	public void setRating(String rating) {
 		this.rating = rating;
 	}
 
@@ -131,7 +131,7 @@ public class Account extends AbstractEntity {
 		return website;
 	}
 
-	public void setWebsite(final String website) {
+	public void setWebsite(String website) {
 		this.website = website;
 	}
 
@@ -139,7 +139,7 @@ public class Account extends AbstractEntity {
 		return employees;
 	}
 
-	public void setEmployees(final int employees) {
+	public void setEmployees(int employees) {
 		this.employees = employees;
 	}
 
@@ -147,7 +147,7 @@ public class Account extends AbstractEntity {
 		return tickerSymbol;
 	}
 
-	public void setTickerSymbol(final String tickerSymbol) {
+	public void setTickerSymbol(String tickerSymbol) {
 		this.tickerSymbol = tickerSymbol;
 	}
 
@@ -155,7 +155,7 @@ public class Account extends AbstractEntity {
 		return parentId;
 	}
 
-	public void setParentId(final long parentId) {
+	public void setParentId(long parentId) {
 		this.parentId = parentId;
 	}
 
@@ -163,7 +163,7 @@ public class Account extends AbstractEntity {
 		return email;
 	}
 
-	public void setEmail(final String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
@@ -171,7 +171,7 @@ public class Account extends AbstractEntity {
 		return responsibleId;
 	}
 
-	public void setResponsibleId(final long responsibleId) {
+	public void setResponsibleId(long responsibleId) {
 		this.responsibleId = responsibleId;
 	}
 
@@ -179,7 +179,7 @@ public class Account extends AbstractEntity {
 		return phoneOffice;
 	}
 
-	public void setPhoneOffice(final String phoneOffice) {
+	public void setPhoneOffice(String phoneOffice) {
 		this.phoneOffice = phoneOffice;
 	}
 
@@ -187,7 +187,7 @@ public class Account extends AbstractEntity {
 		return phoneOther;
 	}
 
-	public void setPhoneOther(final String phoneOther) {
+	public void setPhoneOther(String phoneOther) {
 		this.phoneOther = phoneOther;
 	}
 
@@ -195,7 +195,7 @@ public class Account extends AbstractEntity {
 		return industry;
 	}
 
-	public void setIndustry(final String industry) {
+	public void setIndustry(String industry) {
 		this.industry = industry;
 	}
 }

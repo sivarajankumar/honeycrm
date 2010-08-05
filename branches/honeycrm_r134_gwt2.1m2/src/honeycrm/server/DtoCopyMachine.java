@@ -26,31 +26,32 @@ public class DtoCopyMachine {
 	private static final Set<String> badVariablePrefixes = new HashSet<String>();
 	private static final DomainClassRegistry registry = DomainClassRegistry.instance;
 	private static PersistenceManager m = null;
-
-	private static final Map<Integer, Field[]> cachedFilteredFields = new HashMap<Integer, Field[]>();
+	private static final Map<Integer, Field[]> filteredFieldsCache = new HashMap<Integer, Field[]>();
 	
 	static {
 		badVariablePrefixes.add("$");
 		badVariablePrefixes.add("jdo");
+		badVariablePrefixes.add("INDEX_");
 
 		badVariableNames.add("serialVersionUID");
 	}
 
-	public AbstractEntity copy(final Dto dto) {
+	public AbstractEntity copy(Dto dto) {
 		return copy(dto, null);
 	}
 
 	/**
 	 * Copy data from Dto into domain class. This is usually the case whenever the client sends data to the server (create, update)
 	 */
-	public AbstractEntity copy(final Dto dto, final AbstractEntity existingEntity) {
+	public AbstractEntity copy(Dto dto, AbstractEntity existingEntity) {
 		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
 		try {
 			final AbstractEntity entity = entityClass.newInstance();
-			final Field[] allFields = getFilteredFieldsCached(reflectionHelper.getAllFields(entityClass));
+			final Field[] allFields = filterFields(reflectionHelper.getAllFields(entityClass));
 
-			for (final Field field : allFields) {
+			for (int i = 0; i < allFields.length; i++) {
+				final Field field = allFields[i];
 				final Object value = dto.get(field.getName());
 
 				if (null == value) {
@@ -79,19 +80,19 @@ public class DtoCopyMachine {
 					continue;
 				}
 
-				final Method setter = entityClass.getMethod(reflectionHelper.getMethodName("set", field), field.getType());
+				final Method setter = entityClass.getMethod(reflectionHelper.getMethodNameCached("set", field), field.getType());
 				setter.invoke(entity, value);
 			}
 
 			return entity;
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	private void handleDtoLists(final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final Field field, final Object value) throws NoSuchMethodException,
-	IllegalAccessException, InvocationTargetException {
+			IllegalAccessException, InvocationTargetException {
 		if (((List<?>) value).get(0) instanceof Dto) {
 			final List<AbstractEntity> serverList = new LinkedList<AbstractEntity>();
 
@@ -99,7 +100,7 @@ public class DtoCopyMachine {
 				serverList.add(copy(child));
 			}
 
-			final Method setter = entityClass.getMethod(reflectionHelper.getMethodName("set", field), List.class);
+			final Method setter = entityClass.getMethod(reflectionHelper.getMethodNameCached("set", field), List.class);
 			setter.invoke(entity, serverList);
 		}
 	}
@@ -107,26 +108,28 @@ public class DtoCopyMachine {
 	/**
 	 * Copy data from a domain class instance into a Dto. This is usually the case whenever the server responds to clients (read).
 	 */
-	public Dto copy(final AbstractEntity entity) {
+	public Dto copy(AbstractEntity entity) {
 		final Dto dto = new Dto();
 
 		final Class<?> entityClass = entity.getClass();
-		final Field[] allFields = getFilteredFieldsCached(reflectionHelper.getAllFields(entityClass));
+		final Field[] allFields = filterFields(reflectionHelper.getAllFields(entityClass));
 
 		try {
-			for (final Field field : allFields) {
-				final Method getter = entityClass.getMethod(reflectionHelper.getMethodName("get", field));
+			for (int i = 0; i < allFields.length; i++) {
+				final Field field = allFields[i];
+
+				final Method getter = entityClass.getMethod(reflectionHelper.getMethodNameCached("get", field));
 				final Object value = getter.invoke(entity);
 
-				if (null == value) {
-					continue;
-				} else if (value instanceof List<?>) {
+				if (value instanceof List<?>) {
 					handleDomainClassLists(dto, field, value);
 					continue;
-				} else if ("id".equals(field.getName())) {
+				}
+
+				if ("id".equals(field.getName())) {
 					try {
 						dto.set(field.getName(), (int) ((Key) value).getId());
-					} catch (final NullPointerException e) {
+					} catch (NullPointerException e) {
 						System.out.println("npe!");
 					}
 				} else {
@@ -135,7 +138,7 @@ public class DtoCopyMachine {
 			}
 
 			dto.setModule(entityClass.getSimpleName().toLowerCase());
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -156,18 +159,18 @@ public class DtoCopyMachine {
 	 * TODO This removes the child elements of an entity during an update to avoid duplicating them. This should not be under the responsibility of this class and has to be refactored in the future!
 	 */
 	private void deleteOldChildItems(final Class<? extends AbstractEntity> entityClass, final AbstractEntity existingEntity, final Field field) throws IllegalArgumentException, SecurityException,
-	IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		if (null != existingEntity) {
 			// This is an update, before doing anything else we remove the existing items linked to this entity
 			// This avoids duplicating them on an update.
 			// Note this means that on each update the linked items of an entity are deleted and recreated. This should be avoided in future versions.
-			final List<?> existingItemsList = (List<?>) entityClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(existingEntity);
+			final List<?> existingItemsList = (List<?>) entityClass.getMethod(reflectionHelper.getMethodNameCached("get", field)).invoke(existingEntity);
 
 			//if (existingItemsList.get(0) instanceof AbstractEntity) {
 			if (null == m) {	
 				m = PMF.get().getPersistenceManager();
 			}
-
+			
 			for (final AbstractEntity child : (List<AbstractEntity>) existingItemsList) {
 				if (null == child.getId()) {
 					System.out.println("epic fail: prevented npe");
@@ -184,17 +187,17 @@ public class DtoCopyMachine {
 	/**
 	 * Method throwing away all fields that are irrelevant and should not be copied by this copy machine (e.g. automatically added fields for serialization).
 	 */
-	private Field[] getFilteredFieldsCached(final Field[] allFields) {
+	private Field[] filterFields(final Field[] allFields) {
 		final int hashCode = allFields.hashCode();
 		
-		if (cachedFilteredFields.containsKey(hashCode)) {
-			FilteredFieldsCacheStats.hits++;
-			return cachedFilteredFields.get(hashCode);
+		if (filteredFieldsCache.containsKey(hashCode)) {
+			FilteredFieldsCache.hits++;
+			return filteredFieldsCache.get(hashCode);
 		} else {
-			FilteredFieldsCacheStats.misses++;
-			final Field[] filtered = getFilteredFields(allFields);
-			cachedFilteredFields.put(hashCode, filtered);
-			return filtered;
+			FilteredFieldsCache.misses++;
+			final Field[] fields = getFilteredFields(allFields);
+			filteredFieldsCache.put(hashCode, fields);
+			return fields;
 		}
 	}
 
@@ -232,7 +235,7 @@ public class DtoCopyMachine {
 	}
 }
 
-class FilteredFieldsCacheStats {
+class FilteredFieldsCache {
 	public static int hits = 0;
 	public static int misses = 0;
 }

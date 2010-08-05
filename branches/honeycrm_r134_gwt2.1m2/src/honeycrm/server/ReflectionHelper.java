@@ -24,7 +24,7 @@ public class ReflectionHelper {
 		final Class[] classes = getClasses(packageName);
 		final List<Class> dtos = new ArrayList<Class>();
 
-		for (final Class clazz : classes) {
+		for (Class clazz : classes) {
 			if (clazz.getSimpleName().startsWith(prefix)) {
 				dtos.add(clazz);
 			}
@@ -45,13 +45,13 @@ public class ReflectionHelper {
 	 * @return The classes
 	 * @throws ClassNotFoundException
 	 */
-	public static List<Class> findClasses(final File directory, final String packageName) throws ClassNotFoundException {
-		final List<Class> classes = new ArrayList<Class>();
+	public static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException {
+		List<Class> classes = new ArrayList<Class>();
 		if (!directory.exists()) {
 			return classes;
 		}
-		final File[] files = directory.listFiles();
-		for (final File file : files) {
+		File[] files = directory.listFiles();
+		for (File file : files) {
 			if (file.isDirectory()) {
 				assert !file.getName().contains(".");
 				classes.addAll(findClasses(file, packageName + "." + file.getName()));
@@ -73,18 +73,18 @@ public class ReflectionHelper {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static Class[] getClasses(final String packageName) throws ClassNotFoundException, IOException {
-		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+	public static Class[] getClasses(String packageName) throws ClassNotFoundException, IOException {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		assert classLoader != null;
-		final String path = packageName.replace('.', '/');
-		final Enumeration<URL> resources = classLoader.getResources(path);
-		final List<File> dirs = new ArrayList<File>();
+		String path = packageName.replace('.', '/');
+		Enumeration<URL> resources = classLoader.getResources(path);
+		List<File> dirs = new ArrayList<File>();
 		while (resources.hasMoreElements()) {
-			final URL resource = resources.nextElement();
+			URL resource = resources.nextElement();
 			dirs.add(new File(resource.getFile()));
 		}
-		final ArrayList<Class> classes = new ArrayList<Class>();
-		for (final File directory : dirs) {
+		ArrayList<Class> classes = new ArrayList<Class>();
+		for (File directory : dirs) {
 			classes.addAll(findClasses(directory, packageName));
 		}
 		return classes.toArray(new Class[classes.size()]);
@@ -120,20 +120,10 @@ public class ReflectionHelper {
 	/**
 	 * Returns the getter/setter for a property, e.g. getId if fieldName is id
 	 */
-	public String getMethodName(final String prefix, final Field field) {
-		final String firstLetter = field.getName().substring(0, 1);
-		final String rest = field.getName().substring(1);
-
-		final boolean isBooleanField = (field.getType() == boolean.class || field.getType() == Boolean.class);
-
-		if ("get".equals(prefix) && isBooleanField) {
-			// boolean fields are accessed with is<Variable Name> getters (e.g. isActive()).
-			return "is" + firstLetter.toUpperCase() + rest;
-		} else {
-			return prefix + firstLetter.toUpperCase() + rest;
-		}
+	public String getMethodNameCached(final String prefix, final Field field) {
+		return MethodNameExpert.get().getMethodNameCached(prefix.equals("get"), field);
 	}
-
+	
 	/**
 	 * Return all fields of the dto class that are from the original domain object, i.e. all accessible properties except automatically added or those that are only necessary for organizational purposes.
 	 */
@@ -201,4 +191,6 @@ public class ReflectionHelper {
 		System.arraycopy(array2, 0, array, array1.length, array2.length);
 		return array;
 	}
+	
+	
 }

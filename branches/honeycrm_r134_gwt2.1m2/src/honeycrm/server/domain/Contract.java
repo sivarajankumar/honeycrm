@@ -46,7 +46,7 @@ public class Contract extends AbstractEntity {
 		return offeringID;
 	}
 
-	public void setOfferingID(final Long offeringID) {
+	public void setOfferingID(Long offeringID) {
 		this.offeringID = offeringID;
 	}
 
@@ -54,7 +54,7 @@ public class Contract extends AbstractEntity {
 		return employeeID;
 	}
 
-	public void setEmployeeID(final Long employeeID) {
+	public void setEmployeeID(Long employeeID) {
 		this.employeeID = employeeID;
 	}
 
@@ -62,7 +62,7 @@ public class Contract extends AbstractEntity {
 		return contactID;
 	}
 
-	public void setContactID(final Long contactID) {
+	public void setContactID(Long contactID) {
 		this.contactID = contactID;
 	}
 
@@ -70,7 +70,7 @@ public class Contract extends AbstractEntity {
 		return startDate;
 	}
 
-	public void setStartDate(final Date startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
@@ -78,7 +78,7 @@ public class Contract extends AbstractEntity {
 		return endDate;
 	}
 
-	public void setEndDate(final Date endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
@@ -86,7 +86,7 @@ public class Contract extends AbstractEntity {
 		return services;
 	}
 
-	public void setServices(final List<Service> services) {
+	public void setServices(List<Service> services) {
 		this.services = services;
 	}
 }

@@ -29,7 +29,7 @@ public class ModuleDto implements Serializable {
 		return listFieldIds;
 	}
 
-	public void setListFieldIds(final String[] listFieldIds) {
+	public void setListFieldIds(String[] listFieldIds) {
 		this.listFieldIds = listFieldIds;
 	}
 
@@ -37,7 +37,7 @@ public class ModuleDto implements Serializable {
 		return formFieldIds;
 	}
 
-	public void setFormFieldIds(final String[][] formFieldIds) {
+	public void setFormFieldIds(String[][] formFieldIds) {
 		this.formFieldIds = formFieldIds;
 	}
 
@@ -45,7 +45,7 @@ public class ModuleDto implements Serializable {
 		return quickSearchItems;
 	}
 
-	public void setQuickSearchItems(final String[] quickSearchItems) {
+	public void setQuickSearchItems(String[] quickSearchItems) {
 		this.quickSearchItems = quickSearchItems;
 	}
 
@@ -53,7 +53,7 @@ public class ModuleDto implements Serializable {
 		return historyToken;
 	}
 
-	public void setHistoryToken(final String historyToken) {
+	public void setHistoryToken(String historyToken) {
 		this.historyToken = historyToken;
 	}
 
@@ -61,7 +61,7 @@ public class ModuleDto implements Serializable {
 		return title;
 	}
 
-	public void setTitle(final String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
@@ -69,7 +69,7 @@ public class ModuleDto implements Serializable {
 		return fields;
 	}
 
-	public void setFields(final Set<AbstractField> fields) {
+	public void setFields(Set<AbstractField> fields) {
 		this.fields = fields;
 	}
 
@@ -77,7 +77,7 @@ public class ModuleDto implements Serializable {
 		return module;
 	}
 
-	public void setModule(final String module) {
+	public void setModule(String module) {
 		this.module = module;
 	}
 
@@ -85,7 +85,7 @@ public class ModuleDto implements Serializable {
 		return hidden;
 	}
 
-	public void setHidden(final boolean hidden) {
+	public void setHidden(boolean hidden) {
 		this.hidden = hidden;
 	}
 
@@ -93,7 +93,7 @@ public class ModuleDto implements Serializable {
 		return extraButtons;
 	}
 
-	public void setExtraButtons(final ExtraButton[] extraButtons) {
+	public void setExtraButtons(ExtraButton[] extraButtons) {
 		this.extraButtons = extraButtons;
 	}
 

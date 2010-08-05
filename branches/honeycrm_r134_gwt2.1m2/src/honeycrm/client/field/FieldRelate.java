@@ -37,7 +37,7 @@ public class FieldRelate extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(final Object value) {
+	protected Widget internalGetCreateWidget(Object value) {
 		final long id = (null != value && value instanceof Long && (Long) value > 0) ? (Long) value : 0;
 		return new RelateWidget(getRelatedModule(), id);
 	}
@@ -56,9 +56,9 @@ public class FieldRelate extends AbstractField {
 
 			details.addMouseOverHandler(new MouseOverHandler() {
 				@Override
-				public void onMouseOver(final MouseOverEvent event) {
-					final int left = link.getAbsoluteLeft();
-					final int top = link.getAbsoluteTop() + 16;
+				public void onMouseOver(MouseOverEvent event) {
+					int left = link.getAbsoluteLeft();
+					int top = link.getAbsoluteTop() + 16;
 					popup.setPopupPosition(left, top);
 					popup.show();
 				}
@@ -66,7 +66,7 @@ public class FieldRelate extends AbstractField {
 
 			details.addMouseOutHandler(new MouseOutHandler() {
 				@Override
-				public void onMouseOut(final MouseOutEvent event) {
+				public void onMouseOut(MouseOutEvent event) {
 					popup.hide();
 				}
 			});
@@ -81,12 +81,12 @@ public class FieldRelate extends AbstractField {
 
 	private PopupPanel getDetailsPopup(final Dto related, final String fieldId) {
 		final PopupPanel popup = new PopupPanel(true);
-
+	
 		String html = "";
-
+		
 		final List<String> sortedFieldNames = CollectionHelper.toList(related.getAllData().keySet());
 		Collections.sort(sortedFieldNames);
-
+		
 		for (final String key: sortedFieldNames) {
 			final Serializable value = related.get(key);
 
@@ -96,14 +96,14 @@ public class FieldRelate extends AbstractField {
 				html += "<li>" + label + ": " + value.toString() + "</li>";
 			}
 		}
-
+		
 		popup.add(new HTML("<ul>" + html + "</ul>"));
 
 		return popup;
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(final Object value) {
+	protected Widget internalGetEditWidget(Object value) {
 		return new RelateWidget(getRelatedModule(), (null == value) ? 0 : (Long) value);
 	}
 
@@ -113,7 +113,7 @@ public class FieldRelate extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(final Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		if (w instanceof RelateWidget) {
 			return ((RelateWidget) w).getId();
 		} else if (w instanceof Hyperlink) {

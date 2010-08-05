@@ -34,7 +34,7 @@ public class CollectionHelper {
 
 		return joinedStr;
 	}
-
+	
 	public static String join(final String[] array, final String glue) {
 		return join(toSet(array), glue);
 	}
@@ -45,13 +45,13 @@ public class CollectionHelper {
 	public static Set<String> toSet(final String[] array) {
 		final Set<String> set = new HashSet<String>();
 		if (null != array) {
-			for (final String element : array) {
-				set.add(element);
+			for (int i = 0; i < array.length; i++) {
+				set.add(array[i]);
 			}
 		}
 		return set;
 	}
-
+	
 	/**
 	 * Convert an arbitrary collection (e.g. set) into a list. This is necessary for sorting collections for example. Only lists can be sorted.
 	 */

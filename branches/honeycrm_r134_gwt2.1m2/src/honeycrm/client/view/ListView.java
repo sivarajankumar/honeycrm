@@ -41,20 +41,20 @@ import com.google.gwt.view.client.SingleSelectionModel;
 // the background (polling)
 // TODO use google formatters instead of field classes of honeycrm 
 public class ListView extends AbstractView {
-	private static final int DEFAULT_MAX_ENTRIES = 15;
+	protected static final int DEFAULT_MAX_ENTRIES = 15;
 
 	private int pageSize = DEFAULT_MAX_ENTRIES;
 	private int currentPage = -1;
 	private boolean showTitle;
 	private Button[] additionalButtons;
 	private boolean itemsHaveBeenLoadedOnce = false;
-	private final VerticalPanel panel = new VerticalPanel();
+	protected final VerticalPanel panel = new VerticalPanel();
 
-	private CellTable<Dto> table;
+	private CellTable<Dto> ct;
 	private SimplePager<Dto> pager;
-	private ListViewAdapter<Dto> listAdapter;
+	private ListViewAdapter<Dto> lva;
 
-	private final Panel buttonBar = new HorizontalPanel();
+	protected final Panel buttonBar = new HorizontalPanel();
 
 	public ListView(final String clazz) {
 		super(clazz);
@@ -65,9 +65,11 @@ public class ListView extends AbstractView {
 		final Button btn = new Button("Delete selected");
 		btn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
-				if (getDeletedIds().size() > 0 && Window.confirm("Do you want to delete the selected items?")) {
-					deleteSelected(getDeletedIds());
+			public void onClick(ClickEvent event) {
+				if (getDeletedIds().size() > 0) {
+					if (Window.confirm("Do you want to delete the selected items?")) {
+						deleteSelected(getDeletedIds());
+					}
 				}
 			}
 
@@ -76,13 +78,13 @@ public class ListView extends AbstractView {
 
 				ServiceRegistry.commonService().deleteAll(moduleDto.getModule(), ids, new AsyncCallback<Void>() {
 					@Override
-					public void onSuccess(final Void result) {
+					public void onSuccess(Void result) {
 						LoadIndicator.get().endLoading();
 						refresh();
 					}
 
 					@Override
-					public void onFailure(final Throwable caught) {
+					public void onFailure(Throwable caught) {
 						displayError(caught);
 					}
 				});
@@ -91,7 +93,7 @@ public class ListView extends AbstractView {
 			private Set<Long> getDeletedIds() {
 				final Set<Long> ids = new HashSet<Long>();
 
-				for (final Dto dto : listAdapter.getList()) {
+				for (final Dto dto : lva.getList()) {
 					if (null != dto.get("deleteFlag") && (Boolean) dto.get("deleteFlag")) {
 						ids.add(dto.getId());
 					}
@@ -103,7 +105,7 @@ public class ListView extends AbstractView {
 	}
 
 	protected void initListView() {
-		pager = new SimplePager<Dto>(table = new CellTable<Dto>(), TextLocation.CENTER) {
+		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER) {
 			@Override
 			public void onRangeOrSizeChanged(final PagingListView<Dto> listView) {
 				super.onRangeOrSizeChanged(listView);
@@ -125,21 +127,21 @@ public class ListView extends AbstractView {
 			};
 		};
 
-		listAdapter = new ListViewAdapter<Dto>();
+		lva = new ListViewAdapter<Dto>();
 
 		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>();
 		selectionModel.addSelectionChangeHandler(new SelectionChangeHandler() {
 			@Override
-			public void onSelectionChange(final SelectionChangeEvent event) {
+			public void onSelectionChange(SelectionChangeEvent event) {
 				final Dto dto = selectionModel.getSelectedObject();
 				TabCenterView.instance().showModuleTabWithId(dto.getModule(), dto.getId());
 			}
 		});
 
-		table.setSelectionEnabled(true);
-		table.setSelectionModel(selectionModel);
-		table.setPageSize(pageSize);
-		listAdapter.addView(table);
+		ct.setSelectionEnabled(true);
+		ct.setSelectionModel(selectionModel);
+		ct.setPageSize(pageSize);
+		lva.addView(ct);
 
 		pager.firstPage();
 
@@ -159,7 +161,7 @@ public class ListView extends AbstractView {
 	}
 
 	private void insertTable() {
-		panel.add(table);
+		panel.add(ct);
 		panel.add(pager);
 	}
 
@@ -188,7 +190,7 @@ public class ListView extends AbstractView {
 				public String getValue(final Dto object) {
 					if (moduleDto.getFieldById(id) instanceof FieldRelate) {
 						final Serializable value = object.get(id);
-
+						
 						if (null == value || 0 == (Long) value) {
 							return "";
 						} else {
@@ -209,25 +211,25 @@ public class ListView extends AbstractView {
 			// TODO what is that for?
 			column.setFieldUpdater(new FieldUpdater<Dto, String>() {
 				@Override
-				public void update(final int index, final Dto object, final String value) {
+				public void update(int index, Dto object, String value) {
 					object.set(id, value);
 				}
 			});
 
-			table.addColumn(column, moduleDto.getFieldById(id).getLabel());
+			ct.addColumn(column, moduleDto.getFieldById(id).getLabel());
 		}
 	}
 
 	private void addDeleteColumn() {
 		final Column<Dto, Boolean> delCol = new Column<Dto, Boolean>(new CheckboxCell()) {
 			@Override
-			public Boolean getValue(final Dto object) {
+			public Boolean getValue(Dto object) {
 				return false;
 			}
 		};
 		delCol.setFieldUpdater(new FieldUpdater<Dto, Boolean>() {
 			@Override
-			public void update(final int index, final Dto object, final Boolean value) {
+			public void update(int index, Dto object, Boolean value) {
 				// mark this item for later deletion
 				object.set("deleteFlag", value);
 			}
@@ -242,30 +244,30 @@ public class ListView extends AbstractView {
 			}
 		};
 
-		table.addColumn(delCol, h);
+		ct.addColumn(delCol, h);
 	}
 
-	protected void refreshListViewValues(final ListQueryResult result) {
+	protected void refreshListViewValues(ListQueryResult result) {
 		if (!itemsHaveBeenLoadedOnce) {
 			initListView();
 			itemsHaveBeenLoadedOnce = true;
 		}
 
-		final ArrayList<Dto> values = new ArrayList<Dto>();
+		ArrayList<Dto> values = new ArrayList<Dto>();
 		for (final Dto dto : result.getResults()) {
 			values.add(dto);
 		}
 
-		table.setDataSize(result.getItemCount(), true);
-		/*		final int start = (currentPage - 1) * pageSize;
-
+		ct.setDataSize(result.getItemCount(), true);
+/*		final int start = (currentPage - 1) * pageSize;
+		
 		ct.setPageStart(start);
 		ct.setData(start, result.getItemCount(), values);
-		 */
+*/
 		// give the ListViewAdapter our data
-		listAdapter.setList(values);
-		listAdapter.refresh();
-
+		lva.setList(values);
+		lva.refresh();
+		
 		/*
 		 * if (null == lva.getList() || 0 == lva.getList().size()) { ct.setData(0, values.size(), values); } else { ct.setData(1 * pageSize, values.size(), values); /* if (lva.getList().size() == values.size()) { // do not call set list again. overwrite list items instead. for (int i = 0; i < values.size(); i++) { lva.getList().set(0, values.get(i)); } } else { Window.alert("Fail! unequal list sizes."); } }
 		 */
@@ -290,14 +292,14 @@ public class ListView extends AbstractView {
 
 		commonService.getAll(moduleDto.getModule(), offset, offset + pageSize, new AsyncCallback<ListQueryResult>() {
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				log("error");
 				displayError(caught);
 				LoadIndicator.get().endLoading();
 			}
 
 			@Override
-			public void onSuccess(final ListQueryResult result) {
+			public void onSuccess(ListQueryResult result) {
 				log("received result");
 				currentPage = page;
 				refreshListViewValues(result);
@@ -306,7 +308,7 @@ public class ListView extends AbstractView {
 		});
 	}
 
-	private void log(final String string) {
+	private void log(String string) {
 		LogConsole.log("[" + moduleDto.getModule() + "] " + string);
 	}
 
@@ -330,15 +332,15 @@ public class ListView extends AbstractView {
 		return itemsHaveBeenLoadedOnce;
 	}
 
-	public void setPageSize(final int pageSize) {
+	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
 
-	public void setShowTitle(final boolean showTitle) {
+	public void setShowTitle(boolean showTitle) {
 		this.showTitle = showTitle;
 	}
 
-	public void setAdditionalButtons(final Button... additionalButtons) {
+	public void setAdditionalButtons(Button... additionalButtons) {
 		this.additionalButtons = additionalButtons;
 	}
 

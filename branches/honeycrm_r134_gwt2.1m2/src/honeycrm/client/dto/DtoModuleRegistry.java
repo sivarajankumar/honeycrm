@@ -10,7 +10,7 @@ public class DtoModuleRegistry {
 	private static DtoModuleRegistry instance = null;
 	private final Map<String, ModuleDto> moduleDtos;
 	private final Map<String, Map<String, Set<String>>> relationships;
-
+	
 	private DtoModuleRegistry(final Map<String, ModuleDto> dtoModuleData, final Map<String, Map<String, Set<String>>> relationships) {
 		this.moduleDtos = dtoModuleData;
 		this.relationships = relationships;
@@ -38,7 +38,7 @@ public class DtoModuleRegistry {
 	public Collection<ModuleDto> getDtos() {
 		return moduleDtos.values();
 	}
-
+	
 	public Map<String, Map<String, Set<String>>> getRelationships() {
 		return relationships;
 	}

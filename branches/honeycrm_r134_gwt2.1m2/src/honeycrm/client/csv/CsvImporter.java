@@ -52,7 +52,7 @@ abstract public class CsvImporter extends AbstractCsv {
 		final Map<String, String> map = getMapping();
 
 		final ModuleDto moduleDto = DtoModuleRegistry.instance().get(getModule());
-
+		
 		// start at 1 to skip header row
 		for (int y = 1; y < table.length; y++) {
 			final Dto dto = new Dto();
@@ -61,7 +61,7 @@ abstract public class CsvImporter extends AbstractCsv {
 			for (final String keyHoney : map.keySet()) {
 				final String importStr = getGluedValues(table, positions, y, map.get(keyHoney));
 				final Serializable typedValue = moduleDto.getFieldById(keyHoney).getTypedData(importStr);
-
+				
 				dto.set(keyHoney, typedValue);
 			}
 
@@ -74,14 +74,14 @@ abstract public class CsvImporter extends AbstractCsv {
 	/**
 	 * keySugar may contain some GLUE (e.g. ",") to express that several fields should be concatenated during import. If we find such a key we have to split the different keys and then resolve and concatenate their values.
 	 */
-	private String getGluedValues(final String[][] table, final Map<String, Integer> positions, final int y, final String keySugar) {
+	private String getGluedValues(final String[][] table, final Map<String, Integer> positions, int y, final String keySugar) {
 		if (keySugar.contains(GLUE)) {
 			final String[] actualKeys = keySugar.split(GLUE);
 			String str = "";
 
 			for (int i = 0; i < actualKeys.length; i++) {
 				str += table[y][positions.get(actualKeys[i])];
-
+				
 				if (i < actualKeys.length -1) {
 					str += " ";
 				}

@@ -18,7 +18,6 @@ public class DemoDataHolder {
 	private final static List<String> contractNames = new LinkedList<String>();
 	private final static List<String> serviceNames = new LinkedList<String>();
 	private final static List<String> serviceDiscountTypes = new LinkedList<String>();
-	private final static String[] industries = new String[] { "Apparel", "Banking", "Biotechnology", "Chemicals", "Communications", "Construction", "Consulting", "Education", "Electronics", "Energy", "Engineering", "Entertainment", "Environmental", "Finance", "Government", "Healthcare", "Hospitality", "Insurance", "Machinery", "Manufacturing", "Media", "Not For Profit", "Recreation", "Retail", "Shipping", "Technology", "Telecommunications", "Transportation", "Utilities", "Other" };
 
 	static {
 		serviceDiscountTypes.add("ABS");
@@ -81,9 +80,8 @@ public class DemoDataHolder {
 			emails.add(getRandomEmailAddress());
 
 			long n = r.nextLong();
-			if (n < 0) {
+			if (n < 0)
 				n = -n;
-			}
 
 			dates.add(new Date(minDate + n % maxDateTimespan));
 		}
@@ -91,7 +89,7 @@ public class DemoDataHolder {
 	}
 
 	private static long getMinDateTimestamp() {
-		final Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, 1990);
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DAY_OF_MONTH, 1);
@@ -100,17 +98,17 @@ public class DemoDataHolder {
 	}
 
 	private static long getMaxDateTimespan(final long firstDateTimestamp) {
-		final Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, 2020);
 		c.set(Calendar.MONTH, 11);
 		c.set(Calendar.DAY_OF_MONTH, 1);
-		final Date lastDate = c.getTime();
+		Date lastDate = c.getTime();
 		return lastDate.getTime() - firstDateTimestamp;
 	}
 
 	private static String getRandomEmailAddress() {
-		final String name = getRandomName();
-		final String host = hosts.get(r.nextInt(hosts.size()));
+		String name = getRandomName();
+		String host = hosts.get(r.nextInt(hosts.size()));
 		return (name + "@" + host).toLowerCase();
 	}
 
@@ -148,9 +146,5 @@ public class DemoDataHolder {
 
 	public static String getRandomDiscountType() {
 		return serviceDiscountTypes.get(r.nextInt(serviceDiscountTypes.size()));
-	}
-
-	public static String getRandomIndustry() {
-		return industries[Math.abs(r.nextInt() % industries.length)];
 	}
 }

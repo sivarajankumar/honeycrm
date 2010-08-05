@@ -28,11 +28,11 @@ public class FieldEnum extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(final Object value) {
-		final ListBox box = new ListBox();
+	protected Widget internalGetCreateWidget(Object value) {
+		ListBox box = new ListBox();
 		final String[] options = getOptions();
-		for (final String option : options) {
-			box.addItem(option);
+		for (int i = 0; i < options.length; i++) {
+			box.addItem(options[i]);
 		}
 		return box;
 	}
@@ -44,7 +44,7 @@ public class FieldEnum extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(final Object value) {
+	protected Widget internalGetEditWidget(Object value) {
 		final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
 		final String[] options = getOptions();
 		final ListBox box = new ListBox();
@@ -66,7 +66,7 @@ public class FieldEnum extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(final Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		final ListBox box = (ListBox) w;
 
 		if (box.getSelectedIndex() == -1) {

@@ -9,6 +9,6 @@ abstract public class AbstractAction implements Serializable {
 
 	public AbstractAction() {
 	}
-
+	
 	abstract public void doAction(Dto dto);
 }

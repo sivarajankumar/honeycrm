@@ -25,8 +25,8 @@ public class Initializer extends DockLayoutPanel {
 	/**
 	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
 	 */
-	public static final boolean SKIP_LOADING_VISUALISATIONS = true;
-	private final HTML status = new HTML();
+	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
+	private HTML status = new HTML();
 	private long lastFinishTime = -1;
 
 	public Initializer() {
@@ -36,12 +36,12 @@ public class Initializer extends DockLayoutPanel {
 		status.setStyleName("loading_panel");
 		// TODO add nice loading image
 		add(status);
-
+		
 		// initWidget(vpanel);
-
+		
 		prefetchImages();
 	}
-
+	
 	/**
 	 * Pre-fetch all google web toolkit default images
 	 */
@@ -82,12 +82,12 @@ public class Initializer extends DockLayoutPanel {
 
 		ServiceRegistry.commonService().wakeupServer(new AsyncCallback<Void>() {
 			@Override
-			public void onSuccess(final Void result) {
+			public void onSuccess(Void result) {
 				loadVisualisation();
 			}
 
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				Window.alert("Could not wakeup server side. Please try again later.");
 			}
 		});
@@ -119,7 +119,7 @@ public class Initializer extends DockLayoutPanel {
 			}
 
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				Window.alert("Could not get dto configuration from server side.");
 			}
 		});
@@ -135,7 +135,7 @@ public class Initializer extends DockLayoutPanel {
 			}
 
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				Window.alert("Could not get relationship information from server side.");
 			}
 		});
@@ -155,11 +155,11 @@ public class Initializer extends DockLayoutPanel {
 		// TODO this has no effect. i hope the user has a giant screen because currently scrolling
 		// is not working at all.
 		Window.enableScrolling(true);
-
+		
 		addNorth(new Header(), 40);
-
+		
 		add(TabCenterView.instance());
-
+		
 		History.fireCurrentHistoryState();
 	}
 }

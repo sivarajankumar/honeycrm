@@ -29,8 +29,8 @@ public class CsvExportTest extends TestCase {
 		final String[] lines = csv.split(AbstractCsv.LINE_SEP);
 		assertEquals(list.size(), lines.length);
 
-		for (final String line : lines) {
-			final String[] cols = line.split(AbstractCsv.COL_SEP);
+		for (int i = 0; i < lines.length; i++) {
+			final String[] cols = lines[i].split(AbstractCsv.COL_SEP);
 			assertTrue(cols.length > 1);
 
 			final Set<String> colSet = CollectionHelper.toSet(cols);

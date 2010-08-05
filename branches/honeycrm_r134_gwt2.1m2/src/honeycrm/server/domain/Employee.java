@@ -49,7 +49,7 @@ public class Employee extends AbstractEntity {
 		return name;
 	}
 
-	public void setName(final String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -57,7 +57,7 @@ public class Employee extends AbstractEntity {
 		return active;
 	}
 
-	public void setActive(final boolean active) {
+	public void setActive(boolean active) {
 		this.active = active;
 	}
 
@@ -65,7 +65,7 @@ public class Employee extends AbstractEntity {
 		return department;
 	}
 
-	public void setDepartment(final String department) {
+	public void setDepartment(String department) {
 		this.department = department;
 	}
 
@@ -73,7 +73,7 @@ public class Employee extends AbstractEntity {
 		return title;
 	}
 
-	public void setTitle(final String title) {
+	public void setTitle(String title) {
 		this.title = title;
 	}
 
@@ -81,7 +81,7 @@ public class Employee extends AbstractEntity {
 		return phoneOffice;
 	}
 
-	public void setPhoneOffice(final String phoneOffice) {
+	public void setPhoneOffice(String phoneOffice) {
 		this.phoneOffice = phoneOffice;
 	}
 
@@ -89,7 +89,7 @@ public class Employee extends AbstractEntity {
 		return email;
 	}
 
-	public void setEmail(final String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 }

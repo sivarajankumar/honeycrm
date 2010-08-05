@@ -20,11 +20,11 @@ public class CsvImporterAccounts extends CsvImporter {
 		map.put("industry", "industry");
 		map.put("billingAddress", "billing_address_city,billing_address_country");
 		map.put("shippingAddress", "shipping_address_city,shipping_address_country");
-
+		
 		map.put("employees", "employees");
 		map.put("website", "website");
 		map.put("tickerSymbol", "ticker_symbol");
-
+		
 		// name industry annual_revenue phone_fax billing_address_street billing_address_city billing_address_state billing_address_postalcode billing_address_country
 		// rating phone_office phone_alternate website ownership employees ticker_symbol shipping_address_street shipping_address_city shipping_address_state shipping_address_postalcode shipping_address_country
 		// parent_id sic_code campaign_id email1

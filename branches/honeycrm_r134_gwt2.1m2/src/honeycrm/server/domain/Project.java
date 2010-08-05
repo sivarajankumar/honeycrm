@@ -63,7 +63,7 @@ public class Project extends AbstractEntity {
 		return name;
 	}
 
-	public void setName(final String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -71,7 +71,7 @@ public class Project extends AbstractEntity {
 		return employeeId;
 	}
 
-	public void setEmployeeId(final long employeeId) {
+	public void setEmployeeId(long employeeId) {
 		this.employeeId = employeeId;
 	}
 
@@ -79,7 +79,7 @@ public class Project extends AbstractEntity {
 		return description;
 	}
 
-	public void setDescription(final String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -87,7 +87,7 @@ public class Project extends AbstractEntity {
 		return targetSum;
 	}
 
-	public void setTargetSum(final double targetSum) {
+	public void setTargetSum(double targetSum) {
 		this.targetSum = targetSum;
 	}
 
@@ -95,7 +95,7 @@ public class Project extends AbstractEntity {
 		return currentSum;
 	}
 
-	public void setCurrentSum(final double currentSum) {
+	public void setCurrentSum(double currentSum) {
 		this.currentSum = currentSum;
 	}
 
@@ -103,7 +103,7 @@ public class Project extends AbstractEntity {
 		return startDate;
 	}
 
-	public void setStartDate(final Date startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
@@ -111,7 +111,7 @@ public class Project extends AbstractEntity {
 		return endDate;
 	}
 
-	public void setEndDate(final Date endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
@@ -119,7 +119,7 @@ public class Project extends AbstractEntity {
 		return phase;
 	}
 
-	public void setPhase(final String phase) {
+	public void setPhase(String phase) {
 		this.phase = phase;
 	}
 }

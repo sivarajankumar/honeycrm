@@ -34,7 +34,7 @@ public interface CommonService extends RemoteService {
 	public ListQueryResult fulltextSearch(String query, int from, int to);
 
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String relatedDtoIndex);
-
+	
 	public ListQueryResult fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
 
 	// update
@@ -67,7 +67,7 @@ public interface CommonService extends RemoteService {
 
 	// reports
 	public Map<Integer, Double> getAnnuallyOfferingVolumes();
-
+	
 	// profiling
 	public Collection<ServiceCallStatistics> getServiceCallStatistics();
 	public void bulkCreate();

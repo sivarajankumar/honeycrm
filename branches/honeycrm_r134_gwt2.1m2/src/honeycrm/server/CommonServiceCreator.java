@@ -11,9 +11,9 @@ import java.util.Date;
 public class CommonServiceCreator extends AbstractCommonService {
 	private static final long serialVersionUID = -272641981474976416L;
 
-	public long create(final Dto dto) {
+	public long create(Dto dto) {
 		final AbstractEntity domainObject = copy.copy(dto);
-
+		
 		if (null == domainObject) {
 			throw new RuntimeException("Could not copy dto into domain class");
 		} else {
@@ -39,7 +39,7 @@ public class CommonServiceCreator extends AbstractCommonService {
 		}
 	}
 
-	public void addDemo(final String dtoIndex) {
+	public void addDemo(String dtoIndex) {
 		if ("account".equals(dtoIndex)) {
 			internalCreate(DemoDataProvider.account());
 		} else if ("contact".equals(dtoIndex)) {

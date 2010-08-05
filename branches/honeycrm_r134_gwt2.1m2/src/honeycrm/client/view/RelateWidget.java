@@ -25,13 +25,13 @@ public class RelateWidget extends SuggestBox {
 	private final String marshalledClass;
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	private boolean timerRunning;
-
+	
 	public RelateWidget(final String marshalledClazz, final long id) {
 		super(new MultiWordSuggestOracle());
 		this.marshalledClass = marshalledClazz;
 		addHandlers();
 
-
+		
 		if (0 != id) {
 			// an id of 0 indicates that nothing has been selected yet. if something has been
 			// selected yet load the actual name of the related account.
@@ -45,7 +45,7 @@ public class RelateWidget extends SuggestBox {
 
 		Prefetcher.instance.get(new Consumer<Dto>() {
 			@Override
-			public void setValueAsynch(final Dto result) {
+			public void setValueAsynch(Dto result) {
 				if (null != result) { 
 					setValue(result.getQuicksearch());
 				}
@@ -61,7 +61,7 @@ public class RelateWidget extends SuggestBox {
 					}
 
 					@Override
-					public void onFailure(final Throwable caught) {
+					public void onFailure(Throwable caught) {
 						LoadIndicator.get().endLoading();
 						Window.alert("Could not get item by id");
 					}
@@ -73,9 +73,9 @@ public class RelateWidget extends SuggestBox {
 	private void addHandlers() {
 		addKeyPressHandler(new KeyPressHandler() {
 			@Override
-			public void onKeyPress(final KeyPressEvent event) {
+			public void onKeyPress(KeyPressEvent event) {
 				final String lastQuery = getText().trim() + event.getCharCode();
-
+				
 				if (!timerRunning) {
 					new Timer(){
 						@Override
@@ -89,19 +89,19 @@ public class RelateWidget extends SuggestBox {
 
 		addSelectionHandler(new SelectionHandler<Suggestion>() {
 			@Override
-			public void onSelection(final SelectionEvent<Suggestion> event) {
+			public void onSelection(SelectionEvent<Suggestion> event) {
 				// determine id of this item and store the id in the gui to make sure it is
 				// available on submit
 				final String selected = event.getSelectedItem().getReplacementString();
 
 				commonService.getByName(marshalledClass, selected, new AsyncCallback<Dto>() {
 					@Override
-					public void onFailure(final Throwable caught) {
+					public void onFailure(Throwable caught) {
 						Window.alert("Could not get id of selected item = " + selected);
 					}
 
 					@Override
-					public void onSuccess(final Dto result) {
+					public void onSuccess(Dto result) {
 						if (null == result) {
 							// the related entity could not be found or the search returned more
 							// than one result.
@@ -114,7 +114,7 @@ public class RelateWidget extends SuggestBox {
 			}
 		});
 	}
-
+	
 	private void startDeferredSearch(final String query) {
 		if (!query.isEmpty()) {
 			Prefetcher.instance.get(new Consumer<ListQueryResult>() {
@@ -140,26 +140,26 @@ public class RelateWidget extends SuggestBox {
 
 					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
 						@Override
-						public void onSuccess(final ListQueryResult result) {
+						public void onSuccess(ListQueryResult result) {
 							internalCacheCallback.setValueAsynch(result);
 						}
 
 						@Override
-						public void onFailure(final Throwable caught) {
+						public void onFailure(Throwable caught) {
 							LoadIndicator.get().endLoading();
 							indicateNoResults();
 						}
 					});
-
+					
 					// send request to server. allow user doing some more requests asap.
 					timerRunning = false;
 				}
 			}, 60 * 1000, marshalledClass, query, 0, 20);
 		}
 	}
-
+	
 	private void indicateNoResults() {
-		final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
+		MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
 
 		o.clear();
 		o.add("No Results");

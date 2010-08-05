@@ -35,19 +35,19 @@ public class FieldCurrency extends AbstractField {
 		this.width = DEFAULT_WIDTH;
 	}
 
-	public FieldCurrency(final String indexSum, final String string, final String string2, final int i, final boolean b) {
+	public FieldCurrency(String indexSum, String string, String string2, int i, boolean b) {
 		super(indexSum, string, string2, i, b);
 		this.width = DEFAULT_WIDTH;
 	}
 
-	public FieldCurrency(final String indexDiscount, final String string, final String string2, final int i) {
+	public FieldCurrency(String indexDiscount, String string, String string2, int i) {
 		super(indexDiscount, string, string2, i);
 		this.width = DEFAULT_WIDTH;
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(final Object value) {
-		final TextBox w = new TextBox();
+	protected Widget internalGetCreateWidget(Object value) {
+		TextBox w = new TextBox();
 		w.setText(formatRead().format(NumberParser.convertToDouble((getDefaultValue()))));
 		w.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 		return addEvents(w);
@@ -55,7 +55,7 @@ public class FieldCurrency extends AbstractField {
 
 	@Override
 	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
-		final Label w = new Label();
+		Label w = new Label();
 		// use a currency constant defined in
 		// com/google/gwt/i18n/client/constants/CurrencyCodeMapConstants.properties which can be found
 		// in gwt-user.jar
@@ -65,7 +65,7 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(final Object value) {
+	protected Widget internalGetEditWidget(Object value) {
 		final TextBox w = new TextBox();
 		w.setText(formatRead().format(NumberParser.convertToDouble(value)));
 		w.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
@@ -76,23 +76,23 @@ public class FieldCurrency extends AbstractField {
 	private TextBox addEvents(final TextBox textbox) {
 		textbox.addFocusHandler(new FocusHandler() {
 			@Override
-			public void onFocus(final FocusEvent event) {
+			public void onFocus(FocusEvent event) {
 				try {
 					// user clicked into the field. convert the read format "EUR 1.00" into the write format "1.00"
 					textbox.setText(formatWrite().format(formatRead().parse(textbox.getText())));
-				} catch (final NumberFormatException e) {
+				} catch (NumberFormatException e) {
 				}
 			}
 		});
 
 		textbox.addBlurHandler(new BlurHandler() {
 			@Override
-			public void onBlur(final BlurEvent event) {
+			public void onBlur(BlurEvent event) {
 				try {
 					// the user left the field. convert the editing format "1.00" back to the read format "EUR 1.00"
 					final String formatted = formatRead().format(formatWrite().parse(textbox.getText()));
 					textbox.setText(formatted);
-				} catch (final NumberFormatException e) {
+				} catch (NumberFormatException e) {
 				}
 			}
 		});
@@ -106,12 +106,12 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	public Serializable getData(final Widget w) {
+	public Serializable getData(Widget w) {
 		final String value = (String) super.getData(w);
-
+		
 		try {
 			return NumberFormat.getCurrencyFormat("EUR").parse(value);
-		} catch (final NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			// Gwt throw a number format exception.
 			return NumberParser.convertToDouble(value);
 		}
@@ -126,9 +126,9 @@ public class FieldCurrency extends AbstractField {
 	private NumberFormat formatRead() {
 		return NumberFormat.getCurrencyFormat("EUR");
 	}
-
+	
 	@Override
-	public Serializable getTypedData(final Object value) {
+	public Serializable getTypedData(Object value) {
 		return NumberParser.convertToDouble(value);
 	}
 }
