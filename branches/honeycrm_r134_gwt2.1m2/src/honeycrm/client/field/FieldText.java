@@ -20,10 +20,10 @@ public class FieldText extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
+	protected Widget internalGetCreateWidget(final Object value) {
 		// Display normal TextArea instead of more advanced RichTextArea until a nice
 		// RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
-		TextArea widget4 = new TextArea();
+		final TextArea widget4 = new TextArea();
 		return widget4;
 	}
 
@@ -34,10 +34,10 @@ public class FieldText extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(Object value) {
+	protected Widget internalGetEditWidget(final Object value) {
 		// Display normal TextArea instead of more advanced RichTextArea until a nice
 		// RichTextArea widget is available. The GWT RichTextArea widget has no toolbar...
-		TextArea widget4 = new TextArea();
+		final TextArea widget4 = new TextArea();
 		widget4.setText((null == value) ? "" : value.toString());
 		return widget4;
 	}
@@ -48,7 +48,7 @@ public class FieldText extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(Widget w) {
+	protected Serializable internalGetData(final Widget w) {
 		return ((TextArea) w).getText();
 	}
 }

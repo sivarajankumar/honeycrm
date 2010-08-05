@@ -13,7 +13,7 @@ public class CacheEntry implements Serializable {
 	private boolean locked;
 	private Object value;
 	private long timestamp;
-	private long timeout;
+	private final long timeout;
 	private boolean valid;
 	private List<Consumer> callbacks = new LinkedList<Consumer>();
 
@@ -21,7 +21,7 @@ public class CacheEntry implements Serializable {
 		this.timeout = DEFAULT_TIMEOUT;
 	}
 
-	public CacheEntry(long timeout) {
+	public CacheEntry(final long timeout) {
 		this.timeout = timeout;
 	}
 
@@ -29,7 +29,7 @@ public class CacheEntry implements Serializable {
 		return callbacks;
 	}
 
-	public void setCallbacks(List<Consumer> callbacks) {
+	public void setCallbacks(final List<Consumer> callbacks) {
 		this.callbacks = callbacks;
 	}
 
@@ -37,7 +37,7 @@ public class CacheEntry implements Serializable {
 		return locked;
 	}
 
-	public void setLocked(boolean locked) {
+	public void setLocked(final boolean locked) {
 		this.locked = locked;
 	}
 
@@ -45,7 +45,7 @@ public class CacheEntry implements Serializable {
 		return value;
 	}
 
-	public void setValue(Object value) {
+	public void setValue(final Object value) {
 		this.value = value;
 
 		this.valid = true;

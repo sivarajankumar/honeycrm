@@ -124,7 +124,7 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 		} else {
 			try {
 				return internalGetData(w);
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				// open a dialog and re-throw exception
 				Window.alert("Unexpected type: " + w.getClass());
 				throw e;
@@ -150,7 +150,7 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 	 */
 	private Label getHeaderWidget(final Object value) {
 		return (Label) decorateWidget(new Label(getLabel()));
-		
+
 		// final Label label = (Label) decorateWidget(internalGetDetailWidget(value));
 		// label.setText(getLabel());
 		// return label;

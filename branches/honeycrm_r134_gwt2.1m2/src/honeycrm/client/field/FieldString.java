@@ -18,13 +18,13 @@ public class FieldString extends AbstractField {
 		super(index, label);
 	}
 
-	public FieldString(String indexName, String string, String string2, int i) {
+	public FieldString(final String indexName, final String string, final String string2, final int i) {
 		super(indexName, string, string2, i);
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-		TextBox widget3 = new TextBox();
+	protected Widget internalGetCreateWidget(final Object value) {
+		final TextBox widget3 = new TextBox();
 		return widget3;
 	}
 
@@ -35,8 +35,8 @@ public class FieldString extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(Object value) {
-		TextBox widget3 = new TextBox();
+	protected Widget internalGetEditWidget(final Object value) {
+		final TextBox widget3 = new TextBox();
 		widget3.setValue((null == value) ? "" : value.toString());
 		return widget3;
 	}

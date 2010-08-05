@@ -5,7 +5,7 @@ import junit.framework.TestSuite;
 
 public class AllTests {
 	public static Test suite() {
-		TestSuite suite = new TestSuite("Server code tests");
+		final TestSuite suite = new TestSuite("Server code tests");
 		// $JUnit-BEGIN$
 		suite.addTestSuite(NumberParserTest.class);
 		suite.addTestSuite(RelatesToTest.class);

@@ -18,12 +18,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class CsvImportWidget {
 	private final DecoratedPopupPanel popup = new DecoratedPopupPanel(); 
-	
+
 	private final String module;
-	
+
 	public CsvImportWidget(final String module) {
 		this.module = module;
-		
+
 		final TextArea textArea = getTextArea();
 		final Label statusLabel = getStatusLabel();
 
@@ -58,42 +58,42 @@ public class CsvImportWidget {
 		final Button cancelBtn = new Button("Cancel");
 		cancelBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				popup.hide();
 			}
 		});
-		
+
 		final Button importBtn = new Button("Import");
 		importBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				LoadIndicator.get().startLoading();
 
 				final CsvImporter importer = CsvImporter.get(module);
 				ServiceRegistry.commonService().importCSV(module, importer.parse(textArea.getText()), new AsyncCallback<Void>() {
 					@Override
-					public void onSuccess(Void result) {
+					public void onSuccess(final Void result) {
 						LoadIndicator.get().endLoading();
 						statusLabel.setText("Status: Import completed");
 						TabCenterView.instance().get(module).refreshListView();
 					}
 
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						LoadIndicator.get().endLoading();
 						statusLabel.setText("Status: Import failed");
 					}
 				});
 			}
 		});
-		
+
 		final HorizontalPanel panel = new HorizontalPanel();
 		panel.add(cancelBtn);
 		panel.add(importBtn);
-		
+
 		return panel;
 	}
-	
+
 	public void show() {
 		popup.show();
 	}

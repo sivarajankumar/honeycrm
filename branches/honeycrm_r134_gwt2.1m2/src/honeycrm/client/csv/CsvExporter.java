@@ -14,7 +14,7 @@ public class CsvExporter extends AbstractCsv {
 	public String export(final List<Dto> list) {
 		String csv = "";
 
-		for (Dto entry : list) {
+		for (final Dto entry : list) {
 			final Collection<String> line = new LinkedList<String>();
 
 			for (int i = 0; i < entry.getListFieldIds().length; i++) {

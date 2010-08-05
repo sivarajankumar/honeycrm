@@ -22,10 +22,10 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-	    DateBox dateBox = new DateBox();
+	protected Widget internalGetCreateWidget(final Object value) {
+		final DateBox dateBox = new DateBox();
 		dateBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG)));
-	    return dateBox;
+		return dateBox;
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(Object value) {
-		DateBox widget2 = new DateBox();
+	protected Widget internalGetEditWidget(final Object value) {
+		final DateBox widget2 = new DateBox();
 		widget2.setValue((Date) value);
 		widget2.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG)));
 		return widget2;
@@ -52,7 +52,7 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(Widget w) {
+	protected Serializable internalGetData(final Widget w) {
 		return ((DateBox) w).getValue();
 	}
 }

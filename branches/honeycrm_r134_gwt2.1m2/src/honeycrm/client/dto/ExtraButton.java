@@ -18,16 +18,16 @@ public class ExtraButton implements Serializable, IsSerializable {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 
 	public AbstractAction getAction() {
 		return action;
-	//	return new CreateContractAction();
+		//	return new CreateContractAction();
 	}
 
-	public void setAction(AbstractAction action) {
+	public void setAction(final AbstractAction action) {
 		this.action = action;
 	}
 }

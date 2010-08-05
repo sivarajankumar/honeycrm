@@ -37,7 +37,7 @@ abstract public class AbstractView extends Composite {
 	 */
 	protected Dto initializeDtoFromTable(final String[][] fieldIds, final FlexTable table) {
 		final Dto tmpDto = moduleDto.createDto();
-		
+
 		for (int y = 0; y < fieldIds.length; y++) {
 			for (int x = 0; x < fieldIds[y].length; x++) {
 				final String id = fieldIds[y][x];
@@ -50,13 +50,13 @@ abstract public class AbstractView extends Composite {
 				}
 			}
 		}
-		
+
 		return tmpDto;
 	}
 
 	protected void save(final FlexTable table, final long id) {
 		final Dto tmpDto = initializeDtoFromTable(moduleDto.getFormFieldIds(), table);
-		
+
 		// id == -1 indicates that there is no id yet.
 		// thus if id != -1 we know the id -> we do an update
 		final boolean isUpdate = -1 != id && 0 != id;
@@ -70,7 +70,7 @@ abstract public class AbstractView extends Composite {
 		if (isUpdate) {
 			commonService.update(tmpDto, id, new AsyncCallback<Void>() {
 				@Override
-				public void onSuccess(Void result) {
+				public void onSuccess(final Void result) {
 					// mark cache invalid to make sure the changed values will be displayed
 					Prefetcher.instance.invalidate(moduleDto.getModule(), id);
 
@@ -79,19 +79,19 @@ abstract public class AbstractView extends Composite {
 				}
 
 				@Override
-				public void onFailure(Throwable caught) {
+				public void onFailure(final Throwable caught) {
 					displayError(caught);
 				}
 			});
 		} else {
 			commonService.create(tmpDto, new AsyncCallback<Long>() {
 				@Override
-				public void onFailure(Throwable caught) {
+				public void onFailure(final Throwable caught) {
 					displayError(caught);
 				}
 
 				@Override
-				public void onSuccess(Long result) {
+				public void onSuccess(final Long result) {
 					TabCenterView.instance().get(moduleDto.getModule()).saveCompletedForId(result);
 					// TabCenterView.instance().get(clazz).showDetailView(result);
 					LoadIndicator.get().endLoading();

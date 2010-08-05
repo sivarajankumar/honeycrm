@@ -24,12 +24,12 @@ public class CachingReflectionHelper extends ReflectionHelper {
 			final CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
 			try {
 				cache = cacheFactory.createCache(new HashMap());
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				log.warning("RuntimeException occured while creating cache. Disabled Caching.");
 				cache = null;
 			}
 			log.info("Cache enabled.");
-		} catch (CacheException e) {
+		} catch (final CacheException e) {
 			log.warning("Cannot instantiate cache. Disabled caching.");
 			cache = null;
 		}
@@ -40,7 +40,7 @@ public class CachingReflectionHelper extends ReflectionHelper {
 	}
 
 	@Override
-	public Field[] getAllFields(Class classSrc) {
+	public Field[] getAllFields(final Class classSrc) {
 		// if (isCacheEnabled()) {
 		if (!cacheGetAllFields.containsKey(classSrc)) {
 			cacheGetAllFields.put(classSrc, super.getAllFields(classSrc));
@@ -53,7 +53,7 @@ public class CachingReflectionHelper extends ReflectionHelper {
 
 	// TODO need separate caches for each method..
 	@Override
-	public Field[] getDtoFields(Class<?> dtoClass) {
+	public Field[] getDtoFields(final Class<?> dtoClass) {
 		// if (isCacheEnabled()) {
 		if (!cacheGetDtoFields.containsKey(dtoClass)) {
 			cacheGetDtoFields.put(dtoClass, super.getDtoFields(dtoClass));

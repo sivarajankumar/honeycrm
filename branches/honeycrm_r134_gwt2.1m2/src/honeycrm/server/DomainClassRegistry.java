@@ -20,11 +20,11 @@ public class DomainClassRegistry {
 					dtoToDomain.put(name, domainClass);
 				}
 			}
-			
+
 			for (final String dto : dtoToDomain.keySet()) {
 				domainToDto.put(dtoToDomain.get(dto), dto);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Cannot initialize " + DomainClassRegistry.class.toString() + " class");
 		}

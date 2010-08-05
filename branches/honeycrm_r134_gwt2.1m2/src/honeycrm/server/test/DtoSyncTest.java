@@ -8,16 +8,16 @@ public class DtoSyncTest extends TestCase {
 	/**
 	 * Returns true if both arrays contain the same fields.
 	 */
-	private boolean areEqualSets(Field[] fields, Field[] fields2) {
+	private boolean areEqualSets(final Field[] fields, final Field[] fields2) {
 		return isSubsetOf(fields, fields2) && isSubsetOf(fields2, fields);
 	}
 
 	/**
 	 * Returns true if fields contains a field called fieldName TODO check field type as well. not just the name..
 	 */
-	private boolean containsField(final String fieldName, Field[] fields) {
-		for (int k = 0; k < fields.length; k++) {
-			if (fieldName.equals(fields[k].getName())) {
+	private boolean containsField(final String fieldName, final Field[] fields) {
+		for (final Field field : fields) {
+			if (fieldName.equals(field.getName())) {
 				return true;
 			}
 		}
@@ -28,9 +28,9 @@ public class DtoSyncTest extends TestCase {
 	/**
 	 * Returns true if all values of fields are in fields2 as well.
 	 */
-	private boolean isSubsetOf(Field[] fields, Field[] fields2) {
-		for (int i = 0; i < fields.length; i++) {
-			final String name = fields[i].getName();
+	private boolean isSubsetOf(final Field[] fields, final Field[] fields2) {
+		for (final Field field : fields) {
+			final String name = field.getName();
 
 			if (name.equals("id") || name.equals("serialVersionUID") || name.startsWith("jdo")) {
 				continue; // skip these fields

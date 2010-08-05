@@ -15,35 +15,35 @@ public class CreateContractAction extends AbstractAction {
 
 	public CreateContractAction() {
 	}
-	
+
 	@Override
 	public void doAction(final Dto offering) {
 		if (!"offering".equals(offering.getModule())) {
 			LogConsole.log("This is no offering dto object: '" + offering.getModule() + "'");
 			return;
 		}
-		
+
 		final ModuleDto contractModule = DtoModuleRegistry.instance().get("contract");
 		final Dto contract = contractModule.createDto();
 
 		for (final String key: offering.getAllData().keySet()) {
 			contract.set(key, offering.get(key));
 		}
-		
+
 		linkOfferingToContract(offering, contract);
 	}
 
 	private void linkOfferingToContract(final Dto offering, final Dto contract) {
 		contract.set("offeringID", offering.getId());
-		
+
 		ServiceRegistry.commonService().create(contract, new AsyncCallback<Long>() {
 			@Override
 			public void onSuccess(final Long contractID) {
 				linkContractToOffering(offering, contractID);
 			}
-			
+
 			@Override
-			public void onFailure(Throwable caught) {
+			public void onFailure(final Throwable caught) {
 				Window.alert("Could not create contract");
 			}
 		});
@@ -51,18 +51,18 @@ public class CreateContractAction extends AbstractAction {
 
 	private void linkContractToOffering(final Dto offering, final Long contractID) {
 		offering.set("contractID", contractID);
-		
+
 		ServiceRegistry.commonService().update(offering, offering.getId(), new AsyncCallback<Void>() {
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccess(final Void result) {
 				/**
 				 * forward the user to the created contract.
 				 */
 				TabCenterView.instance().showModuleTabWithId("contract", contractID);
 			}
-			
+
 			@Override
-			public void onFailure(Throwable caught) {
+			public void onFailure(final Throwable caught) {
 				Window.alert("Could not update offering");
 			}
 		});

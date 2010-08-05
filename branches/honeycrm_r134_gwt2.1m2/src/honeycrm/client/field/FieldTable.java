@@ -21,7 +21,7 @@ public class FieldTable extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
+	protected Widget internalGetCreateWidget(final Object value) {
 		return getTableWidget(value, View.CREATE);
 	}
 
@@ -31,7 +31,7 @@ public class FieldTable extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(Object value) {
+	protected Widget internalGetEditWidget(final Object value) {
 		return getTableWidget(value, View.EDIT);
 	}
 
@@ -43,14 +43,14 @@ public class FieldTable extends AbstractField {
 	/**
 	 * Create the widget and initialize it with data.
 	 */
-	private Widget getTableWidget(Object value, final View view) {
+	private Widget getTableWidget(final Object value, final View view) {
 		final ITableWidget w = new ServiceTableWidget(view);
 		w.setData((List<Dto>) value);
 		return w;
 	}
 
 	@Override
-	protected Serializable internalGetData(Widget w) {
+	protected Serializable internalGetData(final Widget w) {
 		return (Serializable) ((ITableWidget) w).getData();
 	}
 }

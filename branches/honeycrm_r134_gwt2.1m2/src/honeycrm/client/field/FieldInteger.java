@@ -22,19 +22,19 @@ public class FieldInteger extends AbstractField {
 		super(index, label);
 		this.width = DEFAULT_WIDTH;
 	}
-	
-	public FieldInteger(final String index, final String label, int defaultValue) {
+
+	public FieldInteger(final String index, final String label, final int defaultValue) {
 		super(index, label, String.valueOf(defaultValue));
 		this.width = DEFAULT_WIDTH;
 	}
 
-	public FieldInteger(String indexQuantity, String string, String string2, int i) {
+	public FieldInteger(final String indexQuantity, final String string, final String string2, final int i) {
 		super(indexQuantity, string, string2, i);
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-		TextBox widget6 = new TextBox();
+	protected Widget internalGetCreateWidget(final Object value) {
+		final TextBox widget6 = new TextBox();
 		widget6.setText(getDefaultValue());
 		widget6.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 		return widget6;
@@ -48,8 +48,8 @@ public class FieldInteger extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(Object value) {
-		TextBox widget6 = new TextBox();
+	protected Widget internalGetEditWidget(final Object value) {
+		final TextBox widget6 = new TextBox();
 		widget6.setText(String.valueOf(NumberParser.convertToInteger(value)));
 		widget6.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 		return widget6;
@@ -61,13 +61,13 @@ public class FieldInteger extends AbstractField {
 	}
 
 	@Override
-	public Serializable getData(Widget w) {
+	public Serializable getData(final Widget w) {
 		final String value = (String) super.getData(w);
 		return NumberParser.convertToInteger(value);
 	}
 
 	@Override
-	public Serializable getTypedData(Object value) {
+	public Serializable getTypedData(final Object value) {
 		return NumberParser.convertToInteger(value);
 	}
 }

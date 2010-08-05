@@ -23,17 +23,17 @@ public class MarkWidget extends AbstractView {
 
 		markBox.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				LoadIndicator.get().startLoading();
 
 				commonService.mark(viewable.getModule(), id, markBox.getValue(), new AsyncCallback<Void>() {
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						displayError(caught);
 					}
 
 					@Override
-					public void onSuccess(Void result) {
+					public void onSuccess(final Void result) {
 						// tell container that mark has been completed
 						TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
 						LoadIndicator.get().endLoading();

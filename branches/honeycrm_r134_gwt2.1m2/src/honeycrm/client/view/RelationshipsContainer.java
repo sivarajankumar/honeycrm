@@ -38,7 +38,7 @@ public class RelationshipsContainer extends AbstractView {
 	public void refresh(final Long relatedId) {
 		Prefetcher.instance.get(new Consumer<Map<String, ListQueryResult>>() {
 			@Override
-			public void setValueAsynch(Map<String, ListQueryResult> value) {
+			public void setValueAsynch(final Map<String, ListQueryResult> value) {
 				/**
 				 * Sort relationship names to guarantee same order across all modules.
 				 */
@@ -50,7 +50,7 @@ public class RelationshipsContainer extends AbstractView {
 						// insert a new relationship panel for this dto module into the map 
 						final SingleRelationshipPanel relPanel = new SingleRelationshipPanel(originating, relatedId, moduleDto.getModule(), value.get(originating));
 						map.put(originating, relPanel);
-						
+
 						// attach the new panel
 						panel.add(relPanel);
 					} else {
@@ -65,13 +65,13 @@ public class RelationshipsContainer extends AbstractView {
 
 				ServiceRegistry.commonService().getAllRelated(relatedId, moduleDto.getModule(), new AsyncCallback<Map<String, ListQueryResult>>() {
 					@Override
-					public void onSuccess(Map<String, ListQueryResult> result) {
+					public void onSuccess(final Map<String, ListQueryResult> result) {
 						LoadIndicator.get().endLoading();
 						internalCacheCallback.setValueAsynch(result);
 					}
 
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						displayError(caught);
 					}
 				});
@@ -97,7 +97,7 @@ class SingleRelationshipPanel extends ListView {
 	private final Long id;
 	private ListQueryResult list;
 
-	public SingleRelationshipPanel(final String originatingDto, final Long id, final String relatedDto, ListQueryResult listQueryResult) {
+	public SingleRelationshipPanel(final String originatingDto, final Long id, final String relatedDto, final ListQueryResult listQueryResult) {
 		super(originatingDto);
 
 		setShowTitle(true);
@@ -116,7 +116,7 @@ class SingleRelationshipPanel extends ListView {
 
 		refresh();
 	}
-	
+
 	public void updateList(final ListQueryResult list) {
 		this.list = list;
 		refresh();
@@ -137,7 +137,7 @@ class SingleRelationshipPanel extends ListView {
 		final Button btn = new Button("Create");
 		btn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				final Map<String, Map<String, Set<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
 
 				/**

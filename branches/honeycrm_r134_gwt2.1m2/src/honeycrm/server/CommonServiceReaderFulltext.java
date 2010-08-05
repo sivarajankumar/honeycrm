@@ -18,14 +18,14 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 	public static final boolean ignoreCase = true;
 	private static final long serialVersionUID = -7000384067604090223L;
 
-	public ListQueryResult fulltextSearch(final String query, int from, int to) {
+	public ListQueryResult fulltextSearch(final String query, final int from, final int to) {
 		final List<Dto> list = new LinkedList<Dto>();
 
 		try {
 			for (final Class<? extends AbstractEntity> domainClass : registry.getDomainClasses()) {
 				list.addAll(fulltextSearchForModule(query, domainClass));
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
@@ -43,7 +43,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 
 				for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(entityClass, SearchableProperty.class)) {
 					if (String.class == field.getType()) {
-						String value = (String) entityClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(entity);
+						final String value = (String) entityClass.getMethod(reflectionHelper.getMethodName("get", field)).invoke(entity);
 
 						if (null != value && ((!ignoreCase && value.contains(query)) || (ignoreCase && value.toLowerCase().contains(query.toLowerCase())))) {
 							moduleList.add(copy.copy(entity));
@@ -52,14 +52,14 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
 		return moduleList;
 	}
 
-	public ListQueryResult fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
+	public ListQueryResult fulltextSearchForModule(final String dtoIndex, final String query, final int from, final int to) {
 		final List<Dto> list = fulltextSearchForModule(query, registry.getDomain(dtoIndex));
 		return new ListQueryResult(list.toArray(new Dto[0]), list.size());
 	}

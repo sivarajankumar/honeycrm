@@ -32,12 +32,12 @@ public class DetailView extends AbstractView {
 	private final DetailViewButtonBar buttonBar;
 	private final RelationshipsContainer relationshipsContainer;
 	private Dto dto = moduleDto.createDto();
-	private Map<String, Serializable> prefilledMap = new HashMap<String, Serializable>();
+	private final Map<String, Serializable> prefilledMap = new HashMap<String, Serializable>();
 
 	/**
 	 * table containing the labels and the actual field values (or input fields if we are in edit mode).
 	 */
-	private FlexTable table = new FlexTable();
+	private final FlexTable table = new FlexTable();
 
 	public DetailView(final String module) {
 		super(module);
@@ -61,11 +61,12 @@ public class DetailView extends AbstractView {
 
 	public void refresh(final long id) {
 		if (0 == id) {
+			Window.alert("Cannot refresh because id == 0");
 			throw new RuntimeException("Cannot refresh because id == 0");
 		} else {
 			Prefetcher.instance.get(new Consumer<Dto>() {
 				@Override
-				public void setValueAsynch(Dto result) {
+				public void setValueAsynch(final Dto result) {
 					table.setVisible(true);
 					relationshipsContainer.refresh(id);
 
@@ -89,14 +90,14 @@ public class DetailView extends AbstractView {
 
 					commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
 						@Override
-						public void onFailure(Throwable caught) {
+						public void onFailure(final Throwable caught) {
 							displayError(caught);
 							table.setVisible(true);
 							LoadIndicator.get().endLoading();
 						}
 
 						@Override
-						public void onSuccess(Dto result) {
+						public void onSuccess(final Dto result) {
 							internalCacheCallback.setValueAsynch(result);
 						}
 					});
@@ -149,7 +150,7 @@ public class DetailView extends AbstractView {
 		}
 	}
 
-	private void addFocus(View view, Widget widgetValue, String id, String focussedField) {
+	private void addFocus(final View view, final Widget widgetValue, final String id, final String focussedField) {
 		if (View.EDIT == view && null != focussedField && id.equals(focussedField) && widgetValue instanceof FocusWidget) {
 			// TODO Cursor is still not put into the widget (e.g. text box) even with focus properly set.
 			((FocusWidget) widgetValue).setFocus(true);
@@ -162,10 +163,10 @@ public class DetailView extends AbstractView {
 	private Widget getWidgetLabel(final String id, final int labelX, final int labelY) {
 		final Widget widgetLabel;
 		if (table.isCellPresent(labelY, labelX)) {
-			if (table.getWidget(labelY, labelX) != null) {
-				widgetLabel = table.getWidget(labelY, labelX);
-			} else {
+			if (null == table.getWidget(labelY, labelX)) {
 				widgetLabel = getLabelForField(id);
+			} else {
+				widgetLabel = table.getWidget(labelY, labelX);
 			}
 		} else {
 			widgetLabel = getLabelForField(id);
@@ -178,7 +179,7 @@ public class DetailView extends AbstractView {
 			if (widgetLabel instanceof Label) {
 				((Label) widgetLabel).addClickHandler(new ClickHandler() {
 					@Override
-					public void onClick(ClickEvent event) {
+					public void onClick(final ClickEvent event) {
 						// the label of this field has been clicked. we assume the user
 						// wanted to express that he would like to start editing the entity
 						// so we start editing of this entity for him
@@ -190,7 +191,7 @@ public class DetailView extends AbstractView {
 			if (widgetValue instanceof TextBox) {
 				((TextBox) widgetValue).addKeyDownHandler(new KeyDownHandler() {
 					@Override
-					public void onKeyDown(KeyDownEvent event) {
+					public void onKeyDown(final KeyDownEvent event) {
 						if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
 							saveChanges();
 						}
@@ -232,12 +233,12 @@ public class DetailView extends AbstractView {
 
 			commonService.delete(moduleDto.getModule(), dto.getId(), new AsyncCallback<Void>() {
 				@Override
-				public void onFailure(Throwable caught) {
+				public void onFailure(final Throwable caught) {
 					displayError(caught);
 				}
 
 				@Override
-				public void onSuccess(Void result) {
+				public void onSuccess(final Void result) {
 					LoadIndicator.get().endLoading();
 					stopViewing();
 				}
@@ -266,7 +267,7 @@ public class DetailView extends AbstractView {
 	/**
 	 * Set all the fields in the given dto instance stored in the map storing prefilled fields.
 	 */
-	private Dto addPrefilledData(Dto dto) {
+	private Dto addPrefilledData(final Dto dto) {
 		for (int row = 0; row < dto.getFormFieldIds().length; row++) {
 			for (int col = 0; col < dto.getFormFieldIds()[row].length; col++) {
 				final String fieldId = dto.getFormFieldIds()[row][col];
@@ -293,7 +294,7 @@ public class DetailView extends AbstractView {
 		return buttonBar;
 	}
 
-	public void prefill(String fieldId, Serializable value) {
+	public void prefill(final String fieldId, final Serializable value) {
 		prefilledMap.put(fieldId, value);
 	}
 

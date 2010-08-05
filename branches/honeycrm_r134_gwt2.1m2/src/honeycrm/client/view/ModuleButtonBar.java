@@ -25,7 +25,7 @@ public class ModuleButtonBar extends AbstractView {
 		//panel.add(getExportButton("Export XLS", "xls"));
 		//panel.add(getExportButton("Export PDF", "pdf"));
 		panel.add(getCsvImportButton(module));
- 		panel.add(new HTML("<div class='clear'></div>"));
+		panel.add(new HTML("<div class='clear'></div>"));
 
 		initWidget(panel);
 	}
@@ -36,27 +36,27 @@ public class ModuleButtonBar extends AbstractView {
 		button.addStyleName("left");
 		return button;
 	}
-	
+
 	private Widget getCsvImportButton(final String module) {
 		final Button button = new Button("CSV Import");
 		button.addStyleName("right");
-		
+
 		button.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				new CsvImportWidget(module).show();
 			}
 		});
-		
+
 		return button;		
 	}
-	
+
 	private Button getExportButton(final String label, final String historyTokenAppendix) {
 		final Button button = new Button(label);
 		button.addStyleName("right");
 		button.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				History.newItem(moduleDto.getHistoryToken() + " " + historyTokenAppendix);
 			}
 		});

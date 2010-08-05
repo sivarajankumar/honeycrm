@@ -64,7 +64,7 @@ public class CommonServiceReader extends AbstractCommonService {
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -83,7 +83,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
+	public ListQueryResult getAll(final String dtoIndex, final int from, final int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		// order by number of views descending -> most viewed items at the top
 		// TODO allow user defined order as well i.e. sorting by arbitrary columns
@@ -105,11 +105,11 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult search(String dtoIndex, Dto searchDto, int from, int to) {
+	public ListQueryResult search(final String dtoIndex, final Dto searchDto, final int from, final int to) {
 		return searchWithOperator(dtoIndex, searchDto, from, to, BoolOperator.AND);
 	}
 
-	protected ListQueryResult searchWithOperator(String dtoIndex, Dto searchDto, int from, int to, final BoolOperator operator) {
+	protected ListQueryResult searchWithOperator(final String dtoIndex, final Dto searchDto, final int from, final int to, final BoolOperator operator) {
 		// TODO
 		return getAll(dtoIndex, from, to);
 
@@ -128,7 +128,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		 */
 	}
 
-	public ListQueryResult getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
+	public ListQueryResult getAllByNamePrefix(final String dtoIndex, final String prefix, final int from, final int to) {
 		if (prefix.trim().isEmpty()) {
 			return new ListQueryResult(new Dto[0], 0);
 		} else {
@@ -141,14 +141,14 @@ public class CommonServiceReader extends AbstractCommonService {
 				final Collection collection = (Collection) query.execute(prefix);
 				System.out.println("getAllByNamePrefix('" + prefix + "')");
 				return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				log.warning("Exception occured during getAllByNamePrefix(" + dtoIndex + "," + prefix + "," + from + "," + to + ")");
 				return new ListQueryResult(new Dto[0], 0);
 			}
 		}
 	}
 
-	public Dto getByName(String dtoIndex, String name) {
+	public Dto getByName(final String dtoIndex, final String name) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name == \"" + name + "\"");
 		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
 
@@ -184,7 +184,7 @@ public class CommonServiceReader extends AbstractCommonService {
 	 * return result; }
 	 */
 
-	public ListQueryResult getAllMarked(String dtoIndex, int from, int to) {
+	public ListQueryResult getAllMarked(final String dtoIndex, final int from, final int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		query.setRange(from, to);
 		query.setFilter("marked == true");
@@ -193,7 +193,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 
-	private ListQueryResult getAllRelated(String originating, Long id, String related) {
+	private ListQueryResult getAllRelated(final String originating, final Long id, final String related) {
 		final Set<AbstractEntity> result = new HashSet<AbstractEntity>();
 
 		/**

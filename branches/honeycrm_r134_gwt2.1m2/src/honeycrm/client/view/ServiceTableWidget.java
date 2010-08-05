@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -47,7 +48,7 @@ public class ServiceTableWidget extends ITableWidget {
 			final Button addBtn = new Button("Add");
 			addBtn.addClickHandler(new ClickHandler() {
 				@Override
-				public void onClick(ClickEvent event) {
+				public void onClick(final ClickEvent event) {
 					final int rows = table.getRowCount();
 
 					for (int x = 0; x < dto.getListFieldIds().length; x++) {
@@ -76,7 +77,7 @@ public class ServiceTableWidget extends ITableWidget {
 			if ("price".equals(index) || "quantity".equals(index) || "discount".equals(index)) {
 				((TextBox) widget).addChangeHandler(new ChangeHandler() {
 					@Override
-					public void onChange(ChangeEvent event) {
+					public void onChange(final ChangeEvent event) {
 						// Window.alert("change!");
 						onPriceOrQuantityUpdate();
 					}
@@ -108,6 +109,7 @@ public class ServiceTableWidget extends ITableWidget {
 						// TODO do this for other widgets as well
 						s.set(dto.getListFieldIds()[x], dto.getFieldById(dto.getListFieldIds()[x]).getData(table.getWidget(y, x)));
 					} else {
+						Window.alert("Cannot yet handle widget type " + table.getWidget(y, x).getClass());
 						throw new RuntimeException("Cannot yet handle widget type " + table.getWidget(y, x).getClass());
 					}
 				}
@@ -121,9 +123,10 @@ public class ServiceTableWidget extends ITableWidget {
 	}
 
 	@Override
-	public void setData(List<Dto> data) {
-		if (null == data)
+	public void setData(final List<Dto> data) {
+		if (null == data) {
 			return;
+		}
 
 		if (!data.isEmpty()) {
 			if (data.get(0) instanceof Dto) {
@@ -139,12 +142,12 @@ public class ServiceTableWidget extends ITableWidget {
 							if (table.getWidget(HEADER_ROWS + y, x) instanceof TextBox) {
 								// TODO this is faaaaar to crappy!
 								// TODO this should be done by field currency somehow..
-								((TextBox) table.getWidget(HEADER_ROWS + y, x)).setText(((TextBox) field.getWidget(View.EDIT, data.get(y), (index))).getText());
+								((TextBox) table.getWidget(HEADER_ROWS + y, x)).setText(((TextBox) field.getWidget(View.EDIT, data.get(y), index)).getText());
 								// data.get(y).getFieldValue(index).toString());
 							}
 						} else {
 							// add a new widget and new click handler
-							table.setWidget(HEADER_ROWS + y, x, field.getWidget(view, data.get(y), (index)));
+							table.setWidget(HEADER_ROWS + y, x, field.getWidget(view, data.get(y), index));
 							addChangeEvents(index, table.getWidget(HEADER_ROWS + y, x));
 						}
 					}
@@ -157,9 +160,9 @@ public class ServiceTableWidget extends ITableWidget {
 		sum.setText(NumberFormat.getCurrencyFormat("EUR").format(getSum(data)));
 	}
 
-	private double getSum(List<Dto> data) {
+	private double getSum(final List<Dto> data) {
 		double currentSum = 0.0;
-		for (Dto service : data) {
+		for (final Dto service : data) {
 			currentSum += (NumberParser.convertToDouble(service.get("price")) - NumberParser.convertToDouble(service.get("discount"))) * (Integer) service.get("quantity");
 		}
 		return currentSum;

@@ -22,7 +22,7 @@ public class Product extends AbstractEntity {
 	@FieldStringAnnotation
 	@Label("Name")
 	private String name;
-	
+
 	@FieldCurrencyAnnotation("0")
 	@Label("Price")
 	private double price;
@@ -30,7 +30,7 @@ public class Product extends AbstractEntity {
 	@FieldTextAnnotation
 	@Label("Description")
 	private String description;
-	
+
 	@FieldBooleanAnnotation
 	@Label("Published")
 	private boolean published;
@@ -39,7 +39,7 @@ public class Product extends AbstractEntity {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -47,7 +47,7 @@ public class Product extends AbstractEntity {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(final double price) {
 		this.price = price;
 	}
 
@@ -55,7 +55,7 @@ public class Product extends AbstractEntity {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -63,7 +63,7 @@ public class Product extends AbstractEntity {
 		return published;
 	}
 
-	public void setPublished(boolean published) {
+	public void setPublished(final boolean published) {
 		this.published = published;
 	}
 }

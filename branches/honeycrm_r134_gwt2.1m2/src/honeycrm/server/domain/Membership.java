@@ -62,7 +62,7 @@ public class Membership extends AbstractEntity {
 		return memberId;
 	}
 
-	public void setMemberId(long memberId) {
+	public void setMemberId(final long memberId) {
 		this.memberId = memberId;
 	}
 
@@ -70,7 +70,7 @@ public class Membership extends AbstractEntity {
 		return employeeId;
 	}
 
-	public void setEmployeeId(long employeeId) {
+	public void setEmployeeId(final long employeeId) {
 		this.employeeId = employeeId;
 	}
 
@@ -78,7 +78,7 @@ public class Membership extends AbstractEntity {
 		return payment;
 	}
 
-	public void setPayment(double payment) {
+	public void setPayment(final double payment) {
 		this.payment = payment;
 	}
 
@@ -86,7 +86,7 @@ public class Membership extends AbstractEntity {
 		return tiedToPurpose;
 	}
 
-	public void setTiedToPurpose(String tiedToPurpose) {
+	public void setTiedToPurpose(final String tiedToPurpose) {
 		this.tiedToPurpose = tiedToPurpose;
 	}
 
@@ -94,7 +94,7 @@ public class Membership extends AbstractEntity {
 		return purpose;
 	}
 
-	public void setPurpose(String purpose) {
+	public void setPurpose(final String purpose) {
 		this.purpose = purpose;
 	}
 
@@ -102,7 +102,7 @@ public class Membership extends AbstractEntity {
 		return paymentMethod;
 	}
 
-	public void setPaymentMethod(String paymentMethod) {
+	public void setPaymentMethod(final String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
 
@@ -110,7 +110,7 @@ public class Membership extends AbstractEntity {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(final Date startDate) {
 		this.startDate = startDate;
 	}
 
@@ -118,7 +118,7 @@ public class Membership extends AbstractEntity {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(final Date endDate) {
 		this.endDate = endDate;
 	}
 }

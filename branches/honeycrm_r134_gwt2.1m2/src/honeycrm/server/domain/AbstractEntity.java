@@ -31,7 +31,7 @@ abstract public class AbstractEntity {
 	// Additionally we have to use Long (not long) because of constrains of google app engine for
 	// allowed id types.
 	protected Key id;
-	
+
 	// TODO mark field has to be supported differently with mark FieldMark instance
 	@Label("Marked")
 	@FieldBooleanAnnotation
@@ -44,7 +44,7 @@ abstract public class AbstractEntity {
 	@Label("Last updated at")
 	@FieldDateAnnotation
 	protected Date lastUpdatedAt;
-	
+
 	@Label("Views")
 	@FieldIntegerAnnotation(0)
 	protected long views;
@@ -53,7 +53,7 @@ abstract public class AbstractEntity {
 		return id;
 	}
 
-	public void setId(Key id) {
+	public void setId(final Key id) {
 		this.id = id;
 	}
 
@@ -61,7 +61,7 @@ abstract public class AbstractEntity {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(final Date createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -69,7 +69,7 @@ abstract public class AbstractEntity {
 		return lastUpdatedAt;
 	}
 
-	public void setLastUpdatedAt(Date lastUpdatedAt) {
+	public void setLastUpdatedAt(final Date lastUpdatedAt) {
 		this.lastUpdatedAt = lastUpdatedAt;
 	}
 
@@ -77,7 +77,7 @@ abstract public class AbstractEntity {
 		return views;
 	}
 
-	public void setViews(long views) {
+	public void setViews(final long views) {
 		this.views = views;
 	}
 
@@ -85,7 +85,7 @@ abstract public class AbstractEntity {
 		return marked;
 	}
 
-	public void setMarked(boolean marked) {
+	public void setMarked(final boolean marked) {
 		this.marked = marked;
 	}
 }

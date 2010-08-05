@@ -8,9 +8,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.PersistenceManager;
@@ -25,30 +27,30 @@ public class DtoCopyMachine {
 	private static final DomainClassRegistry registry = DomainClassRegistry.instance;
 	private static PersistenceManager m = null;
 
+	private static final Map<Integer, Field[]> cachedFilteredFields = new HashMap<Integer, Field[]>();
+	
 	static {
 		badVariablePrefixes.add("$");
 		badVariablePrefixes.add("jdo");
-		badVariablePrefixes.add("INDEX_");
 
 		badVariableNames.add("serialVersionUID");
 	}
 
-	public AbstractEntity copy(Dto dto) {
+	public AbstractEntity copy(final Dto dto) {
 		return copy(dto, null);
 	}
 
 	/**
 	 * Copy data from Dto into domain class. This is usually the case whenever the client sends data to the server (create, update)
 	 */
-	public AbstractEntity copy(Dto dto, AbstractEntity existingEntity) {
+	public AbstractEntity copy(final Dto dto, final AbstractEntity existingEntity) {
 		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
 		try {
 			final AbstractEntity entity = entityClass.newInstance();
-			final Field[] allFields = filterFields(reflectionHelper.getAllFields(entityClass));
+			final Field[] allFields = getFilteredFieldsCached(reflectionHelper.getAllFields(entityClass));
 
-			for (int i = 0; i < allFields.length; i++) {
-				final Field field = allFields[i];
+			for (final Field field : allFields) {
 				final Object value = dto.get(field.getName());
 
 				if (null == value) {
@@ -82,14 +84,14 @@ public class DtoCopyMachine {
 			}
 
 			return entity;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
 	private void handleDtoLists(final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final Field field, final Object value) throws NoSuchMethodException,
-			IllegalAccessException, InvocationTargetException {
+	IllegalAccessException, InvocationTargetException {
 		if (((List<?>) value).get(0) instanceof Dto) {
 			final List<AbstractEntity> serverList = new LinkedList<AbstractEntity>();
 
@@ -105,28 +107,26 @@ public class DtoCopyMachine {
 	/**
 	 * Copy data from a domain class instance into a Dto. This is usually the case whenever the server responds to clients (read).
 	 */
-	public Dto copy(AbstractEntity entity) {
+	public Dto copy(final AbstractEntity entity) {
 		final Dto dto = new Dto();
 
 		final Class<?> entityClass = entity.getClass();
-		final Field[] allFields = filterFields(reflectionHelper.getAllFields(entityClass));
+		final Field[] allFields = getFilteredFieldsCached(reflectionHelper.getAllFields(entityClass));
 
 		try {
-			for (int i = 0; i < allFields.length; i++) {
-				final Field field = allFields[i];
-
+			for (final Field field : allFields) {
 				final Method getter = entityClass.getMethod(reflectionHelper.getMethodName("get", field));
 				final Object value = getter.invoke(entity);
 
-				if (value instanceof List<?>) {
+				if (null == value) {
+					continue;
+				} else if (value instanceof List<?>) {
 					handleDomainClassLists(dto, field, value);
 					continue;
-				}
-
-				if ("id".equals(field.getName())) {
+				} else if ("id".equals(field.getName())) {
 					try {
 						dto.set(field.getName(), (int) ((Key) value).getId());
-					} catch (NullPointerException e) {
+					} catch (final NullPointerException e) {
 						System.out.println("npe!");
 					}
 				} else {
@@ -135,7 +135,7 @@ public class DtoCopyMachine {
 			}
 
 			dto.setModule(entityClass.getSimpleName().toLowerCase());
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
@@ -156,7 +156,7 @@ public class DtoCopyMachine {
 	 * TODO This removes the child elements of an entity during an update to avoid duplicating them. This should not be under the responsibility of this class and has to be refactored in the future!
 	 */
 	private void deleteOldChildItems(final Class<? extends AbstractEntity> entityClass, final AbstractEntity existingEntity, final Field field) throws IllegalArgumentException, SecurityException,
-			IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		if (null != existingEntity) {
 			// This is an update, before doing anything else we remove the existing items linked to this entity
 			// This avoids duplicating them on an update.
@@ -167,7 +167,7 @@ public class DtoCopyMachine {
 			if (null == m) {	
 				m = PMF.get().getPersistenceManager();
 			}
-			
+
 			for (final AbstractEntity child : (List<AbstractEntity>) existingItemsList) {
 				if (null == child.getId()) {
 					System.out.println("epic fail: prevented npe");
@@ -184,7 +184,21 @@ public class DtoCopyMachine {
 	/**
 	 * Method throwing away all fields that are irrelevant and should not be copied by this copy machine (e.g. automatically added fields for serialization).
 	 */
-	private Field[] filterFields(final Field[] allFields) {
+	private Field[] getFilteredFieldsCached(final Field[] allFields) {
+		final int hashCode = allFields.hashCode();
+		
+		if (cachedFilteredFields.containsKey(hashCode)) {
+			FilteredFieldsCacheStats.hits++;
+			return cachedFilteredFields.get(hashCode);
+		} else {
+			FilteredFieldsCacheStats.misses++;
+			final Field[] filtered = getFilteredFields(allFields);
+			cachedFilteredFields.put(hashCode, filtered);
+			return filtered;
+		}
+	}
+
+	private Field[] getFilteredFields(final Field[] allFields) {
 		final List<Field> filteredFields = new LinkedList<Field>();
 		for (int i = 0; i < allFields.length; i++) {
 			if (!shouldBeSkipped(allFields[i])) {
@@ -216,4 +230,9 @@ public class DtoCopyMachine {
 
 		return false;
 	}
+}
+
+class FilteredFieldsCacheStats {
+	public static int hits = 0;
+	public static int misses = 0;
 }

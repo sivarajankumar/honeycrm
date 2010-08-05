@@ -49,7 +49,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 	private TabCenterView() {
 		super(25, Unit.PX);
 		int tabPos = 0;
-		
+
 		addStyleName("with_margin");
 		addStyleName("tab_layout");
 
@@ -59,17 +59,18 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 			if (moduleDto.isHidden()) {
 				continue; // do not add this module to the tabs since it should be hidden
 			}
-			
+
 			final TabModuleView view = new TabModuleView(moduleDto.getModule());
 
 			// refresh list view only for the first tab (which is the only visible tab at the beginning)
-			if (0 == tabPos)
+			if (0 == tabPos) {
 				view.refreshListView();
+			}
 
 			final Hyperlink createBtn = new Hyperlink("Create", moduleDto.getModule() + " create");
 			createBtn.addStyleName("create_button");
 			createBtn.setVisible(false);
-			
+
 			moduleViewMap.put(moduleDto.getModule(), view);
 			tabPositionMap.put(moduleDto.getModule(), tabPos);
 			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
@@ -79,7 +80,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 			final HorizontalPanel titlePanel = new HorizontalPanel();
 			titlePanel.add(createBtn);
 			titlePanel.add(moduleTitle);
-			
+
 			add((view), titlePanel);
 		}
 
@@ -89,7 +90,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 
 		addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override
-			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+			public void onBeforeSelection(final BeforeSelectionEvent<Integer> event) {
 				// hide all create buttons
 				for (final Integer pos : tabPosToCreateBtnMap.keySet()) {
 					tabPosToCreateBtnMap.get(pos).setVisible(false);
@@ -111,12 +112,12 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 		LogConsole.log("created center view");
 
 		History.addValueChangeHandler(this);
-        // History.fireCurrentHistoryState();
-		
+		// History.fireCurrentHistoryState();
+
 		selectTab(0);
 	}
 
-	public TabModuleView get(String moduleName) {
+	public TabModuleView get(final String moduleName) {
 		return moduleViewMap.get(moduleName);
 	}
 
@@ -128,30 +129,30 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 		moduleViewMap.get(clazz).showDetailView(id);
 	}
 
-	public void showModuleTab(String clazz) {
+	public void showModuleTab(final String clazz) {
 		if (!tabPositionMap.containsKey(clazz) || !moduleViewMap.containsKey(clazz)) {
 			Window.alert("Cannot switch to module: '" + clazz + "'");
 			return;
 		}
-		
+
 		if (!moduleViewMap.get(clazz).isListViewInitialized()) {
 			moduleViewMap.get(clazz).refreshListView();
 		}
 		selectTab(tabPositionMap.get(clazz));
 	}
-	
+
 	public void showCreateViewForModule(final String clazz) {
 		showModuleTab(clazz);
 		moduleViewMap.get(clazz).showCreateView();
 	}
 
-	public void showCreateViewForModulePrefilled(String module, String fieldId, Serializable value) {
+	public void showCreateViewForModulePrefilled(final String module, final String fieldId, final Serializable value) {
 		showModuleTab(module);
 		moduleViewMap.get(module).showCreateViewPrefilled(fieldId, value);
 	}
 
 	@Override
-	public void onValueChange(ValueChangeEvent<String> event) {
+	public void onValueChange(final ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
 
 		if (2 == token.length) {

@@ -30,11 +30,11 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-		ListBox box = new ListBox(true);
+	protected Widget internalGetCreateWidget(final Object value) {
+		final ListBox box = new ListBox(true);
 		final String[] options = getOptions();
-		for (int i = 0; i < options.length; i++) {
-			box.addItem(options[i]);
+		for (final String option : options) {
+			box.addItem(option);
 		}
 		return box;
 	}
@@ -55,7 +55,7 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(Object value) {
+	protected Widget internalGetEditWidget(final Object value) {
 		final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
 		final String[] options = getOptions();
 		final ListBox box = new ListBox(true);
@@ -77,7 +77,7 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 
 	@Override
-	protected Serializable internalGetData(Widget w) {
+	protected Serializable internalGetData(final Widget w) {
 		final ListBox box = (ListBox) w;
 		final Set<String> selectedValues = new HashSet<String>();
 

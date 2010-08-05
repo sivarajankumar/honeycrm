@@ -21,8 +21,8 @@ public class FieldEmail extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-		TextBox widget3 = new TextBox();
+	protected Widget internalGetCreateWidget(final Object value) {
+		final TextBox widget3 = new TextBox();
 		return widget3;
 	}
 
@@ -41,8 +41,8 @@ public class FieldEmail extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(Object value) {
-		TextBox widget3 = new TextBox();
+	protected Widget internalGetEditWidget(final Object value) {
+		final TextBox widget3 = new TextBox();
 		widget3.setValue((null == value) ? "" : value.toString());
 		return widget3;
 	}
@@ -53,7 +53,7 @@ public class FieldEmail extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(Widget w) {
+	protected Serializable internalGetData(final Widget w) {
 		return ((Anchor) w).getHTML();
 	}
 }

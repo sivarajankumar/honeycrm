@@ -26,7 +26,7 @@ public class SampleReport extends Composite {
 		final VerticalPanel p = new VerticalPanel();
 
 		if (Initializer.SKIP_LOADING_VISUALISATIONS) {
-			
+
 		} else {
 			final Label status = new Label("Status: ");
 			p.setStyleName("content");
@@ -54,7 +54,7 @@ public class SampleReport extends Composite {
 						}
 
 						@Override
-						public void onFailure(Throwable caught) {
+						public void onFailure(final Throwable caught) {
 							LoadIndicator.get().endLoading();
 
 						}
@@ -62,12 +62,12 @@ public class SampleReport extends Composite {
 				}
 			}.schedule(10 * 1000);
 		}
-		
+
 		initWidget(new ScrollPanel(p));
 	}
 
 	private Options getAreaOptions() {
-		Options options = Options.create();
+		final Options options = Options.create();
 		options.setEnableTooltip(true);
 		options.setTitleX("Year");
 		options.setTitle("EUR");
@@ -77,8 +77,8 @@ public class SampleReport extends Composite {
 		return options;
 	}
 
-	private AbstractDataTable getAbstractTable(Map<Integer, Double> result) {
-		DataTable data = DataTable.create();
+	private AbstractDataTable getAbstractTable(final Map<Integer, Double> result) {
+		final DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Year");
 		data.addColumn(ColumnType.NUMBER, "Annually Volume");
 

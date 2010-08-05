@@ -71,7 +71,7 @@ public class Donation extends AbstractEntity {
 		return employeeId;
 	}
 
-	public void setEmployeeId(long employeeId) {
+	public void setEmployeeId(final long employeeId) {
 		this.employeeId = employeeId;
 	}
 
@@ -79,7 +79,7 @@ public class Donation extends AbstractEntity {
 		return donatorId;
 	}
 
-	public void setDonatorId(long donatorId) {
+	public void setDonatorId(final long donatorId) {
 		this.donatorId = donatorId;
 	}
 
@@ -87,7 +87,7 @@ public class Donation extends AbstractEntity {
 		return projectId;
 	}
 
-	public void setProjectId(long projectId) {
+	public void setProjectId(final long projectId) {
 		this.projectId = projectId;
 	}
 
@@ -95,7 +95,7 @@ public class Donation extends AbstractEntity {
 		return donatedFor;
 	}
 
-	public void setDonatedFor(String donatedFor) {
+	public void setDonatedFor(final String donatedFor) {
 		this.donatedFor = donatedFor;
 	}
 
@@ -103,7 +103,7 @@ public class Donation extends AbstractEntity {
 		return kind;
 	}
 
-	public void setKind(String kind) {
+	public void setKind(final String kind) {
 		this.kind = kind;
 	}
 
@@ -111,7 +111,7 @@ public class Donation extends AbstractEntity {
 		return receiptionDate;
 	}
 
-	public void setReceiptionDate(Date receiptionDate) {
+	public void setReceiptionDate(final Date receiptionDate) {
 		this.receiptionDate = receiptionDate;
 	}
 
@@ -119,7 +119,7 @@ public class Donation extends AbstractEntity {
 		return reaction;
 	}
 
-	public void setReaction(String reaction) {
+	public void setReaction(final String reaction) {
 		this.reaction = reaction;
 	}
 
@@ -127,7 +127,7 @@ public class Donation extends AbstractEntity {
 		return reactedHow;
 	}
 
-	public void setReactedHow(String reactedHow) {
+	public void setReactedHow(final String reactedHow) {
 		this.reactedHow = reactedHow;
 	}
 
@@ -135,7 +135,7 @@ public class Donation extends AbstractEntity {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(final Date date) {
 		this.date = date;
 	}
 
@@ -143,7 +143,7 @@ public class Donation extends AbstractEntity {
 		return amount;
 	}
 
-	public void setAmount(double amount) {
+	public void setAmount(final double amount) {
 		this.amount = amount;
 	}
 }

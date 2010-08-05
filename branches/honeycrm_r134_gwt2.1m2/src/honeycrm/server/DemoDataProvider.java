@@ -14,18 +14,22 @@ public class DemoDataProvider {
 	private final static Random r = new Random();
 
 	public static Account account() {
-		Account a = new Account();
+		final Account a = new Account();
 
 		a.setName(DemoDataHolder.getRandomName());
 		a.setAnnualRevenue(r.nextLong() % 1000000000);
 		a.setBillingAddress(DemoDataHolder.getRandomAddress());
 		a.setShippingAddress(DemoDataHolder.getRandomAddress());
+		a.setEmployees(r.nextInt());
+		a.setEmail(DemoDataHolder.getRandomEmail());
+		a.setIndustry(DemoDataHolder.getRandomIndustry());
+		a.setPhoneOffice(DemoDataHolder.getRandomPhoneNumber());
 		
 		return a;
 	}
 
 	public static Contact contact() {
-		Contact c = new Contact();
+		final Contact c = new Contact();
 
 		c.setName(DemoDataHolder.getRandomName());
 		c.setEmail(DemoDataHolder.getRandomEmail());
@@ -36,12 +40,12 @@ public class DemoDataProvider {
 	}
 
 	public static String getRandomString() {
-		int length = Math.abs(r.nextInt() % (Integer.MAX_VALUE / 100000));
+		final int length = Math.abs(r.nextInt() % (Integer.MAX_VALUE / 100000));
 		String str = "";
 
 		for (int i = 0; i < length; i++) {
 			// TODO which range of ascii table contains digits and letters?
-			char randomChar = (char) (62 + (r.nextInt() % 58));
+			final char randomChar = (char) (62 + (r.nextInt() % 58));
 			str += randomChar;
 		}
 

@@ -10,10 +10,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 
 public class DetailViewButtonBar extends AbstractView {
-	private Button saveBtn = new Button("Save");
-	private Button cancelBtn = new Button("Cancel");
-	private Button editBtn = new Button("Edit");
-	private Button deleteBtn = new Button("Delete");
+	private final Button saveBtn = new Button("Save");
+	private final Button cancelBtn = new Button("Cancel");
+	private final Button editBtn = new Button("Edit");
+	private final Button deleteBtn = new Button("Delete");
 
 	private final DetailView detailview;
 
@@ -30,7 +30,7 @@ public class DetailViewButtonBar extends AbstractView {
 
 		saveBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				detailview.saveChanges();
 				// startViewing();
 			}
@@ -38,7 +38,7 @@ public class DetailViewButtonBar extends AbstractView {
 
 		cancelBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (Window.confirm("Do you really want to cancel your changes?")) {
 					startViewing();
 				}
@@ -47,14 +47,14 @@ public class DetailViewButtonBar extends AbstractView {
 
 		editBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				startEditing();
 			}
 		});
 
 		deleteBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// TODO should close detailview after delete..
 				detailview.delete();
 				startViewing();
@@ -71,11 +71,11 @@ public class DetailViewButtonBar extends AbstractView {
 			final Button b = new Button(extraButton.getLabel());
 			b.addClickHandler(new ClickHandler() {
 				@Override
-				public void onClick(ClickEvent event) {
+				public void onClick(final ClickEvent event) {
 					extraButton.getAction().doAction(detailview.getCurrentDto());
 				}
 			});
-			
+
 			panel.add(b);
 		}
 	}

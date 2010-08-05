@@ -5,6 +5,7 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -16,11 +17,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ModuleFulltextWidget extends FulltextSearchWidget {
-	private final ModuleDto dtoClazz;
+	private final ModuleDto moduleDto;
 
-	public ModuleFulltextWidget(final String clazz) {
+	public ModuleFulltextWidget(final String module) {
 		super();
-		this.dtoClazz = DtoModuleRegistry.instance().get(clazz);
+		this.moduleDto = DtoModuleRegistry.instance().get(module);
 		addStyleName("module_search");
 	}
 
@@ -61,20 +62,20 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 			@Override
 			public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
 				LoadIndicator.get().startLoading();
-				
-				commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
+
+				ServiceRegistry.commonService().fulltextSearchForModule(moduleDto.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 					@Override
-					public void onSuccess(ListQueryResult result) {
+					public void onSuccess(final ListQueryResult result) {
 						internalCacheCallback.setValueAsynch(result);
 					}
 
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						LoadIndicator.get().endLoading();
 						Window.alert("fulltext search failed");
 					}
 				});
 			}
-		}, 60 * 1000, dtoClazz.getModule(), queryString, 0, 10);
+		}, 60 * 1000, moduleDto.getModule(), queryString, 0, 10);
 	}
 }

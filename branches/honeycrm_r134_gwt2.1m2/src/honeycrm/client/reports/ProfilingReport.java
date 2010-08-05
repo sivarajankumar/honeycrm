@@ -39,7 +39,7 @@ public class ProfilingReport extends Composite {
 			}
 
 			@Override
-			public void onFailure(Throwable caught) {
+			public void onFailure(final Throwable caught) {
 				LoadIndicator.get().endLoading();
 			}
 		});
@@ -48,7 +48,7 @@ public class ProfilingReport extends Composite {
 	}
 
 	private Options getOptions(final String title) {
-		Options options = Options.create();
+		final Options options = Options.create();
 		options.setEnableTooltip(true);
 		options.setWidth(200);
 		options.setLegendFontSize(10);

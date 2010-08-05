@@ -37,7 +37,7 @@ public class RelatesToTest extends TestCase {
 			if (failed) {
 				fail();
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			fail();
 		}

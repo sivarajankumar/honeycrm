@@ -47,7 +47,7 @@ import java.util.Set;
 public class DtoWizard {
 	public static final DtoWizard instance = new DtoWizard();
 	private Map<String, ModuleDto> moduleNameToDto;
-	private CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
+	private final CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
 
 	private DtoWizard() {
 	}
@@ -76,13 +76,13 @@ public class DtoWizard {
 			}
 
 			return configuration;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Cannot analyse domain class structure due to a " + e.getClass());
 		}
 	}
 
-	private void setupFields(Class<AbstractEntity> domainClass, ModuleDto moduleDto) {
+	private void setupFields(final Class<AbstractEntity> domainClass, final ModuleDto moduleDto) {
 		try {
 			final Set<AbstractField> fields = new HashSet<AbstractField>();
 
@@ -123,7 +123,7 @@ public class DtoWizard {
 			}
 
 			moduleDto.setFields(fields);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -172,10 +172,10 @@ public class DtoWizard {
 				final ExtraButton b = new ExtraButton();
 				b.setLabel(label);
 				b.setAction(action.newInstance());
-				
+
 				return new ExtraButton[]{b};
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 

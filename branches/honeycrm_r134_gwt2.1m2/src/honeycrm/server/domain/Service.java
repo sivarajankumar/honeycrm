@@ -44,7 +44,7 @@ public class Service extends AbstractEntity {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -52,7 +52,7 @@ public class Service extends AbstractEntity {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(final double price) {
 		this.price = price;
 	}
 
@@ -60,7 +60,7 @@ public class Service extends AbstractEntity {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(final int quantity) {
 		this.quantity = quantity;
 	}
 
@@ -68,7 +68,7 @@ public class Service extends AbstractEntity {
 		return discount;
 	}
 
-	public void setDiscount(double discount) {
+	public void setDiscount(final double discount) {
 		this.discount = discount;
 	}
 
@@ -76,7 +76,7 @@ public class Service extends AbstractEntity {
 		return sum;
 	}
 
-	public void setSum(double sum) {
+	public void setSum(final double sum) {
 		this.sum = sum;
 	}
 }
