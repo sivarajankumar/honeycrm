@@ -1,4 +1,4 @@
-package honeycrm.server;
+package honeycrm.server.transfer;
 
 import honeycrm.client.actions.AbstractAction;
 import honeycrm.client.dto.ExtraButton;
@@ -15,6 +15,7 @@ import honeycrm.client.field.FieldRelate;
 import honeycrm.client.field.FieldString;
 import honeycrm.client.field.FieldTable;
 import honeycrm.client.field.FieldText;
+import honeycrm.server.CachingReflectionHelper;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.DetailViewable;
 import honeycrm.server.domain.decoration.HasExtraButton;

@@ -9,6 +9,7 @@ import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.profiling.ProfilingStatisticsCollector;
 import honeycrm.server.profiling.ReadTest;
 import honeycrm.server.profiling.ServiceCall;
+import honeycrm.server.transfer.DtoWizard;
 
 import java.util.Collection;
 import java.util.Date;

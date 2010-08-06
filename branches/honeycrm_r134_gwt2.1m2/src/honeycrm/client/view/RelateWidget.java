@@ -4,10 +4,15 @@ import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.misc.Observer;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.misc.Subscriber;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -20,11 +25,12 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
-public class RelateWidget extends SuggestBox {
+public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 	private long id;
 	private final String marshalledClass;
 	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	private boolean timerRunning;
+	private final Set<Observer<Dto>> observers = new HashSet<Observer<Dto>>();
 	
 	public RelateWidget(final String marshalledClazz, final long id) {
 		super(new MultiWordSuggestOracle());
@@ -108,6 +114,11 @@ public class RelateWidget extends SuggestBox {
 							// TODO what should be done in this case?
 						} else {
 							id = result.getId();
+							
+							// notify all observers of that new value
+							for (final Observer<Dto> observer: observers) {
+								observer.notify(result);
+							}
 						}
 					}
 				});
@@ -173,5 +184,10 @@ public class RelateWidget extends SuggestBox {
 	 */
 	public long getId() {
 		return id;
+	}
+
+	@Override
+	public void subscribe(final Observer<Dto> observer) {
+		observers.add(observer);
 	}
 }

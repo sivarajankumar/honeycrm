@@ -1,4 +1,4 @@
-package honeycrm.server;
+package honeycrm.server.transfer;
 
 import java.io.File;
 import java.io.IOException;
@@ -120,10 +120,10 @@ public class ReflectionHelper {
 	/**
 	 * Returns the getter/setter for a property, e.g. getId if fieldName is id
 	 */
-	public String getMethodNameCached(final String prefix, final Field field) {
-		return MethodNameExpert.get().getMethodNameCached(prefix.equals("get"), field);
+	public String getMethodNameCached(final boolean isGet, final Field field) {
+		return MethodNameExpert.instance.getMethodNameCached(isGet, field);
 	}
-	
+
 	/**
 	 * Return all fields of the dto class that are from the original domain object, i.e. all accessible properties except automatically added or those that are only necessary for organizational purposes.
 	 */
@@ -191,6 +191,5 @@ public class ReflectionHelper {
 		System.arraycopy(array2, 0, array, array1.length, array2.length);
 		return array;
 	}
-	
-	
+
 }

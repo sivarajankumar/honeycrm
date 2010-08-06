@@ -1,8 +1,8 @@
 package honeycrm.client.test;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.offerings.ServiceTableWidget;
 import honeycrm.client.view.AbstractView.View;
-import honeycrm.client.view.ServiceTableWidget;
 
 import java.util.LinkedList;
 import java.util.List;

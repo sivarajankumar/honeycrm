@@ -2,6 +2,7 @@ package honeycrm.server;
 
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
+import honeycrm.server.transfer.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

@@ -1,6 +1,7 @@
 package honeycrm.server;
 
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.transfer.ReflectionHelper;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;

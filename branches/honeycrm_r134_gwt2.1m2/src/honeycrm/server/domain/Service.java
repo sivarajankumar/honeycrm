@@ -7,6 +7,7 @@ import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -15,8 +16,8 @@ import org.compass.annotations.Searchable;
 
 @PersistenceCapable
 @Searchable
-@ListViewable( { "name", "price", "quantity", "discount", "sum" })
-@DetailViewable( { "name", "price" })
+@ListViewable( { "productID", "price", "quantity", "discount", "sum" })
+@DetailViewable( { "name,productID", "discount,quantity", "price", "sum" })
 @Quicksearchable( { "name" })
 @Hidden
 public class Service extends AbstractEntity {
@@ -40,6 +41,10 @@ public class Service extends AbstractEntity {
 	@Label("Sum")
 	private double sum;
 
+	@FieldRelateAnnotation(Product.class)
+	@Label("Product")
+	private long productID;
+	
 	public String getName() {
 		return name;
 	}
@@ -78,5 +83,13 @@ public class Service extends AbstractEntity {
 
 	public void setSum(double sum) {
 		this.sum = sum;
+	}
+
+	public long getProductID() {
+		return productID;
+	}
+
+	public void setProductID(long productID) {
+		this.productID = productID;
 	}
 }

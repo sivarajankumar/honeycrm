@@ -1,7 +1,7 @@
 package honeycrm.server.test;
 
 import honeycrm.client.dto.ModuleDto;
-import honeycrm.server.DtoWizard;
+import honeycrm.server.transfer.DtoWizard;
 
 import java.util.Map;
 

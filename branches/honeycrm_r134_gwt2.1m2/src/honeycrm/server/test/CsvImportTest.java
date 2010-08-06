@@ -3,8 +3,8 @@ package honeycrm.server.test;
 import honeycrm.client.csv.CsvImporter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
-import honeycrm.server.DtoWizard;
 import honeycrm.server.RelationshipFieldTable;
+import honeycrm.server.transfer.DtoWizard;
 
 import java.util.List;
 

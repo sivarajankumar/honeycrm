@@ -1,11 +1,15 @@
-package honeycrm.client.view;
+package honeycrm.client.offerings;
 
+import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.misc.NumberParser;
+import honeycrm.client.misc.Observer;
 import honeycrm.client.view.AbstractView.View;
+import honeycrm.client.view.ITableWidget;
+import honeycrm.client.view.RelateWidget;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +27,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ServiceTableWidget extends ITableWidget {
+public class ServiceTableWidget extends ITableWidget implements Observer<Dto> {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
 	private final ModuleDto moduleDto = DtoModuleRegistry.instance().get("service");
@@ -71,16 +75,18 @@ public class ServiceTableWidget extends ITableWidget {
 	}
 
 	private Widget addChangeEvents(final String index, final Widget widget) {
-		// only attach a change event for text boxes
-		if (widget instanceof TextBox) {
-			if ("price".equals(index) || "quantity".equals(index) || "discount".equals(index)) {
+		if ("price".equals(index) || "quantity".equals(index) || "discount".equals(index)) {
+			if (widget instanceof TextBox) {
 				((TextBox) widget).addChangeHandler(new ChangeHandler() {
 					@Override
 					public void onChange(ChangeEvent event) {
-						// Window.alert("change!");
 						onPriceOrQuantityUpdate();
 					}
 				});
+			}
+		} else if ("productID".equals(index)) {
+			if (widget instanceof RelateWidget) {
+				((RelateWidget) widget).subscribe(this);
 			}
 		}
 
@@ -163,5 +169,10 @@ public class ServiceTableWidget extends ITableWidget {
 			currentSum += (NumberParser.convertToDouble(service.get("price")) - NumberParser.convertToDouble(service.get("discount"))) * (Integer) service.get("quantity");
 		}
 		return currentSum;
+	}
+
+	@Override
+	public void notify(Dto value) {
+		LogConsole.log("received original price: " + value.get("price").toString());
 	}
 }

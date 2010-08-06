@@ -1,5 +1,7 @@
 package honeycrm.server;
 
+import honeycrm.server.transfer.ReflectionHelper;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;

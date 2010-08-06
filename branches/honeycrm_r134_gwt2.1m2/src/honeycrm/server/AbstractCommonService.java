@@ -1,6 +1,8 @@
 package honeycrm.server;
 
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.transfer.DtoCopyMachine;
+import honeycrm.server.transfer.ReflectionHelper;
 
 import java.util.Collection;
 import java.util.logging.Logger;

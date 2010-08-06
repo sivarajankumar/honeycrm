@@ -11,11 +11,7 @@ public class FulltextSuggestOracle extends SuggestOracle {
 
 	@Override
 	public void requestSuggestions(Request request, Callback callback) {
-		/*
-		 * suggestions.add(new MultiWordSuggestion("a", "a")); suggestions.add(new MultiWordSuggestion("aa", "aa")); suggestions.add(new MultiWordSuggestion("aaa", "aaa")); suggestions.add(new MultiWordSuggestion("b", "b"));
-		 */
 		final Response response = new Response(suggestions);
-
 		callback.onSuggestionsReady(request, response);
 	}
 
