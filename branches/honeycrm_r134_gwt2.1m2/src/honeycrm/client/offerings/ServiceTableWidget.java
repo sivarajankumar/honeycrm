@@ -177,7 +177,7 @@ public class ServiceTableWidget extends ITableWidget {
 				final boolean wasTableAlreadyFilled = (table.getRowCount() == HEADER_ROWS + data.size());
 
 				for (int row = 0; row < data.size(); row++) {
-					insertDtoInTableRow(data.get(row), wasTableAlreadyFilled, row);
+					insertDtoInTableRow(data.get(row), wasTableAlreadyFilled, HEADER_ROWS + row);
 				}
 			} else {
 				throw new RuntimeException("Expected Service. Received " + data.get(0).getClass());

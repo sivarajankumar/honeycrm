@@ -100,28 +100,38 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 				// available on submit
 				final String selected = event.getSelectedItem().getReplacementString();
 
-				commonService.getByName(marshalledClass, selected, new AsyncCallback<Dto>() {
+				Prefetcher.instance.get(new Consumer<Dto>() {
 					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Could not get id of selected item = " + selected);
-					}
-
-					@Override
-					public void onSuccess(Dto result) {
-						if (null == result) {
+					public void setValueAsynch(Dto value) {
+						if (null == value) {
 							// the related entity could not be found or the search returned more
 							// than one result.
 							// TODO what should be done in this case?
 						} else {
-							id = result.getId();
+							id = value.getId();
 							
 							// notify all observers of that new value
 							for (final Observer<Dto> observer: observers) {
-								observer.notify(result);
+								observer.notify(value);
 							}
-						}
+						}						
 					}
-				});
+				}, new ServerCallback<Dto>() {
+					@Override
+					public void doRpc(final Consumer<Dto> internalCacheCallback) {
+						commonService.getByName(marshalledClass, selected, new AsyncCallback<Dto>() {
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert("Could not get id of selected item = " + selected);
+							}
+
+							@Override
+							public void onSuccess(Dto result) {
+								internalCacheCallback.setValueAsynch(result);
+							}
+						});						
+					}
+				}, 60*1000, marshalledClass, selected);
 			}
 		});
 	}
