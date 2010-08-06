@@ -50,32 +50,37 @@ public class FieldRelate extends AbstractField {
 			return new Label();
 		} else {
 			final Dto related = ((Dto) dto.get(fieldId + "_resolved"));
-			final PopupPanel popup = getDetailsPopup(related, fieldId);
-			final Hyperlink link = new Hyperlink(related.getQuicksearch(), related.getHistoryToken() + " " + value);
-			final Label details = new Label(" [details]");
+			
+			if (null == related) {
+				return new Label("[unresolved]");
+			} else {
+				final PopupPanel popup = getDetailsPopup(related, fieldId);
+				final Hyperlink link = new Hyperlink(related.getQuicksearch(), related.getHistoryToken() + " " + value);
+				final Label details = new Label(" [details]");
+	
+				details.addMouseOverHandler(new MouseOverHandler() {
+					@Override
+					public void onMouseOver(MouseOverEvent event) {
+						int left = link.getAbsoluteLeft();
+						int top = link.getAbsoluteTop() + 16;
+						popup.setPopupPosition(left, top);
+						popup.show();
+					}
+				});
+	
+				details.addMouseOutHandler(new MouseOutHandler() {
+					@Override
+					public void onMouseOut(MouseOutEvent event) {
+						popup.hide();
+					}
+				});
 
-			details.addMouseOverHandler(new MouseOverHandler() {
-				@Override
-				public void onMouseOver(MouseOverEvent event) {
-					int left = link.getAbsoluteLeft();
-					int top = link.getAbsoluteTop() + 16;
-					popup.setPopupPosition(left, top);
-					popup.show();
-				}
-			});
-
-			details.addMouseOutHandler(new MouseOutHandler() {
-				@Override
-				public void onMouseOut(MouseOutEvent event) {
-					popup.hide();
-				}
-			});
-
-			final Panel panel = new HorizontalPanel();
-			panel.add(link);
-			panel.add(details);
-
-			return panel;
+				final Panel panel = new HorizontalPanel();
+				panel.add(link);
+				panel.add(details);
+	
+				return panel;
+			}
 		}
 	}
 

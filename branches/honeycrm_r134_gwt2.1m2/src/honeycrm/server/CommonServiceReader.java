@@ -6,9 +6,9 @@ import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +26,10 @@ public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 
 	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final Collection<AbstractEntity> collection) {
+		if (collection.isEmpty()) {
+			return null;
+		} 
+		
 		final List<Dto> list = new LinkedList<Dto>();
 
 		for (final AbstractEntity item : collection) {
@@ -39,7 +43,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		return list.toArray(new Dto[0]);
 	}
 
-	private void resolveRelatedEntities(final AbstractEntity item, final Dto dto) {
+	public static void resolveRelatedEntities(final AbstractEntity item, final Dto dto) {
 		try {
 			final Class<? extends AbstractEntity> originatingClass = item.getClass();
 
@@ -194,18 +198,25 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	private ListQueryResult getAllRelated(String originating, Long id, String related) {
-		final Set<AbstractEntity> result = new HashSet<AbstractEntity>();
-
+		final List<AbstractEntity> result = new ArrayList<AbstractEntity>();
 		/**
 		 * Get all related entities where the id fields contain the id of the originating entity e.g. return all contacts which have accountID == 23 where is the id of the originating account.
 		 */
+		//final long dbStart = System.currentTimeMillis();
+				
 		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(originating, related)) {
 			final Query q = m.newQuery(getDomainClass(originating));
 			q.setFilter(fieldName + " == " + id);
 			result.addAll((Collection<AbstractEntity>) q.execute());
 		}
+		
+		//final long dbDiff = System.currentTimeMillis() - dbStart;
 
-		return new ListQueryResult(getArrayFromQueryResult(originating, result), result.size());
+		//final long convertStart = System.currentTimeMillis();
+		final ListQueryResult r = new ListQueryResult(getArrayFromQueryResult(originating, result), result.size());
+		//final long convertDiff = System.currentTimeMillis() - convertStart;
+		
+		return r;
 	}
 
 	enum BoolOperator {
@@ -223,6 +234,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		};
 	}
 
+	// TODO make this faster: getting account data takes 27ms. getting empty relationship data for an account takes 270ms. 
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String related) {
 		final Map<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
 		final Map<String, Map<String, Set<String>>> relations = RelationshipFieldTable.instance.getMap();

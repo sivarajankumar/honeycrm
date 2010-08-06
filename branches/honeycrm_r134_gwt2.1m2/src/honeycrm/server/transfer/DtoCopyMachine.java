@@ -2,6 +2,7 @@ package honeycrm.server.transfer;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.server.CachingReflectionHelper;
+import honeycrm.server.CommonServiceReader;
 import honeycrm.server.DomainClassRegistry;
 import honeycrm.server.PMF;
 import honeycrm.server.domain.AbstractEntity;
@@ -140,7 +141,14 @@ public class DtoCopyMachine {
 		final List<Dto> serverList = new LinkedList<Dto>();
 
 		for (final AbstractEntity child : (List<AbstractEntity>) value) {
-			serverList.add(copy(child));
+			/**
+			 * resolving related entities of child entities. e.g. services are child items of offerings and contracts.
+			 * this is necessary to display the name of the related entity (and other fields that might be interesting).
+			 */
+			final Dto childDto = copy(child);
+			CommonServiceReader.resolveRelatedEntities(child, childDto);
+
+			serverList.add(childDto);
 		}
 
 		dto.set(field.getName(), (Serializable) serverList);

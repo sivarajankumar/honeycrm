@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 // TODO update history token when a new tab is selected
-public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler<String> {
+public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<String> {
 	private static TabCenterView instance = new TabCenterView();
 
 	// use list instead of set to make sure the sequence stays the same
@@ -41,7 +41,6 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 	private final Map<Integer, String> tabPositionMapReverse = new HashMap<Integer, String>();
 	private final Map<Integer, Widget> tabPosToCreateBtnMap = new HashMap<Integer, Widget>();
 
-
 	public static TabCenterView instance() {
 		return instance;
 	}
@@ -49,7 +48,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 	private TabCenterView() {
 		super(25, Unit.PX);
 		int tabPos = 0;
-		
+
 		addStyleName("with_margin");
 		addStyleName("tab_layout");
 
@@ -59,7 +58,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 			if (moduleDto.isHidden()) {
 				continue; // do not add this module to the tabs since it should be hidden
 			}
-			
+
 			final TabModuleView view = new TabModuleView(moduleDto.getModule());
 
 			// refresh list view only for the first tab (which is the only visible tab at the beginning)
@@ -69,7 +68,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 			final Hyperlink createBtn = new Hyperlink("Create", moduleDto.getModule() + " create");
 			createBtn.addStyleName("create_button");
 			createBtn.setVisible(false);
-			
+
 			moduleViewMap.put(moduleDto.getModule(), view);
 			tabPositionMap.put(moduleDto.getModule(), tabPos);
 			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
@@ -79,7 +78,7 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 			final HorizontalPanel titlePanel = new HorizontalPanel();
 			titlePanel.add(createBtn);
 			titlePanel.add(moduleTitle);
-			
+
 			add((view), titlePanel);
 		}
 
@@ -111,8 +110,8 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 		LogConsole.log("created center view");
 
 		History.addValueChangeHandler(this);
-        // History.fireCurrentHistoryState();
-		
+		// History.fireCurrentHistoryState();
+
 		selectTab(0);
 	}
 
@@ -124,8 +123,12 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 	 * Shows the module tab for the module described by the given class.
 	 */
 	public void showModuleTabWithId(final String clazz, final long id) {
-		showModuleTab(clazz);
-		moduleViewMap.get(clazz).showDetailView(id);
+		if (moduleViewMap.containsKey(clazz)) {
+			showModuleTab(clazz);
+			moduleViewMap.get(clazz).showDetailView(id);
+		} else {
+			LogConsole.log("Cannot switch to module '" + clazz + "'/" + id + ".");
+		}
 	}
 
 	public void showModuleTab(String clazz) {
@@ -133,13 +136,13 @@ public class TabCenterView extends TabLayoutPanel  implements ValueChangeHandler
 			Window.alert("Cannot switch to module: '" + clazz + "'");
 			return;
 		}
-		
+
 		if (!moduleViewMap.get(clazz).isListViewInitialized()) {
 			moduleViewMap.get(clazz).refreshListView();
 		}
 		selectTab(tabPositionMap.get(clazz));
 	}
-	
+
 	public void showCreateViewForModule(final String clazz) {
 		showModuleTab(clazz);
 		moduleViewMap.get(clazz).showCreateView();

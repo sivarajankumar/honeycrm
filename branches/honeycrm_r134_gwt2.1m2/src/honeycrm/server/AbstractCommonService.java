@@ -23,11 +23,11 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	protected static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	protected static final DomainClassRegistry registry = DomainClassRegistry.instance;
 
-	protected Class<? extends AbstractEntity> getDomainClass(final String dtoIndex) {
+	protected static Class<? extends AbstractEntity> getDomainClass(final String dtoIndex) {
 		return registry.getDomain(dtoIndex);
 	}
 
-	protected AbstractEntity getDomainObject(final String dtoIndex, final long id) {
+	protected static AbstractEntity getDomainObject(final String dtoIndex, final long id) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "id == " + id);
 		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
 

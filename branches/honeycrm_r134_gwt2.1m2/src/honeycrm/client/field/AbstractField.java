@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
+// TODO this should be done by field currency somehow.. the fields should provide a "String format(Serializable value);" method.
 public abstract class AbstractField implements IsSerializable, Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -11,8 +11,11 @@ import honeycrm.client.view.AbstractView.View;
 import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.RelateWidget;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -27,13 +30,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ServiceTableWidget extends ITableWidget implements Observer<Dto> {
+public class ServiceTableWidget extends ITableWidget {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
 	private final ModuleDto moduleDto = DtoModuleRegistry.instance().get("service");
-	private final Dto dto = moduleDto.createDto();
 	private final View view;
 	private final Label sum = new Label();
+	private final Map<Integer, Dto> model = new HashMap<Integer, Dto>();
 
 	public ServiceTableWidget(final View view) {
 		this.view = view;
@@ -53,10 +56,12 @@ public class ServiceTableWidget extends ITableWidget implements Observer<Dto> {
 				@Override
 				public void onClick(ClickEvent event) {
 					final int rows = table.getRowCount();
+					final int newRowId = rows;
 
-					for (int x = 0; x < dto.getListFieldIds().length; x++) {
-						final String index = dto.getListFieldIds()[x];
-						table.setWidget(rows, x, addChangeEvents(index, dto.getFieldById(index).getWidget(view, dto, index)));
+					model.put(newRowId, moduleDto.createDto());
+					for (int x = 0; x < moduleDto.getListFieldIds().length; x++) {
+						final String index = moduleDto.createDto().getListFieldIds()[x];
+						table.setWidget(rows, x, addChangeEvents(index, moduleDto.getFieldById(index).getWidget(view, moduleDto.createDto(), index), newRowId));
 					}
 				}
 			});
@@ -68,62 +73,98 @@ public class ServiceTableWidget extends ITableWidget implements Observer<Dto> {
 	}
 
 	private void initHeader() {
-		for (int x = 0; x < dto.getListFieldIds().length; x++) {
-			final AbstractField field = dto.getFieldById(dto.getListFieldIds()[x]);
-			table.setWidget(0, x, field.getWidget(View.LIST_HEADER, dto, dto.getListFieldIds()[x]));
+		for (int x = 0; x < moduleDto.getListFieldIds().length; x++) {
+			final AbstractField field = moduleDto.getFieldById(moduleDto.getListFieldIds()[x]);
+			table.setWidget(0, x, field.getWidget(View.LIST_HEADER, moduleDto.createDto(), moduleDto.getListFieldIds()[x]));
 		}
 	}
 
-	private Widget addChangeEvents(final String index, final Widget widget) {
+	private Widget addChangeEvents(final String index, final Widget widget, final int row) {
 		if ("price".equals(index) || "quantity".equals(index) || "discount".equals(index)) {
 			if (widget instanceof TextBox) {
 				((TextBox) widget).addChangeHandler(new ChangeHandler() {
 					@Override
 					public void onChange(ChangeEvent event) {
-						onPriceOrQuantityUpdate();
+						rowChanged(row);
 					}
 				});
 			}
 		} else if ("productID".equals(index)) {
 			if (widget instanceof RelateWidget) {
-				((RelateWidget) widget).subscribe(this);
+				((RelateWidget) widget).subscribe(new Observer<Dto>() {
+					@Override
+					public void notify(final Dto value) {
+						// overwrite price with price of received dto
+						if (model.containsKey(row) && null != value.get("price")) {
+							final Dto updatedDto = getDtoFromRow(row);
+							updatedDto.set("price", value.get("price"));
+
+							insertDtoInTableRow(updatedDto, true, row);
+						}
+						LogConsole.log("received original price: " + value.get("price").toString() + " in row " + row);
+					}
+				});
 			}
 		}
 
 		return widget;
 	}
 
-	/**
-	 * Update the sum for every
-	 */
-	private void onPriceOrQuantityUpdate() {
-		setData(getData());
+	protected void rowChanged(final int row) {
+		model.put(row, getDtoFromRow(row));
+		LogConsole.log("updated data of row " + row);
+
+		updateSum(row);
+
+		sum.setText(NumberFormat.getCurrencyFormat("EUR").format(getSum(model.values())));
+	}
+
+	private void updateSum(final int row) {
+		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
+			final String index = moduleDto.getListFieldIds()[col];
+			final AbstractField field = moduleDto.getFieldById(index);
+
+			if ("sum".equals(index) && table.getWidget(/* HEADER_ROWS + */row, col) instanceof TextBox) {
+				final Dto dto = model.get(row);
+				final String text = ((TextBox) field.getWidget(View.EDIT, dto, index)).getText();
+				final TextBox box = ((TextBox) table.getWidget(/* HEADER_ROWS + */row, col));
+				box.setText(text);
+			}
+		}
 	}
 
 	@Override
 	public List<Dto> getData() {
 		final List<Dto> services = new LinkedList<Dto>();
 
-		for (int y = HEADER_ROWS; y < table.getRowCount(); y++) {
-			final Dto s = new Dto();
-			s.setModule("service");
-
-			for (int x = 0; x < dto.getListFieldIds().length; x++) {
-				if (table.getCellCount(y) > x) {
-					if (table.getWidget(y, x) instanceof TextBox) {
-						// TODO do this for other widgets as well
-						s.set(dto.getListFieldIds()[x], dto.getFieldById(dto.getListFieldIds()[x]).getData(table.getWidget(y, x)));
-					} else {
-						throw new RuntimeException("Cannot yet handle widget type " + table.getWidget(y, x).getClass());
-					}
-				}
-			}
-
-			s.set("sum", (NumberParser.convertToDouble(s.get("price")) - NumberParser.convertToDouble(s.get("discount"))) * (Integer) s.get("quantity"));
-			services.add(s);
+		for (int row = HEADER_ROWS; row < table.getRowCount(); row++) {
+			services.add(getDtoFromRow(row));
 		}
 
 		return services;
+	}
+
+	private Dto getDtoFromRow(final int row) {
+		final Dto s = new Dto();
+		s.setModule("service");
+
+		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
+			if (table.getCellCount(/* HEADER_ROWS + */row) > col) {
+				final Widget widget = table.getWidget(/* HEADER_ROWS + */row, col);
+
+				if (widget instanceof TextBox) {
+					s.set(moduleDto.getListFieldIds()[col], moduleDto.getFieldById(moduleDto.getListFieldIds()[col]).getData(table.getWidget(/* HEADER_ROWS + */row, col)));
+				} else if (widget instanceof RelateWidget) {
+					s.set(moduleDto.getListFieldIds()[col], ((RelateWidget) widget).getId());
+				} else {
+					// TODO do this for other widgets as well
+					LogConsole.log("Cannot yet handle widget type " + table.getWidget(/* HEADER_ROWS + */row, col).getClass());
+				}
+			}
+		}
+
+		s.set("sum", (NumberParser.convertToDouble(s.get("price")) - NumberParser.convertToDouble(s.get("discount"))) * (Integer) s.get("quantity"));
+		return s;
 	}
 
 	@Override
@@ -135,44 +176,58 @@ public class ServiceTableWidget extends ITableWidget implements Observer<Dto> {
 			if (data.get(0) instanceof Dto) {
 				final boolean wasTableAlreadyFilled = (table.getRowCount() == HEADER_ROWS + data.size());
 
-				for (int y = 0; y < data.size(); y++) {
-					for (int x = 0; x < moduleDto.getListFieldIds().length; x++) {
-						final String index = moduleDto.getListFieldIds()[x];
-						final AbstractField field = moduleDto.getFieldById(index);
-
-						if (wasTableAlreadyFilled) {
-							// update widget because it already exists
-							if (table.getWidget(HEADER_ROWS + y, x) instanceof TextBox) {
-								// TODO this is faaaaar to crappy!
-								// TODO this should be done by field currency somehow..
-								((TextBox) table.getWidget(HEADER_ROWS + y, x)).setText(((TextBox) field.getWidget(View.EDIT, data.get(y), (index))).getText());
-								// data.get(y).getFieldValue(index).toString());
-							}
-						} else {
-							// add a new widget and new click handler
-							table.setWidget(HEADER_ROWS + y, x, field.getWidget(view, data.get(y), (index)));
-							addChangeEvents(index, table.getWidget(HEADER_ROWS + y, x));
-						}
-					}
+				for (int row = 0; row < data.size(); row++) {
+					insertDtoInTableRow(data.get(row), wasTableAlreadyFilled, row);
 				}
 			} else {
-				throw new RuntimeException("Expected DtoService received " + data.get(0).getClass());
+				throw new RuntimeException("Expected Service. Received " + data.get(0).getClass());
 			}
 		}
 
 		sum.setText(NumberFormat.getCurrencyFormat("EUR").format(getSum(data)));
 	}
 
-	private double getSum(List<Dto> data) {
+	/**
+	 * Insert or update the table row in the UI with the data from the model stored in dto.
+	 * 
+	 * @param dto
+	 *            The model object storing the data that should be inserted / updated in the UI.
+	 * @param isUpdate
+	 *            True if the UI should be updated (reuses widgets). False otherwise (creates new widgets).
+	 * @param row
+	 *            The number of the row that has been changed.
+	 */
+	private void insertDtoInTableRow(final Dto dto, final boolean isUpdate, int row) {
+		// make sure the dto is stored
+		model.put(row, dto);
+
+		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
+			final String index = moduleDto.getListFieldIds()[col];
+			final AbstractField field = moduleDto.getFieldById(index);
+
+			if (isUpdate) {
+				// update widget because it already exists
+				if (table.getWidget(/* HEADER_ROWS + */row, col) instanceof TextBox) {
+					// TODO this is faaaaar to crappy!
+					// TODO this should be done by field currency somehow.. the fields should provide a "String format(Serializable value);" method.
+
+					final String text = ((TextBox) field.getWidget(View.EDIT, dto, index)).getText();
+					final TextBox box = ((TextBox) table.getWidget(/* HEADER_ROWS + */row, col));
+					box.setText(text);
+				}
+			} else {
+				// add a new widget and new click handler
+				table.setWidget(row, col, field.getWidget(view, dto, (index)));
+				addChangeEvents(index, table.getWidget(/* HEADER_ROWS + */row, col), row);
+			}
+		}
+	}
+
+	private double getSum(final Collection<Dto> data) {
 		double currentSum = 0.0;
 		for (Dto service : data) {
 			currentSum += (NumberParser.convertToDouble(service.get("price")) - NumberParser.convertToDouble(service.get("discount"))) * (Integer) service.get("quantity");
 		}
 		return currentSum;
-	}
-
-	@Override
-	public void notify(Dto value) {
-		LogConsole.log("received original price: " + value.get("price").toString());
 	}
 }
