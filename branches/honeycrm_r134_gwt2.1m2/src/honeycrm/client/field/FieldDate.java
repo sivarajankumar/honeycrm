@@ -1,13 +1,7 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
-
 import java.io.Serializable;
-import java.util.Date;
 
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
@@ -20,7 +14,7 @@ public class FieldDate extends AbstractField {
 	public FieldDate(final String index, final String label) {
 		super(index, label);
 	}
-
+/*
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
 	    DateBox dateBox = new DateBox();
@@ -50,9 +44,14 @@ public class FieldDate extends AbstractField {
 	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
 		return internalGetDetailWidget(dto, fieldId);
 	}
-
+*/
 	@Override
 	protected Serializable internalGetData(Widget w) {
 		return ((DateBox) w).getValue();
+	}
+	
+	@Override
+	protected Widget editField() {
+		return new DateBox();
 	}
 }

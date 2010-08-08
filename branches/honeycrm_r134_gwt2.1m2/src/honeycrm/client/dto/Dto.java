@@ -1,9 +1,12 @@
 package honeycrm.client.dto;
 
 import honeycrm.client.field.AbstractField;
+import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.misc.NumberParser;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -101,7 +104,7 @@ public class Dto implements Serializable {
 	public String getQuicksearch() {
 		final String[] quickSearchItems = getQuicksearchItems();
 		String str = "";
-		
+
 		for (int i = 0; i < quickSearchItems.length; i++) {
 			str += get(quickSearchItems[i]);
 
@@ -127,5 +130,24 @@ public class Dto implements Serializable {
 
 	public Map<String, Serializable> getAllData() {
 		return data;
+	}
+
+	/**
+	 * Returns all fields that are "pre-viewable" i.e. all fields with non-empty string values that are stored in this instance. The returned fields are sorted by name.
+	 */
+	public List<String> getAllPreviewableFieldsSorted() {
+		final List<String> previewableFields = new ArrayList<String>();
+		final List<String> sortedFieldNames = CollectionHelper.toList(data.keySet());
+		Collections.sort(sortedFieldNames);
+			
+		for (final String key : sortedFieldNames) {
+			final Serializable value = get(key);
+
+			if (!"name".equals(key) && null != value && value instanceof String && !value.toString().isEmpty()) {
+				previewableFields.add(key);
+			}
+		}
+
+		return previewableFields;
 	}
 }

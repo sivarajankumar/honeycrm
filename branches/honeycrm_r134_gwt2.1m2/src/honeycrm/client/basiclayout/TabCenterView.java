@@ -122,12 +122,21 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 	/**
 	 * Shows the module tab for the module described by the given class.
 	 */
-	public void showModuleTabWithId(final String clazz, final long id) {
-		if (moduleViewMap.containsKey(clazz)) {
-			showModuleTab(clazz);
-			moduleViewMap.get(clazz).showDetailView(id);
+	public void openDetailView(final String module, final long id) {
+		if (moduleViewMap.containsKey(module)) {
+			showModuleTab(module);
+			moduleViewMap.get(module).openDetailView(id);
 		} else {
-			LogConsole.log("Cannot switch to module '" + clazz + "'/" + id + ".");
+			LogConsole.log("Cannot switch to module '" + module + "'/" + id + ".");
+		}
+	}
+	
+	public void openEditView(final String module, final long id) {
+		if (moduleViewMap.containsKey(module)) {
+			showModuleTab(module);
+			moduleViewMap.get(module).openEditView(id);
+		} else {
+			LogConsole.log("Cannot switch to module '" + module + "'/" + id + ".");
 		}
 	}
 
@@ -145,12 +154,12 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 	public void showCreateViewForModule(final String clazz) {
 		showModuleTab(clazz);
-		moduleViewMap.get(clazz).showCreateView();
+		moduleViewMap.get(clazz).openCreateView();
 	}
 
 	public void showCreateViewForModulePrefilled(String module, String fieldId, Serializable value) {
 		showModuleTab(module);
-		moduleViewMap.get(module).showCreateViewPrefilled(fieldId, value);
+		moduleViewMap.get(module).openCreateViewPrefilled(fieldId, value);
 	}
 
 	@Override
@@ -161,7 +170,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 			if ("create".equals(token[1])) {
 				showCreateViewForModule(token[0]);
 			} else {
-				showModuleTabWithId(token[0], Long.valueOf(token[1]));
+				openDetailView(token[0], Long.valueOf(token[1]));
 			}
 		} else if (1 == token.length) {
 			showModuleTab(token[0]);

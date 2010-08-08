@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+// TODO caching bug: the service lists that are returned are out-of-date after save
 public class ServiceTableWidget extends ITableWidget {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
@@ -150,16 +151,10 @@ public class ServiceTableWidget extends ITableWidget {
 
 		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
 			if (table.getCellCount(/* HEADER_ROWS + */row) > col) {
+				final String id = moduleDto.getListFieldIds()[col];
 				final Widget widget = table.getWidget(/* HEADER_ROWS + */row, col);
 
-				if (widget instanceof TextBox) {
-					s.set(moduleDto.getListFieldIds()[col], moduleDto.getFieldById(moduleDto.getListFieldIds()[col]).getData(table.getWidget(/* HEADER_ROWS + */row, col)));
-				} else if (widget instanceof RelateWidget) {
-					s.set(moduleDto.getListFieldIds()[col], ((RelateWidget) widget).getId());
-				} else {
-					// TODO do this for other widgets as well
-					LogConsole.log("Cannot yet handle widget type " + table.getWidget(/* HEADER_ROWS + */row, col).getClass());
-				}
+				s.set(id, moduleDto.getFieldById(id).getData(widget));
 			}
 		}
 

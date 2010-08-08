@@ -115,7 +115,8 @@ public class DtoWizard {
 				} else if (field.isAnnotationPresent(FieldIntegerAnnotation.class)) {
 					fields.add(new FieldInteger(name, label, field.getAnnotation(FieldIntegerAnnotation.class).value()));
 				} else if (field.isAnnotationPresent(FieldTextAnnotation.class)) {
-					fields.add(new FieldText(name, label));
+					final int width = field.getAnnotation(FieldTextAnnotation.class).width();
+					fields.add(new FieldText(name, label, width));
 				} else if (field.isAnnotationPresent(FieldTableAnnotation.class)) {
 					fields.add(new FieldTable(name, label));
 				} else {

@@ -3,6 +3,7 @@ package honeycrm.client.view;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -53,13 +54,20 @@ public class DetailView extends AbstractView {
 	}
 
 	/**
-	 * Forces reload of all fields of the domain object. This is neccessary for updating fields that are set on server side and not visible while editing.
+	 * Forces reload of all fields of the domain object. This is necessary for updating fields that are set on server side and not visible while editing.
 	 */
 	public void refresh() {
 		refresh(dto.getId());
 	}
-
+	
 	public void refresh(final long id) {
+		refresh(id, null);
+	}
+	
+	/**
+	 * Retrieve the item with the specified id, display its values in the detail view. Optionally execute the callback to tell clients when the item has successfully been retrieved.
+	 */
+	public void refresh(final long id, final Callback callback) {
 		if (0 == id) {
 			throw new RuntimeException("Cannot refresh because id == 0");
 		} else {
@@ -80,6 +88,10 @@ public class DetailView extends AbstractView {
 						buttonBar.startViewing();
 					}
 					LoadIndicator.get().endLoading();
+					
+					if (null != callback) {
+						callback.callback();
+					}
 				}
 			}, new ServerCallback<Dto>() {
 				@Override

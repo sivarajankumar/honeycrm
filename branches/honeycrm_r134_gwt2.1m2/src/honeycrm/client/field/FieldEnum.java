@@ -76,4 +76,10 @@ public class FieldEnum extends AbstractField {
 			return box.getValue(box.getSelectedIndex());
 		}
 	}
+
+	// TODO this is more difficult..
+	@Override
+	protected Widget editField() {
+		return new ListBox();
+	}
 }

@@ -134,7 +134,7 @@ public class ListView extends AbstractView {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				final Dto dto = selectionModel.getSelectedObject();
-				TabCenterView.instance().showModuleTabWithId(dto.getModule(), dto.getId());
+				TabCenterView.instance().openDetailView(dto.getModule(), dto.getId());
 			}
 		});
 

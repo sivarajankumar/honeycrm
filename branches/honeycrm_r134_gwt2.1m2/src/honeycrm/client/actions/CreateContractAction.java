@@ -7,6 +7,8 @@ import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.ServiceRegistry;
 
+import java.util.List;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -28,6 +30,12 @@ public class CreateContractAction extends AbstractAction {
 
 		for (final String key: offering.getAllData().keySet()) {
 			contract.set(key, offering.get(key));
+
+			if (key.equals("services")) {
+				for (final Dto item: (List<Dto>)contract.get(key)) {
+					item.setId(0);
+				}
+			}
 		}
 		
 		linkOfferingToContract(offering, contract);
@@ -58,7 +66,7 @@ public class CreateContractAction extends AbstractAction {
 				/**
 				 * forward the user to the created contract.
 				 */
-				TabCenterView.instance().showModuleTabWithId("contract", contractID);
+				TabCenterView.instance().openEditView("contract", contractID);
 			}
 			
 			@Override

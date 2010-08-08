@@ -1,13 +1,10 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.StringAbbreviation;
 
 import java.io.Serializable;
 
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldEmail extends AbstractField {
@@ -19,7 +16,7 @@ public class FieldEmail extends AbstractField {
 	public FieldEmail(final String index, final String label) {
 		super(index, label);
 	}
-
+/*
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
 		TextBox widget3 = new TextBox();
@@ -51,9 +48,19 @@ public class FieldEmail extends AbstractField {
 	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
 		return internalGetDetailWidget(dto, fieldId);
 	}
-
+*/
 	@Override
 	protected Serializable internalGetData(Widget w) {
 		return ((Anchor) w).getHTML();
+	}
+	
+	@Override
+	protected String internalFormattedValue(Serializable value) {
+		return StringAbbreviation.shorten(stringify(value), 10);
+	}
+	
+	@Override
+	protected Widget detailField() {
+		return new Anchor();
 	}
 }

@@ -1,14 +1,9 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.NumberParser;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldInteger extends AbstractField {
@@ -18,20 +13,11 @@ public class FieldInteger extends AbstractField {
 	public FieldInteger() {
 	}
 
-	public FieldInteger(final String index, final String label) {
-		super(index, label);
-		this.width = DEFAULT_WIDTH;
-	}
-	
 	public FieldInteger(final String index, final String label, int defaultValue) {
 		super(index, label, String.valueOf(defaultValue));
 		this.width = DEFAULT_WIDTH;
 	}
-
-	public FieldInteger(String indexQuantity, String string, String string2, int i) {
-		super(indexQuantity, string, string2, i);
-	}
-
+/*
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
 		TextBox widget6 = new TextBox();
@@ -58,7 +44,7 @@ public class FieldInteger extends AbstractField {
 	@Override
 	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
 		return internalGetDetailWidget(dto, fieldId);
-	}
+	}*/
 
 	@Override
 	public Serializable getData(Widget w) {

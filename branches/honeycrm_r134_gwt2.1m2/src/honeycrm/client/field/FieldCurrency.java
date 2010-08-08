@@ -1,19 +1,10 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.NumberParser;
 
 import java.io.Serializable;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldCurrency extends AbstractField {
@@ -24,28 +15,12 @@ public class FieldCurrency extends AbstractField {
 		this.width = DEFAULT_WIDTH;
 	}
 
-	// TODO find a way to inherit the constructors from the parent class to avoid declaring them here again
-	public FieldCurrency(final String index, final String label) {
-		super(index, label);
-		this.width = DEFAULT_WIDTH;
-	}
-
 	public FieldCurrency(final String index, final String label, final String defaultValue) {
 		super(index, label, defaultValue);
 		this.width = DEFAULT_WIDTH;
 	}
 
-	public FieldCurrency(String indexSum, String string, String string2, int i, boolean b) {
-		super(indexSum, string, string2, i, b);
-		this.width = DEFAULT_WIDTH;
-	}
-
-	public FieldCurrency(String indexDiscount, String string, String string2, int i) {
-		super(indexDiscount, string, string2, i);
-		this.width = DEFAULT_WIDTH;
-	}
-
-	@Override
+/*	@Override
 	protected Widget internalGetCreateWidget(Object value) {
 		TextBox w = new TextBox();
 		w.setText(formatRead().format(NumberParser.convertToDouble((getDefaultValue()))));
@@ -104,7 +79,7 @@ public class FieldCurrency extends AbstractField {
 	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
 		return internalGetDetailWidget(dto, fieldId);
 	}
-
+*/
 	@Override
 	public Serializable getData(Widget w) {
 		final String value = (String) super.getData(w);

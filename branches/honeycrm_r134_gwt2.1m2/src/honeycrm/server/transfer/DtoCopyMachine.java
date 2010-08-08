@@ -53,7 +53,7 @@ public class DtoCopyMachine {
 				if ("id".equals(field.getName())) {
 					if (null == existingEntity) {
 						continue;
-					} else {
+					} else { //  if (null != value && (Long) value > 0)
 						// insert id of the existing entity in the newly created one
 						// this is an update
 						final Method setter = entityClass.getMethod("setId", Key.class);

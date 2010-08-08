@@ -1,12 +1,9 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.view.RelateWidget;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
 
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -50,58 +47,66 @@ public class FieldRelate extends AbstractField {
 			return new Label();
 		} else {
 			final Dto related = ((Dto) dto.get(fieldId + "_resolved"));
-			
+
 			if (null == related) {
 				return new Label("[unresolved]");
 			} else {
-				final PopupPanel popup = getDetailsPopup(related, fieldId);
 				final Hyperlink link = new Hyperlink(related.getQuicksearch(), related.getHistoryToken() + " " + value);
-				final Label details = new Label(" [details]");
-	
-				details.addMouseOverHandler(new MouseOverHandler() {
-					@Override
-					public void onMouseOver(MouseOverEvent event) {
-						int left = link.getAbsoluteLeft();
-						int top = link.getAbsoluteTop() + 16;
-						popup.setPopupPosition(left, top);
-						popup.show();
-					}
-				});
-	
-				details.addMouseOutHandler(new MouseOutHandler() {
-					@Override
-					public void onMouseOut(MouseOutEvent event) {
-						popup.hide();
-					}
-				});
 
-				final Panel panel = new HorizontalPanel();
-				panel.add(link);
-				panel.add(details);
-	
-				return panel;
+				if (related.getAllPreviewableFieldsSorted().isEmpty()) {
+					/**
+					 * there are no details that can be displayed. only display the link to the related item.
+					 */
+					return link;
+				} else {
+					/**
+					 * there are details to this related dto. attach a [details] label and attach a popup that can be displayed as an onMouseOver effect.
+					 */
+					return getDetailsPanel(related, link, fieldId);
+				}
 			}
 		}
 	}
 
+	private Panel getDetailsPanel(final Dto related, final Hyperlink link, final String fieldId) {
+		final PopupPanel popup = getDetailsPopup(related, fieldId);
+		final Label details = new Label(" [details]");
+
+		details.addMouseOverHandler(new MouseOverHandler() {
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				int left = link.getAbsoluteLeft();
+				int top = link.getAbsoluteTop() + 16;
+				popup.setPopupPosition(left, top);
+				popup.show();
+			}
+		});
+
+		details.addMouseOutHandler(new MouseOutHandler() {
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				popup.hide();
+			}
+		});
+
+		final Panel panel = new HorizontalPanel();
+		panel.add(link);
+		panel.add(details);
+
+		return panel;
+	}
+	
 	private PopupPanel getDetailsPopup(final Dto related, final String fieldId) {
 		final PopupPanel popup = new PopupPanel(true);
-	
-		String html = "";
-		
-		final List<String> sortedFieldNames = CollectionHelper.toList(related.getAllData().keySet());
-		Collections.sort(sortedFieldNames);
-		
-		for (final String key: sortedFieldNames) {
-			final Serializable value = related.get(key);
 
-			// TODO shouldn't this be encapsulated in the dto class in a method like getAll detail preview
-			if (!"name".equals(key) && null != value && value instanceof String && !value.toString().isEmpty()) {
-				final String label = related.getFieldById(key).getLabel();
-				html += "<li>" + label + ": " + value.toString() + "</li>";
-			}
+		String html = "";
+
+		for (final String key : related.getAllPreviewableFieldsSorted()) {
+			final Serializable value = related.get(key);
+			final String label = related.getFieldById(key).getLabel();
+			html += "<li>" + label + ": " + value.toString() + "</li>";
 		}
-		
+
 		popup.add(new HTML("<ul>" + html + "</ul>"));
 
 		return popup;

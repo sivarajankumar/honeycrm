@@ -1,7 +1,5 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
-
 import java.io.Serializable;
 
 import com.google.gwt.user.client.ui.CheckBox;
@@ -17,7 +15,7 @@ public class FieldBoolean extends AbstractField {
 		super(index, label);
 	}
 
-	@Override
+	/*	@Override
 	protected Widget internalGetCreateWidget(Object value) {
 		CheckBox widget = new CheckBox();
 		return widget;
@@ -41,10 +39,20 @@ public class FieldBoolean extends AbstractField {
 	@Override
 	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
 		return internalGetDetailWidget(dto, fieldId);
-	}
+	}*/
 
 	@Override
 	protected Serializable internalGetData(Widget w) {
 		return ((CheckBox) w).getValue();
+	}
+
+	@Override
+	protected Widget editField() {
+		return new CheckBox();
+	}
+
+	@Override
+	protected Widget detailField() {
+		return new CheckBox();
 	}
 }

@@ -7,18 +7,18 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 // TODO this should be done by field currency somehow.. the fields should provide a "String format(Serializable value);" method.
-public abstract class AbstractField implements IsSerializable, Serializable {
+abstract public class AbstractField implements IsSerializable, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Is this a read only field or not?
-	 */
-	protected boolean readOnly = false;
 	/**
 	 * Proposed width of the widget in px that will be used to render this field. Or 0 if nothing has been proposed.
 	 */
@@ -36,28 +36,24 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 	 */
 	protected String label;
 
+	// private IField iField;
+
 	public AbstractField() { // for gwt
 	}
 
-	public AbstractField(final String id, final String label, final String defaultValue, final int width, final boolean readOnly) {
-		this(id, label, defaultValue, width);
-		this.readOnly = readOnly;
-	}
-
-	public AbstractField(final String id, final String label, final String defaultValue, final int width) {
-		this(id, label, defaultValue);
-		this.width = width;
-	}
-
-	public AbstractField(final String id, final String label, final String defaultValue) {
+	public AbstractField(final String id, final String label) {
 		this.id = id;
 		this.label = label;
+	}
+
+	public AbstractField(String id, String label, String defaultValue) {
+		this(id, label);
 		this.defaultValue = defaultValue;
 	}
 
-	public AbstractField(final String id, final String label) {
-		this(id, label, "");
-	}
+	/*
+	 * public AbstractField(String name, String label2, IField iField) { this(name, label2); this.iField = iField; }
+	 */
 
 	/**
 	 * Returns true if there is a width value that has been suggested for the widget used for rendering this field.
@@ -76,10 +72,6 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 
 	public String getDefaultValue() {
 		return defaultValue;
-	}
-
-	public boolean isReadOnly() {
-		return readOnly;
 	}
 
 	/**
@@ -106,13 +98,29 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 		}
 	}
 
-	abstract protected Widget internalGetListWidget(final Dto dto, final String fieldId);
+	protected Widget editField() {
+		return new TextBox();
+	}
 
-	abstract protected Widget internalGetDetailWidget(final Dto dto, final String fieldId);
+	protected Widget detailField() {
+		return new Label();
+	}
 
-	abstract protected Widget internalGetCreateWidget(final Object value);
+	protected Widget internalGetCreateWidget(Object value) {
+		return setData23(editField(), defaultValue, View.CREATE);
+	}
 
-	abstract protected Widget internalGetEditWidget(final Object value);
+	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
+		return setData23(detailField(), dto.get(fieldId), View.DETAIL); // TODO do this in the upper class only
+	}
+
+	protected Widget internalGetEditWidget(Object value) {
+		return setData23(editField(), (Serializable) value, View.EDIT); // TODO change interface
+	}
+
+	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
+		return internalGetDetailWidget(dto, fieldId); // TODO remove method completely
+	}
 
 	/**
 	 * Sub classes may override this method to handle the default widgets differently (e.g. additional conversion).
@@ -146,15 +154,10 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 	}
 
 	/**
-	 * This returns a label containing the title of this field, all other properties (e.g., width, alignment) are set as for a normal content field.
-	 * TODO this method should not receive a value as parameter since it does not need it
+	 * This returns a label containing the title of this field, all other properties (e.g., width, alignment) are set as for a normal content field. TODO this method should not receive a value as parameter since it does not need it
 	 */
 	private Label getHeaderWidget(final Object value) {
 		return (Label) decorateWidget(new Label(getLabel()));
-		
-		// final Label label = (Label) decorateWidget(internalGetDetailWidget(value));
-		// label.setText(getLabel());
-		// return label;
 	}
 
 	/**
@@ -164,11 +167,48 @@ public abstract class AbstractField implements IsSerializable, Serializable {
 		if (hasSuggestedWidth()) {
 			widget.setWidth(getWidthString());
 		}
-		/*
-		 * if (widget instanceof FocusWidget) { // TODO why is this necessary again?
-		 * 
-		 * // only do this if widget is still enabled. this prevents enabling checkboxes being rw after they have been disabled in getDetailWidget. if (((FocusWidget)widget).isEnabled()) { // call set enabled method when ever possible // enable this field if it is not readonly. disable the field if it is readonly. ((FocusWidget) widget).setEnabled(!isReadOnly()); } }
-		 */
 		return widget;
+	}
+
+	protected Widget setData23(final Widget widget, final Serializable value, final View view) {
+		if (widget instanceof Label) {
+			((Label) widget).setText(formattedValue(value, view));
+		} else if (widget instanceof TextBox) {
+			((TextBox) widget).setText(formattedValue(value, view));
+		} else if (widget instanceof TextArea) {
+			((TextArea) widget).setText(formattedValue(value, view));
+		} else if (widget instanceof CheckBox) {
+			((CheckBox) widget).setValue((Boolean) value);
+		} else if (widget instanceof Anchor) {
+			// TODO do this only for value != null
+			// TOOD use Label when value == null
+			((Anchor) widget).setText(formattedValue(value, view));
+			((Anchor) widget).setHref("mailto:" + String.valueOf(value));
+		} else {
+			throw new RuntimeException("Cannot handle widget " + widget.getClass());
+		}
+		return decorate23(widget, View.DETAIL == view);
+	}
+
+	private Widget decorate23(Widget widget, final boolean readOnly) {
+		if (readOnly && widget instanceof FocusWidget) {
+			((FocusWidget) widget).setEnabled(false);
+		}
+		return widget;
+	}
+
+	private String formattedValue(final Serializable value, final View view) {
+		return stringify(internalFormattedValue(value));
+	}
+
+	/**
+	 * Subclasses may override this and implement their own formatting for their content.
+	 */
+	protected String internalFormattedValue(final Serializable value) {
+		return stringify(value);
+	}
+
+	protected String stringify(Serializable value) {
+		return null == value ? "" : String.valueOf(value);
 	}
 }

@@ -27,7 +27,7 @@ public class Product extends AbstractEntity {
 	@Label("Price")
 	private double price;
 
-	@FieldTextAnnotation
+	@FieldTextAnnotation(width=400)
 	@Label("Description")
 	private String description;
 	

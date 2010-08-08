@@ -21,7 +21,7 @@ public class FieldMark extends AbstractField {
 		this.dtoIndex = dtoIndex;
 		this.dtoId = id;
 	}
-
+/*
 	@Override
 	protected Widget internalGetCreateWidget(Object value) {
 		final Dto dto = DtoModuleRegistry.instance().get(dtoIndex).createDto();
@@ -46,9 +46,26 @@ public class FieldMark extends AbstractField {
 	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
 		return internalGetCreateWidget(dto.get(fieldId));
 	};
-
+*/
 	@Override
 	public Serializable getData(Widget w) {
 		throw new RuntimeException("Not Supported");
+	}
+	
+	@Override
+	protected Widget editField() {
+		return detailField();
+	}
+	
+	@Override
+	protected Widget detailField() {
+		// TODO this is more difficult
+		final boolean value = false;
+		final Dto dto = DtoModuleRegistry.instance().get(dtoIndex).createDto();
+		// dto.setId(NumberParser.convertToLong(value));
+		dto.setId(dtoId);
+		dto.setMarked((Boolean) value);
+
+		return new MarkWidget(dto);
 	}
 }
