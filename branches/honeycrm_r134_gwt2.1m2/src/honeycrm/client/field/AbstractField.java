@@ -4,6 +4,7 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.view.AbstractView.View;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -14,6 +15,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 // TODO this should be done by field currency somehow.. the fields should provide a "String format(Serializable value);" method.
 abstract public class AbstractField implements IsSerializable, Serializable {
@@ -182,9 +184,19 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		} else if (widget instanceof Anchor) {
 			// TODO do this only for value != null
 			// TOOD use Label when value == null
+			widget.setTitle(stringify(value));
 			((Anchor) widget).setText(formattedValue(value, view));
 			((Anchor) widget).setHref("mailto:" + String.valueOf(value));
+		} else if (widget instanceof DateBox) {
+			if (value instanceof Date) {
+				((DateBox) widget).setValue((Date) value);
+			} else if (value instanceof String && String.valueOf(value).equals("")) {
+				// nothing to do
+			} else {
+				Window.alert("Cannot set date on DateBox for value: " + String.valueOf(value));
+			}
 		} else {
+			Window.alert("Cannot handle widget " + widget.getClass());
 			throw new RuntimeException("Cannot handle widget " + widget.getClass());
 		}
 		return decorate23(widget, View.DETAIL == view);
