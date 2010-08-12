@@ -94,12 +94,6 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	}
 
 	@Override
-	public void wakeupServer(AsyncCallback<Void> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void create(Dto viewable, AsyncCallback<Long> callback) {
 		// TODO Auto-generated method stub
 

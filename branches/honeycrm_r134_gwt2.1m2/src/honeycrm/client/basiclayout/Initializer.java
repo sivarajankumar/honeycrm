@@ -4,7 +4,6 @@ import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.ServiceRegistry;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +12,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.visualization.client.VisualizationUtils;
 import com.google.gwt.visualization.client.visualizations.ColumnChart;
 import com.google.gwt.visualization.client.visualizations.LineChart;
@@ -36,60 +34,10 @@ public class Initializer extends DockLayoutPanel {
 		// TODO add nice loading image
 		add(status);
 		
-		prefetchImages();
+		setStatus("Starting up..");
+		loadVisualisation();
 	}
 	
-	/**
-	 * Pre-fetch all google web toolkit default images
-	 */
-	private void prefetchImages() {
-		final String root = "gae/gwt/standard/images/";
-		final Set<String> prefetchImages = new HashSet<String>();
-		prefetchImages.add(root + "hborder.png");
-		prefetchImages.add(root + "corner.png");
-		prefetchImages.add(root + "corner.png");
-		prefetchImages.add(root + "corner_ie6.png");
-		prefetchImages.add(root + "hborder.png");
-		prefetchImages.add(root + "hborder_ie6.png");
-		prefetchImages.add(root + "ie6/corner_dialog_topleft.png");
-		prefetchImages.add(root + "ie6/corner_dialog_topright.png");
-		prefetchImages.add(root + "ie6/hborder_blue_shadow.png");
-		prefetchImages.add(root + "ie6/hborder_gray_shadow.png");
-		prefetchImages.add(root + "ie6/vborder_blue_shadow.png");
-		prefetchImages.add(root + "ie6/vborder_gray_shadow.png");
-		prefetchImages.add(root + "splitPanelThumb.png");
-		prefetchImages.add(root + "vborder.png");
-		prefetchImages.add(root + "vborder_ie6.png");
-
-		int imageCount = 0;
-
-		for (final String url : prefetchImages) {
-			setStatus("Loading image #" + (++imageCount) + " of " + prefetchImages.size());
-			Image.prefetch(url);
-		}
-
-		wakeupServer();
-	}
-
-	/**
-	 * Do an initial call to the server side to wake it up.
-	 */
-	private void wakeupServer() {
-		setStatus("Waking up server side..");
-
-		ServiceRegistry.commonService().wakeupServer(new AsyncCallback<Void>() {
-			@Override
-			public void onSuccess(Void result) {
-				loadVisualisation();
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Could not wakeup server side. Please try again later.");
-			}
-		});
-	}
-
 	private void loadVisualisation() {
 		if (SKIP_LOADING_VISUALISATIONS) {
 			loadConfiguration();

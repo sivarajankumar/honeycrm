@@ -54,8 +54,6 @@ public interface CommonService extends RemoteService {
 	public void addDemo(String dtoIndex);
 
 	// misc
-	public void wakeupServer();
-
 	public Map<String, ModuleDto> getDtoConfiguration();
 	public Map<String, Map<String, Set<String>>> getRelationships();
 

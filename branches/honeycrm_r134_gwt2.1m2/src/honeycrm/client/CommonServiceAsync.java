@@ -43,8 +43,6 @@ public interface CommonServiceAsync {
 
 	void deleteAllItems(AsyncCallback<Void> callback);
 
-	void wakeupServer(AsyncCallback<Void> callback);
-
 	void fulltextSearchForModule(String dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult> callback);
 
 	void feedback(String message, AsyncCallback<Void> callback);

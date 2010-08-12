@@ -193,13 +193,6 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		log.info("Deleting all items done.");
 	}
 
-	/**
-	 * Do nothing just call this empty method to wake up the server side. This is done to speedup the up coming requests. Do an initial slow request by the client. When this is has been answered the user interface will be rendered and the real requests will follow in quick succession.
-	 */
-	@Override
-	public void wakeupServer() {
-	}
-
 	@Override
 	public ListQueryResult fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
 		return fulltext.fulltextSearchForModule(dtoIndex, query, from, to);

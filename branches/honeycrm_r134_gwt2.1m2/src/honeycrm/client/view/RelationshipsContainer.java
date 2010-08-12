@@ -143,7 +143,7 @@ class SingleRelationshipPanel extends ListView {
 				final Map<String, Map<String, Set<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
 
 				/**
-				 * e.g. contactId
+				 * id of the field that should be pre-filled e.g. contactId
 				 */
 				final String fieldId = relationships.get(moduleDto.getModule()).get(relatedDtoClass).iterator().next();
 

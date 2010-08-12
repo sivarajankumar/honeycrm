@@ -4,7 +4,6 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.view.AbstractView.View;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
