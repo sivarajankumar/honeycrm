@@ -60,26 +60,18 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 			}
 
 			final TabModuleView view = new TabModuleView(moduleDto.getModule());
-
-			// refresh list view only for the first tab (which is the only visible tab at the beginning)
-			if (0 == tabPos)
-				view.refreshListView();
-
-			final Hyperlink createBtn = new Hyperlink("Create", moduleDto.getModule() + " create");
-			createBtn.addStyleName("create_button");
-			createBtn.setVisible(false);
-
+			final Widget createBtn = getCreateButton(moduleDto.getModule());
+			
 			moduleViewMap.put(moduleDto.getModule(), view);
 			tabPositionMap.put(moduleDto.getModule(), tabPos);
 			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
 			tabPosToCreateBtnMap.put(tabPos - 1, createBtn);
+			
+			// refresh list view only for the first tab (which is the only visible tab at the beginning)
+			if (0 == tabPos)
+				view.refreshListView();
 
-			final Label moduleTitle = new Label(moduleDto.getTitle() + "s");
-			final HorizontalPanel titlePanel = new HorizontalPanel();
-			titlePanel.add(createBtn);
-			titlePanel.add(moduleTitle);
-
-			add((view), titlePanel);
+			add((view), getTitlePanel(moduleDto.getTitle(), createBtn));
 		}
 
 		add(new AdminWidget(), "Admin");
@@ -110,9 +102,25 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 		LogConsole.log("created center view");
 
 		History.addValueChangeHandler(this);
-		// History.fireCurrentHistoryState();
-
-		selectTab(0);
+		/**
+		 * show the tab of the first module.
+		 */
+		History.newItem(tabPositionMapReverse.get(0));
+	}
+	
+	private Widget getCreateButton(final String module) {
+		final Hyperlink createBtn = new Hyperlink("Create", module + " create");
+		createBtn.addStyleName("create_button");
+		createBtn.setVisible(false);
+		return createBtn;
+	}
+	
+	private Widget getTitlePanel(final String title, final Widget createBtn) {
+		final Label moduleTitle = new Label(title + "s");
+		final HorizontalPanel titlePanel = new HorizontalPanel();
+		titlePanel.add(createBtn);
+		titlePanel.add(moduleTitle);
+		return titlePanel;
 	}
 
 	public TabModuleView get(String moduleName) {
@@ -140,16 +148,16 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 		}
 	}
 
-	public void showModuleTab(String clazz) {
-		if (!tabPositionMap.containsKey(clazz) || !moduleViewMap.containsKey(clazz)) {
-			Window.alert("Cannot switch to module: '" + clazz + "'");
+	public void showModuleTab(String module) {
+		if (!tabPositionMap.containsKey(module) || !moduleViewMap.containsKey(module)) {
+			Window.alert("Cannot switch to module: '" + module + "'");
 			return;
 		}
 
-		if (!moduleViewMap.get(clazz).isListViewInitialized()) {
-			moduleViewMap.get(clazz).refreshListView();
+		if (!moduleViewMap.get(module).isListViewInitialized()) {
+			moduleViewMap.get(module).refreshListView();
 		}
-		selectTab(tabPositionMap.get(clazz));
+		selectTab(tabPositionMap.get(module));
 	}
 
 	public void showCreateViewForModule(final String clazz) {
@@ -164,7 +172,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
-		final String[] token = event.getValue().split("\\s+");
+		final String[] token = event.getValue().trim().split("\\s+");
 
 		if (2 == token.length) {
 			if ("create".equals(token[1])) {
@@ -173,7 +181,14 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 				openDetailView(token[0], Long.valueOf(token[1]));
 			}
 		} else if (1 == token.length) {
-			showModuleTab(token[0]);
+			if (!tabPositionMap.containsKey(token[0])) {
+				/**
+				 * Show the first module if the requested module cannot be found.
+				 */
+				showModuleTab(tabPositionMapReverse.get(0));
+			} else {
+				showModuleTab(token[0]);
+			}
 		}
 	}
 }

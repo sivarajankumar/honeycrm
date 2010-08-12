@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -36,8 +35,6 @@ public class Initializer extends DockLayoutPanel {
 		status.setStyleName("loading_panel");
 		// TODO add nice loading image
 		add(status);
-		
-		// initWidget(vpanel);
 		
 		prefetchImages();
 	}
@@ -152,14 +149,8 @@ public class Initializer extends DockLayoutPanel {
 
 		setStatus("Initiating user interface..");
 		remove(status);
-		// TODO this has no effect. i hope the user has a giant screen because currently scrolling
-		// is not working at all.
-		Window.enableScrolling(true);
 		
 		addNorth(new Header(), 40);
-		
 		add(TabCenterView.instance());
-		
-		History.fireCurrentHistoryState();
 	}
 }
