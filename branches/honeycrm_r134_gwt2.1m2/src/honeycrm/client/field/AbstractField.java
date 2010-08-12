@@ -167,7 +167,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		} else if (widget instanceof TextArea) {
 			internalSetData((TextArea) widget, value, view);
 		} else if (widget instanceof CheckBox) {
-			internalSetData((CheckBox) widget, (Boolean) value, view);
+			internalSetData((CheckBox) widget, value, view);
 		} else if (widget instanceof DateBox) {
 			internalSetData((DateBox) widget, value, view);
 		} else if (widget instanceof Anchor) {
@@ -220,8 +220,10 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		notImplemented();
 	}
 
-	protected void internalSetData(CheckBox widget, Boolean value, View view) {
-		widget.setValue(value);
+	protected void internalSetData(CheckBox widget, Serializable value, View view) {
+		if (value instanceof Boolean) {
+			widget.setValue((Boolean) value);
+		}
 	}
 
 	protected void internalSetData(HTML widget, Serializable value, View view) {
