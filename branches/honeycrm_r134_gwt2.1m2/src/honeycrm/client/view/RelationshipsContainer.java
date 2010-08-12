@@ -54,7 +54,7 @@ public class RelationshipsContainer extends AbstractView {
 						// attach the new panel
 						panel.add(relPanel);
 					} else {
-						map.get(originating).updateList(value.get(originating));
+						map.get(originating).updateList(value.get(originating), relatedId);
 					}
 				}
 			}
@@ -94,7 +94,7 @@ public class RelationshipsContainer extends AbstractView {
 // side since there the RelatesTo annotation is read using reflection
 class SingleRelationshipPanel extends ListView {
 	private final String relatedDtoClass;
-	private final Long id;
+	private Long id;
 	private ListQueryResult list;
 
 	public SingleRelationshipPanel(final String originatingDto, final Long id, final String relatedDto, ListQueryResult listQueryResult) {
@@ -118,8 +118,9 @@ class SingleRelationshipPanel extends ListView {
 		refresh();
 	}
 	
-	public void updateList(final ListQueryResult list) {
+	public void updateList(final ListQueryResult list, final Long id) {
 		this.list = list;
+		this.id = id;
 		refresh();
 	}
 

@@ -34,11 +34,11 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	protected void internalSetData(DateBox widget, Date value, View view) {
-		if (null == value) {
-			// nothing to do
+	protected void internalSetData(DateBox widget, Serializable value, View view) {
+		if (value instanceof Date) {
+			widget.setValue((Date) value);
 		} else {
-			(widget).setValue(value);
+			// nothing to do
 		}
 	}
 

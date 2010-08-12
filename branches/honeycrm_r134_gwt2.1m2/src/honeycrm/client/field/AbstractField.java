@@ -170,7 +170,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		} else if (widget instanceof CheckBox) {
 			internalSetData((CheckBox) widget, (Boolean) value, view);
 		} else if (widget instanceof DateBox) {
-			internalSetData((DateBox) widget, (Date) value, view);
+			internalSetData((DateBox) widget, value, view);
 		} else if (widget instanceof Anchor) {
 			internalSetData((Anchor) widget, value, view);
 		} else if (widget instanceof ListBox) {
@@ -178,7 +178,6 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		} else {
 			Window.alert("Cannot handle widget " + widget.getClass());
 			throw new RuntimeException("Cannot handle widget " + widget.getClass());
-			// return widget;
 		}
 		return widget;
 	}
@@ -204,7 +203,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	 * Subclasses may override this and implement their own formatting for their content.
 	 */
 	public String internalFormattedValue(final Serializable value) {
-		return String.valueOf(value);
+		return stringify(value);
 	}
 
 	protected String stringify(Serializable value) {
@@ -218,7 +217,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		notImplemented();
 	}
 	
-	protected void internalSetData(DateBox widget, Date value, View view) {
+	protected void internalSetData(DateBox widget, Serializable value, View view) {
 		notImplemented();
 	}
 
