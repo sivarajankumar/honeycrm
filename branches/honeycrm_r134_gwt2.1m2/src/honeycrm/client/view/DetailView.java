@@ -278,7 +278,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 		return dto.getId() > 0;
 	}
 
-	public void startCreating() {
+	public void create() {
 		resetFields(addPrefilledData(moduleDto.createDto()), View.CREATE);
 		relationshipsContainer.setVisible(false);
 	}
@@ -339,6 +339,9 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 			
 			if (null != action) {
 				switch (action) {
+				case CREATE:
+					create();
+					break;
 				case EDIT:
 					edit(null);
 					break;

@@ -74,6 +74,7 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 	private void toggleButtonVisibility(final ModuleAction state) {
 		switch (state) {
 		case EDIT:
+		case CREATE:
 			WidgetJuggler.setVisible(true, cancelBtn, saveBtn);
 			WidgetJuggler.setVisible(false, editBtn, deleteBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn);
 			break;

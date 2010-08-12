@@ -95,4 +95,9 @@ public class FieldCurrency extends AbstractField {
 	public Serializable getTypedData(Object value) {
 		return NumberParser.convertToDouble(value);
 	}
+	
+	@Override
+	public String internalFormattedValue(Serializable value) {
+		return formatRead().format(NumberParser.convertToDouble(value));
+	}
 }
