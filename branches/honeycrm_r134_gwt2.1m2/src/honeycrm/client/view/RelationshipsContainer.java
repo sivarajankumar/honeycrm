@@ -100,6 +100,7 @@ class SingleRelationshipPanel extends ListView {
 	public SingleRelationshipPanel(final String originatingDto, final Long id, final String relatedDto, ListQueryResult listQueryResult) {
 		super(originatingDto);
 
+		setDisclose(true);
 		setShowTitle(true);
 		setPageSize(5);
 

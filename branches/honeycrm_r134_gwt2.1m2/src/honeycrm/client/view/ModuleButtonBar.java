@@ -14,13 +14,16 @@ import com.google.gwt.user.client.ui.Widget;
  * This widget contains everything (buttons, fulltext search field) above the list view and detail view of the currently active module.
  */
 public class ModuleButtonBar extends AbstractView {
-	public ModuleButtonBar(final String module) {
+	public ModuleButtonBar(final String module, final DetailView detailView) {
 		super(module);
 
 		final FlowPanel panel = new FlowPanel();
 		panel.setStyleName("search_bar");
 		panel.add(new ModuleFulltextWidget(module));
 		panel.add(getAdvancedSearchButton());
+		// TODO setup css properly
+		// panel.add(new DetailViewButtonBar(module, detailView));
+		
 		//panel.add(getExportButton("Export CSV", "csv"));
 		//panel.add(getExportButton("Export XLS", "xls"));
 		//panel.add(getExportButton("Export PDF", "pdf"));

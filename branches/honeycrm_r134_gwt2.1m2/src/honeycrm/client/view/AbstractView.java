@@ -16,6 +16,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -136,7 +137,16 @@ abstract public class AbstractView extends Composite {
 		Window.alert(caught.getClass().toString());
 		// throw new RuntimeException(caught.getLocalizedMessage());
 	}
-
+	
+	/**
+	 * Add all given child widgets to the container panel.
+	 */
+	protected void addToContainer(final Panel container, final Widget... children) {
+		for (final Widget child: children) {
+			container.add(child);
+		}
+	}
+	
 	public enum View {
 		DETAIL, EDIT, CREATE, LIST, LIST_HEADER
 	}

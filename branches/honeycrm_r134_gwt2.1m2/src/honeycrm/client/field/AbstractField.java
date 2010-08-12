@@ -11,7 +11,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FocusWidget;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,8 +40,6 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	 */
 	protected String label;
 
-	// private IField iField;
-
 	public AbstractField() { // for gwt
 	}
 
@@ -52,10 +52,6 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		this(id, label);
 		this.defaultValue = defaultValue;
 	}
-
-	/*
-	 * public AbstractField(String name, String label2, IField iField) { this(name, label2); this.iField = iField; }
-	 */
 
 	/**
 	 * Returns true if there is a width value that has been suggested for the widget used for rendering this field.
@@ -86,13 +82,13 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	public Widget getWidget(final View view, final Dto dto, final String fieldId) {
 		switch (view) {
 		case DETAIL:
-			return decorateWidget(internalGetDetailWidget(dto, (fieldId)));
+			return internalGetDetailWidget(dto, (fieldId));
 		case EDIT:
-			return decorateWidget(internalGetEditWidget(dto.get(fieldId)));
+			return internalGetEditWidget(dto.get(fieldId));
 		case LIST:
-			return decorateWidget(internalGetListWidget(dto, (fieldId)));
+			return internalGetListWidget(dto, (fieldId));
 		case CREATE:
-			return decorateWidget(internalGetCreateWidget(dto.get(fieldId)));
+			return internalGetCreateWidget(dto.get(fieldId));
 		case LIST_HEADER:
 			return getHeaderWidget(dto.get(fieldId));
 		default:
@@ -109,15 +105,15 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	}
 
 	protected Widget internalGetCreateWidget(Object value) {
-		return setData23(editField(), defaultValue, View.CREATE);
+		return decorateWidget(setData(editField(), defaultValue, View.CREATE), false);
 	}
 
 	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
-		return setData23(detailField(), dto.get(fieldId), View.DETAIL); // TODO do this in the upper class only
+		return decorateWidget(setData(detailField(), dto.get(fieldId), View.DETAIL), true); // TODO do this in the upper class only
 	}
 
 	protected Widget internalGetEditWidget(Object value) {
-		return setData23(editField(), (Serializable) value, View.EDIT); // TODO change interface
+		return decorateWidget(setData(editField(), (Serializable) value, View.EDIT), false); // TODO change interface
 	}
 
 	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
@@ -159,52 +155,43 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	 * This returns a label containing the title of this field, all other properties (e.g., width, alignment) are set as for a normal content field. TODO this method should not receive a value as parameter since it does not need it
 	 */
 	private Label getHeaderWidget(final Object value) {
-		return (Label) decorateWidget(new Label(getLabel()));
+		return (Label) decorateWidget(new Label(getLabel()), true);
+	}
+
+	private Widget setData(final Widget widget, final Serializable value, final View view) {
+		if (widget instanceof HTML) {
+			internalSetData((HTML) widget, value, view);
+		} else if (widget instanceof Label) {
+			internalSetData((Label) widget, value, view);
+		} else if (widget instanceof TextBox) {
+			internalSetData((TextBox) widget, value, view);
+		} else if (widget instanceof TextArea) {
+			internalSetData((TextArea) widget, value, view);
+		} else if (widget instanceof CheckBox) {
+			internalSetData((CheckBox) widget, (Boolean) value, view);
+		} else if (widget instanceof DateBox) {
+			internalSetData((DateBox) widget, (Date) value, view);
+		} else if (widget instanceof Anchor) {
+			internalSetData((Anchor) widget, value, view);
+		} else if (widget instanceof ListBox) {
+			internalSetData((ListBox) widget, value, view);
+		} else {
+			Window.alert("Cannot handle widget " + widget.getClass());
+			throw new RuntimeException("Cannot handle widget " + widget.getClass());
+			// return widget;
+		}
+		return widget;
 	}
 
 	/**
 	 * Adjust the width of the widget and the enable / disable it depending on the field settings.
 	 */
-	private Widget decorateWidget(final Widget widget) {
-		if (hasSuggestedWidth()) {
-			widget.setWidth(getWidthString());
-		}
-		return widget;
-	}
-
-	protected Widget setData23(final Widget widget, final Serializable value, final View view) {
-		if (widget instanceof Label) {
-			((Label) widget).setText(formattedValue(value, view));
-		} else if (widget instanceof TextBox) {
-			((TextBox) widget).setText(formattedValue(value, view));
-		} else if (widget instanceof TextArea) {
-			((TextArea) widget).setText(formattedValue(value, view));
-		} else if (widget instanceof CheckBox) {
-			((CheckBox) widget).setValue((Boolean) value);
-		} else if (widget instanceof Anchor) {
-			// TODO do this only for value != null
-			// TOOD use Label when value == null
-			widget.setTitle(stringify(value));
-			((Anchor) widget).setText(formattedValue(value, view));
-			((Anchor) widget).setHref("mailto:" + String.valueOf(value));
-		} else if (widget instanceof DateBox) {
-			if (value instanceof Date) {
-				((DateBox) widget).setValue((Date) value);
-			} else if (value instanceof String && String.valueOf(value).equals("")) {
-				// nothing to do
-			} else {
-				Window.alert("Cannot set date on DateBox for value: " + String.valueOf(value));
-			}
-		} else {
-			Window.alert("Cannot handle widget " + widget.getClass());
-			throw new RuntimeException("Cannot handle widget " + widget.getClass());
-		}
-		return decorate23(widget, View.DETAIL == view);
-	}
-
-	private Widget decorate23(Widget widget, final boolean readOnly) {
+	private Widget decorateWidget(Widget widget, final boolean readOnly) {
 		if (readOnly && widget instanceof FocusWidget) {
 			((FocusWidget) widget).setEnabled(false);
+		}
+		if (hasSuggestedWidth()) {
+			widget.setWidth(getWidthString());
 		}
 		return widget;
 	}
@@ -216,11 +203,51 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	/**
 	 * Subclasses may override this and implement their own formatting for their content.
 	 */
-	protected String internalFormattedValue(final Serializable value) {
-		return stringify(value);
+	public String internalFormattedValue(final Serializable value) {
+		return String.valueOf(value);
 	}
 
 	protected String stringify(Serializable value) {
 		return null == value ? "" : String.valueOf(value);
+	}
+
+	/**
+	 * Subclasses may override this class to initialize values on the widgets they use.
+	 */
+	protected void internalSetData(Anchor widget, Serializable value, View view) {
+		notImplemented();
+	}
+	
+	protected void internalSetData(DateBox widget, Date value, View view) {
+		notImplemented();
+	}
+
+	protected void internalSetData(CheckBox widget, Boolean value, View view) {
+		widget.setValue(value);
+	}
+
+	protected void internalSetData(HTML widget, Serializable value, View view) {
+		notImplemented();
+	}
+	
+	protected void internalSetData(Label widget, Serializable value, View view) {
+		widget.setText(formattedValue(value, view));
+	}
+
+	protected void internalSetData(TextBox widget, Serializable value, View view) {
+		widget.setText(formattedValue(value, view));
+	}
+
+	protected void internalSetData(TextArea widget, Serializable value, View view) {
+		widget.setText(formattedValue(value, view));
+	}
+
+	protected void internalSetData(ListBox widget, Serializable value, View view) {
+		notImplemented();
+	}
+	
+	private void notImplemented() {
+		Window.alert("not implemented");
+		throw new RuntimeException("not implemented");
 	}
 }

@@ -26,6 +26,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -46,6 +47,10 @@ public class ListView extends AbstractView {
 	private int pageSize = DEFAULT_MAX_ENTRIES;
 	private int currentPage = -1;
 	private boolean showTitle;
+	/**
+	 * true if users should have the possibility to hide away the list view. false otherwise.
+	 */
+	private boolean disclose;
 	private Button[] additionalButtons;
 	private boolean itemsHaveBeenLoadedOnce = false;
 	protected final VerticalPanel panel = new VerticalPanel();
@@ -149,33 +154,38 @@ public class ListView extends AbstractView {
 		 * Insert button bar before the rest of the table if the title should be shown. Display button bar right under the table otherwise.
 		 */
 		if (showTitle) {
-			panel.add(buttonBar);
-			insertTable();
+			if (disclose) {
+				final DisclosurePanel disclosurePanel = new DisclosurePanel(moduleDto.getTitle() + "s");
+				disclosurePanel.setAnimationEnabled(true);
+			//	disclosurePanel.setHeader(buttonBar);
+				disclosurePanel.setOpen(true); // TODO the open/closed status should be persisted and reconstructed per user
+
+				final VerticalPanel vpanel = new VerticalPanel();
+				addToContainer(vpanel, buttonBar, ct, pager);
+
+				disclosurePanel.add(vpanel);
+
+				panel.add(disclosurePanel);
+			} else {
+				addToContainer(panel, buttonBar, ct, pager);
+			}
 		} else {
-			insertTable();
-			panel.add(buttonBar);
+			addToContainer(panel, ct, pager, buttonBar);
 		}
 
 		initButtonBar();
 		initListViewHeaderRow();
 	}
 
-	private void insertTable() {
-		panel.add(ct);
-		panel.add(pager);
-	}
-
 	private void initButtonBar() {
-		if (showTitle) {
+		if (showTitle && !disclose) {
 			buttonBar.add(getTitleLabel());
 		}
 
 		buttonBar.add(getDeleteButton());
 
 		if (null != additionalButtons) {
-			for (final Button additionalButton : additionalButtons) {
-				buttonBar.add(additionalButton);
-			}
+			addToContainer(buttonBar, additionalButtons);
 		}
 	}
 
@@ -188,9 +198,10 @@ public class ListView extends AbstractView {
 			final Column<Dto, String> column = new TextColumn<Dto>() {
 				@Override
 				public String getValue(final Dto object) {
+					final Serializable value = object.get(id);
+
+					// TODO should use fields formatting here instead to format relate fields, dates, currency values, etc.
 					if (moduleDto.getFieldById(id) instanceof FieldRelate) {
-						final Serializable value = object.get(id);
-						
 						if (null == value || 0 == (Long) value) {
 							return "";
 						} else {
@@ -203,7 +214,7 @@ public class ListView extends AbstractView {
 							}
 						}
 					} else {
-						return String.valueOf(object.get(id));
+						return object.getFieldById(id).internalFormattedValue(value);
 					}
 				}
 			};
@@ -247,6 +258,7 @@ public class ListView extends AbstractView {
 		ct.addColumn(delCol, h);
 	}
 
+	// TODO fix pagination implementation
 	protected void refreshListViewValues(ListQueryResult result) {
 		if (!itemsHaveBeenLoadedOnce) {
 			initListView();
@@ -259,15 +271,15 @@ public class ListView extends AbstractView {
 		}
 
 		ct.setDataSize(result.getItemCount(), true);
-/*		final int start = (currentPage - 1) * pageSize;
-		
-		ct.setPageStart(start);
-		ct.setData(start, result.getItemCount(), values);
-*/
+		/*
+		 * final int start = (currentPage - 1) * pageSize;
+		 * 
+		 * ct.setPageStart(start); ct.setData(start, result.getItemCount(), values);
+		 */
 		// give the ListViewAdapter our data
 		lva.setList(values);
 		lva.refresh();
-		
+
 		/*
 		 * if (null == lva.getList() || 0 == lva.getList().size()) { ct.setData(0, values.size(), values); } else { ct.setData(1 * pageSize, values.size(), values); /* if (lva.getList().size() == values.size()) { // do not call set list again. overwrite list items instead. for (int i = 0; i < values.size(); i++) { lva.getList().set(0, values.get(i)); } } else { Window.alert("Fail! unequal list sizes."); } }
 		 */
@@ -338,6 +350,10 @@ public class ListView extends AbstractView {
 
 	public void setShowTitle(boolean showTitle) {
 		this.showTitle = showTitle;
+	}
+
+	public void setDisclose(boolean disclose) {
+		this.disclose = disclose;
 	}
 
 	public void setAdditionalButtons(Button... additionalButtons) {

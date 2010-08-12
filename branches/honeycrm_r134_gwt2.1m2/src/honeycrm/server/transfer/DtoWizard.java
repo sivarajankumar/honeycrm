@@ -15,6 +15,7 @@ import honeycrm.client.field.FieldRelate;
 import honeycrm.client.field.FieldString;
 import honeycrm.client.field.FieldTable;
 import honeycrm.client.field.FieldText;
+import honeycrm.client.field.FieldWebsite;
 import honeycrm.server.CachingReflectionHelper;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.DetailViewable;
@@ -34,6 +35,7 @@ import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -119,6 +121,8 @@ public class DtoWizard {
 					fields.add(new FieldText(name, label, width));
 				} else if (field.isAnnotationPresent(FieldTableAnnotation.class)) {
 					fields.add(new FieldTable(name, label));
+				} else if (field.isAnnotationPresent(FieldWebsiteAnnotation.class)) {
+					fields.add(new FieldWebsite(name, label));
 				} else {
 					System.err.println("field " + field.getName() + " does not define an expected annotation describing its field instance");
 				}

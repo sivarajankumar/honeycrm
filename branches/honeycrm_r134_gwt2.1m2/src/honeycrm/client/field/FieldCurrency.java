@@ -1,10 +1,19 @@
 package honeycrm.client.field;
 
 import honeycrm.client.misc.NumberParser;
+import honeycrm.client.view.AbstractView.View;
 
 import java.io.Serializable;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldCurrency extends AbstractField {
@@ -18,34 +27,6 @@ public class FieldCurrency extends AbstractField {
 	public FieldCurrency(final String index, final String label, final String defaultValue) {
 		super(index, label, defaultValue);
 		this.width = DEFAULT_WIDTH;
-	}
-
-/*	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-		TextBox w = new TextBox();
-		w.setText(formatRead().format(NumberParser.convertToDouble((getDefaultValue()))));
-		w.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
-		return addEvents(w);
-	}
-
-	@Override
-	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
-		Label w = new Label();
-		// use a currency constant defined in
-		// com/google/gwt/i18n/client/constants/CurrencyCodeMapConstants.properties which can be found
-		// in gwt-user.jar
-		w.setText(formatRead().format(NumberParser.convertToDouble(dto.get(fieldId))));
-		w.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		return w;
-	}
-
-	@Override
-	protected Widget internalGetEditWidget(Object value) {
-		final TextBox w = new TextBox();
-		w.setText(formatRead().format(NumberParser.convertToDouble(value)));
-		w.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
-
-		return addEvents(w);
 	}
 
 	private TextBox addEvents(final TextBox textbox) {
@@ -76,20 +57,28 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
-		return internalGetDetailWidget(dto, fieldId);
-	}
-*/
-	@Override
 	public Serializable getData(Widget w) {
 		final String value = (String) super.getData(w);
-		
+
 		try {
 			return NumberFormat.getCurrencyFormat("EUR").parse(value);
 		} catch (NumberFormatException e) {
 			// Gwt throw a number format exception.
 			return NumberParser.convertToDouble(value);
 		}
+	}
+
+	@Override
+	protected void internalSetData(Label widget, Serializable value, View view) {
+		(widget).setText(formatRead().format(NumberParser.convertToDouble(value)));
+		(widget).setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+	}
+
+	@Override
+	protected void internalSetData(TextBox widget, Serializable value, View view) {
+		(widget).setText(formatRead().format(NumberParser.convertToDouble((value))));
+		(widget).setTextAlignment(TextBoxBase.ALIGN_RIGHT);
+		addEvents(widget);
 	}
 
 	// create and return the number format instances within these methods instead of creating them on object instantiation to avoid serialisation problems
@@ -101,7 +90,7 @@ public class FieldCurrency extends AbstractField {
 	private NumberFormat formatRead() {
 		return NumberFormat.getCurrencyFormat("EUR");
 	}
-	
+
 	@Override
 	public Serializable getTypedData(Object value) {
 		return NumberParser.convertToDouble(value);

@@ -20,7 +20,7 @@ public class Header extends Composite {
 
 		p.add(addStyle(new Label("Honeeeeeeeyyyyy CRM"), "header_logo"));
 		p.add(addStyle(new FulltextSearchWidget(), "header_search"));
-		p.add(getHeaderLinks("Global Search", "Help", "Profile", "Login"));
+		p.add(getHeaderLinks("Login", "Profile", "Help", "Global Search"));
 		p.add(LoadIndicator.get());
 		p.add(new HTML("<div class='clear'></div>"));
 
@@ -35,7 +35,7 @@ public class Header extends Composite {
 		final Panel p = (Panel) addStyle(new FlowPanel(), "header_links");
 
 		for (int i = 0; i < labels.length; i++) {
-			p.add(getHeaderLink(labels[i]));
+			p.add(getHeaderLink(labels[labels.length - i - 1]));
 
 			if (i < labels.length - 1) {
 				p.add(addStyle(new HTML("&nbsp; | &nbsp;"), "right"));
@@ -45,8 +45,11 @@ public class Header extends Composite {
 		return p;
 	}
 	
-	private Widget addStyle(final Widget widget, final String ... styles) {
-		for (final String style: styles) {
+	/**
+	 * Add the specified styles to the given widget.
+	 */
+	protected Widget addStyle(final Widget widget, final String... styles) {
+		for (final String style : styles) {
 			widget.addStyleName(style);
 		}
 		return widget;

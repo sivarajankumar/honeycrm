@@ -1,13 +1,12 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.CollectionHelper;
+import honeycrm.client.view.AbstractView.View;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -28,41 +27,24 @@ public class FieldEnum extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-		ListBox box = new ListBox();
-		final String[] options = getOptions();
-		for (int i = 0; i < options.length; i++) {
-			box.addItem(options[i]);
-		}
-		return box;
-	}
+	protected void internalSetData(ListBox widget, Serializable value, View view) {
+		if (view == View.CREATE) {
+			final String[] options = getOptions();
+			for (int i = 0; i < options.length; i++) {
+				widget.addItem(options[i]);
+			}	
+		} else if (view == View.EDIT) {
+			final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
+			final String[] options = getOptions();
 
-	@Override
-	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
-		final Serializable value = dto.get(fieldId);
-		return new Label((null == value) ? "" : value.toString());
-	}
-
-	@Override
-	protected Widget internalGetEditWidget(Object value) {
-		final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
-		final String[] options = getOptions();
-		final ListBox box = new ListBox();
-
-		for (int i = 0; i < options.length; i++) {
-			box.addItem(options[i]);
-			if (selectedItems.contains(options[i])) { // preselect the item(s) that have
-				// been stored in the db
-				box.setItemSelected(i, true);
+			for (int i = 0; i < options.length; i++) {
+				widget.addItem(options[i]);
+				if (selectedItems.contains(options[i])) { // preselect the item(s) that have
+					// been stored in the db
+					widget.setItemSelected(i, true);
+				}
 			}
 		}
-
-		return box;
-	}
-
-	@Override
-	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
-		return internalGetDetailWidget(dto, fieldId);
 	}
 
 	@Override
@@ -77,7 +59,6 @@ public class FieldEnum extends AbstractField {
 		}
 	}
 
-	// TODO this is more difficult..
 	@Override
 	protected Widget editField() {
 		return new ListBox();

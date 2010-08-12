@@ -4,6 +4,10 @@ import honeycrm.client.misc.NumberParser;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldInteger extends AbstractField {
@@ -17,34 +21,6 @@ public class FieldInteger extends AbstractField {
 		super(index, label, String.valueOf(defaultValue));
 		this.width = DEFAULT_WIDTH;
 	}
-/*
-	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-		TextBox widget6 = new TextBox();
-		widget6.setText(getDefaultValue());
-		widget6.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
-		return widget6;
-	}
-
-	@Override
-	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
-		final Label widget1 = new Label(String.valueOf(NumberParser.convertToInteger(dto.get(fieldId))));
-		widget1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		return widget1;
-	}
-
-	@Override
-	protected Widget internalGetEditWidget(Object value) {
-		TextBox widget6 = new TextBox();
-		widget6.setText(String.valueOf(NumberParser.convertToInteger(value)));
-		widget6.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
-		return widget6;
-	}
-
-	@Override
-	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
-		return internalGetDetailWidget(dto, fieldId);
-	}*/
 
 	@Override
 	public Serializable getData(Widget w) {
@@ -55,5 +31,19 @@ public class FieldInteger extends AbstractField {
 	@Override
 	public Serializable getTypedData(Object value) {
 		return NumberParser.convertToInteger(value);
+	}
+	
+	@Override
+	protected Widget editField() {
+		final TextBox box = new TextBox();
+		box.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
+		return box;
+	}
+	
+	@Override
+	protected Widget detailField() {
+		final Label label = new Label();
+		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		return label;
 	}
 }

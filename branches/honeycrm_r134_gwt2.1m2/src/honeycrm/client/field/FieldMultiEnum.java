@@ -2,13 +2,13 @@ package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.CollectionHelper;
+import honeycrm.client.view.AbstractView.View;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -28,47 +28,38 @@ public class FieldMultiEnum extends FieldEnum {
 	public FieldMultiEnum(final String id, final String label, final String... options) {
 		super(id, label, options);
 	}
-
+	
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
-		ListBox box = new ListBox(true);
-		final String[] options = getOptions();
-		for (int i = 0; i < options.length; i++) {
-			box.addItem(options[i]);
+	protected void internalSetData(ListBox widget, Serializable value, View view) {
+		if (view == View.CREATE) {
+			final String[] options = getOptions();
+			for (int i = 0; i < options.length; i++) {
+				widget.addItem(options[i]);
+			}
+		} else if (view == View.EDIT) {
+			final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
+			final String[] options = getOptions();
+
+			for (int i = 0; i < options.length; i++) {
+				widget.addItem(options[i]);
+				if (selectedItems.contains(options[i])) {
+					// preselect the item(s) that have been stored in the db
+					widget.setItemSelected(i, true);
+				}
+			}
 		}
-		return box;
 	}
 
 	@Override
-	protected Widget internalGetDetailWidget(final Dto dto, final String fieldId) {
-		final Serializable value = dto.get(fieldId);
+	protected void internalSetData(HTML widget, Serializable value, View view) {
 		if (value.toString().isEmpty()) {
-			return new Label("");
 		} else {
 			String ul = "";
-
 			for (final String selection : value.toString().split(FieldMultiEnum.SEPARATOR)) {
 				ul += "<li>" + selection + "</li>";
 			}
-			return new HTML("<ul>" + ul + "</ul>");
+			widget.setHTML("<ul>" + ul + "</ul>");
 		}
-	}
-
-	@Override
-	protected Widget internalGetEditWidget(Object value) {
-		final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
-		final String[] options = getOptions();
-		final ListBox box = new ListBox(true);
-
-		for (int i = 0; i < options.length; i++) {
-			box.addItem(options[i]);
-			if (selectedItems.contains(options[i])) {
-				// preselect the item(s) that have been stored in the db
-				box.setItemSelected(i, true);
-			}
-		}
-
-		return box;
 	}
 
 	@Override
@@ -88,5 +79,15 @@ public class FieldMultiEnum extends FieldEnum {
 		}
 
 		return CollectionHelper.join(selectedValues, FieldMultiEnum.SEPARATOR);
+	}
+	
+	@Override
+	protected Widget editField() {
+		return new ListBox(true);
+	}
+	
+	@Override
+	protected Widget detailField() {
+		return new HTML();
 	}
 }

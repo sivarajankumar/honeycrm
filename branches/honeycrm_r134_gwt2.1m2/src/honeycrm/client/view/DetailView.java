@@ -85,6 +85,7 @@ public class DetailView extends AbstractView {
 
 						refreshFields(result);
 						// currentId = result.getId();
+						// TODO observer pattern
 						buttonBar.startViewing();
 					}
 					LoadIndicator.get().endLoading();

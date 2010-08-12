@@ -11,6 +11,7 @@ import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldMultiEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
 
 import javax.jdo.annotations.PersistenceCapable;
 
@@ -45,7 +46,7 @@ public class Account extends AbstractEntity {
 	
 	@SearchableProperty
 	@Label("Website")
-	@FieldStringAnnotation
+	@FieldWebsiteAnnotation
 	private String website;
 	
 	@Label("Employees")
