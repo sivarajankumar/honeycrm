@@ -2,8 +2,10 @@ package honeycrm.client.view;
 
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.basiclayout.LoadIndicator;
+import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
+import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -17,6 +19,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -29,7 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * This widget is responsible for displaying detail / edit / create - views for entities.
  */
-public class DetailView extends AbstractView {
+public class DetailView extends AbstractView implements ValueChangeHandler<String> {
 	private final DetailViewButtonBar buttonBar;
 	private final RelationshipsContainer relationshipsContainer;
 	private Dto dto = moduleDto.createDto();
@@ -50,6 +55,8 @@ public class DetailView extends AbstractView {
 
 		buttonBar.setStyleName("detail_view_buttons");
 
+		History.addValueChangeHandler(this);
+		
 		initWidget(panel);
 	}
 
@@ -75,6 +82,7 @@ public class DetailView extends AbstractView {
 				@Override
 				public void setValueAsynch(Dto result) {
 					table.setVisible(true);
+					relationshipsContainer.setVisible(true);
 					relationshipsContainer.refresh(id);
 
 					if (null == result) {
@@ -82,11 +90,8 @@ public class DetailView extends AbstractView {
 					} else {
 						// detailview should be responsible for rendering only return the field
 						// types here
-
 						refreshFields(result);
 						// currentId = result.getId();
-						// TODO observer pattern
-						buttonBar.startViewing();
 					}
 					LoadIndicator.get().endLoading();
 					
@@ -195,7 +200,8 @@ public class DetailView extends AbstractView {
 						// the label of this field has been clicked. we assume the user
 						// wanted to express that he would like to start editing the entity
 						// so we start editing of this entity for him
-						buttonBar.startEditing(focussedField);
+						final String token = CollectionHelper.join(" ", moduleDto.getModule(), ModuleAction.EDIT.toString().toLowerCase(), focussedField);
+						History.newItem(token);
 					}
 				});
 			}
@@ -216,7 +222,7 @@ public class DetailView extends AbstractView {
 	/**
 	 * Start editing mode.
 	 */
-	public void startEditing(final String focussedField) {
+	public void edit(final String focussedField) {
 		if (isShowing()) {
 			resetFields(dto, View.EDIT, focussedField);
 			relationshipsContainer.setVisible(false);
@@ -252,6 +258,7 @@ public class DetailView extends AbstractView {
 				@Override
 				public void onSuccess(Void result) {
 					LoadIndicator.get().endLoading();
+					TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
 					stopViewing();
 				}
 			});
@@ -299,7 +306,7 @@ public class DetailView extends AbstractView {
 	public void stopViewing() {
 		table.clear();
 		dto.setId(-1);
-		buttonBar.stopViewing();
+		relationshipsContainer.setVisible(false);
 	}
 
 	public DetailViewButtonBar getButtonBar() {
@@ -315,5 +322,39 @@ public class DetailView extends AbstractView {
 	 */
 	public Dto getCurrentDto() {
 		return dto;
+	}
+
+	private void cancel() {
+		if (Window.confirm("Do you really want to cancel your changes?")) {
+			view();
+		}
+	}
+
+	@Override
+	public void onValueChange(ValueChangeEvent<String> event) {
+		final String[] token = event.getValue().split("\\s+");
+		
+		if (2 <= token.length && token[0].equals(moduleDto.getModule().toLowerCase())) {
+			final ModuleAction action = ModuleAction.fromString(token[1]);
+			
+			if (null != action) {
+				switch (action) {
+				case EDIT:
+					edit(null);
+					break;
+				case CANCEL:
+					cancel();
+					break;
+				case DELETE:
+					delete();
+					break;
+				case SAVE:
+					saveChanges();
+					break;
+				default:
+					break;
+				}
+			}
+		}
 	}
 }

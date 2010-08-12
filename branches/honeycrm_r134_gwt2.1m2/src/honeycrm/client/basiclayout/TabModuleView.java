@@ -1,13 +1,16 @@
 package honeycrm.client.basiclayout;
 
 import honeycrm.client.misc.Callback;
+import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.view.DetailView;
 import honeycrm.client.view.ListView;
+import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.ModuleButtonBar;
 
 import java.io.Serializable;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -15,20 +18,22 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
 public class TabModuleView extends DockLayoutPanel {
 	private final DetailView detailView;
 	private final ListView listView;
+	private final String module;
 
-	public TabModuleView(final String clazz) {
+	public TabModuleView(final String module) {
 		super(Unit.PX);
 		
-		listView = new ListView(clazz);
-		listView.addStyleName("list_view");
-		detailView = new DetailView(clazz);
-		detailView.addStyleName("detail_view_content");
+		this.module = module;
+		this.listView = new ListView(module);
+		this.listView.addStyleName("list_view");
+		this.detailView = new DetailView(module);
+		this.detailView.addStyleName("detail_view_content");
 
 		final SplitLayoutPanel splitPanel = new SplitLayoutPanel();
 		splitPanel.addWest(new ScrollPanel(listView), 500);
 		splitPanel.add(new ScrollPanel(detailView));
 
-		addNorth(new ModuleButtonBar(clazz, detailView), 40);
+		addNorth(new ModuleButtonBar(module, detailView), 40);
 	
 		add(splitPanel);
 	}
@@ -54,7 +59,8 @@ public class TabModuleView extends DockLayoutPanel {
 	}
 
 	public void openCreateView() {
-		detailView.getButtonBar().startCreating();
+		final String token = CollectionHelper.join(" ", module, ModuleAction.CREATE.toString().toLowerCase());
+		History.newItem(token);
 	}
 
 	public boolean isListViewInitialized() {
@@ -73,7 +79,8 @@ public class TabModuleView extends DockLayoutPanel {
 				/**
 				 *  start editing when the detail view has finished retrieving the specified item.
 				 */
-				detailView.getButtonBar().startEditing();
+				final String token = CollectionHelper.join(" ", module, ModuleAction.EDIT.toString().toLowerCase());
+				History.newItem(token);
 			}
 		});
 	}

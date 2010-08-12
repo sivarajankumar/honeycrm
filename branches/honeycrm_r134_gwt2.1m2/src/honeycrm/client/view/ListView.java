@@ -2,11 +2,12 @@ package honeycrm.client.view;
 
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.basiclayout.LoadIndicator;
-import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.field.FieldRelate;
+import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.misc.WidgetJuggler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,14 +24,17 @@ import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListViewAdapter;
 import com.google.gwt.view.client.PagingListView;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
@@ -139,7 +143,8 @@ public class ListView extends AbstractView {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				final Dto dto = selectionModel.getSelectedObject();
-				TabCenterView.instance().openDetailView(dto.getModule(), dto.getId());
+				final String token = CollectionHelper.join(" ", dto.getHistoryToken(), ModuleAction.DETAIL.toString().toLowerCase(), String.valueOf(dto.getId()));
+				History.newItem(token);
 			}
 		});
 
@@ -161,16 +166,16 @@ public class ListView extends AbstractView {
 				disclosurePanel.setOpen(true); // TODO the open/closed status should be persisted and reconstructed per user
 
 				final VerticalPanel vpanel = new VerticalPanel();
-				addToContainer(vpanel, buttonBar, ct, pager);
+				WidgetJuggler.addToContainer(vpanel, buttonBar, ct, pager);
 
 				disclosurePanel.add(vpanel);
 
 				panel.add(disclosurePanel);
 			} else {
-				addToContainer(panel, buttonBar, ct, pager);
+				WidgetJuggler.addToContainer(panel, buttonBar, ct, pager);
 			}
 		} else {
-			addToContainer(panel, ct, pager, buttonBar);
+			WidgetJuggler.addToContainer(panel, ct, pager, buttonBar);
 		}
 
 		initButtonBar();
@@ -182,11 +187,22 @@ public class ListView extends AbstractView {
 			buttonBar.add(getTitleLabel());
 		}
 
-		buttonBar.add(getDeleteButton());
+		WidgetJuggler.addToContainer(buttonBar, getSelectionWidget(), getDeleteButton());
 
 		if (null != additionalButtons) {
-			addToContainer(buttonBar, additionalButtons);
+			WidgetJuggler.addToContainer(buttonBar, additionalButtons);
 		}
+	}
+
+	private Widget getSelectionWidget() {
+		final ListBox box = new ListBox();
+		box.addItem("All items");
+		box.addItem("This page");
+		
+		final HorizontalPanel panel = new HorizontalPanel();
+		panel.add(new Label("Select: "));
+		panel.add(box);
+		return panel;
 	}
 
 	private void initListViewHeaderRow() {

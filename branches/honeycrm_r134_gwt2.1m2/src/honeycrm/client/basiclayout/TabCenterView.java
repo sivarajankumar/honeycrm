@@ -4,8 +4,10 @@ import honeycrm.client.admin.AdminWidget;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.misc.NumberParser;
 import honeycrm.client.reports.SampleReport;
 import honeycrm.client.view.EmailFeedbackWidget;
+import honeycrm.client.view.ModuleAction;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -61,12 +63,12 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 			final TabModuleView view = new TabModuleView(moduleDto.getModule());
 			final Widget createBtn = getCreateButton(moduleDto.getModule());
-			
+
 			moduleViewMap.put(moduleDto.getModule(), view);
 			tabPositionMap.put(moduleDto.getModule(), tabPos);
 			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
 			tabPosToCreateBtnMap.put(tabPos - 1, createBtn);
-			
+
 			// refresh list view only for the first tab (which is the only visible tab at the beginning)
 			if (0 == tabPos)
 				view.refreshListView();
@@ -107,14 +109,14 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 		 */
 		History.newItem(tabPositionMapReverse.get(0));
 	}
-	
+
 	private Widget getCreateButton(final String module) {
 		final Hyperlink createBtn = new Hyperlink("Create", module + " create");
 		createBtn.addStyleName("create_button");
 		createBtn.setVisible(false);
 		return createBtn;
 	}
-	
+
 	private Widget getTitlePanel(final String title, final Widget createBtn) {
 		final Label moduleTitle = new Label(title + "s");
 		final HorizontalPanel titlePanel = new HorizontalPanel();
@@ -138,7 +140,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 			LogConsole.log("Cannot switch to module '" + module + "'/" + id + ".");
 		}
 	}
-	
+
 	public void openEditView(final String module, final long id) {
 		if (moduleViewMap.containsKey(module)) {
 			showModuleTab(module);
@@ -174,11 +176,20 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().trim().split("\\s+");
 
-		if (2 == token.length) {
-			if ("create".equals(token[1])) {
+		if (2 <= token.length) {
+			final ModuleAction action = ModuleAction.fromString(token[1]);
+
+			final String module = token[0];
+
+			switch (action) {
+			case CREATE:
 				showCreateViewForModule(token[0]);
-			} else {
-				openDetailView(token[0], Long.valueOf(token[1]));
+				break;
+			case DETAIL:
+				openDetailView(module, NumberParser.convertToLong(token[2]));
+				break;
+			default:
+				break;
 			}
 		} else if (1 == token.length) {
 			if (!tabPositionMap.containsKey(token[0])) {

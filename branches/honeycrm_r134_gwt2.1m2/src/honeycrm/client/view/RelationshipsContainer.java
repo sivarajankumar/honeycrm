@@ -78,13 +78,6 @@ public class RelationshipsContainer extends AbstractView {
 			}
 		}, 60*1000, relatedId, moduleDto.getModule());
 	}
-
-	/**
-	 * Visually throw away all panels.
-	 */
-	public void clear() {
-		panel.setVisible(false);
-	}
 }
 
 // TODO instantiate and reuse SearchableListView instead. only problem left to solve is: how to
@@ -146,7 +139,7 @@ class SingleRelationshipPanel extends ListView {
 				 * id of the field that should be pre-filled e.g. contactId
 				 */
 				final String fieldId = relationships.get(moduleDto.getModule()).get(relatedDtoClass).iterator().next();
-
+				
 				TabCenterView.instance().showCreateViewForModulePrefilled(moduleDto.getModule(), fieldId, id);
 			}
 		});

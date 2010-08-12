@@ -1,6 +1,8 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.CollectionHelper;
+import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.RelateWidget;
 
 import java.io.Serializable;
@@ -51,7 +53,8 @@ public class FieldRelate extends AbstractField {
 			if (null == related) {
 				return new Label("[unresolved]");
 			} else {
-				final Hyperlink link = new Hyperlink(related.getQuicksearch(), related.getHistoryToken() + " " + value);
+				final String token = CollectionHelper.join(" ", related.getHistoryToken(), ModuleAction.DETAIL.toString().toLowerCase(), String.valueOf(value));
+				final Hyperlink link = new Hyperlink(related.getQuicksearch(), token);
 
 				if (related.getAllPreviewableFieldsSorted().isEmpty()) {
 					/**
