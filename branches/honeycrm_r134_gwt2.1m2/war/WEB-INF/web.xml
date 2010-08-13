@@ -2,7 +2,6 @@
 <!DOCTYPE web-app
     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     "http://java.sun.com/dtd/web-app_2_3.dtd">
-
 <web-app>
 	<!-- Servlets -->
 	<servlet>
@@ -13,6 +12,16 @@
 	<servlet-mapping>
 		<servlet-name>commonServlet</servlet-name>
 		<url-pattern>/gae/common</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>authServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.AuthServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>authServlet</servlet-name>
+		<url-pattern>/gae/auth</url-pattern>
 	</servlet-mapping>
 	
 	<!-- See http://code.google.com/intl/de-DE/appengine/kb/java.html#What_Is_A_Loading_Request -->
@@ -32,4 +41,34 @@
 		<welcome-file>Gae.html</welcome-file>
 	</welcome-file-list>
 
+    <filter>
+        <filter-name>appstats</filter-name>
+        <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+        <init-param>
+            <param-name>logMessage</param-name>
+            <param-value>Appstats available: /appstats/details?time={ID}</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>appstats</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>appstats</servlet-name>
+        <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>appstats</servlet-name>
+        <url-pattern>/appstats/*</url-pattern>
+    </servlet-mapping>
+
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/appstats/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
 </web-app>
