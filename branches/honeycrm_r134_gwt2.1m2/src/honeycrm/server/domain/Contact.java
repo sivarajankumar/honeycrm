@@ -20,7 +20,7 @@ import org.compass.annotations.SearchableProperty;
 @Searchable
 @ListViewable( { "name", "email" })
 @DetailViewable( { "name,accountID", "responsibleId", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId",
-		"child1Id,child2Id" })
+		"child1Id,child2Id", "secretary" })
 @Quicksearchable( { "name" })
 public class Contact extends AbstractEntity {
 	@SearchableProperty
@@ -95,6 +95,10 @@ public class Contact extends AbstractEntity {
 	@Label("Responsible")
 	@FieldRelateAnnotation(Employee.class)
 	private long responsibleId;
+	
+	@Label("Secretary")
+	@FieldRelateAnnotation(Contact.class)
+	private long secretary;
 
 	public String getCity() {
 		return city;
@@ -222,5 +226,13 @@ public class Contact extends AbstractEntity {
 
 	public void setResponsibleId(long responsibleId) {
 		this.responsibleId = responsibleId;
+	}
+
+	public long getSecretary() {
+		return secretary;
+	}
+
+	public void setSecretary(long secretary) {
+		this.secretary = secretary;
 	}
 }

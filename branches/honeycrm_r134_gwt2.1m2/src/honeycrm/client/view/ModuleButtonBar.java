@@ -18,17 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
  * This widget contains everything (buttons, fulltext search field) above the list view and detail view of the currently active module.
  */
 public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<String> {
-	private final Widget editBtn;
-	private Widget deleteBtn;
-	private Widget changesBtn;
-	private Widget printBtn;
-	private Widget duplicateBtn;
-	private Widget findDuplicatesBtn;
-	private Widget importBtn;
-	private Widget exportBtn;
-	private Widget cancelBtn;
-	private Widget saveBtn;
-	private Widget searchBtn;
+	private final Widget editBtn, deleteBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn, cancelBtn, saveBtn, searchBtn;
 
 	public ModuleButtonBar(final String module, final DetailView detailView) {
 		super(module);
@@ -48,17 +38,10 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 		final FlowPanel panel = new FlowPanel();
 		panel.setStyleName("search_bar");
 		panel.add(new ModuleFulltextWidget(module));
-		// panel.add(getAdvancedSearchButton());
-		// TODO setup css properly
-		// panel.add(new DetailViewButtonBar(module, detailView));
 
 		WidgetJuggler.addToContainer(panel, searchBtn, editBtn, deleteBtn, saveBtn, cancelBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn);
 		toggleButtonVisibility(ModuleAction.INIT);
 
-		// panel.add(getExportButton("Export CSV", "csv"));
-		// panel.add(getExportButton("Export XLS", "xls"));
-		// panel.add(getExportButton("Export PDF", "pdf"));
-		// panel.add(getCsvImportButton(module));
 		panel.add(new HTML("<div class='clear'></div>"));
 
 		History.addValueChangeHandler(this);
@@ -94,46 +77,13 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 		}
 	}
 
-	private Widget getAdvancedSearchButton() {
-		// TODO implement on click event properly
-		final Button button = new Button("Advanced Search");
-		button.addStyleName("left");
-		return button;
-	}
-
-	private Widget getCsvImportButton(final String module) {
-		final Button button = new Button("CSV Import");
-		button.addStyleName("right");
-
-		button.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				new CsvImportWidget(module).show();
-			}
-		});
-
-		return button;
-	}
-
-	private Button getExportButton(final String label, final String historyTokenAppendix) {
-		final Button button = new Button(label);
-		button.addStyleName("right");
-		button.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem(moduleDto.getHistoryToken() + " " + historyTokenAppendix);
-			}
-		});
-		return button;
-	}
-
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
-		
+
 		if (2 <= token.length && token[0].equals(moduleDto.getModule().toLowerCase())) {
 			final ModuleAction action = ModuleAction.fromString(token[1]);
-			
+
 			if (null != action) {
 				toggleButtonVisibility(action);
 			}

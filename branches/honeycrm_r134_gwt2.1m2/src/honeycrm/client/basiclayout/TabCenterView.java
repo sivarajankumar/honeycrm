@@ -8,6 +8,7 @@ import honeycrm.client.misc.NumberParser;
 import honeycrm.client.reports.SampleReport;
 import honeycrm.client.view.EmailFeedbackWidget;
 import honeycrm.client.view.ModuleAction;
+import honeycrm.client.view.csvimport.CsvImportWidget;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -187,6 +188,9 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 				break;
 			case DETAIL:
 				openDetailView(module, NumberParser.convertToLong(token[2]));
+				break;
+			case IMPORT:
+				new CsvImportWidget(module).show();
 				break;
 			default:
 				break;

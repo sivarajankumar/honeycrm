@@ -6,6 +6,7 @@ import honeycrm.client.view.AbstractView.View;
 import java.io.Serializable;
 
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldEmail extends AbstractField {
@@ -28,6 +29,11 @@ public class FieldEmail extends AbstractField {
 		return StringAbbreviation.shorten(stringify(value), 10);
 	}
 
+	@Override
+	protected void internalSetData(TextBox widget, Serializable value, View view) {
+		widget.setValue(stringify(value)); // declare this to avoid shortening of address in edit view
+	}
+	
 	@Override
 	protected void internalSetData(Anchor widget, Serializable value, View view) {
 		// TODO do this only for value != null
