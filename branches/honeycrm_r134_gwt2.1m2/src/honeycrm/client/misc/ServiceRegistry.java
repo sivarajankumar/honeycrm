@@ -1,7 +1,9 @@
 package honeycrm.client.misc;
 
-import honeycrm.client.CommonService;
-import honeycrm.client.CommonServiceAsync;
+import honeycrm.client.services.AuthService;
+import honeycrm.client.services.AuthServiceAsync;
+import honeycrm.client.services.CommonService;
+import honeycrm.client.services.CommonServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 
@@ -11,6 +13,7 @@ import com.google.gwt.core.client.GWT;
 public class ServiceRegistry {
 	private static boolean testingMode = false;
 	private static CommonServiceAsync commonService = null;
+	private static AuthServiceAsync authService = null;
 
 	public static CommonServiceAsync commonService() {
 		// If we are in testing mode assume another commonService instance has been injected for testing. Return the common service instance.
@@ -19,6 +22,13 @@ public class ServiceRegistry {
 			commonService = GWT.create(CommonService.class);
 		}
 		return commonService;
+	}
+	
+	public static AuthServiceAsync authService() {
+		if (null == authService) {
+			authService = GWT.create(AuthService.class);
+		}
+		return authService;
 	}
 
 	/**

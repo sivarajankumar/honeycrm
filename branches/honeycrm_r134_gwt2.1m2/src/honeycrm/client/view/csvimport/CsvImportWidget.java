@@ -36,6 +36,7 @@ public class CsvImportWidget {
 		popup.setWidget(panel);
 		popup.center();
 		popup.hide();
+		popup.setGlassEnabled(true);
 	}
 
 	private Widget getHeaderLabel() {

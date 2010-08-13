@@ -1,8 +1,8 @@
 package honeycrm.client.admin;
 
-import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.services.CommonServiceAsync;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

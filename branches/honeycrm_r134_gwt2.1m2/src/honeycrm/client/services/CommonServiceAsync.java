@@ -1,4 +1,4 @@
-package honeycrm.client;
+package honeycrm.client.services;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;

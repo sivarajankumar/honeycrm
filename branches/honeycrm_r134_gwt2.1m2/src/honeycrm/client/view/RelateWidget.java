@@ -1,6 +1,5 @@
 package honeycrm.client.view;
 
-import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
@@ -10,6 +9,7 @@ import honeycrm.client.misc.Subscriber;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
+import honeycrm.client.services.CommonServiceAsync;
 
 import java.util.HashSet;
 import java.util.Set;

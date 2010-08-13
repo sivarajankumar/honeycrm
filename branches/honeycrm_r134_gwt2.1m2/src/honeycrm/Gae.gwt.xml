@@ -23,4 +23,5 @@
   <!-- This seems to be relevant for testing purposes. -->
   <!-- See http://code.google.com/intl/de-DE/webtoolkit/doc/latest/FAQ_Troubleshooting.html#Resource_not_found -->
   <servlet path="/common" class="honeycrm.server.CommonServiceImpl"/>
+  <servlet path="/auth" class="honeycrm.server.services.AuthServiceImpl"/>
 </module>

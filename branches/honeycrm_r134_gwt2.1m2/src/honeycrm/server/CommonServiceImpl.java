@@ -1,10 +1,10 @@
 package honeycrm.server;
 
-import honeycrm.client.CommonService;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.profiling.ServiceCallStatistics;
+import honeycrm.client.services.CommonService;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.profiling.ProfilingStatisticsCollector;
 import honeycrm.server.profiling.ReadTest;

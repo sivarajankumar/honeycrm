@@ -1,10 +1,10 @@
 package honeycrm.client.view;
 
-import honeycrm.client.CommonServiceAsync;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.services.CommonServiceAsync;
 
 import java.util.HashMap;
 import java.util.Map;

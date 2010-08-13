@@ -1,7 +1,7 @@
 package honeycrm.server.test;
 
-import honeycrm.client.CommonService;
-import honeycrm.client.CommonServiceAsync;
+import honeycrm.client.services.CommonService;
+import honeycrm.client.services.CommonServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
