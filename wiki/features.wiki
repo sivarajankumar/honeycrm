@@ -1,6 +1,12 @@
 = current feature set =
 
-== display relationships and prefilling ==
+== user interface niceties ==
+ * To start editing of an entity this is currently displayed one just has to click on an attribute label (or click the "Edit" button).
+ * The relationship tables can be disclosed per module to save space and to focus the user on the ones that are of interest for the current task.
+ * The email addresses are displayed in shortened form to save horizontal space on the screen. But since they are links they can still be clicked to open the users default email client.
+ * Website fields are displayed as links, too.
+
+== display relationships and prefill relate fields ==
 All items that are reference the entity that is currently open are displayed under its attributes. E.g. all the offerings are shown under the contacts attributes. A "Create" button at the top of the offering relationship table allows to create new offerings and prefill the contact field with the displayed contact (see TODO insert link to screencast).
 
 == caching data on client side ==
