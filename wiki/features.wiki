@@ -1,9 +1,12 @@
 = current feature set =
 
+== display relationships and prefilling ==
+All items that are reference the entity that is currently open are displayed under its attributes. E.g. all the offerings are shown under the contacts attributes. A "Create" button at the top of the offering relationship table allows to create new offerings and prefill the contact field with the displayed contact (see TODO insert link to screencast).
+
 == caching data on client side ==
 to reduce response time information is cached on client side. this reduces the number of callbacks to the server. currently this is only done for relate fields and relationship information.
 
-== contacts csv import from sugarcrm == 
+== contacts and accounts csv import from sugarcrm == 
 contact data exported via the default csv export from sugarcrm can be imported into honeycrm using the admin panel. currently not all fields are mapped into honeycrm.
 
 == full text search ==
