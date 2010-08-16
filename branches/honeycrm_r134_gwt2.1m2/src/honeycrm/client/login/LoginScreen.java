@@ -36,7 +36,7 @@ public class LoginScreen extends DialogBox {
 
 		setGlassEnabled(true);
 		// setAnimationEnabled(true);
-		setText("Please login");
+		setText("Please login to honeycrm. Use login 'james' with no password for testing."); // suggest james test login for testing
 		setWidget(table);
 		show();
 		center();
@@ -44,6 +44,7 @@ public class LoginScreen extends DialogBox {
 
 	private TextBox getLogin(final Callback callback) {
 		final TextBox box = new TextBox();
+		box.setValue("james"); // suggest a sample login
 		box.addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {

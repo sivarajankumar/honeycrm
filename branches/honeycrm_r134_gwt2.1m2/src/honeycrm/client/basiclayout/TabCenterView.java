@@ -79,7 +79,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 		add(new AdminWidget(), "Admin");
 		add(new EmailFeedbackWidget(), "Feedback");
-		add(new SampleReport(), "Dashboard");
+		add(new SampleReport(), "Reports");
 
 		addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override
