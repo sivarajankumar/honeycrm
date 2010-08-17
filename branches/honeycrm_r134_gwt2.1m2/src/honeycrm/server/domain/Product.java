@@ -21,49 +21,17 @@ import org.compass.annotations.Searchable;
 public class Product extends AbstractEntity {
 	@FieldStringAnnotation
 	@Label("Name")
-	private String name;
+	public String name;
 	
 	@FieldCurrencyAnnotation("0")
 	@Label("Price")
-	private double price;
+	public double price;
 
 	@FieldTextAnnotation(width=400)
 	@Label("Description")
-	private String description;
+	public String description;
 	
 	@FieldBooleanAnnotation
 	@Label("Published")
-	private boolean published;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public boolean isPublished() {
-		return published;
-	}
-
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
+	public boolean published;
 }

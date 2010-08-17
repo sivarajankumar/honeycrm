@@ -23,73 +23,25 @@ public class Employee extends AbstractEntity {
 	@SearchableProperty
 	@Label("Name")
 	@FieldStringAnnotation
-	private String name;
+	public String name;
 
 	@Label("Active")
 	@FieldBooleanAnnotation
-	private boolean active;
+	public boolean active;
 
 	@Label("Department")
 	@FieldEnumAnnotation({ "Department 1", "Department 2", "Department 3" })
-	private String department;
+	public String department;
 
 	@Label("Title")
 	@FieldStringAnnotation
-	private String title;
+	public String title;
 
 	@Label("Phone")
 	@FieldStringAnnotation
-	private String phoneOffice;
+	public String phoneOffice;
 
 	@Label("E Mail")
 	@FieldEmailAnnotation
-	private String email;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
-
-	public String getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(String department) {
-		this.department = department;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getPhoneOffice() {
-		return phoneOffice;
-	}
-
-	public void setPhoneOffice(String phoneOffice) {
-		this.phoneOffice = phoneOffice;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	public String email;
 }

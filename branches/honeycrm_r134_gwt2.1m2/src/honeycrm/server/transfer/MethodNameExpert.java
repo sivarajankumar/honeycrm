@@ -7,6 +7,7 @@ import java.util.Map;
 /**
  * Knows method names for getting and settings values. This is encapsulated to allow caching transparently.
  */
+// TODO can be deleted since property values can be retrieved via Field.get(Object) instead of Method.invoke(String, Object[])
 public class MethodNameExpert {
 	public static final MethodNameExpert instance = new MethodNameExpert();
 	

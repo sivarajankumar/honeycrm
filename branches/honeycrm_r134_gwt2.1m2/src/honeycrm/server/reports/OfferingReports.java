@@ -13,7 +13,7 @@ public class OfferingReports {
 
 		for (final Offering offering : offerings) {
 			final Calendar c = Calendar.getInstance();
-			c.setTime(offering.getDeadline());
+			c.setTime(offering.deadline);
 
 			final int year = c.get(Calendar.YEAR);
 

@@ -42,9 +42,9 @@ public class OfferingReportsTest extends TestCase {
 			c.set(Calendar.YEAR, random.nextInt() % 3 + 100);
 
 			Offering o = new Offering();
-			o.setDeadline(c.getTime());
-			o.setServices(new LinkedList<Service>());
-			sum += getServices(o.getServices());
+			o.deadline = (c.getTime());
+			o.services = (new LinkedList<Service>());
+			sum += getServices(o.services);
 
 			offerings.add(o);
 		}
@@ -59,12 +59,12 @@ public class OfferingReportsTest extends TestCase {
 
 		for (int i = 0; i < servicesCount; i++) {
 			final Service s = new Service();
-			s.setQuantity(Math.abs(random.nextInt() % 100));
-			s.setPrice(Math.abs(random.nextDouble() % 10000));
-			s.setDiscount(Math.abs(random.nextDouble() % 10));
+			s.quantity = (Math.abs(random.nextInt() % 100));
+			s.price = (Math.abs(random.nextDouble() % 10000));
+			s.discount = (Math.abs(random.nextDouble() % 10));
 			services.add(s);
 
-			sum += (s.getPrice() - s.getDiscount()) * s.getQuantity();
+			sum += (s.price - s.discount) * s.quantity;
 		}
 
 		return sum;

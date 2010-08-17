@@ -41,17 +41,18 @@ public class DtoCopyMachine {
 
 			for (int i = 0; i < allFields.length; i++) {
 				final Field field = allFields[i];
-				final Object value = dto.get(field.getName());
+				final String fieldName = field.getName();
+				final Object value = dto.get(fieldName);
 
 				if (null == value) {
 					continue;
 				}
 
-				if ("fields".equals(field.getName())) {
+				if ("fields".equals(fieldName)) {
 					continue;
 				}
 
-				if ("id".equals(field.getName())) {
+				if ("id".equals(fieldName)) {
 					if (null == existingEntity) {
 						continue;
 					} else { // if (null != value && (Long) value > 0)
@@ -71,12 +72,10 @@ public class DtoCopyMachine {
 					continue;
 				}
 
-				// try {
-				final Method setter = entityClass.getMethod(reflectionHelper.getMethodNameCached(false, field), field.getType());
-				setter.invoke(entity, value);
-				// } catch (IllegalArgumentException e) {
-				// System.err.println("iae");
-				// }
+				// final Method setter = entityClass.getMethod(reflectionHelper.getMethodNameCached(false, field), field.getType());
+				// setter.invoke(entity, value);
+
+				field.set(entity, value);
 			}
 
 			return entity;
@@ -97,13 +96,16 @@ public class DtoCopyMachine {
 			serverList.add(copy(child));
 		}
 
-		final Method setter = entityClass.getMethod(reflectionHelper.getMethodNameCached(false, field), List.class);
-		setter.invoke(entity, serverList);
+//		final Method setter = entityClass.getMethod(reflectionHelper.getMethodNameCached(false, field), List.class);
+//		setter.invoke(entity, serverList);
+		
+		field.set(entity, serverList);
 	}
 
 	/**
 	 * Copy data from a domain class instance into a Dto. This is usually the case whenever the server responds to clients (read).
 	 */
+	// application hotspot 2nd place 
 	public Dto copy(AbstractEntity entity) {
 		final Dto dto = new Dto();
 
@@ -114,9 +116,11 @@ public class DtoCopyMachine {
 			for (int i = 0; i < allFields.length; i++) {
 				final Field field = allFields[i];
 
-				final Method getter = entityClass.getMethod(reflectionHelper.getMethodNameCached(true, field));
-				final Object value = getter.invoke(entity);
-
+				/// getmethodnamecached 15%
+				// final Method getter = entityClass.getMethod(reflectionHelper.getMethodNameCached(true, field));
+				// final Object value = getter.invoke(entity); // 70%
+				final Object value = field.get(entity);
+				
 				if (null == value) {
 					continue; // skip null values
 				}
@@ -169,7 +173,8 @@ public class DtoCopyMachine {
 			// This is an update, before doing anything else we remove the existing items linked to this entity
 			// This avoids duplicating them on an update.
 			// Note this means that on each update the linked items of an entity are deleted and recreated. This should be avoided in future versions.
-			final List<?> existingItemsList = (List<?>) entityClass.getMethod(reflectionHelper.getMethodNameCached(true, field)).invoke(existingEntity);
+			// final List<?> existingItemsList = (List<?>) entityClass.getMethod(reflectionHelper.getMethodNameCached(true, field)).invoke(existingEntity);
+			final List<?> existingItemsList = (List<?>) field.get(existingEntity);
 
 			if (null == existingItemsList) {
 				return; // we do not have to do anything

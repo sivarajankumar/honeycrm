@@ -25,113 +25,41 @@ import org.compass.annotations.SearchableProperty;
 public class Donation extends AbstractEntity {
 	@Label("Donator")
 	@FieldRelateAnnotation(Contact.class)
-	private long donatorId; // contact
+	public long donatorId; // contact
 
 	@Label("Project")
 	@FieldRelateAnnotation(Project.class)
-	private long projectId;
+	public long projectId;
 
 	@SearchableProperty
 	@Label("Donated for")
 	@FieldEnumAnnotation( { "Foundation", "Project donation", "Unlinked donation" })
-	private String donatedFor; // foundation / project donation / unlinked donation
+	public String donatedFor; // foundation / project donation / unlinked donation
 
 	@SearchableProperty
 	@Label("Kind")
 	@FieldEnumAnnotation( { "Subscription", "Unique" })
-	private String kind; // subscription / once
+	public String kind; // subscription / once
 
 	@Label("Receiption date")
 	@FieldDateAnnotation
-	private Date receiptionDate;
+	public Date receiptionDate;
 
 	@SearchableProperty
 	@Label("Reaction")
 	@FieldEnumAnnotation( { "Thanked", "Receipt", "Certificate", "No" })
-	private String reaction; // thanked / receipt / certificate / no
+	public String reaction; // thanked / receipt / certificate / no
 
 	@Label("Reaction Channel")
 	@SearchableProperty
 	@FieldMultiEnumAnnotation( { "E-Mail", "Letter", "Phone Call" })
-	private String reactedHow; // (=channel) email / mail / phone call
+	public String reactedHow; // (=channel) email / mail / phone call
 
 	@FieldDateAnnotation
 	@Label("Date")
-	private Date date;
+	public Date date;
 
 	@Label("Amount")
 	@FieldCurrencyAnnotation("0")
-	private double amount;
-
-	public long getDonatorId() {
-		return donatorId;
-	}
-
-	public void setDonatorId(long donatorId) {
-		this.donatorId = donatorId;
-	}
-
-	public long getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(long projectId) {
-		this.projectId = projectId;
-	}
-
-	public String getDonatedFor() {
-		return donatedFor;
-	}
-
-	public void setDonatedFor(String donatedFor) {
-		this.donatedFor = donatedFor;
-	}
-
-	public String getKind() {
-		return kind;
-	}
-
-	public void setKind(String kind) {
-		this.kind = kind;
-	}
-
-	public Date getReceiptionDate() {
-		return receiptionDate;
-	}
-
-	public void setReceiptionDate(Date receiptionDate) {
-		this.receiptionDate = receiptionDate;
-	}
-
-	public String getReaction() {
-		return reaction;
-	}
-
-	public void setReaction(String reaction) {
-		this.reaction = reaction;
-	}
-
-	public String getReactedHow() {
-		return reactedHow;
-	}
-
-	public void setReactedHow(String reactedHow) {
-		this.reactedHow = reactedHow;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
+	public double amount;
 }

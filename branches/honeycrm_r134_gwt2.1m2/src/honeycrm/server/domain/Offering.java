@@ -26,59 +26,27 @@ import org.compass.annotations.Searchable;
 public class Offering extends AbstractEntity {
 	@Label("Services")
 	@FieldTableAnnotation(Service.class)
-	private List<Service> services;
+	public List<Service> services;
 
 	@Label("Contact")
 	@FieldRelateAnnotation(Contact.class)
-	private Long contactID;
+	public Long contactID;
 
 	@FieldDateAnnotation
 	@Label("Deadline")
-	private Date deadline;
+	public Date deadline;
 
 	@Label("Contract")
 	@FieldRelateAnnotation(Contract.class)
-	private Long contractID;
-
-	public List<Service> getServices() {
-		return services;
-	}
-
-	public void setServices(List<Service> services) {
-		this.services = services;
-	}
-
-	public Date getDeadline() {
-		return deadline;
-	}
-
-	public void setDeadline(Date deadline) {
-		this.deadline = deadline;
-	}
-
-	public Long getContactID() {
-		return contactID;
-	}
-
-	public void setContactID(Long contactID) {
-		this.contactID = contactID;
-	}
-
-	public Long getContractID() {
-		return contractID;
-	}
-
-	public void setContractID(Long contractID) {
-		this.contractID = contractID;
-	}
-
+	public Long contractID;
+	
 	/**
 	 * Calculate the sum of all services.
 	 */
 	public Double getCosts() {
 		Double costs = 0.0;
 		for (final Service s : services) {
-			costs += (s.getPrice() - s.getDiscount()) * s.getQuantity();
+			costs += (s.price - s.discount) * s.quantity;
 		}
 		return costs;
 	}

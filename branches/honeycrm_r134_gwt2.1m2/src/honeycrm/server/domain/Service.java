@@ -23,73 +23,25 @@ import org.compass.annotations.Searchable;
 public class Service extends AbstractEntity {
 	@FieldStringAnnotation
 	@Label("Name")
-	private String name;
+	public String name;
 
 	@FieldCurrencyAnnotation("0")
 	@Label("Price")
-	private double price;
+	public double price;
 
 	@FieldIntegerAnnotation(1)
 	@Label("Qty")
-	private int quantity;
+	public int quantity;
 
 	@FieldCurrencyAnnotation("0")
 	@Label("Discount")
-	private double discount;
+	public double discount;
 
 	@FieldCurrencyAnnotation("0")
 	@Label("Sum")
-	private double sum;
+	public double sum;
 
 	@FieldRelateAnnotation(Product.class)
 	@Label("Product")
-	private long productID;
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public double getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(double discount) {
-		this.discount = discount;
-	}
-
-	public double getSum() {
-		return sum;
-	}
-
-	public void setSum(double sum) {
-		this.sum = sum;
-	}
-
-	public long getProductID() {
-		return productID;
-	}
-
-	public void setProductID(long productID) {
-		this.productID = productID;
-	}
+	public long productID;
 }

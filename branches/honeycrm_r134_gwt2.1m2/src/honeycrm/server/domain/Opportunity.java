@@ -23,76 +23,28 @@ import org.compass.annotations.SearchableProperty;
 public class Opportunity extends AbstractEntity {
 	@FieldRelateAnnotation(Contact.class)
 	@Label("Contact")
-	private long contactId;
+	public long contactId;
 
 	@Label("Amount")
 	@FieldCurrencyAnnotation("0")
-	private double amount;
+	public double amount;
 
 	@Label("Probability")
 	@FieldIntegerAnnotation(0)
-	private int probability;
+	public int probability;
 
 	@FieldEnumAnnotation( { "Open", "Cold Call", "Closed Won", "Closed Lost" })
 	@Label("Phase")
 	@SearchableProperty
-	private String phase;
+	public String phase;
 
 	@Label("Reason Closed")
 	@FieldEnumAnnotation( { "No Time", "Too Expensive" })
 	@SearchableProperty
-	private String reasonClosed;
+	public String reasonClosed;
 
 	@FieldTextAnnotation
 	@Label("Description")
 	@SearchableProperty
-	private String description;
-
-	public long getContactId() {
-		return contactId;
-	}
-
-	public void setContactId(long contactId) {
-		this.contactId = contactId;
-	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-	public int getProbability() {
-		return probability;
-	}
-
-	public void setProbability(int probability) {
-		this.probability = probability;
-	}
-
-	public String getPhase() {
-		return phase;
-	}
-
-	public void setPhase(String phase) {
-		this.phase = phase;
-	}
-
-	public String getReasonClosed() {
-		return reasonClosed;
-	}
-
-	public void setReasonClosed(String reasonClosed) {
-		this.reasonClosed = reasonClosed;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	public String description;
 }

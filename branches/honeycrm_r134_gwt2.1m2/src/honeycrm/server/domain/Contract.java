@@ -20,61 +20,21 @@ import javax.jdo.annotations.PersistenceCapable;
 public class Contract extends AbstractEntity {
 	@Label("Offering")
 	@FieldRelateAnnotation(Offering.class)
-	private Long offeringID;
+	public Long offeringID;
 
 	@Label("Contact")
 	@FieldRelateAnnotation(Contact.class)
-	private Long contactID;
+	public Long contactID;
 
 	@Label("Start Date")
 	@FieldDateAnnotation
-	private Date startDate;
+	public Date startDate;
 
 	@Label("End Date")
 	@FieldDateAnnotation
-	private Date endDate;
+	public Date endDate;
 
 	@Label("Services")
 	@FieldTableAnnotation(Service.class)
-	private List<Service> services;
-
-	public Long getOfferingID() {
-		return offeringID;
-	}
-
-	public void setOfferingID(Long offeringID) {
-		this.offeringID = offeringID;
-	}
-
-	public Long getContactID() {
-		return contactID;
-	}
-
-	public void setContactID(Long contactID) {
-		this.contactID = contactID;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public List<Service> getServices() {
-		return services;
-	}
-
-	public void setServices(List<Service> services) {
-		this.services = services;
-	}
+	public List<Service> services;
 }

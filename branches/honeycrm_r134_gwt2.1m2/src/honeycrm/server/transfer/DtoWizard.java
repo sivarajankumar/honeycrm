@@ -92,7 +92,7 @@ public class DtoWizard {
 			for (final Field field : reflectionHelper.getAllFields(domainClass)) {
 				final String name = field.getName();
 
-				if (name.startsWith("jdo") || "id".equals(name)) {
+				if (name.startsWith("jdo") || name.startsWith("jprofiler") || "id".equals(name)) {
 					continue;
 				}
 

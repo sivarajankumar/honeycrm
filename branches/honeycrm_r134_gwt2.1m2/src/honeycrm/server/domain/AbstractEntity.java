@@ -31,28 +31,28 @@ abstract public class AbstractEntity {
 	// To allow full text search with compass / lucene the id field has to be of type long.
 	// Additionally we have to use Long (not long) because of constrains of google app engine for
 	// allowed id types.
-	protected Key id;
+	public Key id;
 
 	@Label("Assigned To")
 	@FieldRelateAnnotation(Employee.class)
-	protected long assignedTo;
+	public long assignedTo;
 	
 	// TODO mark field has to be supported differently with mark FieldMark instance
 	@Label("Marked")
 	@FieldBooleanAnnotation
-	protected boolean marked;
+	public boolean marked;
 
 	@Label("Created at")
 	@FieldDateAnnotation
-	protected Date createdAt;
+	public Date createdAt;
 
 	@Label("Last updated at")
 	@FieldDateAnnotation
-	protected Date lastUpdatedAt;
+	public Date lastUpdatedAt;
 	
 	@Label("Views")
 	@FieldIntegerAnnotation(0)
-	protected long views;
+	public long views;
 
 	public Key getId() {
 		return id;

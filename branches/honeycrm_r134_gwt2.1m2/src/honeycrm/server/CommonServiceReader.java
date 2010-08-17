@@ -33,9 +33,9 @@ public class CommonServiceReader extends AbstractCommonService {
 		final List<Dto> list = new LinkedList<Dto>();
 
 		for (final AbstractEntity item : collection) {
-			final Dto dto = copy.copy(item);
+			final Dto dto = copy.copy(item);  // 60%
 
-			resolveRelatedEntities(item, dto);
+			resolveRelatedEntities(item, dto); // 20%
 
 			list.add(dto);
 		}
@@ -54,8 +54,9 @@ public class CommonServiceReader extends AbstractCommonService {
 				final Class<? extends AbstractEntity> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
 				final String relatedModuleName = relatedClass.getSimpleName().toLowerCase();
 
-				final Long id = (Long) originatingClass.getMethod(reflectionHelper.getMethodNameCached(true, field)).invoke(item);
-
+//				final Long id = (Long) originatingClass.getMethod(reflectionHelper.getMethodNameCached(true, field)).invoke(item);
+				final Long id = (Long) field.get(item);
+				
 				if (null != id && id > 0) {
 					/**
 					 * retrieve the referenced entity and copy its dto representation as an additional field into the originating dto object.

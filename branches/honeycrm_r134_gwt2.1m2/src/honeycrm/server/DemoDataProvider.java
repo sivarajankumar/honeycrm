@@ -16,10 +16,10 @@ public class DemoDataProvider {
 	public static Account account() {
 		Account a = new Account();
 
-		a.setName(DemoDataHolder.getRandomName());
-		a.setAnnualRevenue(r.nextLong() % 1000000000);
-		a.setBillingAddress(DemoDataHolder.getRandomAddress());
-		a.setShippingAddress(DemoDataHolder.getRandomAddress());
+		a.name = DemoDataHolder.getRandomName();
+		a.annualRevenue = r.nextLong() % 1000000000;
+		a.billingAddress = DemoDataHolder.getRandomAddress();
+		a.shippingAddress = DemoDataHolder.getRandomAddress();
 		
 		return a;
 	}
@@ -27,10 +27,10 @@ public class DemoDataProvider {
 	public static Contact contact() {
 		Contact c = new Contact();
 
-		c.setName(DemoDataHolder.getRandomName());
-		c.setEmail(DemoDataHolder.getRandomEmail());
-		c.setCity(DemoDataHolder.getRandomAddress());
-		c.setPhone(DemoDataHolder.getRandomPhoneNumber());
+		c.name = (DemoDataHolder.getRandomName());
+		c.email = (DemoDataHolder.getRandomEmail());
+		c.city = (DemoDataHolder.getRandomAddress());
+		c.phone = (DemoDataHolder.getRandomPhoneNumber());
 
 		return c;
 	}

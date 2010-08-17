@@ -43,8 +43,9 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 
 				for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(entityClass, SearchableProperty.class)) {
 					if (String.class == field.getType()) {
-						String value = (String) entityClass.getMethod(reflectionHelper.getMethodNameCached(true, field)).invoke(entity);
-
+						// String value = (String) entityClass.getMethod(reflectionHelper.getMethodNameCached(true, field)).invoke(entity);
+						final String value = (String) field.get(entity);
+						
 						if (null != value && ((!ignoreCase && value.contains(query)) || (ignoreCase && value.toLowerCase().contains(query.toLowerCase())))) {
 							moduleList.add(copy.copy(entity));
 							continue ENTITY_LOOP;

@@ -26,87 +26,31 @@ public class Project extends AbstractEntity {
 	@SearchableProperty
 	@FieldStringAnnotation
 	@Label("Name")
-	private String name;
+	public String name;
 
 	@Label("Description")
 	@FieldTextAnnotation
 	@SearchableProperty
-	private String description;
+	public String description;
 
 	@Label("Target sum")
 	@FieldCurrencyAnnotation("0")
-	private double targetSum;
+	public double targetSum;
 
 	@Label("Current sum")
 	@FieldCurrencyAnnotation("0")
-	private double currentSum;
+	public double currentSum;
 
 	@Label("Start date")
 	@FieldDateAnnotation
-	private Date startDate;
+	public Date startDate;
 
 	@Label("End date")
 	@FieldDateAnnotation
-	private Date endDate;
+	public Date endDate;
 
 	@SearchableProperty
 	@Label("Phase")
 	@FieldEnumAnnotation( { "not started", "in progress", "closed" })
-	private String phase;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public double getTargetSum() {
-		return targetSum;
-	}
-
-	public void setTargetSum(double targetSum) {
-		this.targetSum = targetSum;
-	}
-
-	public double getCurrentSum() {
-		return currentSum;
-	}
-
-	public void setCurrentSum(double currentSum) {
-		this.currentSum = currentSum;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getPhase() {
-		return phase;
-	}
-
-	public void setPhase(String phase) {
-		this.phase = phase;
-	}
+	public String phase;
 }
