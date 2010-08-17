@@ -3,6 +3,7 @@ package honeycrm.client.view;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.services.CommonServiceAsync;
 
@@ -69,7 +70,7 @@ public class FulltextSearchWidget extends SuggestBox {
 		if (nameToDto.containsKey(label)) {
 			setText("");
 			final Dto dto = nameToDto.get(label);
-			History.newItem(dto.getHistoryToken() + " " + dto.getId());
+			History.newItem(CollectionHelper.join(" ", dto.getHistoryToken(), ModuleAction.DETAIL.toString().toLowerCase(), String.valueOf(dto.getId())));
 		} else {
 			Window.alert("Cannot determine id of selected item: '" + label + "'");
 		}

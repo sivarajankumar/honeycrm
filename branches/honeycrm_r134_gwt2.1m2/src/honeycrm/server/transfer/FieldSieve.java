@@ -3,24 +3,18 @@ package honeycrm.server.transfer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class FieldSieve {
 	public static final FieldSieve instance = new FieldSieve();
 	
-	private final Set<String> badVariableNames = new HashSet<String>();
-	private final Set<String> badVariablePrefixes = new HashSet<String>();
+	private static final String badVariableName = "serialVersionUID";
+	private static final String[] badVariablePrefixes = new String[]{"$", "jdo", "INDEX_", "jprofiler"};
 	private static final Map<Integer, Field[]> cache = new HashMap<Integer, Field[]>();
 
 	private FieldSieve() {
-		badVariablePrefixes.add("$");
-		badVariablePrefixes.add("jdo");
-		badVariablePrefixes.add("INDEX_");
-		badVariableNames.add("serialVersionUID");
 	}
 	
 	/**
@@ -57,7 +51,7 @@ public class FieldSieve {
 			return true; // skip static fields
 		}
 
-		if (badVariableNames.contains(field.getName())) {
+		if (field.getName().equals(badVariableName)) {
 			return true; // skip field because its name is on the bad variables name
 		}
 
