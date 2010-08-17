@@ -10,7 +10,6 @@ import honeycrm.server.domain.AbstractEntity;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class DtoCopyMachine {
 		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
 		try {
-			// final AbstractEntity entity = entityClass.newInstance(); // does update properly but offeringID == null after updating manually
 			final AbstractEntity entity = (null == existingEntity) ? entityClass.newInstance() : existingEntity; // does not update updated fields from dto to domain object
 			final Field[] allFields = FieldSieve.instance.filterFields(reflectionHelper.getAllFields(entityClass));
 
@@ -72,9 +70,6 @@ public class DtoCopyMachine {
 					continue;
 				}
 
-				// final Method setter = entityClass.getMethod(reflectionHelper.getMethodNameCached(false, field), field.getType());
-				// setter.invoke(entity, value);
-
 				field.set(entity, value);
 			}
 
@@ -96,9 +91,6 @@ public class DtoCopyMachine {
 			serverList.add(copy(child));
 		}
 
-//		final Method setter = entityClass.getMethod(reflectionHelper.getMethodNameCached(false, field), List.class);
-//		setter.invoke(entity, serverList);
-		
 		field.set(entity, serverList);
 	}
 
@@ -116,9 +108,6 @@ public class DtoCopyMachine {
 			for (int i = 0; i < allFields.length; i++) {
 				final Field field = allFields[i];
 
-				/// getmethodnamecached 15%
-				// final Method getter = entityClass.getMethod(reflectionHelper.getMethodNameCached(true, field));
-				// final Object value = getter.invoke(entity); // 70%
 				final Object value = field.get(entity);
 				
 				if (null == value) {
@@ -173,7 +162,6 @@ public class DtoCopyMachine {
 			// This is an update, before doing anything else we remove the existing items linked to this entity
 			// This avoids duplicating them on an update.
 			// Note this means that on each update the linked items of an entity are deleted and recreated. This should be avoided in future versions.
-			// final List<?> existingItemsList = (List<?>) entityClass.getMethod(reflectionHelper.getMethodNameCached(true, field)).invoke(existingEntity);
 			final List<?> existingItemsList = (List<?>) field.get(existingEntity);
 
 			if (null == existingItemsList) {
@@ -186,12 +174,12 @@ public class DtoCopyMachine {
 			}
 
 			for (final AbstractEntity child : (List<AbstractEntity>) existingItemsList) {
-				if (null == child.getId()) {
+				if (null == child.id) {
 					System.out.println("epic fail: prevented npe");
 				} else {
 					// TODO why doesn't that work too? this throws an "this entity is currently managed by another manager" exception.
 					// m.deletePersistent(child);
-					m.deletePersistent(m.getObjectById(child.getClass(), KeyFactory.createKey(existingEntity.getId(), child.getClass().getSimpleName(), child.getId().getId())));
+					m.deletePersistent(m.getObjectById(child.getClass(), KeyFactory.createKey(existingEntity.id, child.getClass().getSimpleName(), child.id.getId())));
 				}
 			}
 			// }

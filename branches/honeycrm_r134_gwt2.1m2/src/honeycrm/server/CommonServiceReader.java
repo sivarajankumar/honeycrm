@@ -54,7 +54,6 @@ public class CommonServiceReader extends AbstractCommonService {
 				final Class<? extends AbstractEntity> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
 				final String relatedModuleName = relatedClass.getSimpleName().toLowerCase();
 
-//				final Long id = (Long) originatingClass.getMethod(reflectionHelper.getMethodNameCached(true, field)).invoke(item);
 				final Long id = (Long) field.get(item);
 				
 				if (null != id && id > 0) {

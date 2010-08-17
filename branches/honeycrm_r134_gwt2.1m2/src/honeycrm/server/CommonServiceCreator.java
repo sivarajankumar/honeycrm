@@ -18,7 +18,7 @@ public class CommonServiceCreator extends AbstractCommonService {
 			throw new RuntimeException("Could not copy dto into domain class");
 		} else {
 			// explicitly set id to null to force the database to create a new row
-			domainObject.setId(null);
+			domainObject.id = null;
 			return internalCreate(domainObject);
 		}
 	}
@@ -28,13 +28,13 @@ public class CommonServiceCreator extends AbstractCommonService {
 		if (null == domainObject) {
 			throw new RuntimeException("Could not create domain object because domainObject was null");
 		} else {
-			domainObject.setCreatedAt(new Date(System.currentTimeMillis()));
+			domainObject.createdAt = (new Date(System.currentTimeMillis()));
 			m.makePersistent(domainObject);
 
-			if (null == domainObject.getId()) {
+			if (null == domainObject.id) {
 				throw new RuntimeException("Could not create domain object: Key is still null");
 			} else {
-				return domainObject.getId().getId();
+				return domainObject.id.getId();
 			}
 		}
 	}

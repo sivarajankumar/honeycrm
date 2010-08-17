@@ -118,13 +118,6 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Returns the getter/setter for a property, e.g. getId if fieldName is id
-	 */
-	public String getMethodNameCached(final boolean isGet, final Field field) {
-		return MethodNameExpert.instance.getMethodNameCached(isGet, field);
-	}
-
-	/**
 	 * Return all fields of the dto class that are from the original domain object, i.e. all accessible properties except automatically added or those that are only necessary for organizational purposes.
 	 */
 	public Field[] getDtoFields(final Class<?> dtoClass) {
@@ -133,6 +126,7 @@ public class ReflectionHelper {
 		badFieldNames.add("INDEX_");
 		badFieldNames.add("$");
 		badFieldNames.add("jdo");
+		badFieldNames.add("jprofiler");
 
 		final List<Field> dtoFields = new LinkedList<Field>();
 		for (final Field field : dtoClass.getDeclaredFields()) {
