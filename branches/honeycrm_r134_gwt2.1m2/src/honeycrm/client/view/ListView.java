@@ -58,7 +58,7 @@ public class ListView extends AbstractView {
 	/**
 	 * true if users should have the possibility to delete items i.e. the delete ui components should be displayed. false otherwise.
 	 */
-	private boolean allowDelete;
+	private boolean allowDelete = true;
 	private Button[] additionalButtons;
 	private boolean itemsHaveBeenLoadedOnce = false;
 	protected final VerticalPanel panel = new VerticalPanel();
@@ -199,7 +199,7 @@ public class ListView extends AbstractView {
 		}
 
 		if (allowDelete) { // only should selection widget and delete button if user is allowed to delete anything
-			WidgetJuggler.addToContainer(buttonBar, getSelectionWidget(), getDeleteButton());
+			WidgetJuggler.addToContainer(buttonBar, /*getSelectionWidget(),*/ getDeleteButton());
 		}
 		
 		if (null != additionalButtons) {
