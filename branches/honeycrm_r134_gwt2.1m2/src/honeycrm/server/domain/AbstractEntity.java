@@ -4,6 +4,7 @@ import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
 import java.util.Date;
 
@@ -31,6 +32,10 @@ abstract public class AbstractEntity {
 	// Additionally we have to use Long (not long) because of constrains of google app engine for
 	// allowed id types.
 	protected Key id;
+
+	@Label("Assigned To")
+	@FieldRelateAnnotation(Employee.class)
+	protected long assignedTo;
 	
 	// TODO mark field has to be supported differently with mark FieldMark instance
 	@Label("Marked")
@@ -87,5 +92,13 @@ abstract public class AbstractEntity {
 
 	public void setMarked(boolean marked) {
 		this.marked = marked;
+	}
+
+	public long getAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(long assignedTo) {
+		this.assignedTo = assignedTo;
 	}
 }

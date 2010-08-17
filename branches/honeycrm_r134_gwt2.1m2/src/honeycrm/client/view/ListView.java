@@ -55,6 +55,10 @@ public class ListView extends AbstractView {
 	 * true if users should have the possibility to hide away the list view. false otherwise.
 	 */
 	private boolean disclose;
+	/**
+	 * true if users should have the possibility to delete items i.e. the delete ui components should be displayed. false otherwise.
+	 */
+	private boolean allowDelete;
 	private Button[] additionalButtons;
 	private boolean itemsHaveBeenLoadedOnce = false;
 	protected final VerticalPanel panel = new VerticalPanel();
@@ -65,8 +69,8 @@ public class ListView extends AbstractView {
 
 	protected final Panel buttonBar = new HorizontalPanel();
 
-	public ListView(final String clazz) {
-		super(clazz);
+	public ListView(final String module) {
+		super(module);
 		initWidget(panel);
 	}
 
@@ -160,7 +164,7 @@ public class ListView extends AbstractView {
 		 */
 		if (showTitle) {
 			if (disclose) {
-				final DisclosurePanel disclosurePanel = new DisclosurePanel(moduleDto.getTitle() + "s");
+				final DisclosurePanel disclosurePanel = new DisclosurePanel(getListTitle());
 				disclosurePanel.setAnimationEnabled(true);
 			//	disclosurePanel.setHeader(buttonBar);
 				disclosurePanel.setOpen(true); // TODO the open/closed status should be persisted and reconstructed per user
@@ -182,13 +186,22 @@ public class ListView extends AbstractView {
 		initListViewHeaderRow();
 	}
 
+	/**
+	 * Returns the title of the list view widget. Subclasses may override this to display other titles.
+	 */
+	protected String getListTitle() {
+		return moduleDto.getTitle() + "s";
+	}
+
 	private void initButtonBar() {
 		if (showTitle && !disclose) {
 			buttonBar.add(getTitleLabel());
 		}
 
-		WidgetJuggler.addToContainer(buttonBar, getSelectionWidget(), getDeleteButton());
-
+		if (allowDelete) { // only should selection widget and delete button if user is allowed to delete anything
+			WidgetJuggler.addToContainer(buttonBar, getSelectionWidget(), getDeleteButton());
+		}
+		
 		if (null != additionalButtons) {
 			WidgetJuggler.addToContainer(buttonBar, additionalButtons);
 		}
@@ -248,30 +261,32 @@ public class ListView extends AbstractView {
 	}
 
 	private void addDeleteColumn() {
-		final Column<Dto, Boolean> delCol = new Column<Dto, Boolean>(new CheckboxCell()) {
-			@Override
-			public Boolean getValue(Dto object) {
-				return false;
-			}
-		};
-		delCol.setFieldUpdater(new FieldUpdater<Dto, Boolean>() {
-			@Override
-			public void update(int index, Dto object, Boolean value) {
-				// mark this item for later deletion
-				object.set("deleteFlag", value);
-			}
-		});
-
-		// TODO how can we observe checkbox state changes?
-		final Header<Boolean> h = new Header<Boolean>(new CheckboxCell()) {
-			@Override
-			public Boolean getValue() {
-				LogConsole.log("get value");
-				return false;
-			}
-		};
-
-		ct.addColumn(delCol, h);
+		if (allowDelete) { // only attach delete column of the user is allowed to delete
+			final Column<Dto, Boolean> delCol = new Column<Dto, Boolean>(new CheckboxCell()) {
+				@Override
+				public Boolean getValue(Dto object) {
+					return false;
+				}
+			};
+			delCol.setFieldUpdater(new FieldUpdater<Dto, Boolean>() {
+				@Override
+				public void update(int index, Dto object, Boolean value) {
+					// mark this item for later deletion
+					object.set("deleteFlag", value);
+				}
+			});
+	
+			// TODO how can we observe checkbox state changes?
+			final Header<Boolean> h = new Header<Boolean>(new CheckboxCell()) {
+				@Override
+				public Boolean getValue() {
+					LogConsole.log("get value");
+					return false;
+				}
+			};
+	
+			ct.addColumn(delCol, h);
+		}
 	}
 
 	// TODO fix pagination implementation
@@ -371,13 +386,17 @@ public class ListView extends AbstractView {
 	public void setDisclose(boolean disclose) {
 		this.disclose = disclose;
 	}
+	
+	public void setAllowDelete(boolean allowDelete) {
+		this.allowDelete = allowDelete;
+	}
 
 	public void setAdditionalButtons(Button... additionalButtons) {
 		this.additionalButtons = additionalButtons;
 	}
 
 	private Label getTitleLabel() {
-		final Label title = new Label(moduleDto.getTitle() + "s");
+		final Label title = new Label(getListTitle());
 		// TODO add style for this in custom css file
 		title.setStyleName("relationship_title");
 		return title;

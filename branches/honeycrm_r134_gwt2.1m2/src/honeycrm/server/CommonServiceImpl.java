@@ -275,4 +275,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	public Map<String, ListQueryResult> getAllRelated(Long id, String relatedDtoIndex) {
 		return reader.getAllRelated(id, relatedDtoIndex);
 	}
+
+	@Override
+	public ListQueryResult getAllAssignedTo(String dtoIndex, long employeeID, int from, int to) {
+		return reader.getAllAssignedTo(dtoIndex, employeeID, from, to);
+	}
 }

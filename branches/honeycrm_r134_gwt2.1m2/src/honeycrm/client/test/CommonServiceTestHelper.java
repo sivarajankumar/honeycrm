@@ -165,4 +165,10 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 		
 	}
 
+	@Override
+	public void getAllAssignedTo(String dtoIndex, long employeeID, int from, int to, AsyncCallback<ListQueryResult> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

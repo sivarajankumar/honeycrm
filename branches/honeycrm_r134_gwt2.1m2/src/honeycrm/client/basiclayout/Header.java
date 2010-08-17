@@ -1,5 +1,6 @@
 package honeycrm.client.basiclayout;
 
+import honeycrm.client.login.User;
 import honeycrm.client.misc.WidgetJuggler;
 import honeycrm.client.view.FulltextSearchWidget;
 
@@ -21,7 +22,8 @@ public class Header extends Composite {
 
 		p.add(WidgetJuggler.addStyles(new Label("Honeeeeeeeyyyyy CRM"), "header_logo"));
 		p.add(WidgetJuggler.addStyles(new FulltextSearchWidget(), "header_search"));
-		p.add(getHeaderLinks("Login", "Profile", "Help", "Global Search"));
+		p.add(getHeaderLinks("Profile", "Help", "Global Search"));
+		p.add(WidgetJuggler.addStyles(new Label("Welcome, " + User.getLogin() + "!"), "right"));
 		p.add(LoadIndicator.get());
 		p.add(new HTML("<div class='clear'></div>"));
 

@@ -7,7 +7,6 @@ import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
-import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
@@ -20,18 +19,14 @@ import org.compass.annotations.SearchableProperty;
 
 @PersistenceCapable
 @Searchable
-@ListViewable( { "name", "employeeId", "targetSum", "currentSum", "endDate" })
-@DetailViewable( { "name,employeeId", "description,phase", "targetSum,currentSum", "startDate,endDate" })
+@ListViewable( { "name", "assignedTo", "targetSum", "currentSum", "endDate" })
+@DetailViewable( { "name,assignedTo", "description,phase", "targetSum,currentSum", "startDate,endDate" })
 @Quicksearchable( { "name" })
 public class Project extends AbstractEntity {
 	@SearchableProperty
 	@FieldStringAnnotation
 	@Label("Name")
 	private String name;
-
-	@Label("Responsible")
-	@FieldRelateAnnotation(Employee.class)
-	private long employeeId;
 
 	@Label("Description")
 	@FieldTextAnnotation
@@ -65,14 +60,6 @@ public class Project extends AbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public long getEmployeeId() {
-		return employeeId;
-	}
-
-	public void setEmployeeId(long employeeId) {
-		this.employeeId = employeeId;
 	}
 
 	public String getDescription() {

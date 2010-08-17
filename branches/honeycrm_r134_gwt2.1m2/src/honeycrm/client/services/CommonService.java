@@ -20,37 +20,25 @@ public interface CommonService extends RemoteService {
 
 	// read
 	public Dto get(String dtoIndex, long id);
-
 	public Dto getByName(String dtoIndex, String name);
-
 	public ListQueryResult getAll(final String dtoIndex, int from, int to);
-
+	public ListQueryResult getAllAssignedTo(final String dtoIndex, final long employeeID, int from, int to);
 	public ListQueryResult getAllMarked(final String dtoIndex, int from, int to);
-
 	public ListQueryResult getAllByNamePrefix(final String dtoIndex, String prefix, int from, int to);
-
 	public ListQueryResult search(String dtoIndex, Dto searchContact, int from, int to);
-
 	public ListQueryResult fulltextSearch(String query, int from, int to);
-
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String relatedDtoIndex);
-	
 	public ListQueryResult fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
 
 	// update
 	public void update(Dto account, long id);
-
 	public void mark(String dtoIndex, long id, boolean marked);
 
 	// delete
 	public void delete(String dtoIndex, long id);
-
 	public void deleteAll(String dtoIndex, Set<Long> ids);
-
 	public void deleteAll(String dtoIndex);
-
 	public void deleteAllItems();
-
 	public void addDemo(String dtoIndex);
 
 	// misc

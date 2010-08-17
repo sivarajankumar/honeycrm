@@ -19,14 +19,10 @@ import org.compass.annotations.SearchableProperty;
 
 @PersistenceCapable
 @Searchable
-@ListViewable( { "marked", "donatorId", "employeeId", "reaction", "amount" })
-@DetailViewable( { "donatorId,kind", "amount", "donatedFor,employeeId", "reaction,reactedHow", "date", "receiptionDate,projectId" })
+@ListViewable( { "marked", "donatorId", "assignedTo", "reaction", "amount" })
+@DetailViewable( { "donatorId,kind", "amount", "donatedFor,assignedTo", "reaction,reactedHow", "date", "receiptionDate,projectId" })
 @Quicksearchable( { "donatorId", "amount" })
 public class Donation extends AbstractEntity {
-	@FieldRelateAnnotation(Employee.class)
-	@Label("Responsible")
-	private long employeeId;
-
 	@Label("Donator")
 	@FieldRelateAnnotation(Contact.class)
 	private long donatorId; // contact
@@ -66,14 +62,6 @@ public class Donation extends AbstractEntity {
 	@Label("Amount")
 	@FieldCurrencyAnnotation("0")
 	private double amount;
-
-	public long getEmployeeId() {
-		return employeeId;
-	}
-
-	public void setEmployeeId(long employeeId) {
-		this.employeeId = employeeId;
-	}
 
 	public long getDonatorId() {
 		return donatorId;

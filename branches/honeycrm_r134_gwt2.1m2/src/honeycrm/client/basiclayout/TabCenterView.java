@@ -2,6 +2,7 @@ package honeycrm.client.basiclayout;
 
 import honeycrm.client.admin.AdminWidget;
 import honeycrm.client.admin.LogConsole;
+import honeycrm.client.dashboard.Dashboard;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.NumberParser;
@@ -77,6 +78,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 			add((view), getTitlePanel(moduleDto.getTitle(), createBtn));
 		}
 
+		add(new Dashboard(), "Dashboard"); // TODO insert as first tab
 		add(new AdminWidget(), "Admin");
 		add(new EmailFeedbackWidget(), "Feedback");
 		add(new SampleReport(), "Reports");

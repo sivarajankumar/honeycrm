@@ -14,17 +14,13 @@ import java.util.List;
 import javax.jdo.annotations.PersistenceCapable;
 
 @PersistenceCapable
-@DetailViewable({ "contactID", "employeeID", "startDate", "endDate", "services" })
-@ListViewable({ "contactID", "employeeID", "endDate" })
+@DetailViewable({ "contactID", "assignedTo", "startDate", "endDate", "services" })
+@ListViewable({ "contactID", "assignedTo", "endDate" })
 @Quicksearchable({"contactID"})
 public class Contract extends AbstractEntity {
 	@Label("Offering")
 	@FieldRelateAnnotation(Offering.class)
 	private Long offeringID;
-
-	@Label("Employee")
-	@FieldRelateAnnotation(Employee.class)
-	private Long employeeID;
 
 	@Label("Contact")
 	@FieldRelateAnnotation(Contact.class)
@@ -48,14 +44,6 @@ public class Contract extends AbstractEntity {
 
 	public void setOfferingID(Long offeringID) {
 		this.offeringID = offeringID;
-	}
-
-	public Long getEmployeeID() {
-		return employeeID;
-	}
-
-	public void setEmployeeID(Long employeeID) {
-		this.employeeID = employeeID;
 	}
 
 	public Long getContactID() {

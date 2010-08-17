@@ -19,7 +19,7 @@ import org.compass.annotations.SearchableProperty;
 @PersistenceCapable
 @Searchable
 @ListViewable( { "name", "email" })
-@DetailViewable( { "name,accountID", "responsibleId", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId",
+@DetailViewable( { "name,accountID", "assignedTo", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId",
 		"child1Id,child2Id", "secretary" })
 @Quicksearchable( { "name" })
 public class Contact extends AbstractEntity {
@@ -92,10 +92,6 @@ public class Contact extends AbstractEntity {
 	@FieldRelateAnnotation(Contact.class)
 	private long child2Id;
 
-	@Label("Responsible")
-	@FieldRelateAnnotation(Employee.class)
-	private long responsibleId;
-	
 	@Label("Secretary")
 	@FieldRelateAnnotation(Contact.class)
 	private long secretary;
@@ -218,14 +214,6 @@ public class Contact extends AbstractEntity {
 
 	public void setChild2Id(long child2Id) {
 		this.child2Id = child2Id;
-	}
-
-	public long getResponsibleId() {
-		return responsibleId;
-	}
-
-	public void setResponsibleId(long responsibleId) {
-		this.responsibleId = responsibleId;
 	}
 
 	public long getSecretary() {

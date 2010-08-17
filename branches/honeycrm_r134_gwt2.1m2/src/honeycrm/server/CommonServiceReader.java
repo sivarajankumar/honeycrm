@@ -28,8 +28,8 @@ public class CommonServiceReader extends AbstractCommonService {
 	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final Collection<AbstractEntity> collection) {
 		if (collection.isEmpty()) {
 			return null;
-		} 
-		
+		}
+
 		final List<Dto> list = new LinkedList<Dto>();
 
 		for (final AbstractEntity item : collection) {
@@ -116,13 +116,12 @@ public class CommonServiceReader extends AbstractCommonService {
 	protected ListQueryResult searchWithOperator(String dtoIndex, Dto searchDto, int from, int to, final BoolOperator operator) {
 		// TODO
 		return getAll(dtoIndex, from, to);
-
 		/*
 		 * if (null == searchDto) // cannot do a proper search, do a getAll query instead // however, the question remains why we received a searchDto which is null.. return getAll(dtoIndex, from, to);
 		 * 
 		 * final Query query = m.newQuery(getDomainClass(dtoIndex)); final Class<Dto> dtoClass = getDtoClass(dtoIndex); final List<String> queries = new LinkedList<String>(); Dto[] array;
 		 * 
-		 * try { for (final Field field : reflectionHelper.getDtoFields(dtoClass)) { final Method getter = dtoClass.getMethod(reflectionHelper.getMethodName("get", field)); final Object value = getter.invoke(searchDto);
+		 * try { for (final Field field : reflectionHelper.getDtoFields(dtoClass)) { final Method getter = dtoClass.getMethod(reflectionHelper.getMethodName("get", field)); final Object value = getter.invoke(searchDto); }
 		 * 
 		 * if (null != value) { if (String.class == field.getType()) { // use ignore case starts with // TODO to lower case // TODO does this allow sql injection or is it prevented by gwt? queries.add("this." + field.getName() + ".startsWith(\"" + value.toString() + "\")"); } else if (Long.class == field.getType() || long.class == field.getType()) { // use // exact // match if (0 != (Long) value) { queries.add(field.getName() + " == " + value); } } else {
 		 * 
@@ -189,12 +188,7 @@ public class CommonServiceReader extends AbstractCommonService {
 	 */
 
 	public ListQueryResult getAllMarked(String dtoIndex, int from, int to) {
-		final Query query = m.newQuery(getDomainClass(dtoIndex));
-		query.setRange(from, to);
-		query.setFilter("marked == true");
-
-		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
-		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
+		return getAllFiltered(dtoIndex, "marked == true", from, to);
 	}
 
 	private ListQueryResult getAllRelated(String originating, Long id, String related) {
@@ -202,20 +196,20 @@ public class CommonServiceReader extends AbstractCommonService {
 		/**
 		 * Get all related entities where the id fields contain the id of the originating entity e.g. return all contacts which have accountID == 23 where is the id of the originating account.
 		 */
-		//final long dbStart = System.currentTimeMillis();
-				
+		// final long dbStart = System.currentTimeMillis();
+
 		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(originating, related)) {
 			final Query q = m.newQuery(getDomainClass(originating));
 			q.setFilter(fieldName + " == " + id);
 			result.addAll((Collection<AbstractEntity>) q.execute());
 		}
-		
-		//final long dbDiff = System.currentTimeMillis() - dbStart;
 
-		//final long convertStart = System.currentTimeMillis();
+		// final long dbDiff = System.currentTimeMillis() - dbStart;
+
+		// final long convertStart = System.currentTimeMillis();
 		final ListQueryResult r = new ListQueryResult(getArrayFromQueryResult(originating, result), result.size());
-		//final long convertDiff = System.currentTimeMillis() - convertStart;
-		
+		// final long convertDiff = System.currentTimeMillis() - convertStart;
+
 		return r;
 	}
 
@@ -234,7 +228,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		};
 	}
 
-	// TODO make this faster: getting account data takes 27ms. getting empty relationship data for an account takes 270ms. 
+	// TODO make this faster: getting account data takes 27ms. getting empty relationship data for an account takes 270ms.
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String related) {
 		final Map<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
 		final Map<String, Map<String, Set<String>>> relations = RelationshipFieldTable.instance.getMap();
@@ -246,5 +240,18 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 
 		return map;
+	}
+
+	public ListQueryResult getAllAssignedTo(String dtoIndex, long employeeID, int from, int to) {
+		return getAllFiltered(dtoIndex, "assignedTo == " + employeeID, from, to);
+	}
+
+	private ListQueryResult getAllFiltered(final String dtoIndex, final String filters, final int from, final int to) {
+		final Query query = m.newQuery(getDomainClass(dtoIndex));
+		query.setRange(from, to);
+		query.setFilter(filters);
+
+		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
+		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 }

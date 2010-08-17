@@ -62,4 +62,6 @@ public interface CommonServiceAsync {
 	void getRelationships(AsyncCallback<Map<String, Map<String, Set<String>>>> callback);
 
 	void getAllRelated(Long id, String relatedDtoIndex, AsyncCallback<Map<String, ListQueryResult>> callback);
+
+	void getAllAssignedTo(String dtoIndex, long employeeID, int from, int to, AsyncCallback<ListQueryResult> callback);
 }
