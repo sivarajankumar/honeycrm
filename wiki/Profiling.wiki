@@ -1,0 +1,10 @@
+#summary How to profile server side code of honeycrm using JProfiler
+
+= Introduction =
+
+
+= Details =
+
+ * Append the jprofiler agentpath to the vm arguments line of your honeycrm project i.e. the arguments passed to the JVM when honeycrm is run from eclipse (or whatever IDE you use). For OSX append the following
+{{{
+-agentpath:/Applications/jprofiler6/bin/macos/libjprofilerti.jnilib=port=8849
