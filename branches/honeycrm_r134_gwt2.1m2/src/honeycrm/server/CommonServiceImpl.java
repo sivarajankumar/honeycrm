@@ -125,7 +125,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 		final AbstractEntity existingObject = getDomainObject(dto.getModule(), id);
 
-		if (null != existingObject) {
+		if (null == existingObject) {
+			log.warning("cannot find " + dto.getModule() + "/" + id + ": cannot do the update. all changes will be lost.");
+		} else {
 			m.makePersistent(copy.copy(dto, existingObject));
 		}
 

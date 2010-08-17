@@ -34,49 +34,64 @@ public class DtoCopyMachine {
 		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
 		try {
-			final AbstractEntity entity = (null == existingEntity) ? entityClass.newInstance() : existingEntity; // does not update updated fields from dto to domain object
+			final AbstractEntity entity = entityClass.newInstance();
 			final Field[] allFields = FieldSieve.instance.filterFields(reflectionHelper.getAllFields(entityClass));
+			final boolean entityAlreadyExists = null != existingEntity;
 
-			for (int i = 0; i < allFields.length; i++) {
-				final Field field = allFields[i];
-				final String fieldName = field.getName();
-				final Object value = dto.get(fieldName);
+			if (entityAlreadyExists) {
+				/**
+				 * this entity already exists so we can safely copy the id field now.
+				 */
+				entity.id = existingEntity.id;
+			}
 
-				if (null == value) {
-					continue;
-				}
-
-				if ("fields".equals(fieldName)) {
-					continue;
-				}
-
-				if ("id".equals(fieldName)) {
-					if (null == existingEntity) {
-						continue;
-					} else { // if (null != value && (Long) value > 0)
-						// insert id of the existing entity in the newly created one
-						// this is an update
-						/*
-						 * final Method setter = entityClass.getMethod("setId", Key.class); setter.invoke(entity, existingEntity.getId()); continue;
-						 */
-						// do not have to update anything since we copied the object in the first place
-					}
-					continue;
-				}
-
-				if (value instanceof List<?>) {
-					deleteOldChildItems(entityClass, entity, field);
-					handleDtoLists(entityClass, entity, field, value);
-					continue;
-				}
-
-				field.set(entity, value);
+			for (final Field field : allFields) {
+				copySingleField(dto, existingEntity, entityClass, entity, entityAlreadyExists, field);
 			}
 
 			return entity;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	/**
+	 * Copies one field from the dto / existing entity into the new / updated entity.
+	 */
+	private void copySingleField(final Dto dto, final AbstractEntity existingEntity, final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final boolean entityAlreadyExists, final Field field) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		final String fieldName = field.getName();
+
+		if ("id".equals(fieldName)) {
+			/**
+			 * skip the id field because we already copied the id before.
+			 */
+		} else {
+			final Object value;
+			
+			if (entityAlreadyExists) {
+				if (null == dto.get(fieldName)) {
+					value = field.get(existingEntity);
+				} else {
+					value = dto.get(fieldName);
+				}
+			} else {
+				value = dto.get(fieldName);
+			}
+
+			if (null == value) {
+				/**
+				 * skip this field since it is null anyway. the user cannot set fields null so we can safely skip updating this field.
+				 */
+			} else if (value instanceof List<?>) {
+				deleteOldChildItems(entityClass, entity, field);
+				handleDtoLists(entityClass, entity, field, value);
+			} else {
+				/**
+				 * finally we found a good old normal field. copy the value from the dto / existing entity into the new / updated entity.
+				 */
+				field.set(entity, value);
+			}
 		}
 	}
 
@@ -97,7 +112,7 @@ public class DtoCopyMachine {
 	/**
 	 * Copy data from a domain class instance into a Dto. This is usually the case whenever the server responds to clients (read).
 	 */
-	// application hotspot 2nd place 
+	// application hotspot 2nd place
 	public Dto copy(AbstractEntity entity) {
 		final Dto dto = new Dto();
 
@@ -105,28 +120,24 @@ public class DtoCopyMachine {
 		final Field[] allFields = FieldSieve.instance.filterFields(reflectionHelper.getAllFields(entityClass));
 
 		try {
-			for (int i = 0; i < allFields.length; i++) {
-				final Field field = allFields[i];
-
+			for (final Field field: allFields) {
+				final String fieldName = field.getName();
 				final Object value = field.get(entity);
-				
+
 				if (null == value) {
-					continue; // skip null values
-				}
-
-				if (value instanceof List<?>) {
+					/**
+					 * skip null values
+					 */
+				} else if (value instanceof List<?>) {
 					handleDomainClassLists(dto, field, value);
-					continue;
-				}
-
-				if ("id".equals(field.getName())) {
+				} else if ("id".equals(fieldName)) {
 					try {
-						dto.set(field.getName(), (int) ((Key) value).getId());
+						dto.set(fieldName, (int) ((Key) value).getId());
 					} catch (NullPointerException e) {
 						System.out.println("npe!");
 					}
 				} else {
-					dto.set(field.getName(), (Serializable) value);
+					dto.set(fieldName, (Serializable) value);
 				}
 			}
 
