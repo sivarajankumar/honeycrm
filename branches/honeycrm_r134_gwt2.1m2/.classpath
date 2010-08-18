@@ -9,5 +9,9 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/compass-2.3.0-beta1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-visualization.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/lucene-core.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine/appengine-api-labs.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine/appengine-api-stubs.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine/appengine-api.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine/appengine-testing.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
