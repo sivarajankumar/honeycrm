@@ -1,6 +1,7 @@
 package honeycrm.server.domain;
 
 import honeycrm.client.actions.CreateContractAction;
+import honeycrm.client.view.ModuleAction;
 import honeycrm.server.domain.decoration.DetailViewable;
 import honeycrm.server.domain.decoration.HasExtraButton;
 import honeycrm.server.domain.decoration.Label;
@@ -22,7 +23,7 @@ import org.compass.annotations.Searchable;
 @ListViewable({ "contactID", "deadline" })
 @DetailViewable({ "contactID", "deadline", "services" })
 @Quicksearchable({ "contactID" })
-@HasExtraButton(label = "Create Contract", action = CreateContractAction.class)
+@HasExtraButton(label = "Create Contract", action = CreateContractAction.class, show = ModuleAction.DETAIL)
 public class Offering extends AbstractEntity {
 	@Label("Services")
 	@FieldTableAnnotation(Service.class)
@@ -39,7 +40,7 @@ public class Offering extends AbstractEntity {
 	@Label("Contract")
 	@FieldRelateAnnotation(Contract.class)
 	public Long contractID;
-	
+
 	/**
 	 * Calculate the sum of all services.
 	 */

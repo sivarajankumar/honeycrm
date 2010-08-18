@@ -16,6 +16,7 @@ public class AllTests {
 		suite.addTestSuite(OfferingReportsTest.class);
 		suite.addTestSuite(DemoDataProviderTest.class);
 		suite.addTestSuite(DtoSyncTest.class);
+		suite.addTestSuite(HistoryTokenFactoryTest.class);
 		// $JUnit-END$
 		return suite;
 	}

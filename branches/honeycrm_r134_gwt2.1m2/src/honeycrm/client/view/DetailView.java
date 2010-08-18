@@ -5,7 +5,7 @@ import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
-import honeycrm.client.misc.CollectionHelper;
+import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -52,8 +52,6 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 		panel.add(table);
 		panel.add(buttonBar = new DetailViewButtonBar(module, this));
 		panel.add(relationshipsContainer = new RelationshipsContainer(module));
-
-		buttonBar.setStyleName("detail_view_buttons");
 
 		History.addValueChangeHandler(this);
 		
@@ -200,8 +198,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 						// the label of this field has been clicked. we assume the user
 						// wanted to express that he would like to start editing the entity
 						// so we start editing of this entity for him
-						final String token = CollectionHelper.join(" ", moduleDto.getModule(), ModuleAction.EDIT.toString().toLowerCase(), focussedField);
-						History.newItem(token);
+						History.newItem(HistoryTokenFactory.get(moduleDto.getModule(), ModuleAction.EDIT, focussedField));
 					}
 				});
 			}

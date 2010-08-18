@@ -16,6 +16,7 @@ import honeycrm.client.field.FieldString;
 import honeycrm.client.field.FieldTable;
 import honeycrm.client.field.FieldText;
 import honeycrm.client.field.FieldWebsite;
+import honeycrm.client.view.ModuleAction;
 import honeycrm.server.CachingReflectionHelper;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.DetailViewable;
@@ -174,10 +175,12 @@ public class DtoWizard {
 			if (domainClass.isAnnotationPresent(HasExtraButton.class)) {
 				final String label = domainClass.getAnnotation(HasExtraButton.class).label();
 				final Class<? extends AbstractAction> action = domainClass.getAnnotation(HasExtraButton.class).action();
-
+				final ModuleAction show = domainClass.getAnnotation(HasExtraButton.class).show();
+				
 				final ExtraButton b = new ExtraButton();
 				b.setLabel(label);
 				b.setAction(action.newInstance());
+				b.setShow(show);
 				
 				return new ExtraButton[]{b};
 			}

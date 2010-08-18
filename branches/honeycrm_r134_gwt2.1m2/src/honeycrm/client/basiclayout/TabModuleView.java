@@ -1,7 +1,7 @@
 package honeycrm.client.basiclayout;
 
 import honeycrm.client.misc.Callback;
-import honeycrm.client.misc.CollectionHelper;
+import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.view.DetailView;
 import honeycrm.client.view.ListView;
 import honeycrm.client.view.ModuleAction;
@@ -59,8 +59,7 @@ public class TabModuleView extends DockLayoutPanel {
 	}
 
 	public void openCreateView() {
-		final String token = CollectionHelper.join(" ", module, ModuleAction.CREATE.toString().toLowerCase());
-		History.newItem(token);
+		History.newItem(HistoryTokenFactory.get(module, ModuleAction.CREATE));
 	}
 
 	public boolean isListViewInitialized() {
@@ -79,8 +78,7 @@ public class TabModuleView extends DockLayoutPanel {
 				/**
 				 *  start editing when the detail view has finished retrieving the specified item.
 				 */
-				final String token = CollectionHelper.join(" ", module, ModuleAction.EDIT.toString().toLowerCase());
-				History.newItem(token);
+				History.newItem(HistoryTokenFactory.get(module, ModuleAction.EDIT));
 			}
 		});
 	}

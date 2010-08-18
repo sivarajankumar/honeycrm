@@ -25,14 +25,14 @@ public class CollectionHelper {
 		return joinedStr;
 	}
 	
-	public static String join(final String glue, final String... array) {
+	public static String join(final String glue, final Object... array) {
 		return join(toList(array), glue);
 	}
 
-	private static List<String> toList(final String... array) {
+	private static List<String> toList(final Object... array) {
 		final List<String> list = new ArrayList<String>();
-		for (final String item: array) {
-			list.add(item);
+		for (final Object item: array) {
+			list.add(String.valueOf(item));
 		}
 		return list;
 	}

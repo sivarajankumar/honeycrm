@@ -5,7 +5,7 @@ import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.field.FieldRelate;
-import honeycrm.client.misc.CollectionHelper;
+import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.misc.WidgetJuggler;
 
@@ -147,8 +147,7 @@ public class ListView extends AbstractView {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				final Dto dto = selectionModel.getSelectedObject();
-				final String token = CollectionHelper.join(" ", dto.getHistoryToken(), ModuleAction.DETAIL.toString().toLowerCase(), String.valueOf(dto.getId()));
-				History.newItem(token);
+				History.newItem(HistoryTokenFactory.get(dto.getModule(), ModuleAction.DETAIL, dto.getId()));
 			}
 		});
 
