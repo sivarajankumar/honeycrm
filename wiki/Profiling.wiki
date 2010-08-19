@@ -8,3 +8,6 @@
  * Append the jprofiler agentpath to the vm arguments line of your honeycrm project i.e. the arguments passed to the JVM when honeycrm is run from eclipse (or whatever IDE you use). For OSX append the following
 {{{
 -agentpath:/Applications/jprofiler6/bin/macos/libjprofilerti.jnilib=port=8849
+}}}
+
+ * To see the profiling live in action have a look at the following screencast http://www.youtube.com/watch?v=zUJUSxXOOa4
