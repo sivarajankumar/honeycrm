@@ -5,13 +5,11 @@ import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dashboard.Dashboard;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
-import honeycrm.client.misc.NumberParser;
 import honeycrm.client.reports.SampleReport;
 import honeycrm.client.view.EmailFeedbackWidget;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.csvimport.CsvImportWidget;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -138,7 +136,6 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 	public void openDetailView(final String module, final long id) {
 		if (moduleViewMap.containsKey(module)) {
 			showModuleTab(module);
-			moduleViewMap.get(module).openDetailView(id);
 		} else {
 			LogConsole.log("Cannot switch to module '" + module + "'/" + id + ".");
 		}
@@ -165,16 +162,6 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 		selectTab(tabPositionMap.get(module));
 	}
 
-	public void showCreateViewForModule(final String clazz) {
-		showModuleTab(clazz);
-		moduleViewMap.get(clazz).openCreateView();
-	}
-
-	public void showCreateViewForModulePrefilled(String module, String fieldId, Serializable value) {
-		showModuleTab(module);
-		moduleViewMap.get(module).openCreateViewPrefilled(fieldId, value);
-	}
-
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().trim().split("\\s+");
@@ -186,10 +173,8 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 			switch (action) {
 			case CREATE:
-				showCreateViewForModule(token[0]);
-				break;
 			case DETAIL:
-				openDetailView(module, NumberParser.convertToLong(token[2]));
+				showModuleTab(module);
 				break;
 			case IMPORT:
 				new CsvImportWidget(module).show();

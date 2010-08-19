@@ -6,6 +6,7 @@ import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.HistoryTokenFactory;
+import honeycrm.client.misc.NumberParser;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -310,7 +311,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 		return buttonBar;
 	}
 
-	public void prefill(String fieldId, Serializable value) {
+	private void prefill(String fieldId, Serializable value) {
 		prefilledMap.put(fieldId, value);
 	}
 
@@ -336,7 +337,13 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 			
 			if (null != action) {
 				switch (action) {
+				case DETAIL:
+					refresh(NumberParser.convertToLong(token[2]));
+					break;
 				case CREATE:
+					if (token.length == 4) {
+						prefill(token[2], NumberParser.convertToLong(token[3]));
+					}
 					create();
 					break;
 				case EDIT:

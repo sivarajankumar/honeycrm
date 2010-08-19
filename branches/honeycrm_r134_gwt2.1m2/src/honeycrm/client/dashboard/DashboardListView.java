@@ -32,7 +32,7 @@ public class DashboardListView extends ListView {
 		return WidgetJuggler.getButton("Create", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem(HistoryTokenFactory.get(moduleDto.getModule(), ModuleAction.CREATE));
+				History.newItem(HistoryTokenFactory.get(moduleDto.getModule(), ModuleAction.CREATE, "assignedTo", User.getUserId()));
 			}
 		});
 	}

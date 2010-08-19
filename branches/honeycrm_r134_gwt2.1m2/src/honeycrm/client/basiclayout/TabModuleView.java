@@ -2,14 +2,15 @@ package honeycrm.client.basiclayout;
 
 import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.HistoryTokenFactory;
+import honeycrm.client.misc.NumberParser;
 import honeycrm.client.view.DetailView;
 import honeycrm.client.view.ListView;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.ModuleButtonBar;
 
-import java.io.Serializable;
-
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -22,7 +23,7 @@ public class TabModuleView extends DockLayoutPanel {
 
 	public TabModuleView(final String module) {
 		super(Unit.PX);
-		
+
 		this.module = module;
 		this.listView = new ListView(module);
 		this.listView.addStyleName("list_view");
@@ -34,14 +35,8 @@ public class TabModuleView extends DockLayoutPanel {
 		splitPanel.add(new ScrollPanel(detailView));
 
 		addNorth(new ModuleButtonBar(module, detailView), 40);
-	
-		add(splitPanel);
-	}
 
-	public void openDetailView(long id) {
-		// update url accordingly
-		// History.newItem(viewable.getHistoryToken() + " " + id);
-		detailView.refresh(id);
+		add(splitPanel);
 	}
 
 	public void saveCompleted() {
@@ -58,25 +53,16 @@ public class TabModuleView extends DockLayoutPanel {
 		listView.refresh();
 	}
 
-	public void openCreateView() {
-		History.newItem(HistoryTokenFactory.get(module, ModuleAction.CREATE));
-	}
-
 	public boolean isListViewInitialized() {
 		return listView.isInitialized();
 	}
 
-	public void openCreateViewPrefilled(String fieldId, Serializable value) {
-		detailView.prefill(fieldId, value);
-		openCreateView();
-	}
-	
 	public void openEditView(final long id) {
 		detailView.refresh(id, new Callback() {
 			@Override
 			public void callback() {
 				/**
-				 *  start editing when the detail view has finished retrieving the specified item.
+				 * start editing when the detail view has finished retrieving the specified item.
 				 */
 				History.newItem(HistoryTokenFactory.get(module, ModuleAction.EDIT));
 			}

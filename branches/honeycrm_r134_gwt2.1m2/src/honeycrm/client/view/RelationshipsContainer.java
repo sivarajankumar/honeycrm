@@ -1,9 +1,9 @@
 package honeycrm.client.view;
 
 import honeycrm.client.basiclayout.LoadIndicator;
-import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
@@ -18,6 +18,7 @@ import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Panel;
@@ -136,11 +137,10 @@ class SingleRelationshipPanel extends ListView {
 				final Map<String, Map<String, Set<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
 
 				/**
-				 * id of the field that should be pre-filled e.g. contactId
+				 * name of the field that should be pre-filled e.g. contactId
 				 */
-				final String fieldId = relationships.get(moduleDto.getModule()).get(relatedDtoClass).iterator().next();
-				
-				TabCenterView.instance().showCreateViewForModulePrefilled(moduleDto.getModule(), fieldId, id);
+				final String field = relationships.get(moduleDto.getModule()).get(relatedDtoClass).iterator().next();
+				History.newItem(HistoryTokenFactory.get(moduleDto.getModule(), ModuleAction.CREATE, field, id));
 			}
 		});
 		return btn;
