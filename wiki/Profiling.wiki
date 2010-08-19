@@ -11,3 +11,5 @@
 }}}
 
  * To see the profiling live in action have a look at the following screencast http://www.youtube.com/watch?v=zUJUSxXOOa4
+
+<wiki:video url="http://www.youtube.com/watch?v=zUJUSxXOOa4&fs=1" height="600" width="800" />
