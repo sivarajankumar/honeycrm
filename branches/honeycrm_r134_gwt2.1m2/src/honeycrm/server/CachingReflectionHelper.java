@@ -18,8 +18,7 @@ import net.sf.jsr107cache.CacheManager;
 public class CachingReflectionHelper extends ReflectionHelper {
 	private static final Logger log = Logger.getLogger(CachingReflectionHelper.class.getName());
 	private static Cache cache;
-	private static Map<Class, Field[]> cacheGetAllFields = new HashMap<Class, Field[]>();
-	private static Map<Class<?>, Field[]> cacheGetDtoFields = new HashMap<Class<?>, Field[]>();
+	private static final Map<Class<?>, Field[]> cacheGetAllFields = new HashMap<Class<?>, Field[]>();
 
 	static { // setup the cache instance once
 		try {
@@ -50,19 +49,6 @@ public class CachingReflectionHelper extends ReflectionHelper {
 		return cacheGetAllFields.get(classSrc);
 		// } else {
 		// return super.getAllFields(classSrc);
-		// }
-	}
-
-	// TODO need separate caches for each method..
-	@Override
-	public Field[] getDtoFields(Class<?> dtoClass) {
-		// if (isCacheEnabled()) {
-		if (!cacheGetDtoFields.containsKey(dtoClass)) {
-			cacheGetDtoFields.put(dtoClass, super.getDtoFields(dtoClass));
-		}
-		return cacheGetDtoFields.get(dtoClass);
-		// } else {
-		// return super.getDtoFields(dtoClass);
 		// }
 	}
 }

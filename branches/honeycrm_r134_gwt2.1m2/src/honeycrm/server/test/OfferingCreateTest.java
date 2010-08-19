@@ -1,26 +1,21 @@
 package honeycrm.server.test;
 
+import honeycrm.client.dto.Dto;
+import honeycrm.server.CommonServiceImpl;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.ModuleDto;
-import honeycrm.server.CommonServiceCreator;
-import honeycrm.server.CommonServiceImpl;
-import honeycrm.server.domain.Offering;
-import honeycrm.server.domain.Product;
+import junit.framework.TestCase;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-
-import junit.framework.TestCase;
 
 public class OfferingCreateTest extends TestCase {
 	private final Random r = new Random();

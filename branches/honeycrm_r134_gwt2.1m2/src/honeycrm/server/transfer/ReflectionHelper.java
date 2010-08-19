@@ -117,27 +117,6 @@ public class ReflectionHelper {
 		return classesWithFieldNames;
 	}
 
-	/**
-	 * Return all fields of the dto class that are from the original domain object, i.e. all accessible properties except automatically added or those that are only necessary for organizational purposes.
-	 */
-	public Field[] getDtoFields(final Class<?> dtoClass) {
-		final Set<String> badFieldNames = new HashSet<String>();
-		badFieldNames.add("serialVersionUID");
-		badFieldNames.add("INDEX_");
-		badFieldNames.add("$");
-		badFieldNames.add("jdo");
-		badFieldNames.add("jprofiler");
-
-		final List<Field> dtoFields = new LinkedList<Field>();
-		for (final Field field : dtoClass.getDeclaredFields()) {
-			if (!badFieldNames.contains(field.getName()) && !containsPrefix(badFieldNames, field.getName())) {
-				dtoFields.add(field);
-			}
-		}
-
-		return dtoFields.toArray(new Field[0]);
-	}
-
 	private static boolean containsPrefix(final Set<String> set, final String str) {
 		for (final String prefix : set) {
 			if (str.startsWith(prefix)) {
@@ -163,7 +142,7 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Returns all fields annotated with the given annotation
+	 * Returns all fields annotated with the given annotation. This is expensive and should be either cached or calculated at startup.
 	 */
 	public Field[] getAllFieldsWithAnnotation(final Class classSrc, final Class annotationClass) {
 		final List<Field> list = new LinkedList<Field>();
@@ -185,5 +164,14 @@ public class ReflectionHelper {
 		System.arraycopy(array2, 0, array, array1.length, array2.length);
 		return array;
 	}
-
+	
+	public static Field[] getFieldsByType(final Field[] fields, final Class<?> type) {
+		final ArrayList<Field> filteredFields = new ArrayList<Field>(fields.length);
+		for (final Field field: fields) {
+			if (field.getType().equals(type)) {
+				filteredFields.add(field);
+			}
+		}
+		return filteredFields.toArray(new Field[0]);
+	}
 }

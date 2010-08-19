@@ -21,7 +21,7 @@ import org.compass.annotations.Searchable;
 @PersistenceCapable
 @Searchable
 @ListViewable({ "contactID", "deadline" })
-@DetailViewable({ "contactID", "deadline", "services" })
+@DetailViewable({ "contactID", "assignedTo", "deadline", "services" })
 @Quicksearchable({ "contactID" })
 @HasExtraButton(label = "Create Contract", action = CreateContractAction.class, show = ModuleAction.DETAIL)
 public class Offering extends AbstractEntity {

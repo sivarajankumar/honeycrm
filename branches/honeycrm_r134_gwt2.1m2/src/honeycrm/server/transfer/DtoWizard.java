@@ -45,20 +45,25 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.compass.annotations.SearchableProperty;
+
 /**
  * The wizard analyzes the domain classes and creates dto descriptions for them based on their fields and the annotations on the classes. Magically it creates a client side description for the domain classes.
  */
 public class DtoWizard {
 	public static final DtoWizard instance = new DtoWizard();
-	private Map<String, ModuleDto> moduleNameToDto;
+	private boolean initialized = false;
+	private Map<String, ModuleDto> moduleNameToDto = null;
+	private Map<Class<? extends AbstractEntity>, Field[]> searchableFields = null;
 	private CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
 
 	private DtoWizard() {
 	}
 
-	private Map<String, ModuleDto> internalGetConfiguration() {
+	private void initialize() {
 		try {
-			final Map<String, ModuleDto> configuration = new HashMap<String, ModuleDto>();
+			searchableFields = new HashMap<Class<? extends AbstractEntity>, Field[]>();
+			moduleNameToDto = new HashMap<String, ModuleDto>();
 
 			for (final Class<AbstractEntity> domainClass : (Class<AbstractEntity>[]) ReflectionHelper.getClasses("honeycrm.server.domain")) {
 				if (!Modifier.isAbstract(domainClass.getModifiers())) {
@@ -75,11 +80,11 @@ public class DtoWizard {
 					// this can only be done for retrieved entities
 					// dto.setQuicksearchItem()
 
-					configuration.put(name, moduleDto);
+					moduleNameToDto.put(name, moduleDto);
 				}
 			}
 
-			return configuration;
+			initialized = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Cannot analyse domain class structure due to a " + e.getClass());
@@ -148,6 +153,11 @@ public class DtoWizard {
 	}
 
 	private void handleAnnotations(final Class<AbstractEntity> domainClass, final ModuleDto moduleDto) {
+		/**
+		 * the searchable fields are all fields of a class that have the SearchableProperty annotation and are of type String
+		 */
+		searchableFields.put(domainClass, ReflectionHelper.getFieldsByType(reflectionHelper.getAllFieldsWithAnnotation(domainClass, SearchableProperty.class), String.class));
+		
 		moduleDto.setHidden(domainClass.isAnnotationPresent(Hidden.class));
 		moduleDto.setExtraButtons(getExtraButtons(domainClass));
 
@@ -192,9 +202,16 @@ public class DtoWizard {
 	}
 
 	public Map<String, ModuleDto> getDtoConfiguration() {
-		if (null == moduleNameToDto) {
-			moduleNameToDto = internalGetConfiguration();
+		if (!initialized) {
+			initialize();
 		}
 		return moduleNameToDto;
+	}
+
+	public Map<Class<? extends AbstractEntity>, Field[]> getSearchableFields() {
+		if (!initialized) {
+			initialize();
+		}
+		return searchableFields;
 	}
 }

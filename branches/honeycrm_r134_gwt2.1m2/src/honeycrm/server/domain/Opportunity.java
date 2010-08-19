@@ -18,7 +18,7 @@ import org.compass.annotations.SearchableProperty;
 @Searchable
 @PersistenceCapable
 @ListViewable( { "contactId", "probability", "amount" })
-@DetailViewable( { "contactId,amount", "phase,probability", "reasonClosed", "description" })
+@DetailViewable( { "contactId,amount", "assignedTo", "phase,probability", "reasonClosed", "description" })
 @Quicksearchable( { "contactId", "amount" })
 public class Opportunity extends AbstractEntity {
 	@FieldRelateAnnotation(Contact.class)

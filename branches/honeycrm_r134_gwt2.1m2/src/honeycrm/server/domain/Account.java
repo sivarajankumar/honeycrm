@@ -21,7 +21,7 @@ import org.compass.annotations.SearchableProperty;
 @PersistenceCapable
 @Searchable
 @ListViewable( { "name", "phoneOffice" })
-@DetailViewable( { "name,parentId", "responsibleId", "email,phoneOffice", "website,phoneOther", "rating,annualRevenue", "industry,employees", "tickerSymbol", "shippingAddress", "billingAddress" })
+@DetailViewable( { "name,parentId", "assignedTo", "email,phoneOffice", "website,phoneOther", "rating,annualRevenue", "industry,employees", "tickerSymbol", "shippingAddress", "billingAddress" })
 @Quicksearchable( { "name" })
 public class Account extends AbstractEntity {
 	@SearchableProperty
@@ -65,10 +65,6 @@ public class Account extends AbstractEntity {
 	@Label("E Mail")
 	@FieldEmailAnnotation
 	public String email;
-	
-	@Label("Responsible")
-	@FieldRelateAnnotation(Employee.class)
-	public long responsibleId;
 	
 	@Label("Phone Office")
 	@FieldStringAnnotation

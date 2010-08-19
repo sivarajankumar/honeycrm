@@ -3,20 +3,21 @@ package honeycrm.server;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.transfer.DtoWizard;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.Query;
-
-import org.compass.annotations.SearchableProperty;
 
 public class CommonServiceReaderFulltext extends AbstractCommonService {
 	public static final boolean ignoreCase = true;
 	private static final long serialVersionUID = -7000384067604090223L;
+	private static final Map<Class<? extends AbstractEntity>, Field[]> searchableFields = DtoWizard.instance.getSearchableFields();
 
 	public ListQueryResult fulltextSearch(final String query, int from, int to) {
 		final List<Dto> list = new LinkedList<Dto>();
@@ -38,17 +39,18 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 		try {
 			final Query q = m.newQuery(domainClass);
 
+			/**
+			 * performance measurements: 
+			 * Query.execute() ~10%  
+			 * Iterator.next() ~36% (this includes >100k AbstractEntity.jdoReplaceFields() methods very early) 
+			 */
 			ENTITY_LOOP: for (final AbstractEntity entity : (Collection<? extends AbstractEntity>) q.execute()) {
-				final Class<? extends AbstractEntity> entityClass = entity.getClass();
+				for (final Field field : searchableFields.get(domainClass)) {
+					final String value = (String) field.get(entity); // assume that field type is string
 
-				for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(entityClass, SearchableProperty.class)) {
-					if (String.class == field.getType()) {
-						final String value = (String) field.get(entity);
-						
-						if (null != value && ((!ignoreCase && value.contains(query)) || (ignoreCase && value.toLowerCase().contains(query.toLowerCase())))) {
-							moduleList.add(copy.copy(entity));
-							continue ENTITY_LOOP;
-						}
+					if (null != value && ((!ignoreCase && value.contains(query)) || (ignoreCase && value.toLowerCase().contains(query.toLowerCase())))) {
+						moduleList.add(copy.copy(entity));
+						continue ENTITY_LOOP;
 					}
 				}
 			}
