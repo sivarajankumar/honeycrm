@@ -139,7 +139,7 @@ public class Dto implements Serializable {
 		final List<String> previewableFields = new ArrayList<String>();
 		final List<String> sortedFieldNames = CollectionHelper.toList(data.keySet());
 		Collections.sort(sortedFieldNames);
-			
+
 		for (final String key : sortedFieldNames) {
 			final Serializable value = get(key);
 
@@ -150,4 +150,29 @@ public class Dto implements Serializable {
 
 		return previewableFields;
 	}
+
+	/**
+	 * Copies the content of this dto into the destination dto instance. The id field of the source dto (this) is not copied. The ids if list items are nulled i.e. set to 0.
+	 */
+	public Dto copy() {
+		final Dto destination = new Dto();
+		
+		for (final String key : data.keySet()) {
+			if (key.equals("id")) {
+				continue; // do not copy the id field as well
+			}
+
+			destination.set(key, get(key));
+
+			if (destination.get(key) instanceof List<?>) {
+				// null the ids of the services to ensure they are created
+				for (final Dto item : (List<Dto>) destination.get(key)) {
+					item.setId(0);
+				}
+			}
+		}
+
+		return destination;
+	}
+
 }

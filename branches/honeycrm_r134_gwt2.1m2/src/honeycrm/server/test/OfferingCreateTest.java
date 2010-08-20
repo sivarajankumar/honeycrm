@@ -38,15 +38,17 @@ public class OfferingCreateTest extends TestCase {
 	public void testCreate() {
 		final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
-		final ArrayList<Dto> services = getServices(productIds);
-		final Dto offering = getOffering(services);
+		for (int i = 0; i < 100; i++) {
+			final ArrayList<Dto> services = getServices(productIds);
+			final Dto offering = getOffering(services);
 
-		final long id = commonService.create(offering);
+			final long id = commonService.create(offering);
 
-		final Dto o = commonService.get("offering", id);
-		assertNotNull(o.get("deadline"));
-		assertNotNull(o.get("services"));
-		assertEquals(productIds.size(), ((Collection<Dto>) o.get("services")).size());
+			final Dto o = commonService.get("offering", id);
+			assertNotNull(o.get("deadline"));
+			assertNotNull(o.get("services"));
+			assertEquals(productIds.size(), ((Collection<Dto>) o.get("services")).size());
+		}
 	}
 
 	private Dto getOffering(final ArrayList<Dto> services) {

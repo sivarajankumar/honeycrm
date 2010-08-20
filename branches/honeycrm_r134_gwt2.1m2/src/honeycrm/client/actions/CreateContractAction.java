@@ -25,23 +25,8 @@ public class CreateContractAction extends AbstractAction {
 			return;
 		}
 		
-		final ModuleDto contractModule = DtoModuleRegistry.instance().get("contract");
-		final Dto contract = contractModule.createDto();
-
-		for (final String key: offering.getAllData().keySet()) {
-			if (key.equals("id")) {
-				continue; // do not copy the id field as well
-			}
-			
-			contract.set(key, offering.get(key));
-			
-			if (key.equals("services")) {
-				// null the ids of the services to ensure they are created
-				for (final Dto item: (List<Dto>)contract.get(key)) {
-					item.setId(0);
-				}
-			}
-		}
+		final Dto contract = offering.copy();
+		contract.setModule("contract");
 		
 		linkOfferingToContract(offering, contract);
 	}
