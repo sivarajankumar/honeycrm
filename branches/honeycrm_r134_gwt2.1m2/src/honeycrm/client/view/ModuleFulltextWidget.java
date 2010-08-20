@@ -27,7 +27,6 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 	@Override
 	protected void startFulltextSearch(final String queryString) {
 		Prefetcher.instance.get(new Consumer<ListQueryResult>() {
-
 			@Override
 			public void setValueAsynch(final ListQueryResult result) {
 				LoadIndicator.get().endLoading();

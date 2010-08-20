@@ -12,6 +12,8 @@ import net.sf.jsr107cache.CacheException;
 import net.sf.jsr107cache.CacheFactory;
 import net.sf.jsr107cache.CacheManager;
 
+import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
+
 /**
  * Caching wrapper around ReflectionHelper class. Caches expensive reflective operations when possible.
  */
@@ -22,9 +24,11 @@ public class CachingReflectionHelper extends ReflectionHelper {
 
 	static { // setup the cache instance once
 		try {
-			final CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
 			try {
-				cache = cacheFactory.createCache(new HashMap());
+				final CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+				final Map props = new HashMap();
+				props.put(GCacheFactory.EXPIRATION_DELTA, 3600);
+				cache = cacheFactory.createCache(props);
 			} catch (RuntimeException e) {
 				log.warning("RuntimeException occured while creating cache. Disabled Caching.");
 				cache = null;
