@@ -1,6 +1,7 @@
 #summary Plugins useful to developers.
 
 || name || description || url || update site ||
+|| subclipse || svn support for eclipse || subclipse.tigris.org || http://subclipse.tigris.org/update_1.6.x ||
 || eclemma || visualizes code coverage of test cases || http://www.eclemma.org/ || http://update.eclemma.org/ ||
 || PMD || *provides tons of hints*: which classes are to complex, which variable names are bad, where are data flow anomalies, etc. *impressive!*  analyses source, detects violation of conventions (e.g. max. lines of code, max. number of methods, variable names, use of modifiers) and recommends solutions || http://pmd.sourceforge.net/integrations.html || http://pmd.sf.net/eclipse ||
 || hammurapi ||  || http://www.hammurapi.biz/hammurapi-biz/ef/xmenu/hammurapi-group/products/hammurapi/index.html || jar standalone http://www.hammurapi.biz/products/hammurapi/hammurapi-5.7.0-setup.jar ||
