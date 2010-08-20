@@ -36,12 +36,11 @@ public class DemoDataProvider {
 	}
 
 	public static String getRandomString() {
-		int length = Math.abs(r.nextInt() % (Integer.MAX_VALUE / 100000));
+		final int length = r.nextInt(1000);
 		String str = "";
 
 		for (int i = 0; i < length; i++) {
-			// TODO which range of ascii table contains digits and letters?
-			char randomChar = (char) (62 + (r.nextInt() % 58));
+			char randomChar = (char) (48 + r.nextInt(58));
 			str += randomChar;
 		}
 

@@ -6,33 +6,13 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Helper class for all major, reusable reflection related services.
  */
 public class ReflectionHelper {
-	/**
-	 * Traverses a package and returns all classes prefixed with prefix of the package.
-	 */
-	public static Class[] getClassesWithPrefix(final String packageName, final String prefix) throws ClassNotFoundException, IOException {
-		final Class[] classes = getClasses(packageName);
-		final List<Class> dtos = new ArrayList<Class>();
-
-		for (Class clazz : classes) {
-			if (clazz.getSimpleName().startsWith(prefix)) {
-				dtos.add(clazz);
-			}
-		}
-
-		return dtos.toArray(new Class[] {});
-	}
-
 	/**
 	 * From http://snippets.dzone.com/posts/show/4831
 	 * 
@@ -88,42 +68,6 @@ public class ReflectionHelper {
 			classes.addAll(findClasses(directory, packageName));
 		}
 		return classes.toArray(new Class[classes.size()]);
-	}
-
-	/**
-	 * Returns the names of all declared fields of the given class.
-	 */
-	public static Set<String> getFieldNames(final Class clazz) {
-		final Set<String> set = new HashSet<String>();
-
-		for (final Field field : clazz.getDeclaredFields()) {
-			set.add(field.getName());
-		}
-
-		return set;
-	}
-
-	/**
-	 * Returns a map structure that contains classes and sets of the names of the corresponding fields. The map contains the classes specified by package name and prefix.
-	 */
-	public static Map<Class, Set<String>> getFieldNamesOfClassesWithPrefix(final String packageName, final String prefix) throws ClassNotFoundException, IOException {
-		final Map<Class, Set<String>> classesWithFieldNames = new HashMap<Class, Set<String>>();
-		final Class[] classes = getClassesWithPrefix(packageName, prefix);
-
-		for (final Class clazz : classes) {
-			classesWithFieldNames.put(clazz, getFieldNames(clazz));
-		}
-
-		return classesWithFieldNames;
-	}
-
-	private static boolean containsPrefix(final Set<String> set, final String str) {
-		for (final String prefix : set) {
-			if (str.startsWith(prefix)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**

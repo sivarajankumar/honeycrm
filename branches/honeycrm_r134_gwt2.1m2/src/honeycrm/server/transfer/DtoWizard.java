@@ -98,7 +98,7 @@ public class DtoWizard {
 			for (final Field field : reflectionHelper.getAllFields(domainClass)) {
 				final String name = field.getName();
 
-				if (name.startsWith("jdo") || name.startsWith("jprofiler") || "id".equals(name)) {
+				if (name.startsWith("jdo") || name.startsWith("jprofiler") || name.startsWith("$") || "id".equals(name)) {
 					continue;
 				}
 
@@ -130,7 +130,7 @@ public class DtoWizard {
 				} else if (field.isAnnotationPresent(FieldWebsiteAnnotation.class)) {
 					fields.add(new FieldWebsite(name, label));
 				} else {
-					System.err.println("field " + field.getName() + " does not define an expected annotation describing its field instance");
+					System.err.println(DtoWizard.class.getSimpleName() + ": field " + field.getName() + " does not define an expected annotation describing its field instance");
 				}
 			}
 

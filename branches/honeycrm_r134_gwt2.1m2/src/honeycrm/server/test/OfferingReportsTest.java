@@ -36,7 +36,7 @@ public class OfferingReportsTest extends TestCase {
 	private Double getOfferings(final List<Offering> offerings) {
 		Double sum = 0.0;
 
-		final int offeringsCount = 2 + random.nextInt() % 100;
+		final int offeringsCount = 2 + (random.nextInt() % 100);
 		for (int i = 0; i < offeringsCount; i++) {
 			final Calendar c = Calendar.getInstance();
 			c.set(Calendar.YEAR, random.nextInt() % 3 + 100);

@@ -1,25 +1,24 @@
 package honeycrm.server.test;
 
+import honeycrm.server.transfer.ReflectionHelper;
+
+import java.io.IOException;
+
 import junit.framework.Test;
+import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class AllTests {
-	public static Test suite() {
-		TestSuite suite = new TestSuite("Server code tests");
-		// $JUnit-BEGIN$
-		suite.addTestSuite(NumberParserTest.class);
-		suite.addTestSuite(RelatesToTest.class);
-		suite.addTestSuite(CacheTest.class);
-		suite.addTestSuite(CollectionHelperTest.class);
-		suite.addTestSuite(CsvExportTest.class);
-		suite.addTestSuite(CsvImportTest.class);
-		suite.addTestSuite(OfferingReportsTest.class);
-		suite.addTestSuite(DemoDataProviderTest.class);
-		suite.addTestSuite(DtoSyncTest.class);
-		suite.addTestSuite(HistoryTokenFactoryTest.class);
-		suite.addTestSuite(OfferingCreateTest.class);
-		suite.addTestSuite(ReflectionHelperTest.class);
-		// $JUnit-END$
+	public static Test suite() throws ClassNotFoundException, IOException {
+		TestSuite suite = new TestSuite("All tests of honeycrm.server.test");
+		/**
+		 * add all tests in the honeycrm.server.test package to the test suite using reflection.
+		 */
+		for (final Class<?> testcase : ReflectionHelper.getClasses("honeycrm.server.test")) {
+			if (!testcase.equals(AllTests.class)) {
+				suite.addTestSuite((Class<TestCase>) testcase);
+			}
+		}
 		return suite;
 	}
 }

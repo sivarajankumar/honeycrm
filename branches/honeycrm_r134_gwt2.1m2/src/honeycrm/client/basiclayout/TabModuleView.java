@@ -2,15 +2,12 @@ package honeycrm.client.basiclayout;
 
 import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.HistoryTokenFactory;
-import honeycrm.client.misc.NumberParser;
 import honeycrm.client.view.DetailView;
 import honeycrm.client.view.ListView;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.ModuleButtonBar;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;

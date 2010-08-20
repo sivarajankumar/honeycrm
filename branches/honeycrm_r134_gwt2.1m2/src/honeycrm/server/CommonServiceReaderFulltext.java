@@ -44,7 +44,11 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 			 * Query.execute() ~10%  
 			 * Iterator.next() ~36% (this includes >100k AbstractEntity.jdoReplaceFields() methods very early) 
 			 */
-			ENTITY_LOOP: for (final AbstractEntity entity : (Collection<? extends AbstractEntity>) q.execute()) {
+			final List<AbstractEntity> list = new ArrayList<AbstractEntity>();
+			list.addAll((Collection<? extends AbstractEntity>) q.execute());
+			// TODO does this read the values at bulk instead of step by step i.e. is this faster than iterating using Iterator.next()
+			
+			ENTITY_LOOP: for (final AbstractEntity entity : list) {
 				for (final Field field : searchableFields.get(domainClass)) {
 					final String value = (String) field.get(entity); // assume that field type is string
 
