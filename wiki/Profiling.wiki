@@ -16,6 +16,12 @@
 || pretty || js method names are equal to method names of your classes but you have to guess the class name || 3.1 ||
 || detailed || js method names contain class name and method name || 6.7 ||
 
+== More resources on client side performance analysis == 
+
+http://geekycoder.wordpress.com/2010/04/07/gwt-tips-configuring-java-profilers-to-profile-gwt-client-app-in-eclipse/
+http://googlewebtoolkit.blogspot.com/2008/11/profiling-gwt-application-performance.html
+http://sinnema313.wordpress.com/2008/11/16/performance-tuning-a-gwt-application/
+
 = Profiling server side code using JProfiler =
 
  * Append the jprofiler agentpath to the vm arguments line of your honeycrm project i.e. the arguments passed to the JVM when honeycrm is run from eclipse (or whatever IDE you use). For OSX append the following
