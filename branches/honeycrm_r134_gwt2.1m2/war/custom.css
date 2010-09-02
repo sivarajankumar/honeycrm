@@ -14,9 +14,7 @@ body {
 .loading_panel {
 	color: #002fff;
 	font-size: smaller;
-/*	font-weight: bold; */
 	margin-left: 10px;
-/*	margin-top: 10px; */
 }
 
 .error {
@@ -26,17 +24,13 @@ body {
 
 .with_margin {
 	margin: 10px;
-/*	margin-right: 10px;
-	margin-left: 10px; */
 }
 
 .tab_layout {
-/*	width: 100%; */
 }
 
 .content {
 	background-color: #ececec;
-/*	border: 6px solid white;*/
 }
 
 .search_bar {
@@ -46,7 +40,6 @@ body {
 
 .demo_button {
 	float: left;
-/*	margin-right: 100px; */
 }
 
 .search_field {
@@ -78,14 +71,13 @@ body {
 
 .header_logo {
 	float: left;
-/*	width: 20%;*/
 }
 
 .loadIndicator {
 	float: right; 
-	width: 20%; 
 	font-weight: bold; 
 	text-align: center;
+	margin-right: 10px;
 }
 
 .header_links {
@@ -145,7 +137,6 @@ body {
 /* VIEWS */
 
 .detail_view {
-/*	width: 60%; /* force width of detail view smaller to avoid current wrapping bug */
 	float: left;
 	height: 100%;
 	padding: 5px;
@@ -185,14 +176,10 @@ body {
 	
 
 .detail_view_relation {
-/*	border-top: 1px solid #92c1f0; 
-	padding-top: 2px;*/
 }
 
 .list_view {
-/*	float: left;*/
 	padding: 5px;
-/*	width: 40%; */
 }
 
 .under_list_panel {
