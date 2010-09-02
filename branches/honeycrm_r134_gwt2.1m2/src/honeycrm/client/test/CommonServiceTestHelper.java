@@ -16,12 +16,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class CommonServiceTestHelper implements CommonServiceAsync {
 
 	@Override
-	public void addDemo(String dtoIndex, AsyncCallback<Void> callback) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void delete(String dtoIndex, long id, AsyncCallback<Void> callback) {
 		// TODO Auto-generated method stub
 

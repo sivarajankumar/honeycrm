@@ -45,7 +45,7 @@ abstract public class AbstractView extends Composite {
 				if (!Dto.isInternalReadOnlyField(id)) {
 					// TODO this position y, 2*x+1 depends on the current layout of the form..
 					final Widget widgetValue = table.getWidget(y, 2 * x + 1);
-					final Serializable value = tmpDto.getFieldById(id).getData(widgetValue);
+					final Serializable value = moduleDto.getFieldById(id).getData(widgetValue);
 					tmpDto.set(id, value);
 				}
 			}
@@ -108,7 +108,7 @@ abstract public class AbstractView extends Composite {
 	 * Returns the widget for displaying fieldId of tmpViewable for the view.
 	 */
 	protected Widget getWidgetByType(final Dto tmpDto, final String fieldId, final View view) {
-		return tmpDto.getFieldById(fieldId).getWidget(view, tmpDto, fieldId);
+		return moduleDto.getFieldById(fieldId).getWidget(view, tmpDto, fieldId);
 	}
 
 	/**

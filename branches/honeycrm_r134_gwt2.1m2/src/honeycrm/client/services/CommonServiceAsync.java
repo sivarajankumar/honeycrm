@@ -25,8 +25,6 @@ public interface CommonServiceAsync {
 
 	void deleteAll(String dtoIndex, Set<Long> ids, AsyncCallback<Void> callback);
 
-	void addDemo(String dtoIndex, AsyncCallback<Void> callback);
-
 	void getAllByNamePrefix(String dtoIndex, String prefix, int from, int to, AsyncCallback<ListQueryResult> callback);
 
 	void getByName(String dtoIndex, String name, AsyncCallback<Dto> callback);

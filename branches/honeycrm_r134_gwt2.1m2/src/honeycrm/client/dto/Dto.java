@@ -1,6 +1,5 @@
 package honeycrm.client.dto;
 
-import honeycrm.client.field.AbstractField;
 import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.misc.NumberParser;
 
@@ -48,28 +47,12 @@ public class Dto implements Serializable {
 		this.module = module;
 	}
 
-	public Set<AbstractField> getFields() {
-		return DtoModuleRegistry.instance().get(module).getFields();
-	}
-
-	public String getTitle() {
-		return DtoModuleRegistry.instance().get(module).getTitle();
-	}
-
-	public AbstractField getFieldById(final String id) {
-		return DtoModuleRegistry.instance().get(module).getFieldById(id);
-	}
-
-	public void setId(final long id) {
+	public void setId(final Long id) {
 		set("id", id);
 	}
 
 	public long getId() {
 		return NumberParser.convertToLong(data.get("id"));
-	}
-
-	public String getHistoryToken() {
-		return DtoModuleRegistry.instance().get(module).getHistoryToken();
 	}
 
 	public static Dto getByModuleName(final List<Dto> dtos, final String moduleName) {
@@ -81,14 +64,6 @@ public class Dto implements Serializable {
 
 		Window.alert("Could not resolve module " + moduleName + " by name");
 		throw new RuntimeException();
-	}
-
-	public String[] getListFieldIds() {
-		return DtoModuleRegistry.instance().get(module).getListFieldIds();
-	}
-
-	public String[][] getFormFieldIds() {
-		return DtoModuleRegistry.instance().get(module).getFormFieldIds();
 	}
 
 	public static boolean isInternalReadOnlyField(String id) {
@@ -167,12 +142,11 @@ public class Dto implements Serializable {
 			if (destination.get(key) instanceof List<?>) {
 				// null the ids of the services to ensure they are created
 				for (final Dto item : (List<Dto>) destination.get(key)) {
-					item.setId(0);
+					item.setId(null);
 				}
 			}
 		}
 
 		return destination;
 	}
-
 }

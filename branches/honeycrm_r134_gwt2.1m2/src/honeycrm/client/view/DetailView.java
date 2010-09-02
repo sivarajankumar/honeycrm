@@ -133,7 +133,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	}
 
 	private void resetFields(final Dto newDto, final View view, final String focussedField) {
-		final String[][] fieldIds = newDto.getFormFieldIds();
+		final String[][] fieldIds = moduleDto.getFormFieldIds();
 		this.dto = newDto;
 
 		// remove previous cell contents
@@ -285,9 +285,9 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	 * Set all the fields in the given dto instance stored in the map storing prefilled fields.
 	 */
 	private Dto addPrefilledData(Dto dto) {
-		for (int row = 0; row < dto.getFormFieldIds().length; row++) {
-			for (int col = 0; col < dto.getFormFieldIds()[row].length; col++) {
-				final String fieldId = dto.getFormFieldIds()[row][col];
+		for (int row = 0; row < moduleDto.getFormFieldIds().length; row++) {
+			for (int col = 0; col < moduleDto.getFormFieldIds()[row].length; col++) {
+				final String fieldId = moduleDto.getFormFieldIds()[row][col];
 
 				if (prefilledMap.containsKey(fieldId)) {
 					dto.set(fieldId, prefilledMap.get(fieldId));
@@ -303,7 +303,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	 */
 	public void stopViewing() {
 		table.clear();
-		dto.setId(-1);
+		dto.setId(null);
 		relationshipsContainer.setVisible(false);
 	}
 

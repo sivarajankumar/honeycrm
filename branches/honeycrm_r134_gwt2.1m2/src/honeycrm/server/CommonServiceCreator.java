@@ -38,12 +38,4 @@ public class CommonServiceCreator extends AbstractCommonService {
 			}
 		}
 	}
-
-	public void addDemo(String dtoIndex) {
-		if ("account".equals(dtoIndex)) {
-			internalCreate(DemoDataProvider.account());
-		} else if ("contact".equals(dtoIndex)) {
-			internalCreate(DemoDataProvider.contact());
-		}
-	}
 }

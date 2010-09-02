@@ -43,11 +43,6 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public void addDemo(String dtoIndex) {
-		creator.addDemo(dtoIndex);
-	}
-
-	@Override
 	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
 		ServiceCall call = new ServiceCall("getAll");
 

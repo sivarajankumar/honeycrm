@@ -12,6 +12,10 @@ public class OfferingReports {
 		final Map<Integer, Double> volumes = new HashMap<Integer, Double>();
 
 		for (final Offering offering : offerings) {
+			if (null == offering.deadline) {
+				continue; // skip this offering since we cannot analyze it anyway
+			}
+			
 			final Calendar c = Calendar.getInstance();
 			c.setTime(offering.deadline);
 

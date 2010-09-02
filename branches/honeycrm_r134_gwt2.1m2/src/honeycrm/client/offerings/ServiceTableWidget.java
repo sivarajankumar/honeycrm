@@ -58,10 +58,12 @@ public class ServiceTableWidget extends ITableWidget {
 				public void onClick(ClickEvent event) {
 					final int rows = table.getRowCount();
 					final int newRowId = rows;
+					final String[] fields = moduleDto.getListFieldIds();
 
 					model.put(newRowId, moduleDto.createDto());
-					for (int x = 0; x < moduleDto.getListFieldIds().length; x++) {
-						final String index = moduleDto.createDto().getListFieldIds()[x];
+					
+					for (int x = 0; x < fields.length; x++) {
+						final String index = fields[x];
 						table.setWidget(rows, x, addChangeEvents(index, moduleDto.getFieldById(index).getWidget(view, moduleDto.createDto(), index), newRowId));
 					}
 				}

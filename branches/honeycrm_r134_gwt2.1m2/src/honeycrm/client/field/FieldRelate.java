@@ -1,6 +1,8 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.RelateWidget;
@@ -53,7 +55,8 @@ public class FieldRelate extends AbstractField {
 			if (null == related) {
 				return new Label("[unresolved]");
 			} else {
-				final String token = CollectionHelper.join(" ", related.getHistoryToken(), ModuleAction.DETAIL.toString().toLowerCase(), String.valueOf(value));
+				final ModuleDto moduleDtoRelated = DtoModuleRegistry.instance().get(relatedModule);
+				final String token = CollectionHelper.join(" ", moduleDtoRelated.getHistoryToken(), ModuleAction.DETAIL.toString().toLowerCase(), String.valueOf(value));
 				final Hyperlink link = new Hyperlink(related.getQuicksearch(), token);
 
 				if (related.getAllPreviewableFieldsSorted().isEmpty()) {
@@ -65,14 +68,14 @@ public class FieldRelate extends AbstractField {
 					/**
 					 * there are details to this related dto. attach a [details] label and attach a popup that can be displayed as an onMouseOver effect.
 					 */
-					return getDetailsPanel(related, link, fieldId);
+					return getDetailsPanel(related, link, fieldId, moduleDtoRelated);
 				}
 			}
 		}
 	}
 
-	private Panel getDetailsPanel(final Dto related, final Hyperlink link, final String fieldId) {
-		final PopupPanel popup = getDetailsPopup(related, fieldId);
+	private Panel getDetailsPanel(final Dto related, final Hyperlink link, final String fieldId, final ModuleDto moduleDtoRelated) {
+		final PopupPanel popup = getDetailsPopup(related, fieldId, moduleDtoRelated);
 		final Label details = new Label(" [details]");
 
 		details.addMouseOverHandler(new MouseOverHandler() {
@@ -99,14 +102,14 @@ public class FieldRelate extends AbstractField {
 		return panel;
 	}
 	
-	private PopupPanel getDetailsPopup(final Dto related, final String fieldId) {
+	private PopupPanel getDetailsPopup(final Dto related, final String fieldId, final ModuleDto moduleDtoRelated) {
 		final PopupPanel popup = new PopupPanel(true);
 
 		String html = "";
 
 		for (final String key : related.getAllPreviewableFieldsSorted()) {
 			final Serializable value = related.get(key);
-			final String label = related.getFieldById(key).getLabel();
+			final String label = moduleDtoRelated.getFieldById(key).getLabel();
 			html += "<li>" + label + ": " + value.toString() + "</li>";
 		}
 

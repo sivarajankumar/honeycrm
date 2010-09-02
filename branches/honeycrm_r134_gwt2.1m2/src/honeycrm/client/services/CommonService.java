@@ -39,7 +39,6 @@ public interface CommonService extends RemoteService {
 	public void deleteAll(String dtoIndex, Set<Long> ids);
 	public void deleteAll(String dtoIndex);
 	public void deleteAllItems();
-	public void addDemo(String dtoIndex);
 
 	// misc
 	public Map<String, ModuleDto> getDtoConfiguration();

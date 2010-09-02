@@ -3,8 +3,8 @@ package honeycrm.client.dto;
 import honeycrm.client.field.AbstractField;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class ModuleDto implements Serializable {
 	private static final long serialVersionUID = -7089308530920293835L;
@@ -20,7 +20,7 @@ public class ModuleDto implements Serializable {
 	private String historyToken;
 	private String title;
 	private String module;
-	private Set<AbstractField> fields = new HashSet<AbstractField>();
+	private HashMap<String, AbstractField> fields = new HashMap<String, AbstractField>(20);
 
 	public ModuleDto() {
 	}
@@ -65,11 +65,11 @@ public class ModuleDto implements Serializable {
 		this.title = title;
 	}
 
-	public Set<AbstractField> getFields() {
-		return fields;
+	public Collection<AbstractField> getFields() {
+		return fields.values();
 	}
 
-	public void setFields(Set<AbstractField> fields) {
+	public void setFields(final HashMap<String, AbstractField> fields) {
 		this.fields = fields;
 	}
 
@@ -98,14 +98,12 @@ public class ModuleDto implements Serializable {
 	}
 
 	public AbstractField getFieldById(final String id) {
-		for (final AbstractField field : fields) {
-			if (field.getId().equals(id)) {
-				return field;
-			}
+		if (fields.containsKey(id)) {
+			return fields.get(id);
+		} else {
+			// did not find a field with this id. should never reach this point.
+			throw new RuntimeException("Could not find field with id " + id + " in " + ModuleDto.class);
 		}
-
-		// did not find a field with this id. should never reach this point.
-		throw new RuntimeException("Could not find field with id " + id + " in " + ModuleDto.class);
 	}
 
 	public Dto createDto() {

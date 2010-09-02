@@ -15,7 +15,12 @@ public class AllTests {
 		 * add all tests in the honeycrm.server.test package to the test suite using reflection.
 		 */
 		for (final Class<?> testcase : ReflectionHelper.getClasses("honeycrm.server.test")) {
-			if (!testcase.equals(AllTests.class)) {
+			if (testcase.isAnonymousClass() || testcase.equals(AllTests.class)) {
+				/**
+				 * skip this class and anonymous classes (e.g. inner classes like Foo$1)
+				 */
+				continue;
+			} else {
 				suite.addTestSuite((Class<TestCase>) testcase);
 			}
 		}

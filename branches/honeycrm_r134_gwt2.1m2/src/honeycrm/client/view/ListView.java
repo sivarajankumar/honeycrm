@@ -242,7 +242,7 @@ public class ListView extends AbstractView {
 							}
 						}
 					} else {
-						return object.getFieldById(id).internalFormattedValue(value);
+						return moduleDto.getFieldById(id).internalFormattedValue(value);
 					}
 				}
 			};
