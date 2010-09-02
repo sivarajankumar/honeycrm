@@ -1,9 +1,13 @@
-#summary How to profile server side code of honeycrm using JProfiler
+#summary How to profile client and server side code of gwt applications like honeycrm
 
-= Introduction =
+= Profiling client side code using Firebug =
 
+ * First install the Firefox extension Firebug if you have not already installed it: http://getfirebug.com/
+ * Open honeycrm in Eclipse and use the GWT Eclipse plugin to compile the project with *output style* pretty or detailed. This may take longer than the usual compilation process.
+ * To profile honeycrm on app engine deploy it after it has been completely compiled with your new output style settings. Eclipse will re-compile honeycrm before deployment using the same output style settings and upload the js code as usual. Have a look at the size of your war/gae/*.cache*.html files. Uploading may take longer that usually due to the source code size increasements.
+ * To profile honeycrm locally run it as a web application from eclipse. Then open the application in Firefox using the following URL *http://127.0.0.1:8888/Gae.html*. Note that you have to remove the ?gwt.codesrv stuff from the URL that you normally put at the end of the URL (e.g. http://127.0.0.1:8888/Gae.html?gwt.codesvr=127.0.0.1:9997). This runs the application in JavaScript mode locally. So instead of executing your Java code through the browser plugin Firefox will really execute the generated JavaScript code. This allows you to profile the application locally as well.
 
-= Details =
+= Profiling server side code using JProfiler =
 
  * Append the jprofiler agentpath to the vm arguments line of your honeycrm project i.e. the arguments passed to the JVM when honeycrm is run from eclipse (or whatever IDE you use). For OSX append the following
 {{{
