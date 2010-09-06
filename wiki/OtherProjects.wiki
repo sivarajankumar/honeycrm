@@ -2,4 +2,4 @@
 
 || name || url ||
 || wice crm || http://wice.de ||
-|| opentaps || http://www.opentaps.org/ || 
+|| opentaps || http://www.opentaps.org ||
