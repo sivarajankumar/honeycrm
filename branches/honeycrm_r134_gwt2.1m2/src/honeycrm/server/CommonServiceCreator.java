@@ -1,9 +1,7 @@
 package honeycrm.server;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.server.domain.AbstractEntity;
-
-import java.util.Date;
+import honeycrm.server.domain.Bean;
 
 /**
  * Is part of the database layer.
@@ -12,29 +10,30 @@ public class CommonServiceCreator extends AbstractCommonService {
 	private static final long serialVersionUID = -272641981474976416L;
 
 	public long create(Dto dto) {
-		final AbstractEntity domainObject = copy.copy(dto);
+		final Bean domainObject = copy.copy(dto);
 		
 		if (null == domainObject) {
 			throw new RuntimeException("Could not copy dto into domain class");
 		} else {
 			// explicitly set id to null to force the database to create a new row
-			domainObject.id = null;
+			domainObject.setId(null);
 			return internalCreate(domainObject);
 		}
 	}
 
 	// encapsulates setting the created at field on each save
-	private long internalCreate(final AbstractEntity domainObject) {
+	private long internalCreate(final Bean domainObject) {
 		if (null == domainObject) {
 			throw new RuntimeException("Could not create domain object because domainObject was null");
 		} else {
-			domainObject.createdAt = (new Date(System.currentTimeMillis()));
+			// TODO add created at field to bean interface
+			// domainObject.createdAt = (new Date(System.currentTimeMillis()));
 			m.makePersistent(domainObject);
 
-			if (null == domainObject.id) {
+			if (null == domainObject.getId()) {
 				throw new RuntimeException("Could not create domain object: Key is still null");
 			} else {
-				return domainObject.id.getId();
+				return domainObject.getId().getId();
 			}
 		}
 	}

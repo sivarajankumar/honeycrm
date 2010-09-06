@@ -5,7 +5,7 @@ import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.profiling.ServiceCallStatistics;
 import honeycrm.client.services.CommonService;
-import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.Bean;
 import honeycrm.server.profiling.ProfilingStatisticsCollector;
 import honeycrm.server.profiling.ReadTest;
 import honeycrm.server.profiling.ServiceCall;
@@ -118,7 +118,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 		dto.set("lastUpdatedAt", (new Date(System.currentTimeMillis())));
 
-		final AbstractEntity existingObject = getDomainObject(dto.getModule(), id);
+		final Bean existingObject = getDomainObject(dto.getModule(), id);
 
 		if (null == existingObject) {
 			log.warning("cannot find " + dto.getModule() + "/" + id + ": cannot do the update. all changes will be lost.");
@@ -166,7 +166,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		final Query q = m.newQuery(getDomainClass(dtoIndex));
 
 		// delete step by step instead to avoid "can only delete 500 entities en block" errors in app engine.
-		for (final AbstractEntity entity : (Collection<AbstractEntity>) q.execute()) {
+		for (final Bean entity : (Collection<Bean>) q.execute()) {
 			m.deletePersistent(entity);
 		}
 
@@ -176,7 +176,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void deleteAllItems() {
 		log.info("Deleting all items..");
-		for (final Class<? extends AbstractEntity> entityClass : registry.getDomainClasses()) {
+		for (final Class<? extends Bean> entityClass : registry.getDomainClasses()) {
 			try {
 				m.deletePersistentAll((Collection) m.newQuery(entityClass).execute());
 				/*

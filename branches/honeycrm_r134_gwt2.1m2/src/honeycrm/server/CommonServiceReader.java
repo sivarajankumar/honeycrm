@@ -2,7 +2,7 @@ package honeycrm.server;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.Bean;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
 import java.lang.reflect.Field;
@@ -25,15 +25,15 @@ import javax.jdo.Query;
 public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 
-	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final Collection<AbstractEntity> collection) {
+	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final Collection<Bean> collection) {
 		if (collection.isEmpty()) {
 			return null;
 		}
 
 		final List<Dto> list = new LinkedList<Dto>();
 
-		for (final AbstractEntity item : collection) {
-			final Dto dto = copy.copy(item);  // 60%
+		for (final Bean item : collection) {
+			final Dto dto = copy.copy(item); // 60%
 
 			resolveRelatedEntities(item, dto); // 20%
 
@@ -43,24 +43,24 @@ public class CommonServiceReader extends AbstractCommonService {
 		return list.toArray(new Dto[0]);
 	}
 
-	public static void resolveRelatedEntities(final AbstractEntity item, final Dto dto) {
+	public static void resolveRelatedEntities(final Bean item, final Dto dto) {
 		try {
-			final Class<? extends AbstractEntity> originatingClass = item.getClass();
+			final Class<?> originatingClass = item.getClass();
 
 			/**
 			 * iterate over all fields annotated as being relate fields.
 			 */
 			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingClass, FieldRelateAnnotation.class)) {
-				final Class<? extends AbstractEntity> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
+				final Class<? extends Bean> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
 				final String relatedModuleName = relatedClass.getSimpleName().toLowerCase();
 
 				final Long id = (Long) field.get(item);
-				
+
 				if (null != id && id > 0) {
 					/**
 					 * retrieve the referenced entity and copy its dto representation as an additional field into the originating dto object.
 					 */
-					final AbstractEntity relatedEntity = getDomainObject(relatedModuleName, id);
+					final Bean relatedEntity = getDomainObject(relatedModuleName, id);
 
 					if (null != relatedEntity) {
 						final Dto relatedDto = copy.copy(relatedEntity);
@@ -98,7 +98,7 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	public Dto get(final String dtoIndex, final long id) {
-		final AbstractEntity domainObject = getDomainObject(dtoIndex, id);
+		final Bean domainObject = getDomainObject(dtoIndex, id);
 
 		if (null == domainObject) {
 			return null;
@@ -153,7 +153,7 @@ public class CommonServiceReader extends AbstractCommonService {
 
 	public Dto getByName(String dtoIndex, String name) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name == \"" + name + "\"");
-		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
+		final Collection<Bean> collection = (Collection<Bean>) query.execute();
 
 		if (1 == collection.size()) {
 			return copy.copy(collection.iterator().next());
@@ -192,7 +192,7 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	private ListQueryResult getAllRelated(String originating, Long id, String related) {
-		final List<AbstractEntity> result = new ArrayList<AbstractEntity>();
+		final List<Bean> result = new ArrayList<Bean>();
 		/**
 		 * Get all related entities where the id fields contain the id of the originating entity e.g. return all contacts which have accountID == 23 where is the id of the originating account.
 		 */
@@ -201,7 +201,11 @@ public class CommonServiceReader extends AbstractCommonService {
 		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(originating, related)) {
 			final Query q = m.newQuery(getDomainClass(originating));
 			q.setFilter(fieldName + " == " + id);
-			result.addAll((Collection<AbstractEntity>) q.execute());
+			try {
+				result.addAll((Collection<Bean>) q.execute());
+			} catch (RuntimeException e) {
+				System.err.println("runtime exc");
+			}
 		}
 
 		// final long dbDiff = System.currentTimeMillis() - dbStart;
@@ -251,7 +255,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		query.setRange(from, to);
 		query.setFilter(filters);
 
-		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
+		final Collection<Bean> collection = (Collection<Bean>) query.execute();
 		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 }

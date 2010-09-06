@@ -2,7 +2,7 @@ package honeycrm.server;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.Bean;
 import honeycrm.server.transfer.DtoWizard;
 
 import java.lang.reflect.Field;
@@ -18,10 +18,10 @@ import javax.jdo.Query;
 public class CommonServiceReaderFulltext extends AbstractCommonService {
 	public static final boolean ignoreCase = true;
 	private static final long serialVersionUID = -7000384067604090223L;
-	private static final Map<Class<? extends AbstractEntity>, Field[]> searchableFields = DtoWizard.instance.getSearchableFields();
+	private static final Map<Class<? extends Bean>, Field[]> searchableFields = DtoWizard.instance.getSearchableFields();
 	
 	// do not use memcache because the objects we want to cache are not serializable.
-	private static final Map<Class<?>, Collection<? extends AbstractEntity>> cache = new HashMap<Class<?>, Collection<? extends AbstractEntity>>();
+	private static final Map<Class<?>, Collection<Bean>> cache = new HashMap<Class<?>, Collection<Bean>>();
 	private static final long CACHE_EXPIRATION = 60 * 1000;
 	private long lastCacheUpdate = 0;
 
@@ -30,7 +30,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 		final List<Dto> list = new LinkedList<Dto>();
 
 		try {
-			for (final Class<? extends AbstractEntity> domainClass : registry.getDomainClasses()) {
+			for (final Class<? extends Bean> domainClass : registry.getDomainClasses()) {
 				list.addAll(fulltextSearchForModule(query, domainClass));
 			}
 		} catch (Exception e) {
@@ -40,7 +40,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 		return new ListQueryResult(list.toArray(new Dto[0]), list.size());
 	}
 
-	private List<Dto> fulltextSearchForModule(final String query, final Class<? extends AbstractEntity> domainClass) {
+	private List<Dto> fulltextSearchForModule(final String query, final Class<? extends Bean> domainClass) {
 		final List<Dto> hits = new ArrayList<Dto>();
 
 		try {
@@ -48,9 +48,9 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 			// Query.execute() ~10%
 			// Iterator.next() ~36% (this includes >100k AbstractEntity.jdoReplaceFields() methods very early)
 
-			final Collection<? extends AbstractEntity> list = getCachedList(domainClass);
+			final Collection<? extends Bean> list = getCachedList(domainClass);
 
-			ENTITY_LOOP: for (final AbstractEntity entity : list) {
+			ENTITY_LOOP: for (final Bean entity : list) {
 				for (final Field field : searchableFields.get(domainClass /* entity.getClass() */)) {
 					final String value = (String) field.get(entity); // assume that field type is string
 
@@ -67,10 +67,10 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 		return hits;
 	}
 
-	private Collection<? extends AbstractEntity> getCachedList(final Class<? extends AbstractEntity> domainClass) {
+	private Collection<? extends Bean> getCachedList(final Class<? extends Bean> domainClass) {
 		if (isCacheOutOfDate() || !cache.containsKey(domainClass)) {
 			final Query q = m.newQuery(domainClass);
-			cache.put(domainClass, (Collection<? extends AbstractEntity>) q.execute());
+			cache.put(domainClass, (Collection<Bean>) q.execute());
 			lastCacheUpdate = System.currentTimeMillis();
 			log.info("fulltext search cache update");
 		}

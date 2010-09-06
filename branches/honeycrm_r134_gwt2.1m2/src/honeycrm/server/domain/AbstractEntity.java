@@ -23,7 +23,7 @@ import com.google.appengine.api.datastore.Key;
 @PersistenceCapable
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @Searchable
-abstract public class AbstractEntity {
+abstract public class AbstractEntity implements Bean {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
 	@SearchableId
@@ -53,4 +53,14 @@ abstract public class AbstractEntity {
 	@Label("Views")
 	@FieldIntegerAnnotation(0)
 	public long views;
+	
+	@Override
+	public void setId(Key id) {
+		this.id = id;
+	}
+	
+	@Override
+	public Key getId() {
+		return id;
+	}
 }
