@@ -1,0 +1,5 @@
+#summary Other interesting projects
+
+|| name || url ||
+|| wice crm || http://wice.de ||
+|| opentaps || http://www.opentaps.org/ || 
