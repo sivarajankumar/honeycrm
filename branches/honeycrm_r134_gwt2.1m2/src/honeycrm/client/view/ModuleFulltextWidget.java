@@ -1,6 +1,5 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
@@ -29,8 +28,6 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 		Prefetcher.instance.get(new Consumer<ListQueryResult>() {
 			@Override
 			public void setValueAsynch(final ListQueryResult result) {
-				LoadIndicator.get().endLoading();
-
 				if (null != result && result.getItemCount() > 0) {
 					final FulltextSuggestOracle o = emptySuggestOracle();
 					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
@@ -59,8 +56,6 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 		}, new ServerCallback<ListQueryResult>() {
 			@Override
 			public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
-				LoadIndicator.get().startLoading();
-				
 				commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 					@Override
 					public void onSuccess(ListQueryResult result) {
@@ -69,7 +64,6 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						LoadIndicator.get().endLoading();
 						Window.alert("fulltext search failed");
 					}
 				});

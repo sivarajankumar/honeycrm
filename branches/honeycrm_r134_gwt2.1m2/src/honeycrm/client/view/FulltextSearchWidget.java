@@ -1,6 +1,5 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.HistoryTokenFactory;
@@ -78,13 +77,9 @@ public class FulltextSearchWidget extends SuggestBox {
 	}
 
 	protected void startFulltextSearch(final String queryString) {
-		LoadIndicator.get().startLoading();
-		
 		commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
-				LoadIndicator.get().endLoading();
-
 				if (null != result && result.getItemCount() > 0) {
 					final FulltextSuggestOracle o = emptySuggestOracle();
 					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
@@ -113,7 +108,6 @@ public class FulltextSearchWidget extends SuggestBox {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
 				Window.alert("fulltext search failed");
 			}
 		});

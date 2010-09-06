@@ -1,5 +1,6 @@
 package honeycrm.client.basiclayout;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 
@@ -30,6 +31,8 @@ public class LoadIndicator extends Composite {
 	public void endLoading() {
 		if (--concurrentActions == 0) {
 			loading.setVisible(false);
+		} else if (concurrentActions < 0) {
+			Window.alert("end loading too often called");
 		}
 	}
 }

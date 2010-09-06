@@ -59,9 +59,9 @@ public class OfferingReportsTest extends TestCase {
 
 		for (int i = 0; i < servicesCount; i++) {
 			final Service s = new Service();
-			s.quantity = (Math.abs(random.nextInt() % 100));
-			s.price = (Math.abs(random.nextDouble() % 10000));
-			s.discount = (Math.abs(random.nextDouble() % 10));
+			s.quantity = random.nextInt(100);
+			s.price = Math.abs(random.nextDouble() % 10000.0);
+			s.discount = random.nextInt(10);
 			services.add(s);
 
 			sum += (s.price - s.discount) * s.quantity;

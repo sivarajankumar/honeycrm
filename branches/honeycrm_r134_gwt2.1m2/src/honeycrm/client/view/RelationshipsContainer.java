@@ -1,6 +1,5 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.HistoryTokenFactory;
@@ -62,12 +61,9 @@ public class RelationshipsContainer extends AbstractView {
 		}, new ServerCallback<Map<String, ListQueryResult>>() {
 			@Override
 			public void doRpc(final Consumer<Map<String, ListQueryResult>> internalCacheCallback) {
-				LoadIndicator.get().startLoading();
-
 				ServiceRegistry.commonService().getAllRelated(relatedId, moduleDto.getModule(), new AsyncCallback<Map<String, ListQueryResult>>() {
 					@Override
 					public void onSuccess(Map<String, ListQueryResult> result) {
-						LoadIndicator.get().endLoading();
 						internalCacheCallback.setValueAsynch(result);
 					}
 

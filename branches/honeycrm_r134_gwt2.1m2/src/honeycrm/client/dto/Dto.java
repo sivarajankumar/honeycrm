@@ -127,7 +127,7 @@ public class Dto implements Serializable {
 	}
 
 	/**
-	 * Copies the content of this dto into the destination dto instance. The id field of the source dto (this) is not copied. The ids if list items are nulled i.e. set to 0.
+	 * Copies the content of this dto into the destination dto instance. The id field of the source dto (this) is not copied. The ids if list items are nulled i.e. set to null.
 	 */
 	public Dto copy() {
 		final Dto destination = new Dto();

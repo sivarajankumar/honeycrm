@@ -98,6 +98,7 @@ public class ListView extends AbstractView {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						LoadIndicator.get().endLoading();
 						displayError(caught);
 					}
 				});
@@ -224,16 +225,15 @@ public class ListView extends AbstractView {
 			final String id = moduleDto.getListFieldIds()[col];
 
 			final Column<Dto, String> column = new TextColumn<Dto>() {
+				// TODO this is hotspot #4 in the benchmark (firebug, detailed output style)
 				@Override
 				public String getValue(final Dto object) {
 					final Serializable value = object.get(id);
 
-					// TODO should use fields formatting here instead to format relate fields, dates, currency values, etc.
 					if (moduleDto.getFieldById(id) instanceof FieldRelate) {
 						if (null == value || 0 == (Long) value) {
 							return "";
 						} else {
-							// TODO display something else if "name" does not exist
 							final Serializable resolved = object.get(id + "_resolved");
 							if (null == resolved || null == ((Dto) resolved).get("name")) {
 								return "fail!";

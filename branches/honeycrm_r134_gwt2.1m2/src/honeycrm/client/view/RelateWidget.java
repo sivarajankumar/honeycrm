@@ -1,6 +1,5 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.Observer;
@@ -47,8 +46,6 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 	}
 
 	private void setValueForId(final long id) {
-		LoadIndicator.get().startLoading();
-
 		Prefetcher.instance.get(new Consumer<Dto>() {
 			@Override
 			public void setValueAsynch(Dto result) {
@@ -62,13 +59,11 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 				commonService.get(marshalledClass, id, new AsyncCallback<Dto>() {
 					@Override
 					public void onSuccess(final Dto result) {
-						LoadIndicator.get().endLoading();
 						internalCacheCallback.setValueAsynch(result);
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
-						LoadIndicator.get().endLoading();
 						Window.alert("Could not get item by id");
 					}
 				});
@@ -141,7 +136,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 			Prefetcher.instance.get(new Consumer<ListQueryResult>() {
 				@Override
 				public void setValueAsynch(final ListQueryResult result) {
-					LoadIndicator.get().endLoading();
+	//				LoadIndicator.get().endLoading();
 
 					if (0 == result.getResults().length) {
 						indicateNoResults();
@@ -157,7 +152,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 			}, new ServerCallback<ListQueryResult>() {
 				@Override
 				public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
-					LoadIndicator.get().startLoading();
+		//			LoadIndicator.get().startLoading();
 
 					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
 						@Override
@@ -167,7 +162,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							LoadIndicator.get().endLoading();
+	//						LoadIndicator.get().endLoading();
 							indicateNoResults();
 						}
 					});

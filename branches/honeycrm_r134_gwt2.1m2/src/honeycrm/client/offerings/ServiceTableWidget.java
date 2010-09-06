@@ -22,10 +22,12 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -61,7 +63,7 @@ public class ServiceTableWidget extends ITableWidget {
 					final String[] fields = moduleDto.getListFieldIds();
 
 					model.put(newRowId, moduleDto.createDto());
-					
+
 					for (int x = 0; x < fields.length; x++) {
 						final String index = fields[x];
 						table.setWidget(rows, x, addChangeEvents(index, moduleDto.getFieldById(index).getWidget(view, moduleDto.createDto(), index), newRowId));
@@ -83,7 +85,7 @@ public class ServiceTableWidget extends ITableWidget {
 	}
 
 	private Widget addChangeEvents(final String index, final Widget widget, final int row) {
-		if ("price".equals(index) || "quantity".equals(index) || "discount".equals(index)) {
+		if ("price".equals(index) || "quantity".equals(index) || "discount".equals(index) || "kindOfDiscount".equals(index)) {
 			if (widget instanceof TextBox) {
 				((TextBox) widget).addChangeHandler(new ChangeHandler() {
 					@Override
@@ -160,7 +162,7 @@ public class ServiceTableWidget extends ITableWidget {
 			}
 		}
 
-		s.set("sum", (NumberParser.convertToDouble(s.get("price")) - NumberParser.convertToDouble(s.get("discount"))) * (Integer) s.get("quantity"));
+		s.set("sum", getSumForSingleDto(s));
 		return s;
 	}
 
@@ -177,6 +179,7 @@ public class ServiceTableWidget extends ITableWidget {
 					insertDtoInTableRow(data.get(row), wasTableAlreadyFilled, HEADER_ROWS + row);
 				}
 			} else {
+				Window.alert("Expected Service. Received " + data.get(0).getClass());
 				throw new RuntimeException("Expected Service. Received " + data.get(0).getClass());
 			}
 		}
@@ -204,13 +207,18 @@ public class ServiceTableWidget extends ITableWidget {
 
 			if (isUpdate) {
 				// update widget because it already exists
-				if (table.getWidget(/* HEADER_ROWS + */row, col) instanceof TextBox) {
+				if (table.getWidget(row, col) instanceof TextBox) {
 					// TODO this is faaaaar to crappy!
 					// TODO this should be done by field currency somehow.. the fields should provide a "String format(Serializable value);" method.
-
 					final String text = ((TextBox) field.getWidget(View.EDIT, dto, index)).getText();
-					final TextBox box = ((TextBox) table.getWidget(/* HEADER_ROWS + */row, col));
+					final TextBox box = ((TextBox) table.getWidget(row, col));
 					box.setText(text);
+				} else if (table.getWidget(row, col) instanceof ListBox) {
+					final String text = String.valueOf(dto.get(index));
+					final ListBox box = ((ListBox) table.getWidget(row, col));
+					for (int i=0; i<box.getItemCount(); i++) {
+						box.setItemSelected(i, box.getItemText(i).equals(text));
+					}
 				}
 			} else {
 				// add a new widget and new click handler
@@ -223,8 +231,16 @@ public class ServiceTableWidget extends ITableWidget {
 	private double getSum(final Collection<Dto> data) {
 		double currentSum = 0.0;
 		for (Dto service : data) {
-			currentSum += (NumberParser.convertToDouble(service.get("price")) - NumberParser.convertToDouble(service.get("discount"))) * (Integer) service.get("quantity");
+			currentSum += getSumForSingleDto(service);
 		}
 		return currentSum;
+	}
+
+	private double getSumForSingleDto(final Dto service) {
+		final double price = NumberParser.convertToDouble(service.get("price"));
+		final double discountValue = NumberParser.convertToDouble(service.get("discount"));
+		final double discount = ("%".equals(service.get("kindOfDiscount"))) ? (discountValue / 100 * price) : (discountValue);
+
+		return (price - discount) * (Integer) service.get("quantity");
 	}
 }

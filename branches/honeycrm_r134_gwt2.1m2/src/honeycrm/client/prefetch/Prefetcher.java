@@ -1,5 +1,7 @@
 package honeycrm.client.prefetch;
 
+import honeycrm.client.basiclayout.LoadIndicator;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,9 +47,13 @@ public class Prefetcher {
 
 				entry.setLocked(true);
 
+				LoadIndicator.get().startLoading();
+				
 				serverCallback.doRpc(new Consumer<T>() {
 					@Override
 					public void setValueAsynch(T result) {
+						LoadIndicator.get().endLoading();
+						
 						entry.setValue(result);
 						entry.setLocked(false);
 

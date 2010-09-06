@@ -74,6 +74,8 @@ public class LoginScreen extends DialogBox {
 	}
 
 	private void tryLogin(final Callback callback) {
+		errorLbl.setVisible(false);
+		
 		if (LOGIN_DISABLED) {
 			hide();
 			callback.callback();
@@ -87,7 +89,9 @@ public class LoginScreen extends DialogBox {
 					
 					if (null == result || 0 == result) {
 						errorLbl.setVisible(true);
+						allowLogin(true); // allow user to login again with new login/password
 					} else {
+						errorLbl.setVisible(false);
 						User.initUser(result, loginBox.getText());
 						// hide();
 						hide();
@@ -99,6 +103,7 @@ public class LoginScreen extends DialogBox {
 				@Override
 				public void onFailure(Throwable caught) {
 					errorLbl.setVisible(true);
+					allowLogin(true); // allow user to login again with new login/password
 				}
 			});
 		}

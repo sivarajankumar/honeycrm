@@ -68,7 +68,7 @@ public class DtoCopyMachine {
 			 */
 		} else {
 			final Object value;
-			
+
 			if (entityAlreadyExists) {
 				if (null == dto.get(fieldName)) {
 					value = field.get(existingEntity);
@@ -90,7 +90,11 @@ public class DtoCopyMachine {
 				/**
 				 * finally we found a good old normal field. copy the value from the dto / existing entity into the new / updated entity.
 				 */
-				field.set(entity, value);
+				try {
+					field.set(entity, value);
+				} catch (IllegalArgumentException e) {
+					System.err.println("asdas");
+				}
 			}
 		}
 	}
@@ -100,6 +104,7 @@ public class DtoCopyMachine {
 			return; // do not do anything because of the content stored in value.
 		}
 
+		// TODO this forces all domain classes to use the selected list implementation.. e.g. then all clients must use LinkedList.
 		final List<AbstractEntity> serverList = new LinkedList<AbstractEntity>();
 
 		for (final Dto child : (List<Dto>) value) {
@@ -120,7 +125,7 @@ public class DtoCopyMachine {
 		final Field[] allFields = FieldSieve.instance.filterFields(reflectionHelper.getAllFields(entityClass));
 
 		try {
-			for (final Field field: allFields) {
+			for (final Field field : allFields) {
 				final String fieldName = field.getName();
 				final Object value = field.get(entity);
 

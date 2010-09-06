@@ -81,6 +81,7 @@ abstract public class AbstractView extends Composite {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
+					LoadIndicator.get().endLoading();
 				}
 			});
 		} else {
@@ -88,12 +89,12 @@ abstract public class AbstractView extends Composite {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
+					LoadIndicator.get().endLoading();
 				}
 
 				@Override
 				public void onSuccess(Long result) {
 					TabCenterView.instance().get(moduleDto.getModule()).saveCompletedForId(result);
-					// TabCenterView.instance().get(clazz).showDetailView(result);
 					LoadIndicator.get().endLoading();
 				}
 			});

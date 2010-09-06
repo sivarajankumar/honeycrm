@@ -30,6 +30,7 @@ public class MarkWidget extends AbstractView {
 					@Override
 					public void onFailure(Throwable caught) {
 						displayError(caught);
+						LoadIndicator.get().endLoading();
 					}
 
 					@Override

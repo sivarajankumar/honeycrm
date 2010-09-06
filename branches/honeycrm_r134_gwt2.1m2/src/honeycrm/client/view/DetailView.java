@@ -92,7 +92,6 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 						refreshFields(result);
 						// currentId = result.getId();
 					}
-					LoadIndicator.get().endLoading();
 					
 					if (null != callback) {
 						callback.callback();
@@ -101,7 +100,6 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 			}, new ServerCallback<Dto>() {
 				@Override
 				public void doRpc(final Consumer<Dto> internalCacheCallback) {
-					LoadIndicator.get().startLoading();
 					table.setVisible(false);
 
 					commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
@@ -109,7 +107,6 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 						public void onFailure(Throwable caught) {
 							displayError(caught);
 							table.setVisible(true);
-							LoadIndicator.get().endLoading();
 						}
 
 						@Override
@@ -250,6 +247,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 			commonService.delete(moduleDto.getModule(), dto.getId(), new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
+					LoadIndicator.get().endLoading();
 					displayError(caught);
 				}
 

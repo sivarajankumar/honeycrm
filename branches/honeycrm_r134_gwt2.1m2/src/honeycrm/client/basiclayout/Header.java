@@ -22,7 +22,7 @@ public class Header extends Composite {
 
 		p.add(WidgetJuggler.addStyles(new Label("Honeeeeeeeyyyyy CRM"), "header_logo"));
 		p.add(WidgetJuggler.addStyles(new FulltextSearchWidget(), "header_search"));
-		p.add(getHeaderLinks("Profile", "Help", "Global Search"));
+		p.add(getHeaderLinks("Logout", "Profile", "Help", "Global Search"));
 		p.add(WidgetJuggler.addStyles(new Label("Welcome, " + User.getLogin() + "!"), "right"));
 		p.add(LoadIndicator.get());
 		p.add(new HTML("<div class='clear'></div>"));
@@ -31,7 +31,7 @@ public class Header extends Composite {
 	}
 
 	private Widget getHeaderLink(final String label) {
-		return WidgetJuggler.addStyles(new Hyperlink(label, label), "header_link");
+		return WidgetJuggler.addStyles(new Hyperlink(label, label.toLowerCase()), "header_link");
 	}
 
 	private Widget getHeaderLinks(final String... labels) {

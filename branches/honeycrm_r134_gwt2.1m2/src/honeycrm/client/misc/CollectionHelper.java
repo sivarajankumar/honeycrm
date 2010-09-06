@@ -1,5 +1,6 @@
 package honeycrm.client.misc;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,10 +27,18 @@ public class CollectionHelper {
 	}
 	
 	public static String join(final String glue, final Object... array) {
-		return join(toList(array), glue);
+		return join(toStringList(array), glue);
 	}
 
-	private static List<String> toList(final Object... array) {
+	public static ArrayList<Serializable> toList(final Serializable... array) {
+		final ArrayList<Serializable> list = new ArrayList<Serializable>(array.length);
+		for (final Serializable item: array) {
+			list.add(item);
+		}
+		return list;
+	}
+	
+	private static List<String> toStringList(final Object... array) {
 		final List<String> list = new ArrayList<String>();
 		for (final Object item: array) {
 			list.add(String.valueOf(item));

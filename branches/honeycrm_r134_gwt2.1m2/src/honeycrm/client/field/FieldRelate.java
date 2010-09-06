@@ -138,4 +138,19 @@ public class FieldRelate extends AbstractField {
 			throw new RuntimeException("Unexpected type " + w.getClass());
 		}
 	}
+	
+/*	TODO how to implement this when we cannot access the whole dto object from here?
+ 	@Override
+	public String internalFormattedValue(Serializable value) {
+		if (null == value || 0 == (Long) value) {
+			return "";
+		} else {
+			final Serializable resolved = object.get(id + "_resolved");
+			if (null == resolved || null == ((Dto) resolved).get("name")) {
+				return "fail!";
+			} else {
+				return (String) ((Dto) resolved).get("name");
+			}
+		}
+	}*/
 }
