@@ -18,7 +18,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
-@DetailViewable({ "contactID", "assignedTo", "startDate", "endDate", "services" })
+@DetailViewable({ "contactID", "assignedTo", "startDate", "endDate", "services_objects" })
 @ListViewable({ "contactID", "assignedTo", "endDate" })
 @Quicksearchable({"contactID"})
 public class Contract extends AbstractEntity {
@@ -38,7 +38,7 @@ public class Contract extends AbstractEntity {
 	@FieldDateAnnotation
 	public Date endDate;
 
-	@Label("Services")
+	@Label("")
 	@FieldStringAnnotation
 	public List<Key> services_keys;
 

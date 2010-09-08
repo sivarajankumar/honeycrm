@@ -24,11 +24,12 @@ import com.google.appengine.api.datastore.Key;
 @PersistenceCapable
 @Searchable
 @ListViewable({ "contactID", "deadline" })
-@DetailViewable({ "contactID", "assignedTo", "deadline", "services" })
+@DetailViewable({ "contactID", "assignedTo", "deadline", "services_objects" })
 @Quicksearchable({ "contactID" })
 @HasExtraButton(label = "Create Contract", action = CreateContractAction.class, show = ModuleAction.DETAIL)
 public class Offering extends AbstractEntity {
-	@Label("Services")
+	// TODO this field basically has neither a label nor a field type for gui
+	@Label("")
 	@FieldStringAnnotation
 	public List<Key> services_keys;
 
