@@ -1,7 +1,4 @@
-<datastore-indexes>
-    <datastore-index kind="Service" ancestor="true" source="auto">
-        <property name="services_INTEGER_IDX" direction="asc"/>
-    </datastore-index>
-</datastore-indexes>
+<!-- Indices written at Tue, 7 Sep 2010 15:41:42 UTC -->
 
+<datastore-indexes/>
 
