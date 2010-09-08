@@ -49,7 +49,9 @@ public class FieldSieve {
 	private boolean shouldBeSkipped(final Field field) {
 		if (Modifier.STATIC == (field.getModifiers() & Modifier.STATIC)) {
 			return true; // skip static fields
-		}
+		}/* else if (field.isAnnotationPresent(NotPersistent.class)) {
+			return true; // skip all fields that are not persisted
+		}*/
 
 		if (field.getName().equals(badVariableName)) {
 			return true; // skip field because its name is on the bad variables name

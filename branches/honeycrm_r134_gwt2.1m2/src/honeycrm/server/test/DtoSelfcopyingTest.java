@@ -52,10 +52,10 @@ public class DtoSelfcopyingTest extends TestCase {
 
 		final Dto dtoOffering = new Dto();
 		dtoOffering.setModule("offering");
-		dtoOffering.set("services", CollectionHelper.toList(s1/* , s2 */));
+		dtoOffering.set("services_objects", CollectionHelper.toList(s1/* , s2 */));
 
 		final Dto offeringCopy = dtoOffering.copy();
-		final Dto copyService = (Dto) ((List<?>) offeringCopy.get("services")).get(0);
+		final Dto copyService = (Dto) ((List<?>) offeringCopy.get("services_objects")).get(0);
 
 		for (final String field : copyService.getAllData().keySet()) {
 			assertEquals(s1.get(field), copyService.getAllData().get(field));
@@ -63,14 +63,14 @@ public class DtoSelfcopyingTest extends TestCase {
 
 		final long idOffering = commonService.create(dtoOffering);
 		final Dto retrievedOffering = commonService.get("offering", idOffering);
-		assertNotNull(retrievedOffering.get("services"));
+		assertNotNull(retrievedOffering.get("services_objects"));
 		
 		
 		offeringCopy.setModule("contract");
 		final long idContract = commonService.create(offeringCopy);
 
 		final Dto retrievedContract = commonService.get("contract", idContract);
-		final Dto contractService = (Dto) ((List<?>) retrievedContract.get("services")).get(0);
+		final Dto contractService = (Dto) ((List<?>) retrievedContract.get("services_objects")).get(0);
 		for (final String field : contractService.getAllData().keySet()) {
 			if (null == s1.get(field)) {
 				System.out.println(field);

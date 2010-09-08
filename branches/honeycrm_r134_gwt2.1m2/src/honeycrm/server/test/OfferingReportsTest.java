@@ -43,8 +43,8 @@ public class OfferingReportsTest extends TestCase {
 
 			Offering o = new Offering();
 			o.deadline = (c.getTime());
-			o.services = (new LinkedList<Service>());
-			sum += getServices(o.services);
+			o.services_objects = (new LinkedList<Service>());
+			sum += getServices(o.services_objects);
 
 			offerings.add(o);
 		}

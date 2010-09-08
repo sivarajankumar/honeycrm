@@ -1,11 +1,11 @@
 package honeycrm.server.domain.decoration.fields;
 
-import honeycrm.server.domain.Bean;
+import honeycrm.server.domain.AbstractEntity;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FieldRelateAnnotation {
-	Class<? extends Bean> value();
+	Class<? extends AbstractEntity> value();
 }

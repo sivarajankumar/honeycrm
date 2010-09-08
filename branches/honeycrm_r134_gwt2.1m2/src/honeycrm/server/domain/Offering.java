@@ -9,13 +9,17 @@ import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 
 import java.util.Date;
 import java.util.List;
 
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import org.compass.annotations.Searchable;
+
+import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
 @Searchable
@@ -25,9 +29,14 @@ import org.compass.annotations.Searchable;
 @HasExtraButton(label = "Create Contract", action = CreateContractAction.class, show = ModuleAction.DETAIL)
 public class Offering extends AbstractEntity {
 	@Label("Services")
-	@FieldTableAnnotation(Service.class)
-	public List<Service> services;
+	@FieldStringAnnotation
+	public List<Key> services_keys;
 
+	@NotPersistent
+	@Label("Services")
+	@FieldTableAnnotation(Service.class)
+	public List<Service> services_objects;
+	
 	@Label("Contact")
 	@FieldRelateAnnotation(Contact.class)
 	public Long contactID;
@@ -45,7 +54,7 @@ public class Offering extends AbstractEntity {
 	 */
 	public Double getCosts() {
 		Double costs = 0.0;
-		for (final Service s : services) {
+		for (final Service s : services_objects) {
 			costs += (s.price - s.discount) * s.quantity;
 		}
 		return costs;

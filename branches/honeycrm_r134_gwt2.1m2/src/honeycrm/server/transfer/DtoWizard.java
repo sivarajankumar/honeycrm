@@ -18,7 +18,7 @@ import honeycrm.client.field.FieldText;
 import honeycrm.client.field.FieldWebsite;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.server.CachingReflectionHelper;
-import honeycrm.server.domain.Bean;
+import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.DetailViewable;
 import honeycrm.server.domain.decoration.HasExtraButton;
 import honeycrm.server.domain.decoration.Hidden;
@@ -51,7 +51,7 @@ public class DtoWizard {
 	public static final DtoWizard instance = new DtoWizard();
 	private boolean initialized = false;
 	private Map<String, ModuleDto> moduleNameToDto = null;
-	private Map<Class<? extends Bean>, Field[]> searchableFields = null;
+	private Map<Class<? extends AbstractEntity>, Field[]> searchableFields = null;
 	private CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
 
 	private DtoWizard() {
@@ -59,10 +59,10 @@ public class DtoWizard {
 
 	private void initialize() {
 		try {
-			searchableFields = new HashMap<Class<? extends Bean>, Field[]>();
+			searchableFields = new HashMap<Class<? extends AbstractEntity>, Field[]>();
 			moduleNameToDto = new HashMap<String, ModuleDto>();
 
-			for (final Class<Bean> domainClass : (Class<Bean>[]) ReflectionHelper.getClasses("honeycrm.server.domain")) {
+			for (final Class<AbstractEntity> domainClass : (Class<AbstractEntity>[]) ReflectionHelper.getClasses("honeycrm.server.domain")) {
 				if (!Modifier.isAbstract(domainClass.getModifiers())) {
 					final String name = domainClass.getSimpleName().toLowerCase();
 
@@ -88,7 +88,7 @@ public class DtoWizard {
 		}
 	}
 
-	private void setupFields(Class<Bean> domainClass, ModuleDto moduleDto) {
+	private void setupFields(Class<AbstractEntity> domainClass, ModuleDto moduleDto) {
 		try {
 			final HashMap<String,AbstractField> fields = new HashMap<String, AbstractField>();
 
@@ -149,7 +149,7 @@ public class DtoWizard {
 		}
 	}
 
-	private void handleAnnotations(final Class<Bean> domainClass, final ModuleDto moduleDto) {
+	private void handleAnnotations(final Class<AbstractEntity> domainClass, final ModuleDto moduleDto) {
 		/**
 		 * the searchable fields are all fields of a class that have the SearchableProperty annotation and are of type String
 		 */
@@ -176,7 +176,7 @@ public class DtoWizard {
 		}
 	}
 
-	private ExtraButton[] getExtraButtons(final Class<Bean> domainClass) {
+	private ExtraButton[] getExtraButtons(final Class<AbstractEntity> domainClass) {
 		// TODO handle multiple buttons
 		try {
 			if (domainClass.isAnnotationPresent(HasExtraButton.class)) {
@@ -205,7 +205,7 @@ public class DtoWizard {
 		return moduleNameToDto;
 	}
 
-	public Map<Class<? extends Bean>, Field[]> getSearchableFields() {
+	public Map<Class<? extends AbstractEntity>, Field[]> getSearchableFields() {
 		if (!initialized) {
 			initialize();
 		}

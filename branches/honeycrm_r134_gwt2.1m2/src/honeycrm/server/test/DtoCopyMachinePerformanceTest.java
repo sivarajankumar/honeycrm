@@ -2,7 +2,7 @@ package honeycrm.server.test;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.server.DemoDataProvider;
-import honeycrm.server.domain.Bean;
+import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.transfer.DtoCopyMachine;
 import junit.framework.TestCase;
 
@@ -12,7 +12,7 @@ public class DtoCopyMachinePerformanceTest extends TestCase {
 	public void testCopying() {
 		final DtoCopyMachine copy = new DtoCopyMachine();
 		System.out.print("Get demo accounts..");
-		final Bean[] accounts = getDemoAccounts();
+		final AbstractEntity[] accounts = getDemoAccounts();
 		final Dto[] dtos = new Dto[ENTITY_COUNT];
 
 		final long before = System.currentTimeMillis();
@@ -27,8 +27,8 @@ public class DtoCopyMachinePerformanceTest extends TestCase {
 		System.out.println("Done.\nDuration: " + diff + " ms, " + timePerEntity + " ms for 100 entities");
 	}
 
-	private Bean[] getDemoAccounts() {
-		final Bean[] accounts = new Bean[ENTITY_COUNT];
+	private AbstractEntity[] getDemoAccounts() {
+		final AbstractEntity[] accounts = new AbstractEntity[ENTITY_COUNT];
 		for (int i = 0; i < ENTITY_COUNT; i++) {
 			accounts[i] = DemoDataProvider.account();
 		}

@@ -1,7 +1,7 @@
 package honeycrm.server.test;
 
 import honeycrm.server.CachingReflectionHelper;
-import honeycrm.server.domain.Bean;
+import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.transfer.ReflectionHelper;
 
@@ -17,8 +17,8 @@ public class RelatesToTest extends TestCase {
 
 			final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 
-			for (final Class<? extends Bean> clazz : ReflectionHelper.getClasses("honeycrm.server.domain")) {
-				if (!clazz.isInterface() && Modifier.isAbstract(clazz.getModifiers())) {
+			for (final Class<? extends AbstractEntity> clazz : ReflectionHelper.getClasses("honeycrm.server.domain")) {
+				if (Modifier.isAbstract(clazz.getModifiers())) {
 					continue;
 				}
 

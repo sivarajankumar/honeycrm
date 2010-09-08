@@ -5,36 +5,38 @@ import honeycrm.server.CachingReflectionHelper;
 import honeycrm.server.CommonServiceReader;
 import honeycrm.server.DomainClassRegistry;
 import honeycrm.server.PMF;
-import honeycrm.server.domain.Bean;
+import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.Service;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 
 public class DtoCopyMachine {
 	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	private static final DomainClassRegistry registry = DomainClassRegistry.instance;
 	private static PersistenceManager m = null;
 
-	public Bean copy(Dto dto) {
+	public AbstractEntity copy(Dto dto) {
 		return copy(dto, null);
 	}
 
 	/**
 	 * Copy data from Dto into domain class. This is usually the case whenever the client sends data to the server (create, update)
 	 */
-	public Bean copy(final Dto dto, final Bean existingEntity) {
-		final Class<? extends Bean> entityClass = registry.getDomain(dto.getModule());
+	public AbstractEntity copy(final Dto dto, final AbstractEntity existingEntity) {
+		final Class<? extends AbstractEntity> entityClass = registry.getDomain(dto.getModule());
 
 		try {
-			final Bean entity = entityClass.newInstance();
+			final AbstractEntity entity = entityClass.newInstance();
 			final Field[] allFields = FieldSieve.instance.filterFields(reflectionHelper.getAllFields(entityClass));
 			final boolean entityAlreadyExists = null != existingEntity;
 
@@ -42,7 +44,7 @@ public class DtoCopyMachine {
 				/**
 				 * this entity already exists so we can safely copy the id field now.
 				 */
-				entity.setId(existingEntity.getId());
+				entity.id = existingEntity.id;
 			}
 
 			for (final Field field : allFields) {
@@ -59,10 +61,10 @@ public class DtoCopyMachine {
 	/**
 	 * Copies one field from the dto / existing entity into the new / updated entity.
 	 */
-	private void copySingleField(final Dto dto, final Bean existingEntity, final Class<? extends Bean> entityClass, final Bean entity, final boolean entityAlreadyExists, final Field field) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	private void copySingleField(final Dto dto, final AbstractEntity existingEntity, final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final boolean entityAlreadyExists, final Field field) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		final String fieldName = field.getName();
 
-		if ("id".equals(fieldName)) {
+		if ("id".equals(fieldName) || fieldName.endsWith("_keys")) {
 			/**
 			 * skip the id field because we already copied the id before.
 			 */
@@ -99,28 +101,46 @@ public class DtoCopyMachine {
 		}
 	}
 
-	private void handleDtoLists(final Class<? extends Bean> entityClass, final Bean entity, final Field field, final Object value) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+	private void handleDtoLists(final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final Field field, final Object value) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (null == value || ((List<?>) value).isEmpty() || !(((List<?>) value).get(0) instanceof Dto)) {
 			return; // do not do anything because of the content stored in value.
 		}
 
-		// TODO this forces all domain classes to use the selected list implementation.. e.g. then all clients must use LinkedList.
-		final List<Bean> serverList = new LinkedList<Bean>();
-
-		for (final Dto child : (List<Dto>) value) {
-			serverList.add(copy(child));
+		if (null == m) {
+			m = PMF.get().getPersistenceManager();
 		}
 
-		field.set(entity, serverList);
+		final List<Key> keys = new ArrayList<Key>();
+
+		for (final Dto child : (List<Dto>) value) {
+			/**
+			 * save the child item externally add its Key to the key list which is stored within the parent.
+			 */
+			final AbstractEntity childDomainObject = copy(child);
+			m.makePersistent(childDomainObject);
+			keys.add(childDomainObject.id);
+		}
+
+		// do not set field anymore because child will be stored externally
+		// field.set(entity, serverList);
+		// store child keys in entity
+		try {
+			entityClass.getField("services_keys").set(entity, keys);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Copy data from a domain class instance into a Dto. This is usually the case whenever the server responds to clients (read).
 	 */
 	// application hotspot 2nd place
-	public Dto copy(Bean entity) {
+	public Dto copy(AbstractEntity entity) {
 		final Dto dto = new Dto();
 
+		if (null == entity) {
+			System.out.println("npe");
+		}
 		final Class<?> entityClass = entity.getClass();
 		final Field[] allFields = FieldSieve.instance.filterFields(reflectionHelper.getAllFields(entityClass));
 
@@ -134,7 +154,7 @@ public class DtoCopyMachine {
 					 * skip null values
 					 */
 				} else if (value instanceof List<?>) {
-					handleDomainClassLists(dto, field, value);
+					handleDomainClassLists(dto, field, (List<?>) value);
 				} else if ("id".equals(fieldName)) {
 					try {
 						dto.set(fieldName, (int) ((Key) value).getId());
@@ -154,10 +174,32 @@ public class DtoCopyMachine {
 		return dto;
 	}
 
-	private void handleDomainClassLists(final Dto dto, final Field field, final Object value) {
+	private void handleDomainClassLists(final Dto dto, final Field field, final List<?> value) {
+		if (field.getName().endsWith("_keys") || (!value.isEmpty() && value.get(0) instanceof Key)) {
+			if (null == m) {
+				m = PMF.get().getPersistenceManager();
+			}
+
+			// retrieve the children whose keys have been stored and insert them into the dto object.
+			final LinkedList<Dto> children = new LinkedList<Dto>();
+			for (final Key key : (List<Key>) value) {
+				final AbstractEntity childDomainObject = m.getObjectById(Service.class, key.getId());
+				final Dto childDto = copy(childDomainObject);
+				
+				CommonServiceReader.resolveRelatedEntities(childDomainObject, childDto);
+				
+				children.add(childDto);
+			}
+
+			// TODO set name in a generic manner
+			dto.set("services_objects", children);
+
+			return; // skip key lists because we cannot serialize them
+		}
+
 		final List<Dto> serverList = new LinkedList<Dto>();
 
-		for (final Bean child : (List<Bean>) value) {
+		for (final AbstractEntity child : (List<AbstractEntity>) value) {
 			/**
 			 * resolving related entities of child entities. e.g. services are child items of offerings and contracts. this is necessary to display the name of the related entity (and other fields that might be interesting).
 			 */
@@ -173,14 +215,14 @@ public class DtoCopyMachine {
 	/**
 	 * TODO This removes the child elements of an entity during an update to avoid duplicating them. This should not be under the responsibility of this class and has to be refactored in the future!
 	 */
-	private void deleteOldChildItems(final Class<? extends Bean> entityClass, final Bean existingEntity, final Field field) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+	private void deleteOldChildItems(final Class<? extends AbstractEntity> entityClass, final AbstractEntity existingEntity, final Field field) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		if (null != existingEntity) {
 			// This is an update, before doing anything else we remove the existing items linked to this entity
 			// This avoids duplicating them on an update.
 			// Note this means that on each update the linked items of an entity are deleted and recreated. This should be avoided in future versions.
-			final List<?> existingItemsList = (List<?>) field.get(existingEntity);
+			final Collection<?> existingItemsList = (Collection<?>) field.get(existingEntity);
 
-			if (null == existingItemsList) {
+			if (null == existingItemsList || existingItemsList.isEmpty()) {
 				return; // we do not have to do anything
 			}
 
@@ -188,15 +230,14 @@ public class DtoCopyMachine {
 				m = PMF.get().getPersistenceManager();
 			}
 
-			for (final Bean child : (List<Bean>) existingItemsList) {
-				if (null == child.getId()) {
-					System.out.println("epic fail: prevented npe");
-				} else {
-					// TODO why doesn't that work too? this throws an "this entity is currently managed by another manager" exception.
-					// m.deletePersistent(child);
-					m.deletePersistent(m.getObjectById(child.getClass(), KeyFactory.createKey(existingEntity.getId(), child.getClass().getSimpleName(), child.getId().getId())));
-				}
+			if (field.getName().endsWith("_keys")) {
+				// TODO does this work? delete specifying a key collection
+				m.deletePersistentAll(existingItemsList);
 			}
+
+			/*
+			 * for (final Key childId : (List<Key>) existingItemsList) { if (null == childId) { System.out.println("epic fail: prevented npe"); } else { m.deletePersistent(m.getO)); // TODO why doesn't that work too? this throws an "this entity is currently managed by another manager" exception. // m.deletePersistent(child); // m.deletePersistent(m.getObjectById(child.getClass(), KeyFactory.createKey(existingEntity.id, child.getClass().getSimpleName(), child.id.getId()))); } }
+			 */
 		}
 	}
 }

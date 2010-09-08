@@ -1,6 +1,6 @@
 package honeycrm.server;
 
-import honeycrm.server.domain.Bean;
+import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.transfer.DtoCopyMachine;
 import honeycrm.server.transfer.ReflectionHelper;
 
@@ -23,13 +23,13 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	protected static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	protected static final DomainClassRegistry registry = DomainClassRegistry.instance;
 
-	protected static Class<? extends Bean> getDomainClass(final String dtoIndex) {
+	protected static Class<? extends AbstractEntity> getDomainClass(final String dtoIndex) {
 		return registry.getDomain(dtoIndex);
 	}
 
-	protected static Bean getDomainObject(final String dtoIndex, final long id) {
+	protected static AbstractEntity getDomainObject(final String dtoIndex, final long id) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "id == " + id);
-		final Collection<Bean> collection = (Collection<Bean>) query.execute();
+		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
 
 		if (1 == collection.size()) {
 			return collection.iterator().next();

@@ -6,12 +6,16 @@ import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 
 import java.util.Date;
 import java.util.List;
 
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
+
+import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
 @DetailViewable({ "contactID", "assignedTo", "startDate", "endDate", "services" })
@@ -35,6 +39,11 @@ public class Contract extends AbstractEntity {
 	public Date endDate;
 
 	@Label("Services")
+	@FieldStringAnnotation
+	public List<Key> services_keys;
+
+	@NotPersistent
+	@Label("Services")
 	@FieldTableAnnotation(Service.class)
-	public List<Service> services;
+	public List<Service> services_objects;
 }

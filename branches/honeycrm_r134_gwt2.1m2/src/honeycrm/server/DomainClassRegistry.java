@@ -1,6 +1,6 @@
 package honeycrm.server;
 
-import honeycrm.server.domain.Bean;
+import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.transfer.ReflectionHelper;
 
 import java.lang.reflect.Modifier;
@@ -10,13 +10,13 @@ import java.util.Set;
 
 public class DomainClassRegistry {
 	public static final DomainClassRegistry instance = new DomainClassRegistry();
-	private final Map<String, Class<? extends Bean>> dtoToDomain = new HashMap<String, Class<? extends Bean>>();
-	private final Map<Class<? extends Bean>, String> domainToDto = new HashMap<Class<? extends Bean>, String>();
+	private final Map<String, Class<? extends AbstractEntity>> dtoToDomain = new HashMap<String, Class<? extends AbstractEntity>>();
+	private final Map<Class<? extends AbstractEntity>, String> domainToDto = new HashMap<Class<? extends AbstractEntity>, String>();
 
 	private DomainClassRegistry() {
 		try {
-			for (final Class<? extends Bean> domainClass : (Class<? extends Bean>[]) ReflectionHelper.getClasses("honeycrm.server.domain")) {
-				if (!domainClass.isInterface() || !Modifier.isAbstract(domainClass.getModifiers())) {
+			for (final Class<AbstractEntity> domainClass : (Class<AbstractEntity>[]) ReflectionHelper.getClasses("honeycrm.server.domain")) {
+				if (!Modifier.isAbstract(domainClass.getModifiers())) {
 					final String name = domainClass.getSimpleName().toLowerCase();
 					dtoToDomain.put(name, domainClass);
 				}
@@ -31,17 +31,17 @@ public class DomainClassRegistry {
 		}
 	}
 
-	public String getDto(final Class<? extends Bean> domainClass) {
+	public String getDto(final Class<? extends AbstractEntity> domainClass) {
 		assert domainToDto.containsKey(domainClass);
 		return domainToDto.get(domainClass);
 	}
 
-	public Class<? extends Bean> getDomain(final String dto) {
+	public Class<? extends AbstractEntity> getDomain(final String dto) {
 		assert dtoToDomain.containsKey(dto);
 		return dtoToDomain.get(dto);
 	}
 
-	public Set<Class<? extends Bean>> getDomainClasses() {
+	public Set<Class<? extends AbstractEntity>> getDomainClasses() {
 		return domainToDto.keySet();
 	}
 }

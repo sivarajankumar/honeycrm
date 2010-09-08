@@ -46,8 +46,8 @@ public class OfferingCreateTest extends TestCase {
 
 			final Dto o = commonService.get("offering", id);
 			assertNotNull(o.get("deadline"));
-			assertNotNull(o.get("services"));
-			assertEquals(productIds.size(), ((Collection<Dto>) o.get("services")).size());
+			assertNotNull(o.get("services_objects"));
+			assertEquals(productIds.size(), ((Collection<Dto>) o.get("services_objects")).size());
 		}
 	}
 
@@ -55,7 +55,7 @@ public class OfferingCreateTest extends TestCase {
 		final Dto offering = new Dto();
 		offering.setModule("offering");
 		offering.set("deadline", new Date(System.currentTimeMillis()));
-		offering.set("services", services);
+		offering.set("services_objects", services);
 		return offering;
 	}
 
