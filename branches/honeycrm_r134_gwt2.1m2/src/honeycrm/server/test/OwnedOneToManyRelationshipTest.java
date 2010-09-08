@@ -35,21 +35,21 @@ public class OwnedOneToManyRelationshipTest extends TestCase {
 			final int childCountBar = 1; // r.nextInt(20);
 			final int childCountBaz = 0; // r.nextInt(20);
 
-			final Dto foo = getParent(1, childCountFoo);
-			final Dto bar = getParent(2, childCountBar);
-			final Dto baz = getParent(3, childCountBaz);
+			final Dto foo = getOffering(1, childCountFoo);
+			final Dto bar = getOffering(2, childCountBar);
+			final Dto baz = getOffering(3, childCountBaz);
 
 			final long idFoo = commonService.create(foo);
 			final long idBar = commonService.create(bar);
 			final long idBaz = commonService.create(baz);
 
-			final Dto dtoFoo = commonService.get("parent", idFoo);
-			final Dto dtoBar = commonService.get("parent", idBar);
-			final Dto dtoBaz = commonService.get("parent", idBaz);
+			final Dto dtoFoo = commonService.get("offering", idFoo);
+			final Dto dtoBar = commonService.get("offering", idBar);
+			final Dto dtoBaz = commonService.get("offering", idBaz);
 
 			assertEquals(childCountFoo, ((List<?>) dtoFoo.get("services_objects")).size());
 			assertEquals(childCountBar, ((List<?>) dtoBar.get("services_objects")).size());
-			// assertEquals(childCountBaz, ((List<?>) dtoBaz.get("services_objects")).size());
+			//assertEquals(childCountBaz, ((List<?>) dtoBaz.get("services_objects")).size());
 		}
 	}
 
@@ -60,12 +60,12 @@ public class OwnedOneToManyRelationshipTest extends TestCase {
 		return service;
 	}
 
-	private Dto getParent(final int name, final int childCount) {
-		final Dto parent = new Dto();
-		parent.setModule("parent");
-		parent.set("name", "parent " + name);
-		parent.set("services_objects", getServices(childCount));
-		return parent;
+	private Dto getOffering(final int name, final int childCount) {
+		final Dto offering = new Dto();
+		offering.setModule("offering");
+		offering.set("name", "offering " + name);
+		offering.set("services_objects", getServices(childCount));
+		return offering;
 	}
 
 	private ArrayList<Dto> getServices(final int childCount) {
