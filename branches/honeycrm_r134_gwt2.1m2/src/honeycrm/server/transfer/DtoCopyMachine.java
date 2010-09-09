@@ -70,9 +70,9 @@ public class DtoCopyMachine {
 			 */
 			return;
 		}
-		
+
 		final Object value = getValue(dto, existingEntity, entityAlreadyExists, field, fieldName);
-		
+
 		if (DtoWizard.instance.getRelateFields().containsKey(field.hashCode())) {
 			// treat one to many relate field special
 			deleteOldChildItems(entityClass, entity, field);
@@ -156,6 +156,10 @@ public class DtoCopyMachine {
 		final Field[] allFields = FieldSieve.instance.filterFields(reflectionHelper.getAllFields(entityClass));
 
 		try {
+			// TODO use class hash code as key and store class name / and lowercase version of it instead of computing it again
+			// final int clazzHashCode = entityClass.hashCode();
+			dto.setModule(entityClass.getSimpleName().toLowerCase());
+
 			for (final Field field : allFields) {
 				final String fieldName = field.getName();
 				final Object value = field.get(entity);
@@ -165,7 +169,7 @@ public class DtoCopyMachine {
 					 * skip null values
 					 */
 				} else if (DtoWizard.instance.getRelateFields().containsKey(field.hashCode())) {
-					handleDomainClassLists(dto, field, (List<?>) value);
+					handleDomainClassLists(dto, field, (List<Key>) value, fieldName);
 				} else if ("id".equals(fieldName)) {
 					try {
 						dto.set(fieldName, (int) ((Key) value).getId());
@@ -176,8 +180,6 @@ public class DtoCopyMachine {
 					dto.set(fieldName, (Serializable) value);
 				}
 			}
-
-			dto.setModule(entityClass.getSimpleName().toLowerCase());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -185,42 +187,27 @@ public class DtoCopyMachine {
 		return dto;
 	}
 
-	private void handleDomainClassLists(final Dto dto, final Field field, final List<?> value) {
-		if (!value.isEmpty() && value.get(0) instanceof Key) {
+	private void handleDomainClassLists(final Dto dto, final Field field, final List<Key> value, final String fieldName) {
+		if (value.isEmpty()) {
+			// do nothing
+		} else {
 			if (null == m) {
 				m = PMF.get().getPersistenceManager();
 			}
 
 			// retrieve the children whose keys have been stored and insert them into the dto object.
 			final LinkedList<Dto> children = new LinkedList<Dto>();
-			for (final Key key : (List<Key>) value) {
+			for (final Key key : value) {
 				final AbstractEntity childDomainObject = m.getObjectById(DtoWizard.instance.getRelateFields().get(field.hashCode()), key.getId());
 				final Dto childDto = copy(childDomainObject);
-				
+
 				CommonServiceReader.resolveRelatedEntities(childDomainObject, childDto);
-				
+
 				children.add(childDto);
 			}
 
-			// TODO set name in a generic manner
-			dto.set(field.getName(), children);
-
-			return; // skip key lists because we cannot serialize them
+			dto.set(fieldName, children);
 		}
-
-		final List<Dto> serverList = new LinkedList<Dto>();
-
-		for (final AbstractEntity child : (List<AbstractEntity>) value) {
-			/**
-			 * resolving related entities of child entities. e.g. services are child items of offerings and contracts. this is necessary to display the name of the related entity (and other fields that might be interesting).
-			 */
-			final Dto childDto = copy(child);
-			CommonServiceReader.resolveRelatedEntities(child, childDto);
-
-			serverList.add(childDto);
-		}
-
-		dto.set(field.getName(), (Serializable) serverList);
 	}
 
 	/**
