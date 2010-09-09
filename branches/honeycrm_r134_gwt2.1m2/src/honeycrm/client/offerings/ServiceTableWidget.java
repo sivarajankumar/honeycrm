@@ -32,11 +32,10 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-// TODO caching bug: the service lists that are returned are out-of-date after save
 public class ServiceTableWidget extends ITableWidget {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
-	private final ModuleDto moduleDto = DtoModuleRegistry.instance().get("service");
+	private final ModuleDto moduleDto = DtoModuleRegistry.instance().get("uniqueservice");
 	private final View view;
 	private final Label sum = new Label();
 	private final Map<Integer, Dto> model = new HashMap<Integer, Dto>();
@@ -151,7 +150,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 	private Dto getDtoFromRow(final int row) {
 		final Dto s = new Dto();
-		s.setModule("service");
+		s.setModule("uniqueservice");
 
 		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
 			if (table.getCellCount(/* HEADER_ROWS + */row) > col) {

@@ -6,7 +6,7 @@ import honeycrm.server.CommonServiceReader;
 import honeycrm.server.DomainClassRegistry;
 import honeycrm.server.PMF;
 import honeycrm.server.domain.AbstractEntity;
-import honeycrm.server.domain.Service;
+import honeycrm.server.domain.UniqueService;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -64,30 +64,27 @@ public class DtoCopyMachine {
 	private void copySingleField(final Dto dto, final AbstractEntity existingEntity, final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final boolean entityAlreadyExists, final Field field) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		final String fieldName = field.getName();
 
-		if ("id".equals(fieldName) || fieldName.endsWith("_keys")) {
+		if ("id".equals(fieldName)) {
 			/**
 			 * skip the id field because we already copied the id before.
 			 */
+			return;
+		}
+		
+		final Object value = getValue(dto, existingEntity, entityAlreadyExists, field, fieldName);
+		
+		if (DtoWizard.instance.getRelateFields().containsKey(field.hashCode())) {
+			// treat one to many relate field special
+			deleteOldChildItems(entityClass, entity, field);
+			handleDtoLists(entityClass, entity, field, fieldName, value);
 		} else {
-			final Object value;
-
-			if (entityAlreadyExists) {
-				if (null == dto.get(fieldName)) {
-					value = field.get(existingEntity);
-				} else {
-					value = dto.get(fieldName);
-				}
-			} else {
-				value = dto.get(fieldName);
-			}
-
 			if (null == value) {
 				/**
 				 * skip this field since it is null anyway. the user cannot set fields null so we can safely skip updating this field.
 				 */
 			} else if (value instanceof List<?>) {
-				deleteOldChildItems(entityClass, entity, field);
-				handleDtoLists(entityClass, entity, field, value);
+				// TODO remove clause
+				throw new RuntimeException("Should not reach this point anymore");
 			} else {
 				/**
 				 * finally we found a good old normal field. copy the value from the dto / existing entity into the new / updated entity.
@@ -101,7 +98,21 @@ public class DtoCopyMachine {
 		}
 	}
 
-	private void handleDtoLists(final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final Field field, final Object value) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+	private Object getValue(final Dto dto, final AbstractEntity existingEntity, final boolean entityAlreadyExists, final Field field, final String fieldName) throws IllegalAccessException {
+		final Object value;
+		if (entityAlreadyExists) {
+			if (null == dto.get(fieldName)) {
+				value = field.get(existingEntity);
+			} else {
+				value = dto.get(fieldName);
+			}
+		} else {
+			value = dto.get(fieldName);
+		}
+		return value;
+	}
+
+	private void handleDtoLists(final Class<? extends AbstractEntity> entityClass, final AbstractEntity entity, final Field field, final String fieldName, final Object value) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		if (null == value || ((List<?>) value).isEmpty() || !(((List<?>) value).get(0) instanceof Dto)) {
 			return; // do not do anything because of the content stored in value.
 		}
@@ -125,7 +136,7 @@ public class DtoCopyMachine {
 		// field.set(entity, serverList);
 		// store child keys in entity
 		try {
-			entityClass.getField("services_keys").set(entity, keys);
+			field.set(entity, keys);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -153,7 +164,7 @@ public class DtoCopyMachine {
 					/**
 					 * skip null values
 					 */
-				} else if (value instanceof List<?>) {
+				} else if (DtoWizard.instance.getRelateFields().containsKey(field.hashCode())) {
 					handleDomainClassLists(dto, field, (List<?>) value);
 				} else if ("id".equals(fieldName)) {
 					try {
@@ -175,7 +186,7 @@ public class DtoCopyMachine {
 	}
 
 	private void handleDomainClassLists(final Dto dto, final Field field, final List<?> value) {
-		if (field.getName().endsWith("_keys") || (!value.isEmpty() && value.get(0) instanceof Key)) {
+		if (!value.isEmpty() && value.get(0) instanceof Key) {
 			if (null == m) {
 				m = PMF.get().getPersistenceManager();
 			}
@@ -183,7 +194,7 @@ public class DtoCopyMachine {
 			// retrieve the children whose keys have been stored and insert them into the dto object.
 			final LinkedList<Dto> children = new LinkedList<Dto>();
 			for (final Key key : (List<Key>) value) {
-				final AbstractEntity childDomainObject = m.getObjectById(Service.class, key.getId());
+				final AbstractEntity childDomainObject = m.getObjectById(DtoWizard.instance.getRelateFields().get(field.hashCode()), key.getId());
 				final Dto childDto = copy(childDomainObject);
 				
 				CommonServiceReader.resolveRelatedEntities(childDomainObject, childDto);
@@ -192,7 +203,7 @@ public class DtoCopyMachine {
 			}
 
 			// TODO set name in a generic manner
-			dto.set("services_objects", children);
+			dto.set(field.getName(), children);
 
 			return; // skip key lists because we cannot serialize them
 		}
@@ -230,9 +241,9 @@ public class DtoCopyMachine {
 				m = PMF.get().getPersistenceManager();
 			}
 
-			if (field.getName().endsWith("_keys")) {
+			if (DtoWizard.instance.getRelateFields().containsKey(field.hashCode())) {
 				// TODO does this work? delete specifying a key collection
-				m.deletePersistentAll(existingItemsList);
+				m.deletePersistentAll(DtoWizard.instance.getRelateFields().get(field.hashCode()), existingItemsList);
 			}
 
 			/*

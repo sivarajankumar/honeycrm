@@ -1,44 +1,19 @@
 package honeycrm.server.test;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.server.CommonServiceImpl;
+import honeycrm.server.domain.UniqueService;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-
-public class OfferingCreateTest extends TestCase {
-	private final Random r = new Random();
-	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
-	private CommonServiceImpl commonService;
-	private Set<Long> productIds;
-
-	@Override
-	protected void setUp() throws Exception {
-		helper.setUp();
-		commonService = new CommonServiceImpl();
-		productIds = createProducts();
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		helper.tearDown();
-	}
-
-	public void testCreate() {
-		final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-
-		for (int i = 0; i < 100; i++) {
+public class OfferingCreateTest extends DatastoreTest {
+	public void testCreateOfferings() {
+		final Set<Long> productIds = createProducts();
+		
+		for (int i = 0; i < 10; i++) {
 			final ArrayList<Dto> services = getServices(productIds);
 			final Dto offering = getOffering(services);
 
@@ -46,8 +21,8 @@ public class OfferingCreateTest extends TestCase {
 
 			final Dto o = commonService.get("offering", id);
 			assertNotNull(o.get("deadline"));
-			assertNotNull(o.get("services_objects"));
-			assertEquals(productIds.size(), ((Collection<Dto>) o.get("services_objects")).size());
+			assertNotNull(o.get("services"));
+			assertEquals(productIds.size(), ((Collection<Dto>) o.get("services")).size());
 		}
 	}
 
@@ -55,7 +30,7 @@ public class OfferingCreateTest extends TestCase {
 		final Dto offering = new Dto();
 		offering.setModule("offering");
 		offering.set("deadline", new Date(System.currentTimeMillis()));
-		offering.set("services_objects", services);
+		offering.set("services", services);
 		return offering;
 	}
 
@@ -64,7 +39,7 @@ public class OfferingCreateTest extends TestCase {
 
 		for (final Long productId : productIds) {
 			final Dto s = new Dto();
-			s.setModule("service");
+			s.setModule(UniqueService.class.getSimpleName().toLowerCase());
 			s.set("productID", productId);
 			services.add(s);
 		}
@@ -78,8 +53,8 @@ public class OfferingCreateTest extends TestCase {
 		product.setModule("product");
 
 		for (int i = 0; i < 2; i++) {
-			product.set("name", "product " + r.nextLong());
-			product.set("price", r.nextDouble());
+			product.set("name", "product " + random.nextLong());
+			product.set("price", random.nextDouble());
 
 			ids.add(commonService.create(product));
 		}

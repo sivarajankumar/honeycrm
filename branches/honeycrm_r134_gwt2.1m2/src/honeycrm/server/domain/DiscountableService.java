@@ -1,29 +1,19 @@
 package honeycrm.server.domain;
 
-import honeycrm.server.domain.decoration.DetailViewable;
-import honeycrm.server.domain.decoration.Hidden;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+
 import honeycrm.server.domain.decoration.Label;
-import honeycrm.server.domain.decoration.ListViewable;
-import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
-import javax.jdo.annotations.PersistenceCapable;
-
-import org.compass.annotations.Searchable;
-
 @PersistenceCapable
-@Searchable
-@ListViewable( { "productID", "price", "quantity", "discount", "kindOfDiscount", "sum" })
-@DetailViewable( { "name,productID", "discount,quantity", "kindOfDiscount", "price", "sum" })
-@Quicksearchable( { "name" })
-@Hidden
-
-// TODO perhaps service/offerings/contracts bug is caused by appengine/datastore bug: storage of owned relationships when children and parent are of same class
-public class Service extends AbstractEntity {
+@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
+public abstract class DiscountableService extends AbstractEntity {
 	@FieldStringAnnotation
 	@Label("Name")
 	public String name;
@@ -36,10 +26,10 @@ public class Service extends AbstractEntity {
 	@Label("Qty")
 	public int quantity;
 
-	@FieldEnumAnnotation({"%", "abs"})
+	@FieldEnumAnnotation({ "%", "abs" })
 	@Label("Kind")
 	public String kindOfDiscount;
-	
+
 	@FieldIntegerAnnotation(0)
 	@Label("Discount")
 	public int discount;

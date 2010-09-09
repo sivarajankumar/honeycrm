@@ -24,6 +24,7 @@ import honeycrm.server.domain.decoration.HasExtraButton;
 import honeycrm.server.domain.decoration.Hidden;
 import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
+import honeycrm.server.domain.decoration.OneToMany;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
@@ -53,6 +54,7 @@ public class DtoWizard {
 	private Map<String, ModuleDto> moduleNameToDto = null;
 	private Map<Class<? extends AbstractEntity>, Field[]> searchableFields = null;
 	private CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
+	private Map<Integer, Class<? extends AbstractEntity>> relateFields = new HashMap<Integer, Class<? extends AbstractEntity>>();
 
 	private DtoWizard() {
 	}
@@ -99,41 +101,49 @@ public class DtoWizard {
 					continue;
 				}
 
-				final String label = getLabel(field);
-
-				if (field.isAnnotationPresent(FieldBooleanAnnotation.class)) {
-					fields.put(name, new FieldBoolean(name, label));
-				} else if (field.isAnnotationPresent(FieldStringAnnotation.class)) {
-					fields.put(name, new FieldString(name, label));
-				} else if (field.isAnnotationPresent(FieldCurrencyAnnotation.class)) {
-					fields.put(name, new FieldCurrency(name, label, field.getAnnotation(FieldCurrencyAnnotation.class).value()));
-				} else if (field.isAnnotationPresent(FieldEnumAnnotation.class)) {
-					fields.put(name, new FieldEnum(name, label, field.getAnnotation(FieldEnumAnnotation.class).value()));
-				} else if (field.isAnnotationPresent(FieldMultiEnumAnnotation.class)) {
-					fields.put(name, new FieldMultiEnum(name, label, field.getAnnotation(FieldMultiEnumAnnotation.class).value()));
-				} else if (field.isAnnotationPresent(FieldEmailAnnotation.class)) {
-					fields.put(name, new FieldEmail(name, label));
-				} else if (field.isAnnotationPresent(FieldRelateAnnotation.class)) {
-					fields.put(name, new FieldRelate(name, field.getAnnotation(FieldRelateAnnotation.class).value().getSimpleName().toLowerCase(), label));
-				} else if (field.isAnnotationPresent(FieldDateAnnotation.class)) {
-					fields.put(name, new FieldDate(name, label));
-				} else if (field.isAnnotationPresent(FieldIntegerAnnotation.class)) {
-					fields.put(name, new FieldInteger(name, label, field.getAnnotation(FieldIntegerAnnotation.class).value()));
-				} else if (field.isAnnotationPresent(FieldTextAnnotation.class)) {
-					final int width = field.getAnnotation(FieldTextAnnotation.class).width();
-					fields.put(name, new FieldText(name, label, width));
-				} else if (field.isAnnotationPresent(FieldTableAnnotation.class)) {
-					fields.put(name, new FieldTable(name, label));
-				} else if (field.isAnnotationPresent(FieldWebsiteAnnotation.class)) {
-					fields.put(name, new FieldWebsite(name, label));
-				} else {
-					System.err.println(DtoWizard.class.getSimpleName() + ": field " + field.getName() + " does not define an expected annotation describing its field instance");
+				if (field.isAnnotationPresent(OneToMany.class)) {
+					relateFields.put(field.hashCode(), field.getAnnotation(OneToMany.class).value());
 				}
+				
+				handleFieldTypeAnnotation(fields, field, name);
 			}
 
 			moduleDto.setFields(fields);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void handleFieldTypeAnnotation(final HashMap<String, AbstractField> fields, final Field field, final String name) {
+		final String label = getLabel(field);
+
+		if (field.isAnnotationPresent(FieldBooleanAnnotation.class)) {
+			fields.put(name, new FieldBoolean(name, label));
+		} else if (field.isAnnotationPresent(FieldStringAnnotation.class)) {
+			fields.put(name, new FieldString(name, label));
+		} else if (field.isAnnotationPresent(FieldCurrencyAnnotation.class)) {
+			fields.put(name, new FieldCurrency(name, label, field.getAnnotation(FieldCurrencyAnnotation.class).value()));
+		} else if (field.isAnnotationPresent(FieldEnumAnnotation.class)) {
+			fields.put(name, new FieldEnum(name, label, field.getAnnotation(FieldEnumAnnotation.class).value()));
+		} else if (field.isAnnotationPresent(FieldMultiEnumAnnotation.class)) {
+			fields.put(name, new FieldMultiEnum(name, label, field.getAnnotation(FieldMultiEnumAnnotation.class).value()));
+		} else if (field.isAnnotationPresent(FieldEmailAnnotation.class)) {
+			fields.put(name, new FieldEmail(name, label));
+		} else if (field.isAnnotationPresent(FieldRelateAnnotation.class)) {
+			fields.put(name, new FieldRelate(name, field.getAnnotation(FieldRelateAnnotation.class).value().getSimpleName().toLowerCase(), label));
+		} else if (field.isAnnotationPresent(FieldDateAnnotation.class)) {
+			fields.put(name, new FieldDate(name, label));
+		} else if (field.isAnnotationPresent(FieldIntegerAnnotation.class)) {
+			fields.put(name, new FieldInteger(name, label, field.getAnnotation(FieldIntegerAnnotation.class).value()));
+		} else if (field.isAnnotationPresent(FieldTextAnnotation.class)) {
+			final int width = field.getAnnotation(FieldTextAnnotation.class).width();
+			fields.put(name, new FieldText(name, label, width));
+		} else if (field.isAnnotationPresent(FieldTableAnnotation.class)) {
+			fields.put(name, new FieldTable(name, label));
+		} else if (field.isAnnotationPresent(FieldWebsiteAnnotation.class)) {
+			fields.put(name, new FieldWebsite(name, label));
+		} else {
+			System.err.println(DtoWizard.class.getSimpleName() + ": field " + field.getName() + " does not define an expected annotation describing its field instance");
 		}
 	}
 
@@ -210,5 +220,12 @@ public class DtoWizard {
 			initialize();
 		}
 		return searchableFields;
+	}
+	
+	public Map<Integer, Class<? extends AbstractEntity>> getRelateFields() {
+		if (!initialized) {
+			initialize();
+		}
+		return relateFields;
 	}
 }

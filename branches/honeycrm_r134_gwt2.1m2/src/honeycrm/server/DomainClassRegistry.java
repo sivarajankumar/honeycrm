@@ -7,8 +7,10 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class DomainClassRegistry {
+	private static final Logger log = Logger.getLogger(DomainClassRegistry.class.getSimpleName());
 	public static final DomainClassRegistry instance = new DomainClassRegistry();
 	private final Map<String, Class<? extends AbstractEntity>> dtoToDomain = new HashMap<String, Class<? extends AbstractEntity>>();
 	private final Map<Class<? extends AbstractEntity>, String> domainToDto = new HashMap<Class<? extends AbstractEntity>, String>();
@@ -36,9 +38,11 @@ public class DomainClassRegistry {
 		return domainToDto.get(domainClass);
 	}
 
-	public Class<? extends AbstractEntity> getDomain(final String dto) {
-		assert dtoToDomain.containsKey(dto);
-		return dtoToDomain.get(dto);
+	public Class<? extends AbstractEntity> getDomain(final String dtoModuleName) {
+		if (!dtoToDomain.containsKey(dtoModuleName)) {
+			log.severe("Cannot find domain class for dto module " + dtoModuleName);
+		}
+		return dtoToDomain.get(dtoModuleName);
 	}
 
 	public Set<Class<? extends AbstractEntity>> getDomainClasses() {

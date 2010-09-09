@@ -44,6 +44,7 @@ public class FieldTable extends AbstractField {
 	 * Create the widget and initialize it with data.
 	 */
 	private Widget getTableWidget(Object value, final View view) {
+		// TODO make this independend of the widget / chose the widget
 		final ITableWidget w = new ServiceTableWidget(view);
 		w.setData((List<Dto>) value);
 		return w;

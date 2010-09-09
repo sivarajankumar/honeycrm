@@ -6,6 +6,7 @@ import honeycrm.server.domain.decoration.DetailViewable;
 import honeycrm.server.domain.decoration.HasExtraButton;
 import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
+import honeycrm.server.domain.decoration.OneToMany;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
@@ -15,7 +16,6 @@ import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 import java.util.Date;
 import java.util.List;
 
-import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import org.compass.annotations.Searchable;
 
@@ -24,19 +24,19 @@ import com.google.appengine.api.datastore.Key;
 @PersistenceCapable
 @Searchable
 @ListViewable({ "contactID", "deadline" })
-@DetailViewable({ "contactID", "assignedTo", "deadline", "services_objects" })
+@DetailViewable({ "contactID", "assignedTo", "deadline", "services", "recurringServices" })
 @Quicksearchable({ "contactID" })
 @HasExtraButton(label = "Create Contract", action = CreateContractAction.class, show = ModuleAction.DETAIL)
 public class Offering extends AbstractEntity {
-	// TODO this field basically has neither a label nor a field type for gui
-	@Label("")
-	@FieldStringAnnotation
-	public List<Key> services_keys;
+	@Label("Unique Services")
+	@FieldTableAnnotation(UniqueService.class)
+	@OneToMany(UniqueService.class)
+	public List<Key> services;
 
-	@NotPersistent
-	@Label("Services")
-	@FieldTableAnnotation(Service.class)
-	public List<Service> services_objects;
+	@Label("Recurring Services")
+	@FieldTableAnnotation(RecurringService.class)
+	@OneToMany(RecurringService.class)
+	public List<Key> recurringServices;
 	
 	@Label("Contact")
 	@FieldRelateAnnotation(Contact.class)
@@ -54,10 +54,12 @@ public class Offering extends AbstractEntity {
 	 * Calculate the sum of all services.
 	 */
 	public Double getCosts() {
-		Double costs = 0.0;
-		for (final Service s : services_objects) {
+		return 23.0;
+		// TODO hmm, not sure how we want to do that 
+/*		Double costs = 0.0;
+		for (final UniqueService s : services_objects) {
 			costs += (s.price - s.discount) * s.quantity;
 		}
-		return costs;
+		return costs;*/
 	}
 }

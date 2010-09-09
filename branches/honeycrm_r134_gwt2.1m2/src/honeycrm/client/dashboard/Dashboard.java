@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class Dashboard extends Composite {
 	private static final int COLS = 2;
-	private static final String[] modules = new String[] { "project", "contact", "donation", "membership", "offering", "account" };
+	private static final String[] modules = new String[] { "project", "contact", "donation", "membership", "offering", "contract", "account" };
 
 	public Dashboard() {
 		final DashboardListView[] listViews = getListViews();

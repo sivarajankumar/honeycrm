@@ -3,6 +3,7 @@ package honeycrm.server.test;
 import honeycrm.server.transfer.ReflectionHelper;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -15,9 +16,9 @@ public class AllTests {
 		 * add all tests in the honeycrm.server.test package to the test suite using reflection.
 		 */
 		for (final Class<?> testcase : ReflectionHelper.getClasses("honeycrm.server.test")) {
-			if (testcase.isAnonymousClass() || testcase.equals(AllTests.class)) {
+			if (Modifier.isAbstract(testcase.getModifiers()) || testcase.isAnonymousClass() || testcase.equals(AllTests.class)) {
 				/**
-				 * skip this class and anonymous classes (e.g. inner classes like Foo$1)
+				 * skip this class, abstract and anonymous classes (e.g. inner classes like Foo$1)
 				 */
 				continue;
 			} else {
