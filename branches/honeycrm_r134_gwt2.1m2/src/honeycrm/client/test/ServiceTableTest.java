@@ -1,6 +1,7 @@
 package honeycrm.client.test;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.offerings.ServiceTableWidget;
 import honeycrm.client.view.AbstractView.View;
 
@@ -18,7 +19,9 @@ public class ServiceTableTest extends AbstractClientTest {
 
 		list.add(s);
 
-		final ServiceTableWidget w = new ServiceTableWidget(View.EDIT);
+		final Dto offeringDto = DtoModuleRegistry.instance().get("offering").createDto();
+		
+		final ServiceTableWidget w = new ServiceTableWidget(offeringDto, "uniqueservice", View.EDIT);
 		w.setData(list);
 		w.getData();
 	}

@@ -5,7 +5,6 @@ import java.util.List;
 import honeycrm.client.dto.Dto;
 import honeycrm.server.domain.Offering;
 import honeycrm.server.domain.UniqueService;
-import honeycrm.server.transfer.DtoCopyMachine;
 
 public class OwnedOneToManyRelationshipTest extends DatastoreTest {
 	public void testCreate() {

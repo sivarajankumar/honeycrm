@@ -38,7 +38,8 @@ public class FieldRelate extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetCreateWidget(Object value) {
+	protected Widget internalGetCreateWidget(final Dto dto, final String fieldId) {
+		final Serializable value = dto.get(fieldId);
 		final long id = (null != value && value instanceof Long && (Long) value > 0) ? (Long) value : 0;
 		return new RelateWidget(getRelatedModule(), id);
 	}
@@ -119,7 +120,8 @@ public class FieldRelate extends AbstractField {
 	}
 
 	@Override
-	protected Widget internalGetEditWidget(Object value) {
+	protected Widget internalGetEditWidget(final Dto dto, final String fieldId) {
+		final Serializable value = dto.get(fieldId);
 		return new RelateWidget(getRelatedModule(), (null == value) ? 0 : (Long) value);
 	}
 

@@ -2,7 +2,6 @@ package honeycrm.client.offerings;
 
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.misc.NumberParser;
@@ -25,8 +24,8 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -35,19 +34,24 @@ import com.google.gwt.user.client.ui.Widget;
 public class ServiceTableWidget extends ITableWidget {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
-	private final ModuleDto moduleDto = DtoModuleRegistry.instance().get("uniqueservice");
+	private final ModuleDto moduleDto;
 	private final View view;
-	private final Label sum = new Label();
+	private final HTML sum = new HTML();
 	private final Map<Integer, Dto> model = new HashMap<Integer, Dto>();
-
-	public ServiceTableWidget(final View view) {
+	private final VerticalPanel panel = new VerticalPanel();
+	
+	public ServiceTableWidget(final Dto dto, final String fieldId, final View view) {
 		this.view = view;
+		this.moduleDto = ModuleDto.getRelatedDto(dto.getModule(), fieldId);
+		initialize();
+		initWidget(panel);
+	}
 
+	private void initialize() {
 		initHeader();
 
 		sum.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
-		final VerticalPanel panel = new VerticalPanel();
 		panel.add(table);
 		panel.add(sum);
 
@@ -72,8 +76,6 @@ public class ServiceTableWidget extends ITableWidget {
 
 			panel.add(addBtn);
 		}
-
-		initWidget(panel);
 	}
 
 	private void initHeader() {
@@ -120,7 +122,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 		updateSum(row);
 
-		sum.setText(NumberFormat.getCurrencyFormat("EUR").format(getSum(model.values())));
+		sum.setHTML("<b>" + NumberFormat.getCurrencyFormat("EUR").format(getSum(model.values())) + "</b>");
 	}
 
 	private void updateSum(final int row) {
@@ -150,7 +152,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 	private Dto getDtoFromRow(final int row) {
 		final Dto s = new Dto();
-		s.setModule("uniqueservice");
+		s.setModule(moduleDto.getModule());
 
 		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
 			if (table.getCellCount(/* HEADER_ROWS + */row) > col) {
@@ -167,8 +169,9 @@ public class ServiceTableWidget extends ITableWidget {
 
 	@Override
 	public void setData(List<Dto> data) {
-		if (null == data)
+		if (null == data) {
 			return;
+		}
 
 		if (!data.isEmpty()) {
 			if (data.get(0) instanceof Dto) {
@@ -183,7 +186,7 @@ public class ServiceTableWidget extends ITableWidget {
 			}
 		}
 
-		sum.setText(NumberFormat.getCurrencyFormat("EUR").format(getSum(data)));
+		sum.setHTML("<b>" + NumberFormat.getCurrencyFormat("EUR").format(getSum(data)) + "</b>");
 	}
 
 	/**

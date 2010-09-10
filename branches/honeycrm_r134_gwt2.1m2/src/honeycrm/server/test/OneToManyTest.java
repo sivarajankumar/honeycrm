@@ -6,10 +6,11 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.google.appengine.api.datastore.Key;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.server.PMF;
+import honeycrm.server.domain.DiscountableService;
 import honeycrm.server.domain.Offering;
+import honeycrm.server.domain.RecurringService;
 import honeycrm.server.domain.UniqueService;
 import honeycrm.server.transfer.DtoCopyMachine;
 
@@ -21,32 +22,45 @@ public class OneToManyTest extends DatastoreTest {
 		final Dto dto = new Dto();
 		dto.setModule(Offering.class.getSimpleName().toLowerCase());
 
-		final ArrayList<Dto> services = new ArrayList<Dto>();
-		services.add(getDtoService());
+		final ArrayList<Dto> uniqueServices = new ArrayList<Dto>();
+		uniqueServices.add(getDtoService(UniqueService.class.getSimpleName().toLowerCase()));
 
-		dto.set("services", services);
+		final ArrayList<Dto> recurringServices = new ArrayList<Dto>();
+		recurringServices.add(getDtoService(RecurringService.class.getSimpleName().toLowerCase()));
+		
+		dto.set("services", uniqueServices);
+		dto.set("recurringServices", recurringServices);
 
 		final Offering offering = (Offering) copy.copy(dto);
 
 		assertEquals(1, offering.services.size());
+		assertEquals(1, offering.recurringServices.size());
 	}
 
 	public void testCopyDomainObjectWithOneToMany() {
 		final int serviceCount = 1;
 		final Offering offering = new Offering();
-		offering.services = createAndPersistServices(serviceCount);
-
+		offering.services = createAndPersistServices(serviceCount, false);
+		offering.recurringServices = createAndPersistServices(serviceCount, true);
+		
 		final Dto dto = copy.copy(offering);
 
 		assertNotNull(dto.get("services"));
 		assertEquals(serviceCount, ((List<?>) dto.get("services")).size());
+		assertEquals(serviceCount, ((List<?>) dto.get("recurringServices")).size());
+		
+		final long id = commonService.create(dto);
+		
+		final Dto retrievedDto = commonService.get("offering", id);
+		assertEquals(serviceCount, ((List<?>) retrievedDto.get("services")).size());
+		assertEquals(serviceCount, ((List<?>) retrievedDto.get("recurringServices")).size());
 	}
 
-	private ArrayList<Key> createAndPersistServices(final int serviceCount) {
+	private ArrayList<Key> createAndPersistServices(final int serviceCount, boolean uniqueServices) {
 		final ArrayList<Key> keys = new ArrayList<Key>();
 
 		for (int i = 0; i < serviceCount; i++) {
-			final UniqueService s = getService();
+			final DiscountableService s = getService(uniqueServices);
 			m.makePersistent(s);
 			keys.add(s.id);
 		}
@@ -54,16 +68,16 @@ public class OneToManyTest extends DatastoreTest {
 		return keys;
 	}
 
-	private UniqueService getService() {
-		final UniqueService service = new UniqueService();
+	private DiscountableService getService(boolean uniqueServices) {
+		final DiscountableService service = uniqueServices ? new UniqueService() : new RecurringService();
 		service.name = "service" + random.nextInt();
 		service.price = random.nextDouble();
 		return service;
 	}
 
-	private Dto getDtoService() {
+	private Dto getDtoService(final String moduleName) {
 		final Dto dto = new Dto();
-		dto.setModule(UniqueService.class.getSimpleName().toLowerCase());
+		dto.setModule(moduleName);
 		dto.set("name", "service " + random.nextInt());
 		return dto;
 	}

@@ -74,7 +74,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	/**
 	 * Return the width suggested for the widget used to render this field as a string, e.g., "100px"
 	 */
-	public String getWidthString() {
+	private String getWidthString() {
 		return width + "px";
 	}
 
@@ -83,13 +83,13 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		case DETAIL:
 			return internalGetDetailWidget(dto, (fieldId));
 		case EDIT:
-			return internalGetEditWidget(dto.get(fieldId));
+			return internalGetEditWidget(dto, (fieldId));
 		case LIST:
 			return internalGetListWidget(dto, (fieldId));
 		case CREATE:
-			return internalGetCreateWidget(dto.get(fieldId));
+			return internalGetCreateWidget(dto, (fieldId));
 		case LIST_HEADER:
-			return getHeaderWidget(dto.get(fieldId));
+			return getHeaderWidget();
 		default:
 			throw new RuntimeException("Unknown view: " + view);
 		}
@@ -103,7 +103,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		return new Label();
 	}
 
-	protected Widget internalGetCreateWidget(Object value) {
+	protected Widget internalGetCreateWidget(final Dto dto, final String fieldId) {
 		return decorateWidget(setData(editField(), defaultValue, View.CREATE), false);
 	}
 
@@ -111,8 +111,8 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		return decorateWidget(setData(detailField(), dto.get(fieldId), View.DETAIL), true); // TODO do this in the upper class only
 	}
 
-	protected Widget internalGetEditWidget(Object value) {
-		return decorateWidget(setData(editField(), (Serializable) value, View.EDIT), false); // TODO change interface
+	protected Widget internalGetEditWidget(final Dto dto, final String fieldId) {
+		return decorateWidget(setData(editField(), dto.get(fieldId), View.EDIT), false); // TODO change interface
 	}
 
 	protected Widget internalGetListWidget(final Dto dto, final String fieldId) {
@@ -153,7 +153,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	/**
 	 * This returns a label containing the title of this field, all other properties (e.g., width, alignment) are set as for a normal content field. TODO this method should not receive a value as parameter since it does not need it
 	 */
-	private Label getHeaderWidget(final Object value) {
+	private Label getHeaderWidget() {
 		return (Label) decorateWidget(new Label(getLabel()), true);
 	}
 

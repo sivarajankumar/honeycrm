@@ -13,14 +13,14 @@ import org.compass.annotations.Searchable;
 
 @PersistenceCapable
 @Searchable
-@ListViewable({ "productID", "price", "quantity", "unit", "recurrence", "discount", "kindOfDiscount", "sum" })
+@ListViewable({ "productID", "price", "quantity", "unit2", "recurrence", "discount", "kindOfDiscount", "sum" })
 @DetailViewable({ "name,productID", "discount,quantity", "kindOfDiscount", "price", "sum" })
 @Quicksearchable({ "name" })
 @Hidden
 public class RecurringService extends DiscountableService {
 	@Label("Unit")
 	@FieldEnumAnnotation({ "hours", "pieces" })
-	public String unit;
+	public String unit2;
 
 	@Label("Recurrence")
 	@FieldEnumAnnotation({ "monthly", "annually" })

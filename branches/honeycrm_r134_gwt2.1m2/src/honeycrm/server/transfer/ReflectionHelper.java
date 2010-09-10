@@ -118,4 +118,8 @@ public class ReflectionHelper {
 		}
 		return filteredFields.toArray(new Field[0]);
 	}
+	
+	public String getFieldFQN(final Class<?> clazz, final String fieldName) {
+		return clazz.toString() + "." + fieldName;
+	}
 }

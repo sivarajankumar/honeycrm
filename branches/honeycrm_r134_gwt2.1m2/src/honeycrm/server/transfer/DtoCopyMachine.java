@@ -6,8 +6,6 @@ import honeycrm.server.CommonServiceReader;
 import honeycrm.server.DomainClassRegistry;
 import honeycrm.server.PMF;
 import honeycrm.server.domain.AbstractEntity;
-import honeycrm.server.domain.UniqueService;
-
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -15,8 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.Key;
 
@@ -73,9 +73,9 @@ public class DtoCopyMachine {
 
 		final Object value = getValue(dto, existingEntity, entityAlreadyExists, field, fieldName);
 
-		if (DtoWizard.instance.getRelateFields().containsKey(field.hashCode())) {
+		if (DtoWizard.instance.getRelateFields().containsKey(reflectionHelper.getFieldFQN(entityClass, fieldName))) {
 			// treat one to many relate field special
-			deleteOldChildItems(entityClass, entity, field);
+			deleteOldChildItems(entityClass, existingEntity, field);
 			handleDtoLists(entityClass, entity, field, fieldName, value);
 		} else {
 			if (null == value) {
@@ -168,8 +168,8 @@ public class DtoCopyMachine {
 					/**
 					 * skip null values
 					 */
-				} else if (DtoWizard.instance.getRelateFields().containsKey(field.hashCode())) {
-					handleDomainClassLists(dto, field, (List<Key>) value, fieldName);
+				} else if (DtoWizard.instance.getRelateFields().containsKey(reflectionHelper.getFieldFQN(entityClass, fieldName))) {
+					handleDomainClassLists(dto, entityClass, field, (List<Key>) value, fieldName);
 				} else if ("id".equals(fieldName)) {
 					try {
 						dto.set(fieldName, (int) ((Key) value).getId());
@@ -187,7 +187,7 @@ public class DtoCopyMachine {
 		return dto;
 	}
 
-	private void handleDomainClassLists(final Dto dto, final Field field, final List<Key> value, final String fieldName) {
+	private void handleDomainClassLists(final Dto dto, final Class<?> entityClass, final Field field, final List<Key> value, final String fieldName) {
 		if (value.isEmpty()) {
 			// do nothing
 		} else {
@@ -198,12 +198,23 @@ public class DtoCopyMachine {
 			// retrieve the children whose keys have been stored and insert them into the dto object.
 			final LinkedList<Dto> children = new LinkedList<Dto>();
 			for (final Key key : value) {
-				final AbstractEntity childDomainObject = m.getObjectById(DtoWizard.instance.getRelateFields().get(field.hashCode()), key.getId());
-				final Dto childDto = copy(childDomainObject);
+				final Class<?> queryClass = DtoWizard.instance.getRelateFields().get(reflectionHelper.getFieldFQN(entityClass, fieldName));
 
-				CommonServiceReader.resolveRelatedEntities(childDomainObject, childDto);
+				try {
+					final Query q = m.newQuery(queryClass);
+					q.setFilter("id == " + key.getId());
+					
+					final AbstractEntity childDomainObject = (AbstractEntity) ((List<?>) q.execute()).iterator().next();
+					
+//				final AbstractEntity childDomainObject = m.getObjectById(DtoWizard.instance.getRelateFields().get(reflectionHelper.getFieldFQN(entityClass, fieldName)), key.getId());
+					final Dto childDto = copy(childDomainObject);
 
-				children.add(childDto);
+					CommonServiceReader.resolveRelatedEntities(childDomainObject, childDto);
+
+					children.add(childDto);
+				} catch (NoSuchElementException e) {
+					System.err.println("Cannot find " + queryClass.toString() + "/" + key.getId());
+				}
 			}
 
 			dto.set(fieldName, children);
@@ -228,14 +239,13 @@ public class DtoCopyMachine {
 				m = PMF.get().getPersistenceManager();
 			}
 
-			if (DtoWizard.instance.getRelateFields().containsKey(field.hashCode())) {
+			if (DtoWizard.instance.getRelateFields().containsKey(reflectionHelper.getFieldFQN(entityClass, field.getName()))) {
 				// TODO does this work? delete specifying a key collection
-				m.deletePersistentAll(DtoWizard.instance.getRelateFields().get(field.hashCode()), existingItemsList);
+				for (final Key key: (Collection<Key>) existingItemsList) {
+					final Class<?> clazz = DtoWizard.instance.getRelateFields().get(reflectionHelper.getFieldFQN(entityClass, field.getName()));
+					m.deletePersistent(m.getObjectById(clazz, key));
+				}
 			}
-
-			/*
-			 * for (final Key childId : (List<Key>) existingItemsList) { if (null == childId) { System.out.println("epic fail: prevented npe"); } else { m.deletePersistent(m.getO)); // TODO why doesn't that work too? this throws an "this entity is currently managed by another manager" exception. // m.deletePersistent(child); // m.deletePersistent(m.getObjectById(child.getClass(), KeyFactory.createKey(existingEntity.id, child.getClass().getSimpleName(), child.id.getId()))); } }
-			 */
 		}
 	}
 }

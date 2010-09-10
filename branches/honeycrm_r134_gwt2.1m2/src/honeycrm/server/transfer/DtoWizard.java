@@ -54,7 +54,7 @@ public class DtoWizard {
 	private Map<String, ModuleDto> moduleNameToDto = null;
 	private Map<Class<? extends AbstractEntity>, Field[]> searchableFields = null;
 	private CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
-	private Map<Integer, Class<? extends AbstractEntity>> relateFields = new HashMap<Integer, Class<? extends AbstractEntity>>();
+	private Map<String, Class<? extends AbstractEntity>> relateFields = new HashMap<String, Class<? extends AbstractEntity>>();
 
 	private DtoWizard() {
 	}
@@ -92,7 +92,8 @@ public class DtoWizard {
 
 	private void setupFields(Class<AbstractEntity> domainClass, ModuleDto moduleDto) {
 		try {
-			final HashMap<String,AbstractField> fields = new HashMap<String, AbstractField>();
+			final HashMap<String, AbstractField> fields = new HashMap<String, AbstractField>();
+			final HashMap<String, String> relateFieldMappings = new HashMap<String, String>();
 
 			for (final Field field : reflectionHelper.getAllFields(domainClass)) {
 				final String name = field.getName();
@@ -102,12 +103,14 @@ public class DtoWizard {
 				}
 
 				if (field.isAnnotationPresent(OneToMany.class)) {
-					relateFields.put(field.hashCode(), field.getAnnotation(OneToMany.class).value());
+					relateFields.put(reflectionHelper.getFieldFQN(domainClass, name), field.getAnnotation(OneToMany.class).value());
+					relateFieldMappings.put(field.getName(), field.getAnnotation(OneToMany.class).value().getSimpleName().toLowerCase());
 				}
-				
+
 				handleFieldTypeAnnotation(fields, field, name);
 			}
 
+			moduleDto.setRelateFieldMappings(relateFieldMappings);
 			moduleDto.setFields(fields);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -164,7 +167,7 @@ public class DtoWizard {
 		 * the searchable fields are all fields of a class that have the SearchableProperty annotation and are of type String
 		 */
 		searchableFields.put(domainClass, ReflectionHelper.getFieldsByType(reflectionHelper.getAllFieldsWithAnnotation(domainClass, SearchableProperty.class), String.class));
-		
+
 		moduleDto.setHidden(domainClass.isAnnotationPresent(Hidden.class));
 		moduleDto.setExtraButtons(getExtraButtons(domainClass));
 
@@ -193,13 +196,13 @@ public class DtoWizard {
 				final String label = domainClass.getAnnotation(HasExtraButton.class).label();
 				final Class<? extends AbstractAction> action = domainClass.getAnnotation(HasExtraButton.class).action();
 				final ModuleAction show = domainClass.getAnnotation(HasExtraButton.class).show();
-				
+
 				final ExtraButton b = new ExtraButton();
 				b.setLabel(label);
 				b.setAction(action.newInstance());
 				b.setShow(show);
-				
-				return new ExtraButton[]{b};
+
+				return new ExtraButton[] { b };
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -221,8 +224,8 @@ public class DtoWizard {
 		}
 		return searchableFields;
 	}
-	
-	public Map<Integer, Class<? extends AbstractEntity>> getRelateFields() {
+
+	public Map<String, Class<? extends AbstractEntity>> getRelateFields() {
 		if (!initialized) {
 			initialize();
 		}

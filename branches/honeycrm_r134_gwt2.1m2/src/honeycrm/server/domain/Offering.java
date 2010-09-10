@@ -10,7 +10,6 @@ import honeycrm.server.domain.decoration.OneToMany;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
-import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 
 import java.util.Date;

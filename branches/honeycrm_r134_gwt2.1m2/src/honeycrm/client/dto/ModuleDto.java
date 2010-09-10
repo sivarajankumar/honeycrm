@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
+import com.google.gwt.user.client.Window;
+
 public class ModuleDto implements Serializable {
 	private static final long serialVersionUID = -7089308530920293835L;
 
@@ -21,6 +23,7 @@ public class ModuleDto implements Serializable {
 	private String title;
 	private String module;
 	private HashMap<String, AbstractField> fields = new HashMap<String, AbstractField>(20);
+	private HashMap<String, String> relateFieldMappings = new HashMap<String, String>(20);
 
 	public ModuleDto() {
 	}
@@ -96,14 +99,34 @@ public class ModuleDto implements Serializable {
 	public void setExtraButtons(ExtraButton[] extraButtons) {
 		this.extraButtons = extraButtons;
 	}
+	
+	public HashMap<String, String> getRelateFieldMappings() {
+		return relateFieldMappings;
+	}
+
+	public void setRelateFieldMappings(HashMap<String, String> relateFields) {
+		this.relateFieldMappings = relateFields;
+	}
 
 	public AbstractField getFieldById(final String id) {
 		if (fields.containsKey(id)) {
 			return fields.get(id);
 		} else {
+			Window.alert("Could not find field with id " + id + " in " + ModuleDto.class);
 			// did not find a field with this id. should never reach this point.
 			throw new RuntimeException("Could not find field with id " + id + " in " + ModuleDto.class);
 		}
+	}
+	
+	/**
+	 * Returns the module dto instance representing the fields that are referenced by the relate field.
+	 * E.g. offerings reference unique services with the field "uniqueServices".
+	 * getRelatedDto("offering", "uniqueServices") then returns an instance of the module dto for unique services.
+	 */
+	public static ModuleDto getRelatedDto(final String originatingModuleName, final String relateFieldId) {
+		final ModuleDto originatingModule = DtoModuleRegistry.instance().get(originatingModuleName);
+		final String relatedModuleName = originatingModule.getRelateFieldMappings().get(relateFieldId);
+		return DtoModuleRegistry.instance().get(relatedModuleName);
 	}
 
 	public Dto createDto() {
