@@ -1,7 +1,6 @@
 package honeycrm.server.test;
 
 import honeycrm.server.domain.Offering;
-import honeycrm.server.domain.UniqueService;
 import honeycrm.server.reports.OfferingReports;
 
 import java.util.Calendar;
@@ -48,24 +47,6 @@ public class OfferingReportsTest extends TestCase {
 			//sum += getServices(o.services_objects);
 
 			offerings.add(o);
-		}
-
-		return sum;
-	}
-
-	private Double getServices(final List<UniqueService> services) {
-		Double sum = 0.0;
-
-		final int servicesCount = 2 + random.nextInt() % 100;
-
-		for (int i = 0; i < servicesCount; i++) {
-			final UniqueService s = new UniqueService();
-			s.quantity = random.nextInt(100);
-			s.price = Math.abs(random.nextDouble() % 10000.0);
-			s.discount = random.nextInt(10);
-			services.add(s);
-
-			sum += (s.price - s.discount) * s.quantity;
 		}
 
 		return sum;

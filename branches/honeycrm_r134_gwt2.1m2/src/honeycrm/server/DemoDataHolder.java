@@ -18,8 +18,13 @@ public class DemoDataHolder {
 	private final static List<String> contractNames = new LinkedList<String>();
 	private final static List<String> serviceNames = new LinkedList<String>();
 	private final static List<String> serviceDiscountTypes = new LinkedList<String>();
-
+	private final static List<String> productNames = new LinkedList<String>();
+	
 	static {
+		productNames.add("foo");
+		productNames.add("bar");
+		productNames.add("baz");
+		
 		serviceDiscountTypes.add("ABS");
 		serviceDiscountTypes.add("REL");
 
@@ -146,5 +151,9 @@ public class DemoDataHolder {
 
 	public static String getRandomDiscountType() {
 		return serviceDiscountTypes.get(r.nextInt(serviceDiscountTypes.size()));
+	}
+
+	public static String getRandomProductName() {
+		return productNames.get(r.nextInt(productNames.size())) + r.nextInt();
 	}
 }

@@ -4,12 +4,9 @@ import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.transfer.DtoCopyMachine;
 import honeycrm.server.transfer.ReflectionHelper;
 
-import java.util.Collection;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
@@ -28,13 +25,6 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	}
 
 	protected static AbstractEntity getDomainObject(final String dtoIndex, final long id) {
-		final Query query = m.newQuery(getDomainClass(dtoIndex), "id == " + id);
-		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
-
-		if (1 == collection.size()) {
-			return collection.iterator().next();
-		} else {
-			return null;
-		}
+		return id > 0 ? (AbstractEntity) m.getObjectById(getDomainClass(dtoIndex), id) : null;
 	}
 }

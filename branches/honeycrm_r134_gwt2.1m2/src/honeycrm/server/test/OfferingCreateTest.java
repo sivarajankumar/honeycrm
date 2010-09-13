@@ -1,6 +1,7 @@
 package honeycrm.server.test;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.server.DemoDataProvider;
 import honeycrm.server.domain.UniqueService;
 
 import java.util.ArrayList;
@@ -49,13 +50,8 @@ public class OfferingCreateTest extends DatastoreTest {
 
 	private Set<Long> createProducts() {
 		final Set<Long> ids = new HashSet<Long>();
-		final Dto product = new Dto();
-		product.setModule("product");
 
-		for (int i = 0; i < 2; i++) {
-			product.set("name", "product " + random.nextLong());
-			product.set("price", random.nextDouble());
-
+		for (final Dto product: DemoDataProvider.getProducts(2)) {
 			ids.add(commonService.create(product));
 		}
 

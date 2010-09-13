@@ -3,6 +3,8 @@ package honeycrm.server.test;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.server.DomainClassRegistry;
 import honeycrm.server.domain.AbstractEntity;
+import honeycrm.server.domain.Contract;
+import honeycrm.server.domain.Offering;
 import honeycrm.server.domain.RecurringService;
 import honeycrm.server.domain.UniqueService;
 import honeycrm.server.transfer.DtoWizard;
@@ -51,6 +53,8 @@ public class DtoWizardTest extends TestCase {
 	public void testRelateFieldHashCodeAssumptions() {
 		try {
 			for (int i = 0; i < 10; i++) {
+				assertTrue(Contract.class.getField("services").hashCode() != Offering.class.getField("services").hashCode());
+				
 				assertNotSame(UniqueService.class.getField("id"), UniqueService.class.getField("id"));
 				assertTrue(UniqueService.class.getField("id").hashCode() == RecurringService.class.getField("id").hashCode());
 
@@ -66,6 +70,7 @@ public class DtoWizardTest extends TestCase {
 				// ok, great. we cannot distinguish between the id field in both classes since it is declared in the upper class and thus appears to be the same field.
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail();
 		}
 	}

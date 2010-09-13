@@ -129,12 +129,10 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		endAndPersist(call);
 	}
 
+	// TODO delete does not delete anymore..
 	@Override
 	public void delete(String dtoIndex, long id) {
-		final Object object = getDomainObject(dtoIndex, id);
-		if (null != object) {
-			m.deletePersistent(object);
-		}
+		m.deletePersistent(m.getObjectById(getDomainClass(dtoIndex), id));
 	}
 
 	@Override
@@ -252,14 +250,14 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void bulkRead() {
 		final PersistenceManager m = PMF.get().getPersistenceManager();
-		
+
 		final long before = System.currentTimeMillis();
 		log.warning("Started full table scan");
 		System.out.flush();
 		final Query q = m.newQuery(ReadTest.class);
 		q.setRange(1, 1000);
 		final Collection<ReadTest> result = (Collection<ReadTest>) q.execute();
-		
+
 		log.warning("Finished full table scan: Read items in " + (System.currentTimeMillis() - before) + " ms.");
 	}
 

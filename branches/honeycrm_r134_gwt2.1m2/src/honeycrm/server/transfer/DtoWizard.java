@@ -54,8 +54,8 @@ public class DtoWizard {
 	private Map<String, ModuleDto> moduleNameToDto = null;
 	private Map<Class<? extends AbstractEntity>, Field[]> searchableFields = null;
 	private CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
-	private Map<String, Class<? extends AbstractEntity>> relateFields = new HashMap<String, Class<? extends AbstractEntity>>();
-
+	private Map<Class<?>, Map<Field, Class<?>>> relateFields = new HashMap<Class<?>, Map<Field,Class<?>>>(2);
+	
 	private DtoWizard() {
 	}
 
@@ -103,7 +103,10 @@ public class DtoWizard {
 				}
 
 				if (field.isAnnotationPresent(OneToMany.class)) {
-					relateFields.put(reflectionHelper.getFieldFQN(domainClass, name), field.getAnnotation(OneToMany.class).value());
+					if (!relateFields.containsKey(domainClass)) {
+						relateFields.put(domainClass, new HashMap<Field, Class<?>>(2));
+					}
+					relateFields.get(domainClass).put(field, field.getAnnotation(OneToMany.class).value());
 					relateFieldMappings.put(field.getName(), field.getAnnotation(OneToMany.class).value().getSimpleName().toLowerCase());
 				}
 
@@ -225,7 +228,7 @@ public class DtoWizard {
 		return searchableFields;
 	}
 
-	public Map<String, Class<? extends AbstractEntity>> getRelateFields() {
+	public Map<Class<?>, Map<Field, Class<?>>> getRelateFields() {
 		if (!initialized) {
 			initialize();
 		}

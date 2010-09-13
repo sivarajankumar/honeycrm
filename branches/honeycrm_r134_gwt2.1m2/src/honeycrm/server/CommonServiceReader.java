@@ -25,18 +25,18 @@ import javax.jdo.Query;
 public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 
-	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final Collection<AbstractEntity> collection) {
+	protected Dto[] getArrayFromQueryResult(final String dtoIndex, final List<AbstractEntity> collection) {
 		if (collection.isEmpty()) {
 			return null;
 		}
 
 		final List<Dto> list = new LinkedList<Dto>();
 
+		final Class<?> itemClass = collection.get(0).getClass();
+		
 		for (final AbstractEntity item : collection) {
-			final Dto dto = copy.copy(item);  // 60%
-
-			resolveRelatedEntities(item, dto); // 20%
-
+			final Dto dto = copy.copy(item);
+			resolveRelatedEntities(item, dto, itemClass);
 			list.add(dto);
 		}
 
@@ -44,23 +44,24 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	public static void resolveRelatedEntities(final AbstractEntity item, final Dto dto) {
+		resolveRelatedEntities(item, dto, item.getClass());
+	}
+	
+	public static void resolveRelatedEntities(final AbstractEntity item, final Dto dto, final Class<?> originatingClass) {
 		try {
-			final Class<? extends AbstractEntity> originatingClass = item.getClass();
-
 			/**
 			 * iterate over all fields annotated as being relate fields.
 			 */
+			// TODO this can be done at initialization time
 			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingClass, FieldRelateAnnotation.class)) {
 				final Class<? extends AbstractEntity> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
-				final String relatedModuleName = relatedClass.getSimpleName().toLowerCase();
-
 				final Long id = (Long) field.get(item);
 				
 				if (null != id && id > 0) {
 					/**
 					 * retrieve the referenced entity and copy its dto representation as an additional field into the originating dto object.
 					 */
-					final AbstractEntity relatedEntity = getDomainObject(relatedModuleName, id);
+					final AbstractEntity relatedEntity = m.getObjectById(relatedClass, id);
 
 					if (null != relatedEntity) {
 						final Dto relatedDto = copy.copy(relatedEntity);
@@ -94,7 +95,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		query.setOrdering("views desc");
 		query.setRange(from, to);
 
-		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, (Collection) query.execute()), getItemCount(dtoIndex));
+		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, (List<AbstractEntity>) query.execute()), getItemCount(dtoIndex));
 	}
 
 	public Dto get(final String dtoIndex, final long id) {
@@ -141,7 +142,7 @@ public class CommonServiceReader extends AbstractCommonService {
 				query.declareParameters("String searchedName");
 				query.setRange(from, to);
 
-				final Collection collection = (Collection) query.execute(prefix);
+				final List<AbstractEntity> collection = (List<AbstractEntity>) query.execute(prefix);
 				System.out.println("getAllByNamePrefix('" + prefix + "')");
 				return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 			} catch (RuntimeException e) {
@@ -201,7 +202,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(originating, related)) {
 			final Query q = m.newQuery(getDomainClass(originating));
 			q.setFilter(fieldName + " == " + id);
-			result.addAll((Collection<AbstractEntity>) q.execute());
+			result.addAll((List<AbstractEntity>) q.execute());
 		}
 
 		// final long dbDiff = System.currentTimeMillis() - dbStart;
@@ -251,7 +252,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		query.setRange(from, to);
 		query.setFilter(filters);
 
-		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
+		final List<AbstractEntity> collection = (List<AbstractEntity>) query.execute();
 		return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
 	}
 }
