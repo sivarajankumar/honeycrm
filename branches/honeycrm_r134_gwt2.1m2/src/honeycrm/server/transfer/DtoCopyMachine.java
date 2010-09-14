@@ -73,7 +73,7 @@ public class DtoCopyMachine {
 
 		final Object value = getValue(dto, existingEntity, entityAlreadyExists, field, fieldName);
 
-		if (RELATE_FIELDS.containsKey(entityClass) && RELATE_FIELDS.get(entityClass).containsKey(field)) { //reflectionHelper.getFieldFQN(entityClass, fieldName))) {
+		if (RELATE_FIELDS.containsKey(entityClass) && RELATE_FIELDS.get(entityClass).containsKey(field)) { // reflectionHelper.getFieldFQN(entityClass, fieldName))) {
 			// treat one to many relate field special
 			deleteOldChildItems(entityClass, existingEntity, field);
 			handleDtoLists(entityClass, entity, field, fieldName, value);
@@ -138,11 +138,15 @@ public class DtoCopyMachine {
 		}
 	}
 
+	public Dto copy(AbstractEntity entity) {
+		return copy(entity, false);
+	}
+
 	/**
 	 * Copy data from a domain class instance into a Dto. This is usually the case whenever the server responds to clients (read).
 	 */
 	// application hotspot 2nd place
-	public Dto copy(AbstractEntity entity) {
+	public Dto copy(AbstractEntity entity, final boolean resolveLists) {
 		final Dto dto = new Dto();
 
 		if (null == entity) {
@@ -166,13 +170,15 @@ public class DtoCopyMachine {
 					 */
 				} else if ("id".equals(fieldName)) {
 					try {
-						dto.set(fieldName, (int) ((Key) value).getId());
+						dto.set(fieldName, (long) ((Key) value).getId());
 					} catch (NullPointerException e) {
 						System.out.println("npe!");
 					}
-				} else if (RELATE_FIELDS.containsKey(entityClass) && RELATE_FIELDS.get(entityClass).containsKey(field)) { // reflectionHelper.getFieldFQN(entityClass, fieldName))) {
-					// 80% of whole method execution time spend here
-					handleDomainClassLists(dto, entityClass, field, (List<Key>) value, fieldName);
+				} else if (RELATE_FIELDS.containsKey(entityClass) && RELATE_FIELDS.get(entityClass).containsKey(field)) {
+					if (resolveLists) {
+						// 80% of whole method execution time spend here
+						handleDomainClassLists(dto, entityClass, field, (List<Key>) value, fieldName);
+					}
 				} else {
 					dto.set(fieldName, (Serializable) value);
 				}
@@ -193,7 +199,7 @@ public class DtoCopyMachine {
 			final LinkedList<Dto> children = new LinkedList<Dto>();
 			for (final Key key : value) {
 				// TODO avoid NoSuchElement exc / null pointer exc
-				final Class<?> queryClass = RELATE_FIELDS.get(entityClass).get(field); // reflectionHelper.getFieldFQN(entityClass, fieldName));
+				final Class<?> queryClass = RELATE_FIELDS.get(entityClass).get(field);
 
 				try {
 					final AbstractEntity childDomainObject = (AbstractEntity) m.getObjectById(queryClass, key.getId());
@@ -224,9 +230,9 @@ public class DtoCopyMachine {
 				return; // we do not have to do anything
 			}
 
-			if (RELATE_FIELDS.containsKey(entityClass) && RELATE_FIELDS.get(entityClass).containsKey(field)) { //reflectionHelper.getFieldFQN(entityClass, field.getName()))) {
+			if (RELATE_FIELDS.containsKey(entityClass) && RELATE_FIELDS.get(entityClass).containsKey(field)) { // reflectionHelper.getFieldFQN(entityClass, field.getName()))) {
 				// TODO does this work? delete specifying a key collection
-				for (final Key key: (Collection<Key>) existingItemsList) {
+				for (final Key key : (Collection<Key>) existingItemsList) {
 					final Class<?> clazz = RELATE_FIELDS.get(entityClass).get(field); // (reflectionHelper.getFieldFQN(entityClass, field.getName()));
 					m.deletePersistent(m.getObjectById(clazz, key));
 				}

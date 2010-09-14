@@ -43,7 +43,7 @@ public class OneToManyTest extends DatastoreTest {
 		offering.services = createAndPersistServices(serviceCount, false);
 		offering.recurringServices = createAndPersistServices(serviceCount, true);
 		
-		final Dto dto = copy.copy(offering);
+		final Dto dto = copy.copy(offering, true);
 
 		assertNotNull(dto.get("services"));
 		assertEquals(serviceCount, ((List<?>) dto.get("services")).size());

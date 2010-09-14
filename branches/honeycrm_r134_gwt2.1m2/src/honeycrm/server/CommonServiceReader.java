@@ -104,7 +104,8 @@ public class CommonServiceReader extends AbstractCommonService {
 		if (null == domainObject) {
 			return null;
 		} else {
-			final Dto dto = copy.copy(domainObject);
+			// pass resolveLists = true because we now we need to get all data. in list views for example we do not need the list content because it cannot be displayed anyway.
+			final Dto dto = copy.copy(domainObject, true);
 			resolveRelatedEntities(domainObject, dto);
 			return dto;
 		}
