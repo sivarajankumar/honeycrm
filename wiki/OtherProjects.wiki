@@ -1,5 +1,10 @@
 #summary Other interesting projects in arbitrary order
 
+== zoho crm ==
+ * http://www.zoho.com/
+ * demo at http://crm.zoho.com/crm/ShowHomePage.do
+ * *impressive*, looks nice, feels relatively fast - still, should be faster
+
 == civi crm ==
  * http://drupal.demo.civicrm.org/ http://joomla.demo.civicrm.org
  * very nice look and feel, much more web 2.0 like web application
