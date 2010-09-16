@@ -1,7 +1,10 @@
 #summary some resources about google web toolkit
 
-= must read = 
- * articles in app engine documentation e.g. about datastore http://code.google.com/intl/de-DE/appengine/articles/
+= Project management =
+ * *getting real* from 37signals.com http://gettingreal.37signals.com
+
+= Must Read: Howtos and Patterns = 
+ * *articles* in app engine documentation e.g. about datastore http://code.google.com/intl/de-DE/appengine/articles/
 
 = general gwt resources =
 
