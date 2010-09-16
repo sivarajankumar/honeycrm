@@ -6,6 +6,7 @@
  * *impressive*, looks nice, feels relatively fast - still, should be faster
  * nice reporting with very fast export functionality
  * layout looks similar to salesforce and sugarcrm. actually the vendor compares the prices with sugarcrm, salesforce.com and act.
+ * at the bottom of the page stays a panel displaying notifications and allowing to chat with other employees i.e. zoho integrates an instant messaging tool for collaboration, too.
 
 == civi crm ==
  * http://drupal.demo.civicrm.org/ http://joomla.demo.civicrm.org
