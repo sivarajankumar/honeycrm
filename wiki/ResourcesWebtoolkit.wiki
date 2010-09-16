@@ -1,5 +1,8 @@
 #summary some resources about google web toolkit
 
+= must read = 
+ * articles in app engine documentation e.g. about datastore http://code.google.com/intl/de-DE/appengine/articles/
+
 = general gwt resources =
 
 || google i/o 2010 video about ui overhaul ||  http://www.youtube.com/watch?v=g2XclEOJdIc&playnext_from=TL&videos=3iOGbt6Y2as ||
