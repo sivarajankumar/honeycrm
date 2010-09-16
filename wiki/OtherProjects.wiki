@@ -4,6 +4,7 @@
  * http://www.zoho.com/
  * demo at http://crm.zoho.com/crm/ShowHomePage.do
  * *impressive*, looks nice, feels relatively fast - still, should be faster
+ * nice reporting with very fast export functionality
 
 == civi crm ==
  * http://drupal.demo.civicrm.org/ http://joomla.demo.civicrm.org
