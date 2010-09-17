@@ -6,6 +6,7 @@ import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
+import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
@@ -16,9 +17,13 @@ import org.compass.annotations.Searchable;
 @PersistenceCapable
 @Searchable
 @ListViewable( { "name", "price" })
-@DetailViewable( { "name", "price", "published", "description" })
+@DetailViewable( { "name", "price", "published", "predecessor", "description" })
 @Quicksearchable( { "name" })
 public class Product extends AbstractEntity {
+	@FieldRelateAnnotation(Product.class)
+	@Label("Predecessor Product")
+	public long predecessor;
+	
 	@FieldStringAnnotation
 	@Label("Name")
 	public String name;

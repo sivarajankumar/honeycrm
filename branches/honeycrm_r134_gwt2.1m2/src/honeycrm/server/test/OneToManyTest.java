@@ -1,11 +1,5 @@
 package honeycrm.server.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-
-import com.google.appengine.api.datastore.Key;
 import honeycrm.client.dto.Dto;
 import honeycrm.server.PMF;
 import honeycrm.server.domain.DiscountableService;
@@ -13,6 +7,13 @@ import honeycrm.server.domain.Offering;
 import honeycrm.server.domain.RecurringService;
 import honeycrm.server.domain.UniqueService;
 import honeycrm.server.transfer.DtoCopyMachine;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jdo.PersistenceManager;
+
+import com.google.appengine.api.datastore.Key;
 
 public class OneToManyTest extends DatastoreTest {
 	private final PersistenceManager m = PMF.get().getPersistenceManager();

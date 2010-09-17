@@ -1,11 +1,11 @@
 package honeycrm.server.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.server.DemoDataProvider;
 import honeycrm.server.domain.Contract;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContractRetrievePerformanceTest extends DatastoreTest {
 	public void testCreateAndRead() throws InterruptedException {
@@ -43,7 +43,7 @@ public class ContractRetrievePerformanceTest extends DatastoreTest {
 		System.out.println("done.");
 
 		// for profiling this might be useful..
-		Thread.sleep(1000 * 60 * 60);
+		// Thread.sleep(1000 * 60 * 60);
 	}
 
 	private Dto getContract(final int count, final List<Long> productIds) {

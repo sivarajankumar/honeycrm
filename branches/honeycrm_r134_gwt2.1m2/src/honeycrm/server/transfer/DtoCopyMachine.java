@@ -6,6 +6,7 @@ import honeycrm.server.CommonServiceReader;
 import honeycrm.server.DomainClassRegistry;
 import honeycrm.server.PMF;
 import honeycrm.server.domain.AbstractEntity;
+
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -17,6 +18,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.jdo.PersistenceManager;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 
 public class DtoCopyMachine {
@@ -24,6 +28,7 @@ public class DtoCopyMachine {
 	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	private static final DomainClassRegistry registry = DomainClassRegistry.instance;
 	private static final PersistenceManager m = PMF.get().getPersistenceManager();
+	private static final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 	public AbstractEntity copy(Dto dto) {
 		return copy(dto, null);
@@ -118,7 +123,7 @@ public class DtoCopyMachine {
 		}
 
 		final List<Key> keys = new ArrayList<Key>();
-
+		
 		for (final Dto child : (List<Dto>) value) {
 			/**
 			 * save the child item externally add its Key to the key list which is stored within the parent.
@@ -170,7 +175,7 @@ public class DtoCopyMachine {
 					 */
 				} else if ("id".equals(fieldName)) {
 					try {
-						dto.set(fieldName, (long) ((Key) value).getId());
+						dto.set(fieldName, ((Key) value).getId());
 					} catch (NullPointerException e) {
 						System.out.println("npe!");
 					}
@@ -197,6 +202,14 @@ public class DtoCopyMachine {
 		} else {
 			// retrieve the children whose keys have been stored and insert them into the dto object.
 			final LinkedList<Dto> children = new LinkedList<Dto>();
+			
+/* TODO we should do a parallel fetch instead using the low level api.
+ * 		but this requires copying from a property list instead of copying from an object into a Dto instance.
+ * 			final Map<Key, Entity> result = datastore.get(value);
+			for (final Key key: value) {
+				System.out.println(result.get(key).getProperty("price"));
+			}
+*/			
 			for (final Key key : value) {
 				// TODO avoid NoSuchElement exc / null pointer exc
 				final Class<?> queryClass = RELATE_FIELDS.get(entityClass).get(field);
@@ -233,7 +246,7 @@ public class DtoCopyMachine {
 			if (RELATE_FIELDS.containsKey(entityClass) && RELATE_FIELDS.get(entityClass).containsKey(field)) { // reflectionHelper.getFieldFQN(entityClass, field.getName()))) {
 				// TODO does this work? delete specifying a key collection
 				for (final Key key : (Collection<Key>) existingItemsList) {
-					final Class<?> clazz = RELATE_FIELDS.get(entityClass).get(field); // (reflectionHelper.getFieldFQN(entityClass, field.getName()));
+					final Class<?> clazz = RELATE_FIELDS.get(entityClass).get(field);
 					m.deletePersistent(m.getObjectById(clazz, key));
 				}
 			}

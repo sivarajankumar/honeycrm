@@ -1,15 +1,15 @@
 package honeycrm.server.domain;
 
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-
 import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
+
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
+import javax.jdo.annotations.PersistenceCapable;
 
 @PersistenceCapable
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)

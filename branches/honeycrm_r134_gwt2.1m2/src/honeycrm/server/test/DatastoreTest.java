@@ -1,13 +1,13 @@
 package honeycrm.server.test;
 
+import honeycrm.server.CommonServiceImpl;
+
 import java.util.Random;
 
-import honeycrm.server.CommonServiceImpl;
+import junit.framework.TestCase;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-
-import junit.framework.TestCase;
 
 public abstract class DatastoreTest extends TestCase {
 	protected static final Random random = new Random(System.currentTimeMillis());

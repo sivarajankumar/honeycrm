@@ -1,13 +1,14 @@
 package honeycrm.server.test;
 
-import java.util.LinkedList;
-import java.util.List;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.CollectionHelper;
 import honeycrm.server.DemoDataProvider;
 import honeycrm.server.domain.Offering;
 import honeycrm.server.domain.UniqueService;
 import honeycrm.server.transfer.DtoCopyMachine;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class DtoSelfcopyingTest extends DatastoreTest {
 	private final DtoCopyMachine copy = new DtoCopyMachine();

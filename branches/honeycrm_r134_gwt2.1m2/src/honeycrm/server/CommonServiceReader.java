@@ -201,6 +201,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		// final long dbStart = System.currentTimeMillis();
 
 		for (final String fieldName : RelationshipFieldTable.instance.getRelationshipFieldNames(originating, related)) {
+			// TODO use parallel fetch instead if possible
 			final Query q = m.newQuery(getDomainClass(originating));
 			q.setFilter(fieldName + " == " + id);
 			result.addAll((List<AbstractEntity>) q.execute());

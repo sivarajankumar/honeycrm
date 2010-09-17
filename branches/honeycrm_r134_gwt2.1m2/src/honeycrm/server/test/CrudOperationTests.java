@@ -4,11 +4,10 @@ import honeycrm.client.dto.Dto;
 import honeycrm.server.CommonServiceImpl;
 import honeycrm.server.DemoDataProvider;
 import honeycrm.server.transfer.DtoCopyMachine;
+import junit.framework.TestCase;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-
-import junit.framework.TestCase;
 
 public class CrudOperationTests extends TestCase {
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());

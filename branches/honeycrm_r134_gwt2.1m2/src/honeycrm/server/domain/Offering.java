@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
+
 import org.compass.annotations.Searchable;
 
 import com.google.appengine.api.datastore.Key;

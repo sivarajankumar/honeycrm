@@ -1,8 +1,9 @@
 package honeycrm.server.test;
 
-import java.util.List;
 import honeycrm.client.dto.Dto;
 import honeycrm.server.DemoDataProvider;
+
+import java.util.List;
 
 public class OwnedOneToManyRelationshipTest extends DatastoreTest {
 	public void testCreate() {
