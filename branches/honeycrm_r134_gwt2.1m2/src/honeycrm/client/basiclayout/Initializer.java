@@ -22,7 +22,7 @@ public class Initializer extends DockLayoutPanel {
 	/**
 	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
 	 */
-	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
+	public static final boolean SKIP_LOADING_VISUALISATIONS = true;
 	private HTML status = new HTML();
 	private long lastFinishTime = -1;
 
@@ -39,6 +39,24 @@ public class Initializer extends DockLayoutPanel {
 	}
 	
 	private void loadVisualisation() {
+		/*GWT.runAsync(new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				VisualizationUtils.loadVisualizationApi(new Runnable() {
+					@Override
+					public void run() {
+						// init reports now because we loaded the charts
+						loadConfiguration();
+					}
+				}, Table.PACKAGE, LineChart.PACKAGE, ColumnChart.PACKAGE);				
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				Window.alert("Could not load visualisation api");
+			}
+		});*/
+		
 		if (SKIP_LOADING_VISUALISATIONS) {
 			loadConfiguration();
 		} else {

@@ -1,21 +1,22 @@
-package honeycrm.client.view;
+package honeycrm.client.view.list;
 
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.field.FieldRelate;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.misc.WidgetJuggler;
+import honeycrm.client.view.AbstractView;
+import honeycrm.client.view.ModuleAction;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -35,10 +36,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.ListViewAdapter;
-import com.google.gwt.view.client.PagingListView;
-import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionModel.SelectionChangeHandler;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 // TODO track which items are already in the cache
@@ -47,9 +45,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 // TODO use google formatters instead of field classes of honeycrm 
 public class ListView extends AbstractView {
 	protected static final int DEFAULT_MAX_ENTRIES = 15;
-
 	private int pageSize = DEFAULT_MAX_ENTRIES;
-	private int currentPage = -1;
 	private boolean showTitle;
 	/**
 	 * true if users should have the possibility to hide away the list view. false otherwise.
@@ -61,13 +57,13 @@ public class ListView extends AbstractView {
 	private boolean allowDelete = true;
 	private Button[] additionalButtons;
 	private boolean itemsHaveBeenLoadedOnce = false;
+
 	protected final VerticalPanel panel = new VerticalPanel();
-
-	private CellTable<Dto> ct;
-	private SimplePager<Dto> pager;
-	private ListViewAdapter<Dto> lva;
-
 	protected final Panel buttonBar = new HorizontalPanel();
+
+	private CellTable<Dto> table;
+	private SimplePager pager;
+	private ListViewDB db;
 
 	public ListView(final String module) {
 		super(module);
@@ -107,11 +103,9 @@ public class ListView extends AbstractView {
 			private Set<Long> getDeletedIds() {
 				final Set<Long> ids = new HashSet<Long>();
 
-				for (final Dto dto : lva.getList()) {
-					if (null != dto.get("deleteFlag") && (Boolean) dto.get("deleteFlag")) {
-						ids.add(dto.getId());
-					}
-				}
+				/*
+				 * for (final Dto dto : lva.getList()) { if (null != dto.get("deleteFlag") && (Boolean) dto.get("deleteFlag")) { ids.add(dto.getId()); } }
+				 */
 				return ids;
 			}
 		});
@@ -119,32 +113,13 @@ public class ListView extends AbstractView {
 	}
 
 	protected void initListView() {
-		pager = new SimplePager<Dto>(ct = new CellTable<Dto>(), TextLocation.CENTER) {
-			@Override
-			public void onRangeOrSizeChanged(final PagingListView<Dto> listView) {
-				super.onRangeOrSizeChanged(listView);
+		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 
-				/**
-				 * only do something if items have already been loaded
-				 */
-				if (itemsHaveBeenLoadedOnce) {
-					final int newPage = 1 + listView.getPageStart() / listView.getPageSize();
-					final boolean changedPage = newPage != currentPage;
-
-					if (changedPage) {
-						/**
-						 * retrieve items of the selected page
-						 */
-						refreshPage(newPage);
-					}
-				}
-			};
-		};
-
-		lva = new ListViewAdapter<Dto>();
+		pager = new SimplePager(TextLocation.LEFT, pagerResources, false, 0, true);
+		pager.setDisplay(table = new CellTable<Dto>());
 
 		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>();
-		selectionModel.addSelectionChangeHandler(new SelectionChangeHandler() {
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				final Dto dto = selectionModel.getSelectedObject();
@@ -152,10 +127,13 @@ public class ListView extends AbstractView {
 			}
 		});
 
-		ct.setSelectionEnabled(true);
-		ct.setSelectionModel(selectionModel);
-		ct.setPageSize(pageSize);
-		lva.addView(ct);
+		table.setKeyProvider(ListViewDB.KEY_PROVIDER);
+		selectionModel.setKeyProvider(ListViewDB.KEY_PROVIDER);
+
+		table.setSelectionModel(selectionModel);
+		table.setPageSize(pageSize);
+		db = new ListViewDB(getListDataProvider());
+		db.addDataDisplay(table);
 
 		pager.firstPage();
 
@@ -166,24 +144,28 @@ public class ListView extends AbstractView {
 			if (disclose) {
 				final DisclosurePanel disclosurePanel = new DisclosurePanel(getListTitle());
 				disclosurePanel.setAnimationEnabled(true);
-			//	disclosurePanel.setHeader(buttonBar);
+				// disclosurePanel.setHeader(buttonBar);
 				disclosurePanel.setOpen(true); // TODO the open/closed status should be persisted and reconstructed per user
 
 				final VerticalPanel vpanel = new VerticalPanel();
-				WidgetJuggler.addToContainer(vpanel, buttonBar, ct, pager);
+				WidgetJuggler.addToContainer(vpanel, buttonBar, table, pager);
 
 				disclosurePanel.add(vpanel);
 
 				panel.add(disclosurePanel);
 			} else {
-				WidgetJuggler.addToContainer(panel, buttonBar, ct, pager);
+				WidgetJuggler.addToContainer(panel, buttonBar, table, pager);
 			}
 		} else {
-			WidgetJuggler.addToContainer(panel, ct, pager, buttonBar);
+			WidgetJuggler.addToContainer(panel, table, pager, buttonBar);
 		}
 
 		initButtonBar();
 		initListViewHeaderRow();
+	}
+
+	protected ListViewDataProvider getListDataProvider() {
+		return new ListViewDataProvider(moduleDto.getModule());
 	}
 
 	/**
@@ -199,9 +181,9 @@ public class ListView extends AbstractView {
 		}
 
 		if (allowDelete) { // only should selection widget and delete button if user is allowed to delete anything
-			WidgetJuggler.addToContainer(buttonBar, /*getSelectionWidget(),*/ getDeleteButton());
+			WidgetJuggler.addToContainer(buttonBar, /* getSelectionWidget(), */getDeleteButton());
 		}
-		
+
 		if (null != additionalButtons) {
 			WidgetJuggler.addToContainer(buttonBar, additionalButtons);
 		}
@@ -211,7 +193,7 @@ public class ListView extends AbstractView {
 		final ListBox box = new ListBox();
 		box.addItem("All items");
 		box.addItem("This page");
-		
+
 		final HorizontalPanel panel = new HorizontalPanel();
 		panel.add(new Label("Select: "));
 		panel.add(box);
@@ -247,15 +229,7 @@ public class ListView extends AbstractView {
 				}
 			};
 
-			// TODO what is that for?
-			column.setFieldUpdater(new FieldUpdater<Dto, String>() {
-				@Override
-				public void update(int index, Dto object, String value) {
-					object.set(id, value);
-				}
-			});
-
-			ct.addColumn(column, moduleDto.getFieldById(id).getLabel());
+			table.addColumn(column, moduleDto.getFieldById(id).getLabel());
 		}
 	}
 
@@ -274,7 +248,7 @@ public class ListView extends AbstractView {
 					object.set("deleteFlag", value);
 				}
 			});
-	
+
 			// TODO how can we observe checkbox state changes?
 			final Header<Boolean> h = new Header<Boolean>(new CheckboxCell()) {
 				@Override
@@ -283,83 +257,18 @@ public class ListView extends AbstractView {
 					return false;
 				}
 			};
-	
-			ct.addColumn(delCol, h);
+
+			table.addColumn(delCol, h);
 		}
 	}
 
-	// TODO fix pagination implementation
-	protected void refreshListViewValues(ListQueryResult result) {
+	public void refresh() {
 		if (!itemsHaveBeenLoadedOnce) {
 			initListView();
 			itemsHaveBeenLoadedOnce = true;
 		}
 
-		ArrayList<Dto> values = new ArrayList<Dto>();
-		for (final Dto dto : result.getResults()) {
-			values.add(dto);
-		}
-
-		ct.setDataSize(result.getItemCount(), true);
-		/*
-		 * final int start = (currentPage - 1) * pageSize;
-		 * 
-		 * ct.setPageStart(start); ct.setData(start, result.getItemCount(), values);
-		 */
-		// give the ListViewAdapter our data
-		lva.setList(values);
-		lva.refresh();
-
-		/*
-		 * if (null == lva.getList() || 0 == lva.getList().size()) { ct.setData(0, values.size(), values); } else { ct.setData(1 * pageSize, values.size(), values); /* if (lva.getList().size() == values.size()) { // do not call set list again. overwrite list items instead. for (int i = 0; i < values.size(); i++) { lva.getList().set(0, values.get(i)); } } else { Window.alert("Fail! unequal list sizes."); } }
-		 */
-
-		// lva.setList(values);
-		// lva.refresh();
-
-		// ct.setPageStart((currentPage - 1) * MAX_ENTRIES + 1);
-		// if (0 == ct.getDataSize()) {
-		// }
-	}
-
-	protected void refreshPage(final int page) {
-		log("refreshPage " + page);
-
-		final int offset = getOffsetForPage(page);
-
-		assert 0 <= offset;
-
-		LoadIndicator.get().startLoading();
-		log("started loading");
-
-		commonService.getAll(moduleDto.getModule(), offset, offset + pageSize, new AsyncCallback<ListQueryResult>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				log("error");
-				displayError(caught);
-				LoadIndicator.get().endLoading();
-			}
-
-			@Override
-			public void onSuccess(ListQueryResult result) {
-				log("received result");
-				currentPage = page;
-				refreshListViewValues(result);
-				LoadIndicator.get().endLoading();
-			}
-		});
-	}
-
-	private void log(String string) {
-		LogConsole.log("[" + moduleDto.getModule() + "] " + string);
-	}
-
-	protected int getOffsetForPage(final int page) {
-		return (-1 == page) ? (0) : (page - 1) * pageSize;
-	}
-
-	public void refresh() {
-		refreshPage(1); // TODO refresh all items (was: refresh(currentPage);)
+		db.refresh();
 	}
 
 	public void deleteSelected() {
@@ -385,7 +294,7 @@ public class ListView extends AbstractView {
 	public void setDisclose(boolean disclose) {
 		this.disclose = disclose;
 	}
-	
+
 	public void setAllowDelete(boolean allowDelete) {
 		this.allowDelete = allowDelete;
 	}

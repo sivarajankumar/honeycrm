@@ -10,6 +10,7 @@ import honeycrm.client.misc.NumberParser;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
+import honeycrm.client.view.relationship.RelationshipsContainer;
 
 import java.io.Serializable;
 import java.util.HashMap;

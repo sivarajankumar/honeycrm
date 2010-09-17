@@ -33,7 +33,8 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 
 		final FlowPanel panel = new FlowPanel();
 		panel.setStyleName("search_bar");
-		panel.add(new ModuleFulltextWidget(module));
+		// do not add module fulltext widget because we only want to see one search box
+		// panel.add(new ModuleFulltextWidget(module));
 
 		WidgetJuggler.addToContainer(panel, searchBtn, editBtn, deleteBtn, saveBtn, cancelBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn);
 		toggleButtonVisibility(ModuleAction.INIT);
@@ -66,6 +67,9 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 		case DETAIL:
 			WidgetJuggler.setVisible(true, editBtn, deleteBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn, searchBtn);
 			WidgetJuggler.setVisible(false, saveBtn, cancelBtn);
+			break;
+		case ADVANCEDSEARCH:
+			
 			break;
 		default:
 			// TODO

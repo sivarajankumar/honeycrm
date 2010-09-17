@@ -1,24 +1,21 @@
-package honeycrm.client.view;
+package honeycrm.client.view.relationship;
 
 import honeycrm.client.dto.DtoModuleRegistry;
-import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.HistoryTokenFactory;
-import honeycrm.client.misc.ServiceRegistry;
-import honeycrm.client.prefetch.Consumer;
-import honeycrm.client.prefetch.Prefetcher;
-import honeycrm.client.prefetch.ServerCallback;
+import honeycrm.client.view.AbstractView;
+import honeycrm.client.view.ModuleAction;
+import honeycrm.client.view.list.ListView;
+import honeycrm.client.view.list.ListViewDataProvider;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -29,51 +26,29 @@ public class RelationshipsContainer extends AbstractView {
 	 * Map storing the single relationship panel instances. instead of recreating them on every refresh we will reuse the instances and just call updateList on them.
 	 */
 	private final Map<String, SingleRelationshipPanel> map = new HashMap<String, SingleRelationshipPanel>();
+	private final ArrayList<String> originatingNames;
 
 	public RelationshipsContainer(final String relatedDtoClass) {
 		super(relatedDtoClass);
 		initWidget(panel);
+
+		originatingNames = DtoModuleRegistry.instance().getRelatedModules(moduleDto.getModule());
+		Collections.sort(originatingNames);
 	}
 
 	public void refresh(final Long relatedId) {
-		Prefetcher.instance.get(new Consumer<Map<String, ListQueryResult>>() {
-			@Override
-			public void setValueAsynch(Map<String, ListQueryResult> value) {
-				/**
-				 * Sort relationship names to guarantee same order across all modules.
-				 */
-				final List<String> originatingNames = new LinkedList<String>(value.keySet());
-				Collections.sort(originatingNames);
+		for (final String originating : originatingNames) {
+			if (map.isEmpty() || !map.containsKey(originating)) {
+				// insert a new relationship panel for this dto module into the map
+				final SingleRelationshipPanel relPanel = new SingleRelationshipPanel(originating, relatedId, moduleDto.getModule());
+				map.put(originating, relPanel);
 
-				for (final String originating : originatingNames) {
-					if (map.isEmpty() || !map.containsKey(originating)) {
-						// insert a new relationship panel for this dto module into the map 
-						final SingleRelationshipPanel relPanel = new SingleRelationshipPanel(originating, relatedId, moduleDto.getModule(), value.get(originating));
-						map.put(originating, relPanel);
-						
-						// attach the new panel
-						panel.add(relPanel);
-					} else {
-						map.get(originating).updateList(value.get(originating), relatedId);
-					}
-				}
+				// attach the new panel
+				panel.add(relPanel);
+			} else {
+				map.get(originating).refresh();
 			}
-		}, new ServerCallback<Map<String, ListQueryResult>>() {
-			@Override
-			public void doRpc(final Consumer<Map<String, ListQueryResult>> internalCacheCallback) {
-				ServiceRegistry.commonService().getAllRelated(relatedId, moduleDto.getModule(), new AsyncCallback<Map<String, ListQueryResult>>() {
-					@Override
-					public void onSuccess(Map<String, ListQueryResult> result) {
-						internalCacheCallback.setValueAsynch(result);
-					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-						displayError(caught);
-					}
-				});
-			}
-		}, 60*1000, relatedId, moduleDto.getModule());
+		}
 	}
 }
 
@@ -85,9 +60,8 @@ public class RelationshipsContainer extends AbstractView {
 class SingleRelationshipPanel extends ListView {
 	private final String relatedDtoClass;
 	private Long id;
-	private ListQueryResult list;
 
-	public SingleRelationshipPanel(final String originatingDto, final Long id, final String relatedDto, ListQueryResult listQueryResult) {
+	public SingleRelationshipPanel(final String originatingDto, final Long id, final String relatedDto) {
 		super(originatingDto);
 
 		setDisclose(true);
@@ -96,7 +70,6 @@ class SingleRelationshipPanel extends ListView {
 
 		this.relatedDtoClass = relatedDto;
 		this.id = id;
-		this.list = listQueryResult;
 
 		/*
 		 * only add the create button if this relationship has is represented by a single id field e.g. no create button should be displayed in the contact <-> contact relationship because there are three different fields in each contact referencing other contacts. just clicking the create button it is not clear which of the fields should be pre-filled.
@@ -105,12 +78,6 @@ class SingleRelationshipPanel extends ListView {
 			setAdditionalButtons(getCreateBtn());
 		}
 
-		refresh();
-	}
-	
-	public void updateList(final ListQueryResult list, final Long id) {
-		this.list = list;
-		this.id = id;
 		refresh();
 	}
 
@@ -123,6 +90,11 @@ class SingleRelationshipPanel extends ListView {
 		final Map<String, Map<String, Set<String>>> r = DtoModuleRegistry.instance().getRelationships();
 		// assume the relationship exists.
 		return 1 == r.get(moduleDto.getModule()).get(relatedDtoClass).size();
+	}
+
+	@Override
+	protected ListViewDataProvider getListDataProvider() {
+		return new RelationshipListViewDataProvider(moduleDto.getModule(), relatedDtoClass, id);
 	}
 
 	private Button getCreateBtn() {
@@ -140,10 +112,5 @@ class SingleRelationshipPanel extends ListView {
 			}
 		});
 		return btn;
-	}
-
-	@Override
-	public void refreshPage(final int page) {
-		refreshListViewValues(list);
 	}
 }

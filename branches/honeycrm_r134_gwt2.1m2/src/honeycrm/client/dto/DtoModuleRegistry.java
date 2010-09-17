@@ -1,5 +1,6 @@
 package honeycrm.client.dto;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -41,5 +42,21 @@ public class DtoModuleRegistry {
 	
 	public Map<String, Map<String, Set<String>>> getRelationships() {
 		return relationships;
+	}
+	
+	/**
+	 * Returns a list of all modules that have relationships to the originating module.
+	 * E.g. for originatingModule = employees the list should contain projects and opportunities because both reference an employee with the assignedTo field.
+	 */
+	public ArrayList<String> getRelatedModules(final String originatingModule) {
+		final ArrayList<String> list = new ArrayList<String>();
+		
+		for (final String module: relationships.keySet()) {
+			if (relationships.get(module).containsKey(originatingModule)) {
+				list.add(module);
+			}
+		}
+		
+		return list;
 	}
 }

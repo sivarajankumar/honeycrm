@@ -1,18 +1,15 @@
 package honeycrm.client.dashboard;
 
-import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.login.User;
 import honeycrm.client.misc.HistoryTokenFactory;
-import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.misc.WidgetJuggler;
-import honeycrm.client.view.ListView;
 import honeycrm.client.view.ModuleAction;
+import honeycrm.client.view.list.ListView;
+import honeycrm.client.view.list.ListViewDataProvider;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 
 public class DashboardListView extends ListView {
@@ -38,18 +35,8 @@ public class DashboardListView extends ListView {
 	}
 
 	@Override
-	protected void refreshPage(int page) {
-		ServiceRegistry.commonService().getAllAssignedTo(moduleDto.getModule(), User.getUserId(), 0, 20, new AsyncCallback<ListQueryResult>() {
-			@Override
-			public void onSuccess(ListQueryResult result) {
-				refreshListViewValues(result);
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("cannot execute getAllAssignedTo('" + moduleDto.getModule() + "'," + User.getUserId() + ")");
-			}
-		});
+	protected ListViewDataProvider getListDataProvider() {
+		return new DashboardListViewDataProvider(moduleDto.getModule());
 	}
 	
 	@Override

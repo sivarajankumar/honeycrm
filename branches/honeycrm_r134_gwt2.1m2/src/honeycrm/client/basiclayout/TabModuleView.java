@@ -3,9 +3,9 @@ package honeycrm.client.basiclayout;
 import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.view.DetailView;
-import honeycrm.client.view.ListView;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.ModuleButtonBar;
+import honeycrm.client.view.list.ListView;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.History;
