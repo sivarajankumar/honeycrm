@@ -154,8 +154,9 @@ public class CommonServiceReader extends AbstractCommonService {
 	}
 
 	public Dto getByName(String dtoIndex, String name) {
-		final Query query = m.newQuery(getDomainClass(dtoIndex), "name == \"" + name + "\"");
-		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute();
+		final Query query = m.newQuery(getDomainClass(dtoIndex), "name == nameParam");
+		query.declareParameters("String nameParam");
+		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute(name);
 
 		if (1 == collection.size()) {
 			return copy.copy(collection.iterator().next());
