@@ -194,7 +194,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		return getAllFiltered(dtoIndex, "marked == true", from, to);
 	}
 
-	private ListQueryResult getAllRelated(String originating, Long id, String related) {
+	public ListQueryResult getAllRelated(String originating, Long id, String related) {
 		final List<AbstractEntity> result = new ArrayList<AbstractEntity>();
 		/**
 		 * Get all related entities where the id fields contain the id of the originating entity e.g. return all contacts which have accountID == 23 where is the id of the originating account.

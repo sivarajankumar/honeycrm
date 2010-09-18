@@ -2,7 +2,6 @@ package honeycrm.client.services;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.profiling.ServiceCallStatistics;
 
 import java.util.Collection;
@@ -27,6 +26,7 @@ public interface CommonService extends RemoteService {
 	public ListQueryResult getAllByNamePrefix(final String dtoIndex, String prefix, int from, int to);
 	public ListQueryResult search(String dtoIndex, Dto searchContact, int from, int to);
 	public ListQueryResult fulltextSearch(String query, int from, int to);
+	public ListQueryResult getAllRelated(String originating, Long id, String related);
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String relatedDtoIndex);
 	public ListQueryResult fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
 
@@ -39,10 +39,6 @@ public interface CommonService extends RemoteService {
 	public void deleteAll(String dtoIndex, Set<Long> ids);
 	public void deleteAll(String dtoIndex);
 	public void deleteAllItems();
-
-	// misc
-	public Map<String, ModuleDto> getDtoConfiguration();
-	public Map<String, Map<String, Set<String>>> getRelationships();
 
 	// import operations
 	public void importCSV(final String module, final List<Dto> dtos);

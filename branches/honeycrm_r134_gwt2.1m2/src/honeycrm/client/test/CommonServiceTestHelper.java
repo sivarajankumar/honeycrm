@@ -2,7 +2,6 @@ package honeycrm.client.test;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.profiling.ServiceCallStatistics;
 import honeycrm.client.services.CommonServiceAsync;
 
@@ -118,12 +117,6 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	}
 
 	@Override
-	public void getDtoConfiguration(AsyncCallback<Map<String, ModuleDto>> callback) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void importCSV(String module, List<Dto> dtos, AsyncCallback<Void> callback) {
 		// TODO Auto-generated method stub
 		
@@ -148,12 +141,6 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 	}
 
 	@Override
-	public void getRelationships(AsyncCallback<Map<String, Map<String, Set<String>>>> callback) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void getAllRelated(Long id, String relatedDtoIndex, AsyncCallback<Map<String, ListQueryResult>> callback) {
 		// TODO Auto-generated method stub
 		
@@ -161,6 +148,12 @@ public class CommonServiceTestHelper implements CommonServiceAsync {
 
 	@Override
 	public void getAllAssignedTo(String dtoIndex, long employeeID, int from, int to, AsyncCallback<ListQueryResult> callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAllRelated(String originating, Long id, String related, AsyncCallback<ListQueryResult> callback) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -2,7 +2,6 @@ package honeycrm.client.services;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.profiling.ServiceCallStatistics;
 
 import java.util.Collection;
@@ -47,8 +46,6 @@ public interface CommonServiceAsync {
 
 	void getAnnuallyOfferingVolumes(AsyncCallback<Map<Integer, Double>> callback);
 
-	void getDtoConfiguration(AsyncCallback<Map<String, ModuleDto>> callback);
-
 	void importCSV(String module, List<Dto> dtos, AsyncCallback<Void> callback);
 
 	void getServiceCallStatistics(AsyncCallback<Collection<ServiceCallStatistics>> callback);
@@ -57,9 +54,9 @@ public interface CommonServiceAsync {
 
 	void bulkRead(AsyncCallback<Void> callback);
 
-	void getRelationships(AsyncCallback<Map<String, Map<String, Set<String>>>> callback);
-
 	void getAllRelated(Long id, String relatedDtoIndex, AsyncCallback<Map<String, ListQueryResult>> callback);
 
 	void getAllAssignedTo(String dtoIndex, long employeeID, int from, int to, AsyncCallback<ListQueryResult> callback);
+
+	void getAllRelated(String originating, Long id, String related, AsyncCallback<ListQueryResult> callback);
 }

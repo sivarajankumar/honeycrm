@@ -2,7 +2,6 @@ package honeycrm.server;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.profiling.ServiceCallStatistics;
 import honeycrm.client.services.CommonService;
 import honeycrm.server.domain.AbstractEntity;
@@ -217,11 +216,6 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public Map<String, ModuleDto> getDtoConfiguration() {
-		return wizard.getDtoConfiguration();
-	}
-
-	@Override
 	public Collection<ServiceCallStatistics> getServiceCallStatistics() {
 		return profiler.get();
 	}
@@ -262,10 +256,10 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	}
 
 	@Override
-	public Map<String, Map<String, Set<String>>> getRelationships() {
-		return RelationshipFieldTable.instance.getMap();
+	public ListQueryResult getAllRelated(String originating, Long id, String related) {
+		return reader.getAllRelated(originating, id, related);
 	}
-
+	
 	@Override
 	public Map<String, ListQueryResult> getAllRelated(Long id, String relatedDtoIndex) {
 		return reader.getAllRelated(id, relatedDtoIndex);

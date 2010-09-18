@@ -1,6 +1,7 @@
 package honeycrm.server.test;
 
 import honeycrm.client.csv.CsvImporter;
+import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.server.RelationshipFieldTable;
@@ -14,7 +15,7 @@ public class CsvImportTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		// it is required that the dto module registry is properly setup
-		DtoModuleRegistry.create(DtoWizard.instance.getDtoConfiguration(), RelationshipFieldTable.instance.getMap());
+		DtoModuleRegistry.create(new Configuration(DtoWizard.instance.getDtoConfiguration(), RelationshipFieldTable.instance.getMap()));
 	}
 	
 	public void testContactsImport() {

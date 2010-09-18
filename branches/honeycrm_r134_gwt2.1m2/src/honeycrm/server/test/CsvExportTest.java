@@ -2,6 +2,7 @@ package honeycrm.server.test;
 
 import honeycrm.client.csv.AbstractCsv;
 import honeycrm.client.csv.CsvExporter;
+import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.misc.CollectionHelper;
@@ -17,7 +18,7 @@ import junit.framework.TestCase;
 public class CsvExportTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
-		DtoModuleRegistry.create(DtoWizard.instance.getDtoConfiguration(), RelationshipFieldTable.instance.getMap());
+		DtoModuleRegistry.create(new Configuration(DtoWizard.instance.getDtoConfiguration(), RelationshipFieldTable.instance.getMap()));
 	}
 
 	public void testExport() {

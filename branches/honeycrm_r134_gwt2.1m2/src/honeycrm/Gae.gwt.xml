@@ -2,6 +2,7 @@
 <module rename-to='gae'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+  <inherits name="com.google.gwt.i18n.I18N"/>
   <inherits name='com.google.gwt.junit.JUnit' />
   <inherits name='com.google.gwt.visualization.Visualization'/>
 
@@ -24,4 +25,9 @@
   <!-- See http://code.google.com/intl/de-DE/webtoolkit/doc/latest/FAQ_Troubleshooting.html#Resource_not_found -->
   <servlet path="/common" class="honeycrm.server.CommonServiceImpl"/>
   <servlet path="/auth" class="honeycrm.server.services.AuthServiceImpl"/>
+  <servlet path="/config" class="honeycrm.server.services.ConfigServiceImpl"/>
+  
+  <extend-property name="locale" values="en"/>
+  <extend-property name="locale" values="ge"/>
+  <set-property-fallback name="locale" value="en"/>
 </module>
