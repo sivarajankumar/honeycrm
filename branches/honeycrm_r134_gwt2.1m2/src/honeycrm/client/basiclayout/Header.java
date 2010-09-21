@@ -19,6 +19,7 @@ public class Header extends Composite {
 		 */
 
 		final Panel p = (Panel) WidgetJuggler.addStyles(new FlowPanel(), "honey_header", "with_margin");
+		initWidget(p);
 
 		p.add(WidgetJuggler.addStyles(new Label("Honeeeeeeeyyyyy CRM"), "header_logo"));
 		p.add(WidgetJuggler.addStyles(new FulltextSearchWidget(), "header_search"));
@@ -26,8 +27,6 @@ public class Header extends Composite {
 		p.add(WidgetJuggler.addStyles(new Label("Welcome, " + User.getLogin() + "!"), "right"));
 		p.add(LoadIndicator.get());
 		p.add(new HTML("<div class='clear'></div>"));
-
-		initWidget(p);
 	}
 
 	private Widget getHeaderLink(final String label) {

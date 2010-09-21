@@ -5,7 +5,7 @@ import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dashboard.Dashboard;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
-import honeycrm.client.reports.SampleReport;
+import honeycrm.client.reports.ReportSuggester;
 import honeycrm.client.view.EmailFeedbackWidget;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.csvimport.CsvImportWidget;
@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
@@ -49,66 +51,80 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 	private TabCenterView() {
 		super(25, Unit.PX);
-		int tabPos = 0;
-
-		addStyleName("with_margin");
-		addStyleName("tab_layout");
-
-		final Collection<ModuleDto> dtos = DtoModuleRegistry.instance().getDtos();
-
-		for (final ModuleDto moduleDto : dtos) {
-			if (moduleDto.isHidden()) {
-				continue; // do not add this module to the tabs since it should be hidden
-			}
-
-			final TabModuleView view = new TabModuleView(moduleDto.getModule());
-			final Widget createBtn = getCreateButton(moduleDto.getModule());
-
-			moduleViewMap.put(moduleDto.getModule(), view);
-			tabPositionMap.put(moduleDto.getModule(), tabPos);
-			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
-			tabPosToCreateBtnMap.put(tabPos - 1, createBtn);
-
-			// refresh list view only for the first tab (which is the only visible tab at the beginning)
-			if (0 == tabPos)
-				view.refreshListView();
-
-			add((view), getTitlePanel(moduleDto.getTitle(), createBtn));
-		}
-
-		add(new Dashboard(), "Dashboard"); // TODO insert as first tab
-		add(new AdminWidget(), "Admin");
-		add(new EmailFeedbackWidget(), "Feedback");
-		add(new SampleReport(), "Reports");
-
-		addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+		
+		GWT.runAsync(new RunAsyncCallback() {
+			
 			@Override
-			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
-				// hide all create buttons
-				for (final Integer pos : tabPosToCreateBtnMap.keySet()) {
-					tabPosToCreateBtnMap.get(pos).setVisible(false);
-				}
-				if (tabPosToCreateBtnMap.containsKey(event.getItem())) {
-					// show create button for currently selected tab
-					tabPosToCreateBtnMap.get(event.getItem()).setVisible(true);
+			public void onSuccess() {
+				int tabPos = 0;
+
+				addStyleName("with_margin");
+				addStyleName("tab_layout");
+
+				final Collection<ModuleDto> dtos = DtoModuleRegistry.instance().getDtos();
+
+				for (final ModuleDto moduleDto : dtos) {
+					if (moduleDto.isHidden()) {
+						continue; // do not add this module to the tabs since it should be hidden
+					}
+
+					final TabModuleView view = new TabModuleView(moduleDto.getModule());
+					final Widget createBtn = getCreateButton(moduleDto.getModule());
+
+					moduleViewMap.put(moduleDto.getModule(), view);
+					tabPositionMap.put(moduleDto.getModule(), tabPos);
+					tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
+					tabPosToCreateBtnMap.put(tabPos - 1, createBtn);
+
+					// refresh list view only for the first tab (which is the only visible tab at the beginning)
+					if (0 == tabPos)
+						view.refreshListView();
+
+					add((view), getTitlePanel(moduleDto.getTitle(), createBtn));
 				}
 
-				if (tabPositionMapReverse.containsKey(event.getItem())) {
-					// add the history token for the module stored in this tab
-					History.newItem(DtoModuleRegistry.instance().get(tabPositionMapReverse.get(event.getItem())).getHistoryToken());
-				} else {
-					// TODO add history for special tabs like admin panel
-				}
+				add(new Dashboard(), "Dashboard"); // TODO insert as first tab
+				add(new AdminWidget(), "Admin");
+				add(new EmailFeedbackWidget(), "Feedback");
+//				add(new SampleReport(), "Reports");
+				add(new ReportSuggester(), "Reports");
+
+				addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+					@Override
+					public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+						// hide all create buttons
+						for (final Integer pos : tabPosToCreateBtnMap.keySet()) {
+							tabPosToCreateBtnMap.get(pos).setVisible(false);
+						}
+						if (tabPosToCreateBtnMap.containsKey(event.getItem())) {
+							// show create button for currently selected tab
+							tabPosToCreateBtnMap.get(event.getItem()).setVisible(true);
+						}
+
+						if (tabPositionMapReverse.containsKey(event.getItem())) {
+							// add the history token for the module stored in this tab
+							History.newItem(DtoModuleRegistry.instance().get(tabPositionMapReverse.get(event.getItem())).getHistoryToken());
+						} else {
+							// TODO add history for special tabs like admin panel
+						}
+					}
+				});
+				
+
+				
+				/**
+				 * show the tab of the first module.
+				 */
+				History.newItem(tabPositionMapReverse.get(0));
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				Window.alert("Could not execute asynchronously");
 			}
 		});
 
-		LogConsole.log("created center view");
-
 		History.addValueChangeHandler(this);
-		/**
-		 * show the tab of the first module.
-		 */
-		History.newItem(tabPositionMapReverse.get(0));
 	}
 
 	private Widget getCreateButton(final String module) {

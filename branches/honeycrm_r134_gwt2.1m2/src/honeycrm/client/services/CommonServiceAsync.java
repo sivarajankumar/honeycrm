@@ -44,8 +44,6 @@ public interface CommonServiceAsync {
 
 	void feedback(String message, AsyncCallback<Void> callback);
 
-	void getAnnuallyOfferingVolumes(AsyncCallback<Map<Integer, Double>> callback);
-
 	void importCSV(String module, List<Dto> dtos, AsyncCallback<Void> callback);
 
 	void getServiceCallStatistics(AsyncCallback<Collection<ServiceCallStatistics>> callback);

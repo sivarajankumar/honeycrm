@@ -1,26 +1,18 @@
 package honeycrm.client.services;
 
+import java.util.Map;
+
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.profiling.ServiceCallStatistics;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-@RemoteServiceRelativePath("common")
-public interface CommonService extends RemoteService {
-	// create
-	public long create(Dto viewable);
-
-	// read
+@RemoteServiceRelativePath("read")
+public interface ReadService extends RemoteService {
+	public ListQueryResult getAll(final String kind);
 	public Dto get(String dtoIndex, long id);
 	public Dto getByName(String dtoIndex, String name);
-	public ListQueryResult getAll(final String dtoIndex, int from, int to);
 	public ListQueryResult getAllAssignedTo(final String dtoIndex, final long employeeID, int from, int to);
 	public ListQueryResult getAllMarked(final String dtoIndex, int from, int to);
 	public ListQueryResult getAllByNamePrefix(final String dtoIndex, String prefix, int from, int to);
@@ -29,25 +21,4 @@ public interface CommonService extends RemoteService {
 	public ListQueryResult getAllRelated(String originating, Long id, String related);
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String relatedDtoIndex);
 	public ListQueryResult fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
-
-	// update
-	public void update(Dto account, long id);
-	public void mark(String dtoIndex, long id, boolean marked);
-
-	// delete
-	public void delete(String dtoIndex, long id);
-	public void deleteAll(String dtoIndex, Set<Long> ids);
-	public void deleteAll(String dtoIndex);
-	public void deleteAllItems();
-
-	// import operations
-	public void importCSV(final String module, final List<Dto> dtos);
-
-	// email
-	public void feedback(final String message);
-
-	// profiling
-	public Collection<ServiceCallStatistics> getServiceCallStatistics();
-	public void bulkCreate();
-	public void bulkRead();
 }

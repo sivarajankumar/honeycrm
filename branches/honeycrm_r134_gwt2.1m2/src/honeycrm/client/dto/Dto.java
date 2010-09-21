@@ -28,17 +28,13 @@ public class Dto implements Serializable {
 	}
 
 	public Serializable get(final String fieldId) {
-		if (data.containsKey(fieldId)) {
-			return data.get(fieldId);
-		} else {
-			return null;
-		}
+		return data.get(fieldId);
 	}
-
+	
 	public void set(final String fieldId, final Serializable value) {
 		data.put(fieldId, value);
 	}
-
+	
 	public String getModule() {
 		return module;
 	}

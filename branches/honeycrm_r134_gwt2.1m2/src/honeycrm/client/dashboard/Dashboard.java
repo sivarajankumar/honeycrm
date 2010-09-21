@@ -2,8 +2,11 @@ package honeycrm.client.dashboard;
 
 import honeycrm.client.misc.WidgetJuggler;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -15,13 +18,22 @@ public class Dashboard extends Composite {
 	private static final String[] modules = new String[] { "project", "contact", "donation", "membership", "offering", "contract", "account" };
 
 	public Dashboard() {
-		final DashboardListView[] listViews = getListViews();
-
 		final VerticalPanel panel = new VerticalPanel();
-		panel.add(getRefreshButton(listViews));
-		panel.add(getTable(listViews));
-
 		initWidget(new ScrollPanel(panel));
+
+		GWT.runAsync(new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				final DashboardListView[] listViews = getListViews();
+				panel.add(getRefreshButton(listViews));
+				panel.add(getTable(listViews));
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				Window.alert("Could not run code asynchronously");
+			}
+		});
 	}
 
 	private DashboardListView[] getListViews() {

@@ -17,6 +17,7 @@ import java.util.Set;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -263,12 +264,21 @@ public class ListView extends AbstractView {
 	}
 
 	public void refresh() {
-		if (!itemsHaveBeenLoadedOnce) {
-			initListView();
-			itemsHaveBeenLoadedOnce = true;
-		}
-
-		db.refresh();
+		GWT.runAsync(new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				if (!itemsHaveBeenLoadedOnce) {
+					initListView();
+					itemsHaveBeenLoadedOnce = true;
+				}
+				db.refresh();				
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				Window.alert("could not run code asynchronously.");
+			}
+		});
 	}
 
 	public void deleteSelected() {

@@ -16,6 +16,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -37,8 +39,8 @@ import com.google.gwt.user.client.ui.Widget;
  * This widget is responsible for displaying detail / edit / create - views for entities.
  */
 public class DetailView extends AbstractView implements ValueChangeHandler<String> {
-	private final DetailViewButtonBar buttonBar;
-	private final RelationshipsContainer relationshipsContainer;
+	private DetailViewButtonBar buttonBar;
+	private RelationshipsContainer relationshipsContainer;
 	private Dto dto = moduleDto.createDto();
 	private Map<String, Serializable> prefilledMap = new HashMap<String, Serializable>();
 
@@ -51,13 +53,25 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 		super(module);
 
 		final VerticalPanel panel = new VerticalPanel();
-		panel.add(table);
-		panel.add(buttonBar = new DetailViewButtonBar(module, this));
-		panel.add(relationshipsContainer = new RelationshipsContainer(module));
-
-		History.addValueChangeHandler(this);
-		
 		initWidget(panel);
+	
+		final DetailView thisDetailView = this;
+		
+		GWT.runAsync(new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				History.addValueChangeHandler(thisDetailView);
+
+				panel.add(table);
+				panel.add(buttonBar = new DetailViewButtonBar(module, thisDetailView));
+				panel.add(relationshipsContainer = new RelationshipsContainer(module));
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				Window.alert("Could not run code asynchronously");
+			}
+		});
 	}
 
 	/**
@@ -75,49 +89,59 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	 * Retrieve the item with the specified id, display its values in the detail view. Optionally execute the callback to tell clients when the item has successfully been retrieved.
 	 */
 	public void refresh(final long id, final Callback callback) {
-		if (0 == id) {
-			throw new RuntimeException("Cannot refresh because id == 0");
-		} else {
-			Prefetcher.instance.get(new Consumer<Dto>() {
-				@Override
-				public void setValueAsynch(Dto result) {
-					table.setVisible(true);
-					relationshipsContainer.setVisible(true);
-					relationshipsContainer.refresh(id);
-
-					if (null == result) {
-						Window.alert("Could not find account with id " + id);
-					} else {
-						// detailview should be responsible for rendering only return the field
-						// types here
-						refreshFields(result);
-						// currentId = result.getId();
-					}
-					
-					if (null != callback) {
-						callback.callback();
-					}
-				}
-			}, new ServerCallback<Dto>() {
-				@Override
-				public void doRpc(final Consumer<Dto> internalCacheCallback) {
-					table.setVisible(false);
-
-					commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
+		GWT.runAsync(new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				if (0 == id) {
+					throw new RuntimeException("Cannot refresh because id == 0");
+				} else {
+					Prefetcher.instance.get(new Consumer<Dto>() {
 						@Override
-						public void onFailure(Throwable caught) {
-							displayError(caught);
+						public void setValueAsynch(Dto result) {
 							table.setVisible(true);
-						}
+							relationshipsContainer.setVisible(true);
+							relationshipsContainer.refresh(id);
 
-						@Override
-						public void onSuccess(Dto result) {
-							internalCacheCallback.setValueAsynch(result);
+							if (null == result) {
+								Window.alert("Could not find account with id " + id);
+							} else {
+								// detailview should be responsible for rendering only return the field
+								// types here
+								refreshFields(result);
+								// currentId = result.getId();
+							}
+							
+							if (null != callback) {
+								callback.callback();
+							}
 						}
-					});
+					}, new ServerCallback<Dto>() {
+						@Override
+						public void doRpc(final Consumer<Dto> internalCacheCallback) {
+							table.setVisible(false);
+
+							commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
+								@Override
+								public void onFailure(Throwable caught) {
+									displayError(caught);
+									table.setVisible(true);
+								}
+
+								@Override
+								public void onSuccess(Dto result) {
+									internalCacheCallback.setValueAsynch(result);
+								}
+							});
+						}
+					}, 60 * 1000, moduleDto.getModule(), id);
 				}
-			}, 60 * 1000, moduleDto.getModule(), id);
-		}
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				Window.alert("Could not run code asynchronously");
+			}
+		});
 	}
 
 	// TODO only update the field contents instead of removing all fields an

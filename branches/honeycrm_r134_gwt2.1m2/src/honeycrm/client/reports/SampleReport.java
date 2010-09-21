@@ -26,7 +26,7 @@ public class SampleReport extends Composite {
 		final VerticalPanel p = new VerticalPanel();
 
 		if (Initializer.SKIP_LOADING_VISUALISATIONS) {
-			
+			p.add(new Label("reports are currently disabled"));
 		} else {
 			final Label status = new Label("Status: ");
 			p.setStyleName("content");
@@ -39,7 +39,7 @@ public class SampleReport extends Composite {
 				public void run() {
 					LoadIndicator.get().startLoading();
 
-					ServiceRegistry.commonService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
+					ServiceRegistry.reportService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
 						@Override
 						public void onSuccess(final Map<Integer, Double> result) {
 							LoadIndicator.get().endLoading();

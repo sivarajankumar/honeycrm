@@ -8,8 +8,6 @@ import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.profiling.ProfilingStatisticsCollector;
 import honeycrm.server.profiling.ReadTest;
 import honeycrm.server.profiling.ServiceCall;
-import honeycrm.server.transfer.DtoWizard;
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -32,8 +30,6 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final CommonServiceReader reader = new CommonServiceReader();
 	private static final CommonServiceReaderFulltext fulltext = new CommonServiceReaderFulltext();
 	private static final CommonServiceEmail email = new CommonServiceEmail();
-	private static final CommonServiceReporter reporter = new CommonServiceReporter();
-	private static final DtoWizard wizard = DtoWizard.instance;
 	private static final ProfilingStatisticsCollector profiler = new ProfilingStatisticsCollector();
 
 	@Override
@@ -208,11 +204,6 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	@Override
 	public void feedback(String message) {
 		email.feedback(message);
-	}
-
-	@Override
-	public Map<Integer, Double> getAnnuallyOfferingVolumes() {
-		return reporter.getAnnuallyOfferingVolumes();
 	}
 
 	@Override

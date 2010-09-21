@@ -1,6 +1,7 @@
 package honeycrm.client.login;
 
 import honeycrm.client.basiclayout.Initializer;
+import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.misc.Callback;
@@ -25,31 +26,29 @@ import com.google.gwt.visualization.client.visualizations.Table;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
 
 public class LoginScreen extends DialogBox {
-	private final TextBox loginBox, passwordBox;
-	private final Button loginBtn;
-	private final Widget errorLbl;
+	private TextBox loginBox, passwordBox;
+	private Button loginBtn;
+	private Label errorLbl;
 	private static final boolean LOGIN_DISABLED = false;
-	private int loadSteps = 0;
+	private double loadSteps = 0;
 	private boolean loginDeferred = false;
 
 	public LoginScreen(final Callback callback) {
 		final FlexTable table = new FlexTable();
+		setWidget(table);
 		table.setWidget(0, 0, new Label("Login:"));
 		table.setWidget(0, 1, loginBox = getLogin(callback));
 		table.setWidget(1, 0, new Label("Password:"));
 		table.setWidget(1, 1, passwordBox = new TextBox());
 		table.setWidget(2, 0, errorLbl = getErrorLabel());
 		table.setWidget(3, 0, loginBtn = getLoginButton(callback));
-
 		table.getFlexCellFormatter().setColSpan(2, 0, 1);
-
-		setGlassEnabled(true);
-		// setAnimationEnabled(true);
 		setText("Please login to honeycrm. Use login 'james' with no password for testing."); // suggest james test login for testing
-		setWidget(table);
+		setGlassEnabled(true);
+		setAnimationEnabled(false);
+		// setAnimationEnabled(true);
 		show();
 		center();
 
@@ -75,9 +74,9 @@ public class LoginScreen extends DialogBox {
 				ServiceRegistry.configService().getConfiguration(new AsyncCallback<Configuration>() {
 					@Override
 					public void onSuccess(final Configuration result) {
-						loadSteps++;
-						
 						DtoModuleRegistry.create(result);
+
+						loadSteps++;
 
 						if (loginDeferred && finishedInitialisation()) {
 							tryLogin(callback);
@@ -112,8 +111,8 @@ public class LoginScreen extends DialogBox {
 		return box;
 	}
 
-	private Widget getErrorLabel() {
-		final Widget error = WidgetJuggler.addStyles(new Label("Login failed"), "error");
+	private Label getErrorLabel() {
+		final Label error = (Label) WidgetJuggler.addStyles(new Label("Login failed"), "error");
 		error.setVisible(false);
 		return error;
 	}
@@ -130,43 +129,53 @@ public class LoginScreen extends DialogBox {
 	}
 
 	private void tryLogin(final Callback callback) {
-		if (finishedInitialisation()) {
-			errorLbl.setVisible(false);
+		GWT.runAsync(new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				if (finishedInitialisation()) {
+					errorLbl.setVisible(false);
 
-			if (LOGIN_DISABLED) {
-				hide();
-				callback.callback();
-			} else {
-				allowLogin(false);
+					if (LOGIN_DISABLED) {
+						hide();
+						callback.callback();
+					} else {
+						allowLogin(false);
 
-				ServiceRegistry.authService().login(loginBox.getText(), "password", new AsyncCallback<Long>() {
-					@Override
-					public void onSuccess(Long result) {
-						allowLogin(true);
+						ServiceRegistry.authService().login(loginBox.getText(), "password", new AsyncCallback<Long>() {
+							@Override
+							public void onSuccess(Long result) {
+								allowLogin(true);
 
-						if (null == result || 0 == result) {
-							errorLbl.setVisible(true);
-							allowLogin(true); // allow user to login again with new login/password
-						} else {
-							errorLbl.setVisible(false);
-							User.initUser(result, loginBox.getText());
-							// hide();
-							hide();
-							setVisible(false);
-							callback.callback();
-						}
+								if (null == result || 0 == result) {
+									errorLbl.setVisible(true);
+									allowLogin(true); // allow user to login again with new login/password
+								} else {
+									errorLbl.setVisible(false);
+									User.initUser(result, loginBox.getText());
+									TabCenterView.instance(); // instantiate ui before switching perspective
+									hide();
+									setVisible(false);
+									callback.callback();
+								}
+							}
+
+							@Override
+							public void onFailure(Throwable caught) {
+								errorLbl.setVisible(true);
+								allowLogin(true); // allow user to login again with new login/password
+							}
+						});
 					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-						errorLbl.setVisible(true);
-						allowLogin(true); // allow user to login again with new login/password
-					}
-				});
+				} else {
+					loginDeferred = true;
+				}
 			}
-		} else {
-			loginDeferred = true;
-		}
+
+			@Override
+			public void onFailure(Throwable reason) {
+				Window.alert("Could not execute code asynchronously.");
+			}
+		});
 	}
 
 	private void allowLogin(boolean allow) {

@@ -2,9 +2,12 @@ package honeycrm.client.view;
 
 import honeycrm.client.misc.WidgetJuggler;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -14,36 +17,47 @@ import com.google.gwt.user.client.ui.Widget;
  * This widget contains everything (buttons, fulltext search field) above the list view and detail view of the currently active module.
  */
 public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<String> {
-	private final Widget editBtn, deleteBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn, cancelBtn, saveBtn, searchBtn;
+	private Widget editBtn, deleteBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn, cancelBtn, saveBtn, searchBtn;
 
 	public ModuleButtonBar(final String module, final DetailView detailView) {
 		super(module);
 
-		searchBtn = getButton("Search", ModuleAction.ADVANCEDSEARCH, "left", "left_margin_small");
-		editBtn = getButton("Edit", ModuleAction.EDIT, "left", "left_margin_big");
-		deleteBtn = getButton("Delete", ModuleAction.DELETE, "left", "left_margin_small");
-		cancelBtn = getButton("Cancel", ModuleAction.CANCEL, "left", "left_margin_small");
-		saveBtn = getButton("Save", ModuleAction.SAVE, "left", "left_margin_big");
-		changesBtn = getButton("Changes", ModuleAction.CHANGES, "left", "left_margin_big");
-		printBtn = getButton("Print", ModuleAction.PRINT, "left", "left_margin_small");
-		duplicateBtn = getButton("Duplicate", ModuleAction.DUPLICATE, "left", "left_margin_big");
-		findDuplicatesBtn = getButton("Find Duplicates", ModuleAction.FINDDUPLICATES, "left", "left_margin_small");
-		importBtn = getButton("Import", ModuleAction.IMPORT, "left", "left_margin_big");
-		exportBtn = getButton("Export", ModuleAction.EXPORT, "left", "left_margin_small");
-
 		final FlowPanel panel = new FlowPanel();
 		panel.setStyleName("search_bar");
-		// do not add module fulltext widget because we only want to see one search box
-		// panel.add(new ModuleFulltextWidget(module));
-
-		WidgetJuggler.addToContainer(panel, searchBtn, editBtn, deleteBtn, saveBtn, cancelBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn);
-		toggleButtonVisibility(ModuleAction.INIT);
-
-		panel.add(new HTML("<div class='clear'></div>"));
+		initWidget(panel);
 
 		History.addValueChangeHandler(this);
 
-		initWidget(panel);
+		GWT.runAsync(new RunAsyncCallback() {
+			
+			@Override
+			public void onSuccess() {
+				searchBtn = getButton("Search", ModuleAction.ADVANCEDSEARCH, "left", "left_margin_small");
+				editBtn = getButton("Edit", ModuleAction.EDIT, "left", "left_margin_big");
+				deleteBtn = getButton("Delete", ModuleAction.DELETE, "left", "left_margin_small");
+				cancelBtn = getButton("Cancel", ModuleAction.CANCEL, "left", "left_margin_small");
+				saveBtn = getButton("Save", ModuleAction.SAVE, "left", "left_margin_big");
+				changesBtn = getButton("Changes", ModuleAction.CHANGES, "left", "left_margin_big");
+				printBtn = getButton("Print", ModuleAction.PRINT, "left", "left_margin_small");
+				duplicateBtn = getButton("Duplicate", ModuleAction.DUPLICATE, "left", "left_margin_big");
+				findDuplicatesBtn = getButton("Find Duplicates", ModuleAction.FINDDUPLICATES, "left", "left_margin_small");
+				importBtn = getButton("Import", ModuleAction.IMPORT, "left", "left_margin_big");
+				exportBtn = getButton("Export", ModuleAction.EXPORT, "left", "left_margin_small");
+
+				// do not add module fulltext widget because we only want to see one search box
+				// panel.add(new ModuleFulltextWidget(module));
+
+				WidgetJuggler.addToContainer(panel, searchBtn, editBtn, deleteBtn, saveBtn, cancelBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn);
+				toggleButtonVisibility(ModuleAction.INIT);
+
+				panel.add(new HTML("<div class='clear'></div>"));				
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+				Window.alert("Could not run code asynchronously");
+			}
+		});
 	}
 
 	private Widget getButton(final String label, final ModuleAction state, final String... styles) {
