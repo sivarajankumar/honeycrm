@@ -2,7 +2,9 @@
 
  * one option might be the integration of an already existing theme
    * e.g. the Waffles theme from drupal, see http://drupal.org/project/waffles
+http://drupal.org/files/images/screen_cvs.jpg
    * e.g. the acquia marina theme from drupal, see http://drupal.org/project/acquia_marina
+http://drupal.org/files/images/acquia_marina.preview.png
    * or other drupal themes from http://drupal.org/project/themes?solrsort=sis_project_release_usage%20desc
 
 = version 1 =
