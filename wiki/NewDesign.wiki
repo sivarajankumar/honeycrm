@@ -1,5 +1,10 @@
 #summary Thoughts about new design for honeycrm
 
+ * one option might be the integration of an already existing theme
+   * e.g. the Waffles theme from drupal, see http://drupal.org/project/waffles
+   * e.g. the acquia marina theme from drupal, see http://drupal.org/project/acquia_marina
+   * or other drupal themes from http://drupal.org/project/themes?solrsort=sis_project_release_usage%20desc
+
 = version 1 =
 
 http://honeycrm.googlecode.com/svn/wiki/design1.png
