@@ -57,8 +57,9 @@ public class ReportSuggester extends Composite {
 		options.setEnableTooltip(true);
 		options.setTitleX("Year");
 		options.setTitle("EUR");
-		options.setWidth(400);
+		options.setWidth(600);
 		options.setHeight(240);
+		options.setMin(0.0);
 		options.setTitle("Annually Opportunity Volumes");
 		return options;
 	}
@@ -67,16 +68,20 @@ public class ReportSuggester extends Composite {
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Year");
 		data.addColumn(ColumnType.NUMBER, "Expenses for 'A'");
+		data.addColumn(ColumnType.NUMBER, "Expenses for 'B'");
+		data.addColumn(ColumnType.NUMBER, "Expenses for 'C'");
 
 		data.addRows(result.keySet().size());
 
 		int i = 0;
-		for (final Integer year : result.keySet()) {
-			data.setValue(i, 0, String.valueOf(year));
-			data.setValue(i, 1, result.get("A").get(year));
+		for (final Map.Entry<Integer, Map<String, Integer>> entry : result.entrySet()) {
+			data.setValue(i, 0, String.valueOf(entry.getKey()));
+			data.setValue(i, 1, entry.getValue().get("A"));
+			data.setValue(i, 2, entry.getValue().get("B"));
+			data.setValue(i, 3, entry.getValue().get("C"));
 			i++;
 		}
-
+		
 		return data;
 	}
 

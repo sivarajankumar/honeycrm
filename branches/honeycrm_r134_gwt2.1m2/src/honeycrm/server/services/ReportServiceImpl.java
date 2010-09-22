@@ -23,14 +23,15 @@ public class ReportServiceImpl extends RemoteServiceServlet implements ReportSer
 	public Map<Integer, Map<String, Integer>> getExpensesPerCategoryPerYear() {
 		final Map<Integer, Map<String, Integer>> r = new HashMap<Integer, Map<String, Integer>>();
 
-		for (int year = 2000; year < 2010; year++) {
-			final Map<String, Integer> rYear = new HashMap<String, Integer>();
+		for (int i = 0; i < 10; i++) {
+			final int year = 2000 + i;
+			final Map<String, Integer> revenueForOneYear = new HashMap<String, Integer>();
 
 			for (final String category : new String[] { "A", "B", "C" }) {
-				rYear.put(category, year + random.nextInt(100));
+				revenueForOneYear.put(category, i * i + random.nextInt(50));
 			}
 
-			r.put(year, rYear);
+			r.put(year, revenueForOneYear);
 		}
 
 		return r;

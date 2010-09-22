@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.TextBox;
 public class LoginScreen extends DialogBox {
 	private TextBox loginBox, passwordBox;
 	private Button loginBtn;
-	private Label errorLbl;
+	private final Label errorLbl, loadingLbl;
 	private static final boolean LOGIN_DISABLED = false;
 	private double loadSteps = 0;
 	private boolean loginDeferred = false;
@@ -43,8 +43,10 @@ public class LoginScreen extends DialogBox {
 		table.setWidget(1, 0, new Label("Password:"));
 		table.setWidget(1, 1, passwordBox = new TextBox());
 		table.setWidget(2, 0, errorLbl = getErrorLabel());
-		table.setWidget(3, 0, loginBtn = getLoginButton(callback));
+		table.setWidget(3, 0, loadingLbl = getLoadingLabel());
+		table.setWidget(4, 0, loginBtn = getLoginButton(callback));
 		table.getFlexCellFormatter().setColSpan(2, 0, 1);
+		table.getFlexCellFormatter().setColSpan(3, 0, 1);
 		setText("Please login to honeycrm. Use login 'james' with no password for testing."); // suggest james test login for testing
 		setGlassEnabled(true);
 		setAnimationEnabled(false);
@@ -97,6 +99,12 @@ public class LoginScreen extends DialogBox {
 		});
 	}
 
+	private Label getLoadingLabel() {
+		final Label loading = new Label("Loading..");
+		loading.setVisible(false);
+		return loading;
+	}
+
 	private TextBox getLogin(final Callback callback) {
 		final TextBox box = new TextBox();
 		box.setValue("james"); // suggest a sample login
@@ -129,6 +137,8 @@ public class LoginScreen extends DialogBox {
 	}
 
 	private void tryLogin(final Callback callback) {
+		loadingLbl.setVisible(true);
+		
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
@@ -144,9 +154,12 @@ public class LoginScreen extends DialogBox {
 						ServiceRegistry.authService().login(loginBox.getText(), "password", new AsyncCallback<Long>() {
 							@Override
 							public void onSuccess(Long result) {
+								loadingLbl.setVisible(false);
+								
 								allowLogin(true);
 
 								if (null == result || 0 == result) {
+									loadingLbl.setVisible(false);
 									errorLbl.setVisible(true);
 									allowLogin(true); // allow user to login again with new login/password
 								} else {
@@ -161,6 +174,7 @@ public class LoginScreen extends DialogBox {
 
 							@Override
 							public void onFailure(Throwable caught) {
+								loadingLbl.setVisible(false);
 								errorLbl.setVisible(true);
 								allowLogin(true); // allow user to login again with new login/password
 							}
