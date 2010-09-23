@@ -1,5 +1,7 @@
 package honeycrm.client.admin;
 
+import honeycrm.client.view.EmailFeedbackWidget;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.Window;
@@ -16,7 +18,7 @@ public class AdminWidget extends Composite {
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
-				for (final Composite widget : new Composite[] { new LocaleSettingsWidget(), new DatabaseWidget(), new CacheStatsWidget(), LogConsole.get() }) {
+				for (final Composite widget : new Composite[] { new EmailFeedbackWidget(), new LocaleSettingsWidget(), new DatabaseWidget(), new CacheStatsWidget(), LogConsole.get() }) {
 					table.add(widget);
 				}
 			}

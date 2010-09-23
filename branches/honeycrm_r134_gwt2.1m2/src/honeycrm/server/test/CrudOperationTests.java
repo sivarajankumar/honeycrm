@@ -47,9 +47,9 @@ public class CrudOperationTests extends TestCase {
 
 	public void testReadPerformance() {
 		final Random r = new Random();
-		final int count = 1000;
+		final float count = 1000;
 
-		final long ids[] = new long[count];
+		final long ids[] = new long[(int) count];
 
 		final long createTime = Timer.getTime(new Command() {
 			@Override
@@ -81,23 +81,23 @@ public class CrudOperationTests extends TestCase {
 			@Override
 			public void execute() {
 				for (int i = 0; i < count; i++) {
-					final long randomId = ids[r.nextInt(count)];
+					final long randomId = ids[r.nextInt((int) count)];
 					commonService.get("contact", randomId);
 				}
 			}
 		});
 		System.out.println("Got " + count + " random entities in " + getRandomTime + " ms (" + (count / getRandomTime) + " entities/ms)");
-		
-		final int getAllIterations = 10;
-		final long getAllTime = Timer.getTime(new Command() {
-			@Override
-			public void execute() {
-				for (int i = 0; i < getAllIterations; i++) {
-					commonService.getAll("contact", 0, count);
+
+		final float getAllIterations = 10;
+		for (int i = 0; i < getAllIterations; i++) {
+			final long getAllTime = Timer.getTime(new Command() {
+				@Override
+				public void execute() {
+					commonService.getAll("contact", 0, (int) count);
 				}
-			}
-		});
-		System.out.println("getAll " + getAllIterations + " times for " + count + " entities in " + getAllTime + "ms (" + (getAllIterations * count / getAllTime) + " entities/ms)");
+			});
+			System.out.println("getAll " + (1 + i) + "/" + getAllIterations + " times for " + count + " entities in " + getAllTime + "ms (" + (count / getAllTime) + " entities/ms)");
+		}
 	}
 
 	public void testUpdating() {

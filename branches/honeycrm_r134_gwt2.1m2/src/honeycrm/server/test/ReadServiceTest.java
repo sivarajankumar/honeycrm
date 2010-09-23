@@ -81,9 +81,9 @@ public class ReadServiceTest extends DatastoreTest {
 	}
 
 	public void testGetPerformance() throws InterruptedException {
-		final int count = 1000;
+		final float count = 1000;
 
-		final long[] keys = new long[count];
+		final long[] keys = new long[(int) count];
 
 		final long createTime = Timer.getTime(new Command() {
 			@Override
@@ -99,7 +99,7 @@ public class ReadServiceTest extends DatastoreTest {
 			@Override
 			public void execute() {
 				for (int i = 0; i < count; i++) {
-					final long randomId = keys[random.nextInt(count)];
+					final long randomId = keys[random.nextInt((int) count)];
 					// db.get(KeyFactory.createKey("Contact", randomId));
 					service.get("Contact", randomId);
 				}
@@ -107,17 +107,16 @@ public class ReadServiceTest extends DatastoreTest {
 		});
 		System.out.println("Got " + count + " random entities in " + randomGetTime + "ms (" + (count / randomGetTime) + " entities/ms)");
 
-		final int getAllIterations = 10;
-		final long getAllTime = Timer.getTime(new Command() {
-			@Override
-			public void execute() {
-				for (int i = 0; i < getAllIterations; i++) {
+		final float getAllIterations = 10;
+		for (int i = 0; i < getAllIterations; i++) {
+			final long getAllTime = Timer.getTime(new Command() {
+				@Override
+				public void execute() {
 					service.getAll("Contact");
 				}
-			}
-		});
-		System.out.println("getAll " + getAllIterations + " times for " + count + " entities in " + getAllTime + "ms (" + (getAllIterations * count / getAllTime) + " entities/ms)");
-
+			});
+			System.out.println("getAll " + (1 + i) + "/" + getAllIterations + " times for " + count + " entities in " + getAllTime + "ms (" + (count / getAllTime) + " entities/ms)");
+		}
 		// Thread.sleep(1000 * 60 * 60);
 	}
 

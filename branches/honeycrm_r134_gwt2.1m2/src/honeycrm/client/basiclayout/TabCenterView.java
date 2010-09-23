@@ -6,7 +6,6 @@ import honeycrm.client.dashboard.Dashboard;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.reports.ReportSuggester;
-import honeycrm.client.view.EmailFeedbackWidget;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.csvimport.CsvImportWidget;
 
@@ -84,8 +83,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 				}
 
 				add(new Dashboard(), "Dashboard"); // TODO insert as first tab
-				add(new AdminWidget(), "Admin");
-				add(new EmailFeedbackWidget(), "Feedback");
+				add(new AdminWidget(), "Misc");
 //				add(new SampleReport(), "Reports");
 				add(new ReportSuggester(), "Reports");
 
@@ -183,7 +181,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 		final String[] token = event.getValue().trim().split("\\s+");
 
 		if (2 <= token.length) {
-			final ModuleAction action = ModuleAction.fromString(token[1]);
+			final ModuleAction action = ModuleAction.fromString(token[0]);
 
 			final String module = token[0];
 
