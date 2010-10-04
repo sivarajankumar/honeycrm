@@ -1,2 +1,28 @@
 #summary Thoughts about installing plugins for HoneyCRM.
 #labels Phase-Design
+
+= introduction =
+on this page we want to outline a possible plugin framework for the honeycrm application. users should be able to install plugins i.e. *apps* into honeycrm using an integrated app store.
+
+== what is an app? ==
+
+=== categorisation ===
+
+|| category || server side changes || client side changes || description ||
+|| gadget ||  || X || the simplest plugin. only modifies client side i.e. the user interface. no domain classes are added or modified. the user interface is extended at specified positions. e.g. honeycrm might allow that plugins add themselves to the header widget (e.g. a clock gadget might want to appear on top of the screen).  ||
+|| solution || X || X || potentially modifies client *and* server side. domain classes might be added or extended. changes in the domain model might imply client side changes i.e. the user interface. ||
+|| _more categories?_ || || || ||
+
+== privileges ==
+in general the installation of apps should require administrative privileges within honeycrm. however, 
+
+= installation of plugins =
+https://honeycrm.googlecode.com/svn/wiki/plugins/installation.png
+
+- the honeycrm application should contain a
+
+= plugin-aware application initialisation =
+https://honeycrm.googlecode.com/svn/wiki/plugins/startup.png
+
+= plugin-aware login sequence = 
+https://honeycrm.googlecode.com/svn/wiki/plugins/login.png
