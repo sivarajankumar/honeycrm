@@ -33,17 +33,18 @@ https://honeycrm.googlecode.com/svn/wiki/plugins/installation.png
 
 during the application startup the byte code and JavaScript source have to be loaded from the database. the classes of the app have to be loaded using their byte code. the javascript source should be stored in memcache and send to the user after logging in. 
 
-after login the execution of client side plugin code might have to be started explicitly e.g. call AbstractPlugin.show() on all gadgets. plugins have to be detected by the platform (passive registration) or register themselves (active registration) in the platform. 
-
 https://honeycrm.googlecode.com/svn/wiki/plugins/startup.png
 
 == plugin-aware login sequence ==
 
-
+after login the execution of client side plugin code might have to be started explicitly e.g. call AbstractPlugin.show() on all gadgets. plugins have to be detected by the platform (passive registration) or register themselves (active registration) in the platform. 
 
 https://honeycrm.googlecode.com/svn/wiki/plugins/login.png
 
 = Problems =
+
+there are still a lot of questions. just to name a few:
+
  * What is part of the plugin description/package?
   * Does the plugin contain source code or bytecode and generated JavaScript source?
  * How can apps be removed?
