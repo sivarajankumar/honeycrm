@@ -37,7 +37,9 @@ https://honeycrm.googlecode.com/svn/wiki/plugins/startup.png
 
 == plugin-aware login sequence ==
 
-after login the execution of client side plugin code might have to be started explicitly e.g. call AbstractPlugin.show() on all gadgets. plugins have to be detected by the platform (passive registration) or register themselves (active registration) in the platform. 
+after login two things have to be done:
+ * the generated JavaScript code of all installed plugin has to be loaded: the client side requests the plugin js source. the server then requests it from the database/memcache and sends it to the client. the client then may have to *eval* the new source code to allow overriding existing behaviour (*if this is the desired behaviour?!?*)
+ * the execution of client side plugin code might have to be started explicitly e.g. call AbstractPlugin.show() on all gadgets: to make this work plugins have to be detected by the platform (passive registration) or register themselves (active registration) in the platform. 
 
 https://honeycrm.googlecode.com/svn/wiki/plugins/login.png
 
