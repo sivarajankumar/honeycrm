@@ -1,4 +1,4 @@
-#summary Thoughts about installing plugins for HoneyCRM.
+#summary Thoughts about an AppStore-ish framework for HoneyCRM.
 #labels Phase-Design
 
 = introduction =
