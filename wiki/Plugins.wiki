@@ -15,6 +15,14 @@ an app is a piece of software that extends the functionality of honeycrm. it is 
 || add-on || X || X || potentially modifies client *and* server side. domain classes might be added or extended. changes in the domain model might imply client side changes i.e. the user interface. || a booking module might add the booking entity and updates the user interface e.g. by adding fields to the contacts module ||
 || _more categories?_ || || || || ||
 
+==== installation of new domain classes ====
+
+apps modifying the server side might want to add or update domain classes. however, just adding the .java or .class files of the POJOs will not be enough - the data nucleus enhancer still has to be run after the domain classes have been added.
+
+the requirement to run the data nucleus enhancer on new domain classes could be removed if we simplify our domain model to property lists. i.e. instead of using domain classes like contact, account, contract and so on only one domain class would exist storing a map of properties.
+
+https://honeycrm.googlecode.com/svn/wiki/plugins/domain.png
+
 = ideas about installing and using apps =
 
 == installation of plugins ==
