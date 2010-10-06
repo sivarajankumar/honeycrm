@@ -95,7 +95,7 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
 
-		if (2 <= token.length && token[0].equals(moduleDto.getModule().toLowerCase())) {
+		if (2 <= token.length && token[0].equals(moduleDto.getModule())) {
 			final ModuleAction action = ModuleAction.fromString(token[1]);
 
 			if (null != action) {

@@ -42,8 +42,6 @@ import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.Map;
-
 import org.compass.annotations.SearchableProperty;
 
 /**
@@ -52,10 +50,10 @@ import org.compass.annotations.SearchableProperty;
 public class DtoWizard {
 	public static final DtoWizard instance = new DtoWizard();
 	private boolean initialized = false;
-	private Map<String, ModuleDto> moduleNameToDto = null;
-	private Map<Class<? extends AbstractEntity>, Field[]> searchableFields = null;
+	private HashMap<String, ModuleDto> moduleNameToDto = null;
+	private HashMap<Class<? extends AbstractEntity>, Field[]> searchableFields = null;
 	private CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
-	private Map<Class<?>, Map<Field, Class<?>>> relateFields = new HashMap<Class<?>, Map<Field,Class<?>>>(2);
+	private HashMap<Class<?>, HashMap<Field, Class<?>>> relateFields = new HashMap<Class<?>, HashMap<Field,Class<?>>>(2);
 	
 	private DtoWizard() {
 	}
@@ -215,21 +213,21 @@ public class DtoWizard {
 		return new ExtraButton[0];
 	}
 
-	public Map<String, ModuleDto> getDtoConfiguration() {
+	public HashMap<String, ModuleDto> getDtoConfiguration() {
 		if (!initialized) {
 			initialize();
 		}
 		return moduleNameToDto;
 	}
 
-	public Map<Class<? extends AbstractEntity>, Field[]> getSearchableFields() {
+	public HashMap<Class<? extends AbstractEntity>, Field[]> getSearchableFields() {
 		if (!initialized) {
 			initialize();
 		}
 		return searchableFields;
 	}
 
-	public Map<Class<?>, Map<Field, Class<?>>> getRelateFields() {
+	public HashMap<Class<?>, HashMap<Field, Class<?>>> getRelateFields() {
 		if (!initialized) {
 			initialize();
 		}

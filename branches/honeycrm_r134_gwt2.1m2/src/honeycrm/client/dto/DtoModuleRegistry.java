@@ -2,9 +2,8 @@ package honeycrm.client.dto;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
+import java.util.HashMap;
+import java.util.HashSet;
 import com.google.gwt.user.client.Window;
 
 public class DtoModuleRegistry {
@@ -38,7 +37,7 @@ public class DtoModuleRegistry {
 		return configuration.getModuleDtos().values();
 	}
 	
-	public Map<String, Map<String, Set<String>>> getRelationships() {
+	public HashMap<String, HashMap<String, HashSet<String>>> getRelationships() {
 		return configuration.getRelationships();
 	}
 	

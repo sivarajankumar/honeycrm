@@ -21,20 +21,25 @@ public class Dto implements Serializable {
 	private static final long serialVersionUID = 2098126312789586977L;
 
 	private String module;
-	private Map<String, Serializable> data = new HashMap<String, Serializable>();
+	private HashMap<String, Serializable> data = new HashMap<String, Serializable>();
 
 	public Dto() {
 		data.put("id", null);
+	}
+	
+	public Dto(final String module) {
+		this();
+		this.module = module;
 	}
 
 	public Serializable get(final String fieldId) {
 		return data.get(fieldId);
 	}
-	
-	public void set(final String fieldId, final Serializable value) {
-		data.put(fieldId, value);
+
+	public void set(final String key, final Serializable value) {
+		data.put(key, value);
 	}
-	
+
 	public String getModule() {
 		return module;
 	}
@@ -44,7 +49,7 @@ public class Dto implements Serializable {
 	}
 
 	public void setId(final Long id) {
-		set("id", id);
+		data.put("id", id);
 	}
 
 	public long getId() {
@@ -112,7 +117,7 @@ public class Dto implements Serializable {
 		Collections.sort(sortedFieldNames);
 
 		for (final String key : sortedFieldNames) {
-			final Serializable value = get(key);
+			final Object value = get(key);
 
 			if (!"name".equals(key) && null != value && value instanceof String && !value.toString().isEmpty()) {
 				previewableFields.add(key);
@@ -127,7 +132,7 @@ public class Dto implements Serializable {
 	 */
 	public Dto copy() {
 		final Dto destination = new Dto();
-		
+
 		for (final String key : data.keySet()) {
 			if (key.equals("id")) {
 				continue; // do not copy the id field as well

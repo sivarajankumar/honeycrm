@@ -7,21 +7,19 @@ import honeycrm.server.transfer.ReflectionHelper;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class RelationshipFieldTable {
 	private static final ReflectionHelper reflectionHelper = new ReflectionHelper();
 	public static final RelationshipFieldTable instance = new RelationshipFieldTable();
-	private final Map<String, Map<String, Set<String>>> map = new HashMap<String, Map<String, Set<String>>>();
+	private final HashMap<String, HashMap<String, HashSet<String>>> map = new HashMap<String, HashMap<String, HashSet<String>>>();
 
 	private RelationshipFieldTable() {
 		for (final Class<? extends AbstractEntity> originatingDtoClass : DomainClassRegistry.instance.getDomainClasses()) {
 			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingDtoClass, FieldRelateAnnotation.class)) {
-				final Class<? extends AbstractEntity> relatedDtoClass = field.getAnnotation(FieldRelateAnnotation.class).value();
+				final Class<?> relatedDtoClass = field.getAnnotation(FieldRelateAnnotation.class).value();
 
 				final String strOrigin = DomainClassRegistry.instance.getDto(originatingDtoClass);
-				final String strRelated = DomainClassRegistry.instance.getDto(relatedDtoClass);
+				final String strRelated = DomainClassRegistry.instance.getDto((Class<? extends AbstractEntity>) relatedDtoClass);
 
 				insertIntoMap(field, strOrigin, strRelated);
 			}
@@ -35,16 +33,16 @@ public class RelationshipFieldTable {
 			if (map.get(strOrigin).containsKey(strRelated)) {
 				map.get(strOrigin).get(strRelated).add(field.getName());
 			} else {
-				final Set<String> set = new HashSet<String>();
+				final HashSet<String> set = new HashSet<String>();
 				set.add(field.getName());
 
 				map.get(strOrigin).put(strRelated, set);
 			}
 		} else {
-			final Set<String> set = new HashSet<String>();
+			final HashSet<String> set = new HashSet<String>();
 			set.add(field.getName());
 
-			final Map<String, Set<String>> relatedDtoMap = new HashMap<String, Set<String>>();
+			final HashMap<String, HashSet<String>> relatedDtoMap = new HashMap<String, HashSet<String>>();
 			relatedDtoMap.put(strRelated, set);
 
 			map.put(strOrigin, relatedDtoMap);
@@ -52,7 +50,7 @@ public class RelationshipFieldTable {
 	}
 
 	// TODO write test
-	public Set<String> getRelationshipFieldNames(final String originatingDto, final String relatedDto) {
+	public HashSet<String> getRelationshipFieldNames(final String originatingDto, final String relatedDto) {
 		if (map.containsKey(originatingDto) && map.get(originatingDto).containsKey(relatedDto)) {
 			return map.get(originatingDto).get(relatedDto);
 		} else {
@@ -61,7 +59,7 @@ public class RelationshipFieldTable {
 		}
 	}
 
-	public Map<String, Map<String, Set<String>>> getMap() {
+	public HashMap<String, HashMap<String, HashSet<String>>> getMap() {
 		return map;
 	}
 }

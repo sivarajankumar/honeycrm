@@ -8,6 +8,8 @@ import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.profiling.ProfilingStatisticsCollector;
 import honeycrm.server.profiling.ReadTest;
 import honeycrm.server.profiling.ServiceCall;
+import honeycrm.server.services.ReadServiceImpl;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -31,6 +33,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 	private static final CommonServiceReaderFulltext fulltext = new CommonServiceReaderFulltext();
 	private static final CommonServiceEmail email = new CommonServiceEmail();
 	private static final ProfilingStatisticsCollector profiler = new ProfilingStatisticsCollector();
+	private static final ReadServiceImpl fastReader = new ReadServiceImpl();
 
 	@Override
 	public long create(Dto dto) {
@@ -39,7 +42,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 
 	@Override
 	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
-		ServiceCall call = new ServiceCall("getAll");
+	//	ServiceCall call = new ServiceCall("getAll");
 
 		// TODO using transactions currently breaks getAll()
 		// TODO do everything within the context of a transaction
@@ -49,9 +52,9 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
 		final ListQueryResult result = reader.getAll(dtoIndex, from, to);
 		// t.commit();
 
-		endAndPersist(call);
+		//		endAndPersist(call);
 
-		return result;
+				return result;
 		// } finally {
 		// if (t.isActive()) {
 		// t.rollback();

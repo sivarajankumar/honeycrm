@@ -11,7 +11,7 @@ public class Initializer extends DockLayoutPanel {
 	/**
 	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
 	 */
-	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
+	public static final boolean SKIP_LOADING_VISUALISATIONS = true;
 
 	public Initializer() {
 		super(Unit.PX);

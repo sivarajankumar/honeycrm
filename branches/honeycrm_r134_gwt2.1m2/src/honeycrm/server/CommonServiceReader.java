@@ -9,11 +9,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import javax.jdo.Query;
 
 /**
@@ -54,14 +53,14 @@ public class CommonServiceReader extends AbstractCommonService {
 			 */
 			// TODO this can be done at initialization time
 			for (final Field field : reflectionHelper.getAllFieldsWithAnnotation(originatingClass, FieldRelateAnnotation.class)) {
-				final Class<? extends AbstractEntity> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
+				final Class<?> relatedClass = field.getAnnotation(FieldRelateAnnotation.class).value();
 				final Long id = (Long) field.get(item);
 				
 				if (null != id && id > 0) {
 					/**
 					 * retrieve the referenced entity and copy its dto representation as an additional field into the originating dto object.
 					 */
-					final AbstractEntity relatedEntity = m.getObjectById(relatedClass, id);
+					final AbstractEntity relatedEntity = (AbstractEntity) m.getObjectById(relatedClass, id);
 
 					if (null != relatedEntity) {
 						final Dto relatedDto = copy.copy(relatedEntity);
@@ -234,8 +233,8 @@ public class CommonServiceReader extends AbstractCommonService {
 
 	// TODO make this faster: getting account data takes 27ms. getting empty relationship data for an account takes 270ms.
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String related) {
-		final Map<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
-		final Map<String, Map<String, Set<String>>> relations = RelationshipFieldTable.instance.getMap();
+		final HashMap<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
+		final HashMap<String, HashMap<String, HashSet<String>>> relations = RelationshipFieldTable.instance.getMap();
 
 		for (final String originating : relations.keySet()) {
 			if (relations.get(originating).containsKey(related)) {

@@ -12,9 +12,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.jdo.PersistenceManager;
@@ -24,7 +23,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 
 public class DtoCopyMachine {
-	private static final Map<Class<?>, Map<Field, Class<?>>> RELATE_FIELDS = DtoWizard.instance.getRelateFields();
+	private static final HashMap<Class<?>, HashMap<Field, Class<?>>> RELATE_FIELDS = DtoWizard.instance.getRelateFields();
 	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	private static final DomainClassRegistry registry = DomainClassRegistry.instance;
 	private static final PersistenceManager m = PMF.get().getPersistenceManager();
@@ -201,7 +200,7 @@ public class DtoCopyMachine {
 			// do nothing
 		} else {
 			// retrieve the children whose keys have been stored and insert them into the dto object.
-			final LinkedList<Dto> children = new LinkedList<Dto>();
+			final ArrayList<Dto> children = new ArrayList<Dto>();
 			
 /* TODO we should do a parallel fetch instead using the low level api.
  * 		but this requires copying from a property list instead of copying from an object into a Dto instance.

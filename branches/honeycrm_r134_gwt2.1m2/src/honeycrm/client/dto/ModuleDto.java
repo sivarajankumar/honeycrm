@@ -22,14 +22,28 @@ public class ModuleDto implements Serializable {
 	private String historyToken;
 	private String title;
 	private String module;
-	private HashMap<String, AbstractField> fields = new HashMap<String, AbstractField>(20);
-	private HashMap<String, String> relateFieldMappings = new HashMap<String, String>(20);
-
+	private HashMap<String, AbstractField> fields = new HashMap<String, AbstractField>();
+	private HashMap<String, String> relateFieldMappings = new HashMap<String, String>();
+	private HashMap<String, String> oneToManyMappings = new HashMap<String, String>();
+	
 	public ModuleDto() {
 	}
 
 	public String[] getListFieldIds() {
 		return listFieldIds;
+	}
+	
+	/**
+	 * Returns true if searchField is part of the list fields.
+	 * TODO Replace listFieldIds with ArrayList<String> -> this way we can use List<?>.containsKey instead of doing this on our own.
+	 */
+	public boolean isListViewField(final String searchField) {
+		for (final String ownField: listFieldIds) {
+			if (ownField.equals(searchField)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void setListFieldIds(String[] listFieldIds) {
@@ -106,6 +120,14 @@ public class ModuleDto implements Serializable {
 
 	public void setRelateFieldMappings(HashMap<String, String> relateFields) {
 		this.relateFieldMappings = relateFields;
+	}
+
+	public HashMap<String, String> getOneToManyMappings() {
+		return oneToManyMappings;
+	}
+
+	public void setOneToManyMappings(HashMap<String, String> oneToManyMappings) {
+		this.oneToManyMappings = oneToManyMappings;
 	}
 
 	public AbstractField getFieldById(final String id) {

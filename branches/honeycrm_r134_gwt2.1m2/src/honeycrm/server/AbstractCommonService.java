@@ -21,7 +21,7 @@ abstract public class AbstractCommonService extends RemoteServiceServlet {
 	protected static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();
 	protected static final DomainClassRegistry registry = DomainClassRegistry.instance;
 
-	protected static Class<? extends AbstractEntity> getDomainClass(final String dtoIndex) {
+	public static Class<? extends AbstractEntity> getDomainClass(final String dtoIndex) {
 		return registry.getDomain(dtoIndex);
 	}
 

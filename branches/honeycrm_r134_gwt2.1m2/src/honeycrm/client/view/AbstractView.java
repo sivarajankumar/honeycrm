@@ -8,7 +8,10 @@ import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.services.CommonServiceAsync;
-
+import honeycrm.client.services.CreateServiceAsync;
+import honeycrm.client.services.DeleteServiceAsync;
+import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.services.UpdateServiceAsync;
 import java.io.Serializable;
 
 import com.google.gwt.user.client.Window;
@@ -22,6 +25,10 @@ import com.google.gwt.user.datepicker.client.DateBox;
 
 abstract public class AbstractView extends Composite {
 	protected final CommonServiceAsync commonService = ServiceRegistry.commonService();
+	protected static final CreateServiceAsync createService = ServiceRegistry.createService();
+	protected static final ReadServiceAsync readService = ServiceRegistry.readService();
+	protected static final UpdateServiceAsync updateService = ServiceRegistry.updateService();
+	protected static final DeleteServiceAsync deleteService = ServiceRegistry.deleteService();
 	protected final ModuleDto moduleDto;
 
 	public AbstractView(final String moduleName) {
@@ -68,7 +75,8 @@ abstract public class AbstractView extends Composite {
 		}
 
 		if (isUpdate) {
-			commonService.update(tmpDto, id, new AsyncCallback<Void>() {
+			updateService.update(tmpDto, new AsyncCallback<Void>() {
+//			commonService.update(tmpDto, id, new AsyncCallback<Void>() {
 				@Override
 				public void onSuccess(Void result) {
 					// mark cache invalid to make sure the changed values will be displayed
@@ -85,7 +93,7 @@ abstract public class AbstractView extends Composite {
 				}
 			});
 		} else {
-			commonService.create(tmpDto, new AsyncCallback<Long>() {
+			createService.create(tmpDto, new AsyncCallback<Long>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);

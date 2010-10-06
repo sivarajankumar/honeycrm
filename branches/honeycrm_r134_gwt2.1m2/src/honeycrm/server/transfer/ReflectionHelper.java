@@ -69,6 +69,19 @@ public class ReflectionHelper {
 		}
 		return classes.toArray(new Class[classes.size()]);
 	}
+	
+	/**
+	 * Returns all classes of the specified package that extend the specified super class.
+	 */
+	public static List<Class<?>> getClassesWithSuperclass(final String packageName, final Class<?> superclass) throws ClassNotFoundException, IOException {
+		final List<Class<?>> domainClasses = new ArrayList<Class<?>>();
+		for (final Class<?> clazz : getClasses(packageName)) {
+			if (superclass.equals(clazz.getSuperclass())) {
+				domainClasses.add(clazz);
+			}
+		}
+		return domainClasses;
+	}
 
 	/**
 	 * Returns fields of classSrc and inherited fields.
@@ -86,7 +99,7 @@ public class ReflectionHelper {
 	}
 
 	/**
-	 * Returns all fields annotated with the given annotation. This is expensive and should be either cached or calculated at startup.
+	 * Returns all fields of the source class (classSrc) that are annotated with the given annotation (annotationClass). This is expensive and should be either cached or calculated at startup.
 	 */
 	public Field[] getAllFieldsWithAnnotation(final Class classSrc, final Class annotationClass) {
 		final List<Field> list = new LinkedList<Field>();

@@ -52,7 +52,6 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 		super(25, Unit.PX);
 		
 		GWT.runAsync(new RunAsyncCallback() {
-			
 			@Override
 			public void onSuccess() {
 				int tabPos = 0;
@@ -181,7 +180,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 		final String[] token = event.getValue().trim().split("\\s+");
 
 		if (2 <= token.length) {
-			final ModuleAction action = ModuleAction.fromString(token[0]);
+			final ModuleAction action = ModuleAction.fromString(token[1]);
 
 			final String module = token[0];
 

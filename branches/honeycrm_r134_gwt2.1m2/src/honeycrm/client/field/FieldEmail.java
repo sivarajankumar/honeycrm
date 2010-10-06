@@ -25,17 +25,17 @@ public class FieldEmail extends AbstractField {
 	}
 
 	@Override
-	public String internalFormattedValue(Serializable value) {
+	public String internalFormattedValue(Object value) {
 		return StringAbbreviation.shorten(stringify(value), 10);
 	}
 
 	@Override
-	protected void internalSetData(TextBox widget, Serializable value, View view) {
+	protected void internalSetData(TextBox widget, Object value, View view) {
 		widget.setValue(stringify(value)); // declare this to avoid shortening of address in edit view
 	}
 	
 	@Override
-	protected void internalSetData(Anchor widget, Serializable value, View view) {
+	protected void internalSetData(Anchor widget, Object value, View view) {
 		// TODO do this only for value != null
 		// TODO use Label when value == null
 		widget.setTitle(stringify(value));

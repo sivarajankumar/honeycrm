@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+import honeycrm.client.basiclayout.Initializer;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.view.ModuleAction;
@@ -39,7 +40,9 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
-				showReport(0);
+				if (!Initializer.SKIP_LOADING_VISUALISATIONS) {
+					showReport(0);
+				}
 			}
 
 			@Override
@@ -84,7 +87,7 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Year"); // TODO generalize
 
-		for (final String column: reportMeta.getColumns()) {
+		for (final String column : reportMeta.getColumns()) {
 			data.addColumn(ColumnType.NUMBER, column);
 		}
 
@@ -132,6 +135,10 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 
 		if (2 <= token.length) {
 			final ModuleAction action = ModuleAction.fromString(token[0]);
+			
+			if (null == action) 
+				return;
+			
 			final int reportId = NumberParser.convertToInteger(token[1]);
 
 			switch (action) {
@@ -142,7 +149,6 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 					Window.alert("invalid report id");
 				}
 			}
-
 		}
 	}
 }

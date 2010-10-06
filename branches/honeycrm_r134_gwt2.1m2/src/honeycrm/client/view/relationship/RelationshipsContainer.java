@@ -10,9 +10,8 @@ import honeycrm.client.view.list.ListViewDataProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
@@ -81,13 +80,13 @@ class SingleRelationshipPanel extends ListView {
 		refresh();
 	}
 
-	public static boolean doesRelationshipExist(final String originatingDomain, final String relatedDomain) {
-		final Map<String, Map<String, Set<String>>> r = DtoModuleRegistry.instance().getRelationships();
+/*	public static boolean doesRelationshipExist(final String originatingDomain, final String relatedDomain) {
+		final HashMap<String, HashMap<String, HashSet<String>>> r = DtoModuleRegistry.instance().getRelationships();
 		return r.containsKey(originatingDomain) && r.get(originatingDomain).containsKey(relatedDomain);
-	}
+	}*/
 
 	private boolean hasRelationshipUniqueFieldName() {
-		final Map<String, Map<String, Set<String>>> r = DtoModuleRegistry.instance().getRelationships();
+		final HashMap<String, HashMap<String, HashSet<String>>> r = DtoModuleRegistry.instance().getRelationships();
 		// assume the relationship exists.
 		return 1 == r.get(moduleDto.getModule()).get(relatedDtoClass).size();
 	}
@@ -102,7 +101,7 @@ class SingleRelationshipPanel extends ListView {
 		btn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				final Map<String, Map<String, Set<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
+				final HashMap<String, HashMap<String, HashSet<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
 
 				/**
 				 * name of the field that should be pre-filled e.g. contactId

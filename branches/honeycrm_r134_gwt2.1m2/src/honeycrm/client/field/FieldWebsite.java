@@ -2,8 +2,6 @@ package honeycrm.client.field;
 
 import honeycrm.client.view.AbstractView.View;
 
-import java.io.Serializable;
-
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -24,7 +22,7 @@ public class FieldWebsite extends AbstractField {
 	}
 
 	@Override
-	protected void internalSetData(Anchor widget, Serializable value, View view) {
+	protected void internalSetData(Anchor widget, Object value, View view) {
 		widget.setHref(withHttp(stringify(value)));
 		widget.setText(stringify(value));
 	}

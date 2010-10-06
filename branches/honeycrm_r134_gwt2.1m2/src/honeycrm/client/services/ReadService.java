@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("read")
 public interface ReadService extends RemoteService {
-	public ListQueryResult getAll(final String kind);
+	public ListQueryResult getAll(final String kind, final int from, final int to);
 	public Dto get(String dtoIndex, long id);
 	public Dto getByName(String dtoIndex, String name);
 	public ListQueryResult getAllAssignedTo(final String dtoIndex, final long employeeID, int from, int to);

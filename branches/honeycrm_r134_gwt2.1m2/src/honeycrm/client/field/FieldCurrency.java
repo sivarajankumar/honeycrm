@@ -69,13 +69,13 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	protected void internalSetData(Label widget, Serializable value, View view) {
+	protected void internalSetData(Label widget, Object value, View view) {
 		(widget).setText(formatRead().format(NumberParser.convertToDouble(value)));
 		(widget).setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 	}
 
 	@Override
-	protected void internalSetData(TextBox widget, Serializable value, View view) {
+	protected void internalSetData(TextBox widget, Object value, View view) {
 		(widget).setText(formatRead().format(NumberParser.convertToDouble((value))));
 		(widget).setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 		addEvents(widget);
@@ -97,7 +97,7 @@ public class FieldCurrency extends AbstractField {
 	}
 	
 	@Override
-	public String internalFormattedValue(Serializable value) {
+	public String internalFormattedValue(Object value) {
 		return formatRead().format(NumberParser.convertToDouble(value));
 	}
 }

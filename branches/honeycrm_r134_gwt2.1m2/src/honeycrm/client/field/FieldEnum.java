@@ -27,7 +27,7 @@ public class FieldEnum extends AbstractField {
 	}
 
 	@Override
-	protected void internalSetData(ListBox widget, Serializable value, View view) {
+	protected void internalSetData(ListBox widget, Object value, View view) {
 		if (view == View.CREATE) {
 			final String[] options = getOptions();
 			for (int i = 0; i < options.length; i++) {

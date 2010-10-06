@@ -99,8 +99,11 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 						@Override
 						public void setValueAsynch(Dto result) {
 							table.setVisible(true);
-							relationshipsContainer.setVisible(true);
-							relationshipsContainer.refresh(id);
+							//if (null == relationshipsContainer) {
+								// TODO fix creation of relationship container
+								relationshipsContainer.setVisible(true);
+								relationshipsContainer.refresh(id);
+							//}
 
 							if (null == result) {
 								Window.alert("Could not find account with id " + id);
@@ -120,7 +123,8 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 						public void doRpc(final Consumer<Dto> internalCacheCallback) {
 							table.setVisible(false);
 
-							commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
+							readService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
+//							commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
 								@Override
 								public void onFailure(Throwable caught) {
 									displayError(caught);
@@ -269,7 +273,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 		if (isShowing()) {
 			LoadIndicator.get().startLoading();
 
-			commonService.delete(moduleDto.getModule(), dto.getId(), new AsyncCallback<Void>() {
+			deleteService.delete(moduleDto.getModule(), dto.getId(), new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					LoadIndicator.get().endLoading();
@@ -355,7 +359,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
 		
-		if (2 <= token.length && token[0].equals(moduleDto.getModule().toLowerCase())) {
+		if (2 <= token.length && token[0].equals(moduleDto.getModule())) {
 			final ModuleAction action = ModuleAction.fromString(token[1]);
 			
 			if (null != action) {

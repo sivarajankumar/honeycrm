@@ -157,7 +157,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		return (Label) decorateWidget(new Label(getLabel()), true);
 	}
 
-	private Widget setData(final Widget widget, final Serializable value, final View view) {
+	private Widget setData(final Widget widget, final Object value, final View view) {
 		if (widget instanceof HTML) {
 			internalSetData((HTML) widget, value, view);
 		} else if (widget instanceof Label) {
@@ -194,55 +194,55 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		return widget;
 	}
 
-	private String formattedValue(final Serializable value, final View view) {
+	private String formattedValue(final Object value, final View view) {
 		return stringify(internalFormattedValue(value));
 	}
 
 	/**
 	 * Subclasses may override this and implement their own formatting for their content.
 	 */
-	public String internalFormattedValue(final Serializable value) {
+	public String internalFormattedValue(final Object value) {
 		return stringify(value);
 	}
 
-	protected String stringify(Serializable value) {
+	protected String stringify(Object value) {
 		return null == value ? "" : String.valueOf(value);
 	}
 
 	/**
 	 * Subclasses may override this class to initialize values on the widgets they use.
 	 */
-	protected void internalSetData(Anchor widget, Serializable value, View view) {
+	protected void internalSetData(Anchor widget, Object value, View view) {
 		notImplemented();
 	}
 	
-	protected void internalSetData(DateBox widget, Serializable value, View view) {
+	protected void internalSetData(DateBox widget, Object value, View view) {
 		notImplemented();
 	}
 
-	protected void internalSetData(CheckBox widget, Serializable value, View view) {
+	protected void internalSetData(CheckBox widget, Object value, View view) {
 		if (value instanceof Boolean) {
 			widget.setValue((Boolean) value);
 		}
 	}
 
-	protected void internalSetData(HTML widget, Serializable value, View view) {
+	protected void internalSetData(HTML widget, Object value, View view) {
 		notImplemented();
 	}
 	
-	protected void internalSetData(Label widget, Serializable value, View view) {
+	protected void internalSetData(Label widget, Object value, View view) {
 		widget.setText(formattedValue(value, view));
 	}
 
-	protected void internalSetData(TextBox widget, Serializable value, View view) {
+	protected void internalSetData(TextBox widget, Object value, View view) {
 		widget.setText(formattedValue(value, view));
 	}
 
-	protected void internalSetData(TextArea widget, Serializable value, View view) {
+	protected void internalSetData(TextArea widget, Object value, View view) {
 		widget.setText(formattedValue(value, view));
 	}
 
-	protected void internalSetData(ListBox widget, Serializable value, View view) {
+	protected void internalSetData(ListBox widget, Object value, View view) {
 		notImplemented();
 	}
 	

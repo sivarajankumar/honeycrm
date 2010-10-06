@@ -32,4 +32,23 @@
   <!-- extend-property name="locale" values="en"/>
   <extend-property name="locale" values="ge"/>
   <set-property-fallback name="locale" value="en"/-->
+  
+  <extend-configuration-property name="rpc.blacklist" value=".*"/>
+  <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.SerializableException"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.long"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.String"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.int"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.long"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.double"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.boolean"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.util.Date"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.util.ArrayList"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.util.HashMap"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.util.HashSet"/>
+  <extend-configuration-property name="rpc.blacklist" value="+honeycrm.client.*"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.Integer"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.Long"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.Double"/>
+  <extend-configuration-property name="rpc.blacklist" value="+java.lang.Boolean"/>
+  <extend-configuration-property name="rpc.blacklist" value="+com.google.gwt.user.client.rpc.*"/>
 </module>
