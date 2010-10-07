@@ -23,6 +23,8 @@ the requirement to run the data nucleus enhancer on new domain classes could be 
 
 https://honeycrm.googlecode.com/svn/wiki/plugins/domain.png
 
+*UPDATE 2010/10/07* Since r271 we use the low level API instead i.e. we can add whatever domain class we want on the fly since no data nucleus enhancer has to be run. just create a new Entity instance of the desired kind, with the fields you want. 
+
 = ideas about installing and using apps =
 
 == installation of plugins ==
