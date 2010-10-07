@@ -28,6 +28,18 @@ public class UpdateServiceTest extends DatastoreTest {
 		assertEquals("Bar", retrievedContact2.get("name"));
 	}
 	
+	public void testUpdatingRelateField() {
+		final Dto contact = new Dto("Contact");
+		final long id = create.create(contact);
+		
+		final Dto retrievedContact = reader.get("Contact", id);
+		retrievedContact.set("accountId", 0L); // <- this indicates that nothing has been selected yet. so no Key should be created either.
+		updater.update(retrievedContact);
+	
+		final Dto retrievedContact2 = reader.get("Contact", id);
+		assertEquals(retrievedContact.get("accountId"), retrievedContact2.get("accountId"));
+	}
+	
 	public void testUpdatingWithOneToMany() {
 		
 	}

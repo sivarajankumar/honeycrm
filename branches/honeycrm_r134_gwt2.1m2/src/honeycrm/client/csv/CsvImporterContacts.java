@@ -18,6 +18,6 @@ public class CsvImporterContacts extends CsvImporter {
 
 	@Override
 	protected String getModule() {
-		return "contact";
+		return "Contact";
 	}
 }

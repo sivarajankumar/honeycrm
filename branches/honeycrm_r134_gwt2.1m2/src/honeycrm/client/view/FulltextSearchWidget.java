@@ -4,7 +4,7 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.ServiceRegistry;
-import honeycrm.client.services.CommonServiceAsync;
+import honeycrm.client.services.ReadServiceAsync;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,8 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public class FulltextSearchWidget extends SuggestBox {
 	public static final int MIN_QUERY_LENGTH = 3;
-	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
+	protected static final ReadServiceAsync readService = ServiceRegistry.readService();
+	//	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected String lastQueryString;
 	protected final Map<String, Dto> nameToDto = new HashMap<String, Dto>();
 
@@ -77,7 +78,8 @@ public class FulltextSearchWidget extends SuggestBox {
 	}
 
 	protected void startFulltextSearch(final String queryString) {
-		commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
+		readService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
+		// commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				if (null != result && result.getItemCount() > 0) {

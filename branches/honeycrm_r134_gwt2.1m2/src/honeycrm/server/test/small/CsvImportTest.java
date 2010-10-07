@@ -7,8 +7,6 @@ import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.server.RelationshipFieldTable;
 import honeycrm.server.transfer.DtoWizard;
 
-import java.util.List;
-
 import junit.framework.TestCase;
 
 public class CsvImportTest extends TestCase {
@@ -28,17 +26,17 @@ public class CsvImportTest extends TestCase {
 				+ "\"78159143-432f-5063-dc07-4c1904c0f30c\",\"06/16/2010 07:05 pm\",\"06/16/2010 07:05 pm\",\"1\",\"1\",\"\",\"0\",\"seed_sally_id\",\"\",\"Jerrell\",\"Lachance\",\"VP Sales\",\"\",\"0\",\"(170) 360-1699\",\"(989) 323-1320\",\"(320) 473-5892\",\"\",\"\",\"123 Anywhere Street\",\"Denver\",\"CA\",\"64860\",\"USA\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"Other\",\"\",\"\",\"\",\"vegan.im.section@example.com\",\"Cumberland Trails Inc\",\"sally\"";
 
 		final CsvImporter importer = CsvImporter.get("contact");
-		final List<Dto> list = importer.parse(csv);
+		final Dto[] list = importer.parse(csv);
 
-		assertTrue(importer.parse("\n").isEmpty());
-		assertTrue(importer.parse("").isEmpty());
-		assertTrue(importer.parse(null).isEmpty());
+		assertTrue(importer.parse("\n").length == 0);
+		assertTrue(importer.parse("").length == 0);
+		assertTrue(importer.parse(null).length == 0);
 		
 		assertNotNull(list);
-		assertEquals(6, list.size());
+		assertEquals(6, list.length);
 
-		list.get(0).get("name").equals("Irma Bustillos");
-		list.get(0).get("email").equals("vegan.vegan.vegan@example.tw");
-		list.get(5).get("name").equals("Jerrell Lachance");
+		list[0].get("name").equals("Irma Bustillos");
+		list[0].get("email").equals("vegan.vegan.vegan@example.tw");
+		list[5].get("name").equals("Jerrell Lachance");
 	}
 }

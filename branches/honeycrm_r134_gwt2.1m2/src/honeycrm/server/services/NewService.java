@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -21,11 +22,12 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public abstract class NewService extends RemoteServiceServlet {
 	private static final long serialVersionUID = -4102236506193658058L;
 	protected static final DatastoreService db = DatastoreServiceFactory.getDatastoreService();
+	protected static final HashMap<String, ModuleDto> configuration = NewDtoWizard.getConfiguration().getModuleDtos();
 	protected final CopyMachine copy = new CopyMachine();
-
+	
 	class CopyMachine {
-		private final HashMap<String, ModuleDto> configuration = NewDtoWizard.getConfiguration().getModuleDtos();
-
+		private final Logger log = Logger.getLogger(CopyMachine.class.toString());
+	
 		public ListQueryResult entitiesToDtoArray(String kind, final int count, final Iterable<Entity> entities, boolean isDetailView) {
 			int i = 0;
 			final Dto[] dtos = new Dto[count];
@@ -62,9 +64,10 @@ public abstract class NewService extends RemoteServiceServlet {
 				dto.set(fieldName, (Serializable) entry.getValue());
 			}
 
-			if (true || resolveRelatedEntities) {
+			// if (resolveRelatedEntities) {
+			// TODO resolve at most 2 (?) times: Contract -> Unique Services -> Product
 				resolveRelatedEntities(dto, entity);
-			}
+			// }
 			if (isDetailView) {
 				resolveKeyLists(dto, entity);
 			}
@@ -83,7 +86,6 @@ public abstract class NewService extends RemoteServiceServlet {
 					if (null != keys) {
 						for (final Map.Entry<Key, Entity> entry : db.get(keys).entrySet()) {
 							final Dto child = entityToDto(UniqueService.class.getSimpleName(), entry.getValue(), false, false);
-							int i = 0;
 							children.add(child);
 						}
 					}
@@ -101,10 +103,11 @@ public abstract class NewService extends RemoteServiceServlet {
 				final String relatedEntityName = entry.getValue();
 
 				if (null == entity.getProperty(fieldName)) {
-					// skip relate fields that are null
+					// No Key has been stored yet. Set the relate field to 0 to express that on the client side.
+					dto.set(fieldName, 0L);
 				} else if (!(entity.getProperty(fieldName) instanceof Key)) {
 					// check if Entity has been stored properly!
-					System.err.println("Expected instance of " + Key.class + ". Found " + entity.getProperty(fieldName) + ". Skipping field.");
+					log.warning("Expected instance of " + Key.class + ". Found " + entity.getProperty(fieldName).getClass() + ". Skipping field.");
 				} else {
 					final long id = ((Key) entity.getProperty(fieldName)).getId();
 
@@ -147,10 +150,15 @@ public abstract class NewService extends RemoteServiceServlet {
 				} else if (relationMap.containsKey(fieldName)) {
 					// This is a relate field.
 					// Want to store value as Key value. Create a new Key for the referenced entity.
-					final String relatedEntity = relationMap.get(fieldName);
-					final Key key = KeyFactory.createKey(relatedEntity, (Long) entry.getValue());
+					if (entry.getValue() instanceof Long && (Long) entry.getValue() > 0) {
+						final String relatedEntity = relationMap.get(fieldName);
+						final Key key = KeyFactory.createKey(relatedEntity, (Long) entry.getValue());
 
-					entity.setProperty(fieldName, key);
+						entity.setProperty(fieldName, key);
+					} else {
+						// No valid id has been set. Null the property.
+						entity.setProperty(fieldName, null);
+					}
 				} else if (oneToManyMap.containsKey(fieldName)) {
 					// This is a one to many field.
 					// Create all referenced items and store a list containing their keys in the entity we wanted to create in the first place.

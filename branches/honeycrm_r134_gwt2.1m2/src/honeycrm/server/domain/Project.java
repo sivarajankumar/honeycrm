@@ -12,12 +12,10 @@ import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
 import java.util.Date;
 
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
-@PersistenceCapable
+//@PersistenceCapable
 @Searchable
 @ListViewable( { "name", "assignedTo", "targetSum", "currentSum", "endDate" })
 @DetailViewable( { "name,assignedTo", "description,phase", "targetSum,currentSum", "startDate,endDate" })

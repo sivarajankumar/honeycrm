@@ -12,12 +12,12 @@ import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
 import java.util.Date;
 
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
-@PersistenceCapable
+import com.google.appengine.api.datastore.Key;
+
+//@PersistenceCapable
 @Searchable
 @ListViewable( { "marked", "memberId", "assignedTo", "startDate" })
 @DetailViewable( { "memberId,assignedTo", "tiedToPurpose,purpose", "payment,paymentMethod", "startDate,endDate" })
@@ -25,7 +25,7 @@ import org.compass.annotations.SearchableProperty;
 public class Membership extends AbstractEntity {
 	@FieldRelateAnnotation(Contact.class)
 	@Label("Member")
-	public long memberId; // relation to contacts
+	public Key memberId; // relation to contacts
 
 	@FieldCurrencyAnnotation("0")
 	@Label("Contribution")

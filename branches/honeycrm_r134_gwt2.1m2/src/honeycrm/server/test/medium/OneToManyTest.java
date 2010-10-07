@@ -34,14 +34,14 @@ public class OneToManyTest extends DatastoreTest {
 
 		final Offering offering = (Offering) copy.copy(dto);
 
-		assertEquals(1, offering.services.size());
+		assertEquals(1, offering.uniqueServices.size());
 		assertEquals(1, offering.recurringServices.size());
 	}
 
 	public void testCopyDomainObjectWithOneToMany() {
 		final int serviceCount = 1;
 		final Offering offering = new Offering();
-		offering.services = createAndPersistServices(serviceCount, false);
+		offering.uniqueServices = createAndPersistServices(serviceCount, false);
 		offering.recurringServices = createAndPersistServices(serviceCount, true);
 		
 		final Dto dto = copy.copy(offering, true);

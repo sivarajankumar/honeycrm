@@ -23,7 +23,7 @@ public class RelationshipListViewDataProvider extends ListViewDataProvider {
 	public void refresh(final HasData<Dto> display) {
 		// TODO do only call getRelated(originating, originalModule, relationshipModule)
 		// TODO this has to be extremely fast
-		ServiceRegistry.commonService().getAllRelated(originatingModule, originatingId, module, new AsyncCallback<ListQueryResult>() {
+		ServiceRegistry.readService().getAllRelated(originatingModule, originatingId, module, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("could not load");

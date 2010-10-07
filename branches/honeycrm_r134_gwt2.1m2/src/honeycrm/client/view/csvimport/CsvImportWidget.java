@@ -3,6 +3,7 @@ package honeycrm.client.view.csvimport;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.csv.CsvImporter;
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.ServiceRegistry;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,13 +18,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CsvImportWidget {
-	private final DecoratedPopupPanel popup = new DecoratedPopupPanel(); 
-	
+	private final DecoratedPopupPanel popup = new DecoratedPopupPanel();
+
 	private final String module;
-	
+
 	public CsvImportWidget(final String module) {
 		this.module = module;
-		
+
 		final TextArea textArea = getTextArea();
 		final Label statusLabel = getStatusLabel();
 
@@ -63,38 +64,53 @@ public class CsvImportWidget {
 				popup.hide();
 			}
 		});
-		
+
 		final Button importBtn = new Button("Import");
 		importBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				LoadIndicator.get().startLoading();
-
 				final CsvImporter importer = CsvImporter.get(module);
-				ServiceRegistry.commonService().importCSV(module, importer.parse(textArea.getText()), new AsyncCallback<Void>() {
-					@Override
-					public void onSuccess(Void result) {
-						LoadIndicator.get().endLoading();
-						statusLabel.setText("Status: Import completed");
-						TabCenterView.instance().get(module).refreshListView();
-					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-						LoadIndicator.get().endLoading();
-						statusLabel.setText("Status: Import failed");
-					}
-				});
+				importDto(importer.parse(textArea.getText()), 0, statusLabel);
 			}
 		});
-		
+
 		final HorizontalPanel panel = new HorizontalPanel();
 		panel.add(cancelBtn);
 		panel.add(importBtn);
-		
+
 		return panel;
 	}
-	
+
+	private void importDto(final Dto[] dtos, final int currentIndex, final Label statusLabel) {
+		if (0 == currentIndex) {
+			LoadIndicator.get().startLoading();
+			statusLabel.setText("Status: Started Import");
+		}
+		
+		ServiceRegistry.createService().create(dtos[currentIndex], new AsyncCallback<Long>() {
+			@Override
+			public void onSuccess(Long result) {
+				statusLabel.setText("Status: Imported " + String.valueOf(currentIndex) + " / " + dtos.length);
+
+				final boolean isImportDone = currentIndex == dtos.length - 1;
+
+				if (isImportDone) {
+					LoadIndicator.get().endLoading();
+					statusLabel.setText("Status: Import completed");
+					TabCenterView.instance().get(module).refreshListView();
+				} else {
+					importDto(dtos, 1 + currentIndex, statusLabel);
+				}
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				LoadIndicator.get().endLoading();
+				statusLabel.setText("Status: Import failed.");
+			}
+		});
+	}
+
 	public void show() {
 		popup.show();
 	}

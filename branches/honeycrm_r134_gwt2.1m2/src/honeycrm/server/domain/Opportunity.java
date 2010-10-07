@@ -10,20 +10,20 @@ import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
+import com.google.appengine.api.datastore.Key;
+
 @Searchable
-@PersistenceCapable
+//@PersistenceCapable
 @ListViewable( { "contactId", "probability", "amount" })
 @DetailViewable( { "contactId,amount", "assignedTo", "phase,probability", "reasonClosed", "description" })
 @Quicksearchable( { "contactId", "amount" })
 public class Opportunity extends AbstractEntity {
 	@FieldRelateAnnotation(Contact.class)
 	@Label("Contact")
-	public long contactId;
+	public Key contactId;
 
 	@Label("Amount")
 	@FieldCurrencyAnnotation("0")

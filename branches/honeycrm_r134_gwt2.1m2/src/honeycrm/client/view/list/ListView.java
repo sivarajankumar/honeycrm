@@ -86,7 +86,7 @@ public class ListView extends AbstractView {
 			private void deleteSelected(final Set<Long> ids) {
 				LoadIndicator.get().startLoading();
 
-				ServiceRegistry.commonService().deleteAll(moduleDto.getModule(), ids, new AsyncCallback<Void>() {
+				ServiceRegistry.deleteService().deleteAll(moduleDto.getModule(), ids, new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
 						LoadIndicator.get().endLoading();
@@ -116,7 +116,7 @@ public class ListView extends AbstractView {
 	protected void initListView() {
 		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 
-		pager = new SimplePager(TextLocation.LEFT, pagerResources, false, 0, true);
+		pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
 		pager.setDisplay(table = new CellTable<Dto>());
 
 		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>();
@@ -149,16 +149,16 @@ public class ListView extends AbstractView {
 				disclosurePanel.setOpen(true); // TODO the open/closed status should be persisted and reconstructed per user
 
 				final VerticalPanel vpanel = new VerticalPanel();
-				WidgetJuggler.addToContainer(vpanel, buttonBar, table, pager);
+				WidgetJuggler.addToContainer(vpanel, buttonBar, pager, table);
 
 				disclosurePanel.add(vpanel);
 
 				panel.add(disclosurePanel);
 			} else {
-				WidgetJuggler.addToContainer(panel, buttonBar, table, pager);
+				WidgetJuggler.addToContainer(panel, buttonBar, pager, table);
 			}
 		} else {
-			WidgetJuggler.addToContainer(panel, table, pager, buttonBar);
+			WidgetJuggler.addToContainer(panel, pager, table, buttonBar);
 		}
 
 		initButtonBar();

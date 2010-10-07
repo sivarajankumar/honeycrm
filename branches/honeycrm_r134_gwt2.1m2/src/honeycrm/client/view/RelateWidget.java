@@ -8,8 +8,6 @@ import honeycrm.client.misc.Subscriber;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
-import honeycrm.client.services.CommonServiceAsync;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,15 +23,14 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
-	private long id;
-	private final String marshalledClass;
-	private static final CommonServiceAsync commonService = ServiceRegistry.commonService();
+	private long id = 0; // start with id == 0L to indicate that nothing has been selected.
+	private final String kind;
 	private boolean timerRunning;
 	private final Set<Observer<Dto>> observers = new HashSet<Observer<Dto>>();
 	
-	public RelateWidget(final String marshalledClazz, final long id) {
+	public RelateWidget(final String kind, final long id) {
 		super(new MultiWordSuggestOracle());
-		this.marshalledClass = marshalledClazz;
+		this.kind = kind;
 		addHandlers();
 
 		
@@ -56,7 +53,8 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 		}, new ServerCallback<Dto>() {
 			@Override
 			public void doRpc(final Consumer<Dto> internalCacheCallback) {
-				commonService.get(marshalledClass, id, new AsyncCallback<Dto>() {
+				ServiceRegistry.readService().get(kind, id, new AsyncCallback<Dto>() {
+//				commonService.get(marshalledClass, id, new AsyncCallback<Dto>() {
 					@Override
 					public void onSuccess(final Dto result) {
 						internalCacheCallback.setValueAsynch(result);
@@ -68,7 +66,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 					}
 				});
 			}
-		}, 60 * 1000, marshalledClass, id);
+		}, 60 * 1000, kind, id);
 	}
 
 	private void addHandlers() {
@@ -114,7 +112,8 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 				}, new ServerCallback<Dto>() {
 					@Override
 					public void doRpc(final Consumer<Dto> internalCacheCallback) {
-						commonService.getByName(marshalledClass, selected, new AsyncCallback<Dto>() {
+						ServiceRegistry.readService().getByName(kind, selected, new AsyncCallback<Dto>() {
+//						commonService.getByName(marshalledClass, selected, new AsyncCallback<Dto>() {
 							@Override
 							public void onFailure(Throwable caught) {
 								Window.alert("Could not get id of selected item = " + selected);
@@ -126,7 +125,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 							}
 						});						
 					}
-				}, 60*1000, marshalledClass, selected);
+				}, 60*1000, kind, selected);
 			}
 		});
 	}
@@ -153,8 +152,8 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 				@Override
 				public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
 		//			LoadIndicator.get().startLoading();
-
-					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
+					ServiceRegistry.readService().getAllByNamePrefix(kind, query, 0, 20, new AsyncCallback<ListQueryResult>() {
+//					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
 						@Override
 						public void onSuccess(ListQueryResult result) {
 							internalCacheCallback.setValueAsynch(result);
@@ -170,7 +169,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 					// send request to server. allow user doing some more requests asap.
 					timerRunning = false;
 				}
-			}, 60 * 1000, marshalledClass, query, 0, 20);
+			}, 60 * 1000, kind, query, 0, 20);
 		}
 	}
 	

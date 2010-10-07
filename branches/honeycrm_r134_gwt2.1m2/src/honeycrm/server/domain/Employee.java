@@ -12,12 +12,10 @@ import honeycrm.server.domain.decoration.fields.FieldEmailAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
-@PersistenceCapable
+//@PersistenceCapable
 @Searchable
 @ListViewable({ "active", "name" })
 @DetailViewable({ "name,active", "title,phoneOffice", "employedSince", "department,email" })

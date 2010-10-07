@@ -7,11 +7,9 @@ import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.compass.annotations.Searchable;
 
-@PersistenceCapable
+//@PersistenceCapable
 @Searchable
 @ListViewable({ "productID", "price", "quantity", "unit", "discount", "kindOfDiscount", "sum" })
 @DetailViewable({ "name,productID", "discount,quantity", "kindOfDiscount", "price", "sum" })

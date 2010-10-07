@@ -12,14 +12,14 @@ import honeycrm.server.domain.decoration.fields.FieldMultiEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
+import honeycrm.server.domainNew.SearchableEntity;
 
-import javax.jdo.annotations.PersistenceCapable;
-
-import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
-@PersistenceCapable
-@Searchable
+import com.google.appengine.api.datastore.Key;
+
+//@PersistenceCapable
+@SearchableEntity
 @ListViewable( { "name", "phoneOffice" })
 @DetailViewable( { "name,parentId", "assignedTo", "email,phoneOffice", "website,phoneOther", "rating,annualRevenue", "industry,employees", "tickerSymbol", "shippingAddress", "billingAddress" })
 @Quicksearchable( { "name" })
@@ -60,7 +60,7 @@ public class Account extends AbstractEntity {
 	
 	@Label("Member Of")
 	@FieldRelateAnnotation(Account.class)
-	public long parentId;
+	public Key parentId;
 	
 	@Label("E Mail")
 	@FieldEmailAnnotation

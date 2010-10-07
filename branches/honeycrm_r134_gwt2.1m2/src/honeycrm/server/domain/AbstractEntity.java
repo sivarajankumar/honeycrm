@@ -8,25 +8,16 @@ import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableId;
-
 import com.google.appengine.api.datastore.Key;
 
-@PersistenceCapable
-@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
+//@PersistenceCapable
+//@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @Searchable
 abstract public class AbstractEntity {
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	@PrimaryKey
-	@SearchableId
+	//	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	//	@PrimaryKey
+	//@SearchableId
 	// NOTE:
 	// To allow full text search with compass / lucene the id field has to be of type long.
 	// Additionally we have to use Long (not long) because of constrains of google app engine for
@@ -35,7 +26,7 @@ abstract public class AbstractEntity {
 
 	@Label("Assigned To")
 	@FieldRelateAnnotation(Employee.class)
-	public long assignedTo;
+	public Key assignedTo;
 	
 	// TODO mark field has to be supported differently with mark FieldMark instance
 	@Label("Marked")

@@ -6,7 +6,7 @@ import java.util.Map;
 public class CsvImporterAccounts extends CsvImporter {
 	@Override
 	protected String getModule() {
-		return "account";
+		return "Account";
 	}
 
 	@Override

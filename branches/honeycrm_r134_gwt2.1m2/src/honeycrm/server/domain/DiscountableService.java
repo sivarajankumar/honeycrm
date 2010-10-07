@@ -1,5 +1,8 @@
 package honeycrm.server.domain;
 
+import com.google.appengine.api.datastore.Key;
+
+import honeycrm.server.domain.decoration.Hidden;
 import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
@@ -7,12 +10,9 @@ import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
-import javax.jdo.annotations.Inheritance;
-import javax.jdo.annotations.InheritanceStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-
-@PersistenceCapable
-@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
+//@PersistenceCapable
+//@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
+@Hidden
 public abstract class DiscountableService extends AbstractEntity {
 	@FieldStringAnnotation
 	@Label("Name")
@@ -40,5 +40,5 @@ public abstract class DiscountableService extends AbstractEntity {
 
 	@FieldRelateAnnotation(Product.class)
 	@Label("Product")
-	public long productID;
+	public Key productID;
 }

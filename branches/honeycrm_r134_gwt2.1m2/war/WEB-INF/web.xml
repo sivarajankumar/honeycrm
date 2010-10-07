@@ -8,7 +8,6 @@
 		<servlet-name>commonServlet</servlet-name>
 		<servlet-class>honeycrm.server.CommonServiceImpl</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>commonServlet</servlet-name>
 		<url-pattern>/gae/common</url-pattern>
@@ -18,10 +17,63 @@
 		<servlet-name>authServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.AuthServiceImpl</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>authServlet</servlet-name>
 		<url-pattern>/gae/auth</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>configServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.ConfigServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>configServlet</servlet-name>
+		<url-pattern>/gae/config</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>reportServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.ReportServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>reportServlet</servlet-name>
+		<url-pattern>/gae/report</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>readServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.ReadServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>readServlet</servlet-name>
+		<url-pattern>/gae/read</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>createServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.CreateServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>createServlet</servlet-name>
+		<url-pattern>/gae/create</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>updateServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.UpdateServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>updateServlet</servlet-name>
+		<url-pattern>/gae/update</url-pattern>
+	</servlet-mapping>
+		
+	<servlet>
+		<servlet-name>deleteServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.DeleteServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>deleteServlet</servlet-name>
+		<url-pattern>/gae/delete</url-pattern>
 	</servlet-mapping>
 	
 	<!-- See http://code.google.com/intl/de-DE/appengine/kb/java.html#What_Is_A_Loading_Request -->

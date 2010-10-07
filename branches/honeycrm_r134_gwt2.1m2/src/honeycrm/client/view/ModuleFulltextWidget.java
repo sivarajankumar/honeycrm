@@ -56,7 +56,8 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 		}, new ServerCallback<ListQueryResult>() {
 			@Override
 			public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
-				commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
+				readService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
+				// commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 					@Override
 					public void onSuccess(ListQueryResult result) {
 						internalCacheCallback.setValueAsynch(result);

@@ -16,13 +16,28 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gwt.user.client.Command;
 
 public class ReadServiceTest extends DatastoreTest {
 	private static final CreateServiceImpl creator = new CreateServiceImpl();
-	private static final ReadServiceImpl reader = new ReadServiceImpl();
+	private ReadServiceImpl reader;
 	private static final DatastoreService db = DatastoreServiceFactory.getDatastoreService();
+	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
+	@Override
+	protected void setUp() throws Exception {
+		helper.setUp();
+		reader = new ReadServiceImpl(); // re-create read service between tests to avoid full text search cache invalidation
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		helper.tearDown();
+		reader = null;
+	}
+	
 	public void testGet() {
 		final Entity e = createContact();
 		final Dto dto = reader.get(Contact.class.getSimpleName(), e.getKey().getId());
@@ -38,6 +53,48 @@ public class ReadServiceTest extends DatastoreTest {
 		final ListQueryResult r = reader.getAll(Contact.class.getSimpleName(), 0, 100);
 		assertEquals(100, r.getItemCount());
 		assertEquals(100, r.getResults().length);
+	}
+
+	public void testFulltextSearchOnSingleModule() {
+		final Dto contact = new Dto(Contact.class.getSimpleName());
+		for (int i = 0; i < 10; i++) {
+			contact.set("name", "foo" + i);
+			creator.create(contact);
+		}
+
+		final ListQueryResult r = reader.fulltextSearchForModule(Contact.class.getSimpleName(), "foo", 0, 100);
+
+		assertEquals(10, r.getItemCount());
+
+		final ListQueryResult r2 = reader.fulltextSearchForModule(Contact.class.getSimpleName(), "foo1", 0, 100);
+
+		assertEquals(1, r2.getItemCount());
+	}
+
+	public void testFulltextSearchOnAllModules() {
+		for (int i = 0; i < 10; i++) {
+			final Dto c = new Dto("Contact");
+			final Dto a = new Dto("Account");
+			final Dto p = new Dto("Product");
+			
+			c.set("name", "contact" + i);
+			a.set("name", "account" + i);
+			p.set("name", "product" + i);
+
+			if (i % 2 == 0) { // every second product has a description too
+				p.set("description", "product description 42 " + i);
+			}
+
+			creator.create(c);
+			creator.create(a);
+			creator.create(p);
+		}
+
+		assertEquals(3, reader.fulltextSearch("1", 0, 100).getItemCount());
+		assertEquals(10, reader.fulltextSearch("contact", 0, 100).getItemCount());
+		assertEquals(10, reader.fulltextSearch("product", 0, 100).getItemCount());
+		assertEquals(5, reader.fulltextSearch("42", 0, 100).getItemCount());
+
 	}
 
 	public void testGetByName() {
@@ -66,7 +123,7 @@ public class ReadServiceTest extends DatastoreTest {
 		db.put(product);
 
 		final Entity uniqueService = new Entity(UniqueService.class.getSimpleName());
-		uniqueService.setProperty("productId", product.getKey());
+		uniqueService.setProperty("productID", product.getKey());
 		db.put(uniqueService);
 
 		final ArrayList<Key> serviceKeys = new ArrayList<Key>(1);
@@ -79,7 +136,7 @@ public class ReadServiceTest extends DatastoreTest {
 		final Dto contractDto = reader.get(Contract.class.getSimpleName(), contract.getKey().getId());
 		assertEquals(1, ((List<?>) contractDto.get("uniqueServices")).size());
 		assertTrue(((List<?>) contractDto.get("uniqueServices")).get(0) instanceof Dto);
-		assertEquals(product.getKey().getId(), ((List<Dto>) contractDto.get("uniqueServices")).get(0).get("productId"));
+		assertEquals(product.getKey().getId(), ((List<Dto>) contractDto.get("uniqueServices")).get(0).get("productID"));
 	}
 
 	public void testGetPerformance() throws InterruptedException {

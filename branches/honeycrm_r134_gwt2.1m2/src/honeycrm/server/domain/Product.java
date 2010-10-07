@@ -9,20 +9,19 @@ import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
+import honeycrm.server.domainNew.SearchableEntity;
 
-import javax.jdo.annotations.PersistenceCapable;
+import com.google.appengine.api.datastore.Key;
 
-import org.compass.annotations.Searchable;
-
-@PersistenceCapable
-@Searchable
+//@PersistenceCapable
+@SearchableEntity
 @ListViewable( { "name", "price" })
 @DetailViewable( { "name", "price", "published", "predecessor", "description" })
 @Quicksearchable( { "name" })
 public class Product extends AbstractEntity {
 	@FieldRelateAnnotation(Product.class)
 	@Label("Predecessor Product")
-	public long predecessor;
+	public Key predecessor;
 	
 	@FieldStringAnnotation
 	@Label("Name")

@@ -53,7 +53,7 @@ public class DtoWizardTest extends TestCase {
 	public void testRelateFieldHashCodeAssumptions() {
 		try {
 			for (int i = 0; i < 10; i++) {
-				assertTrue(Contract.class.getField("services").hashCode() != Offering.class.getField("services").hashCode());
+				assertTrue(Contract.class.getField("uniqueServices").hashCode() != Offering.class.getField("uniqueServices").hashCode());
 				
 				assertNotSame(UniqueService.class.getField("id"), UniqueService.class.getField("id"));
 				assertTrue(UniqueService.class.getField("id").hashCode() == RecurringService.class.getField("id").hashCode());

@@ -22,7 +22,8 @@ public class DashboardListViewDataProvider extends ListViewDataProvider {
 		final int start = range.getStart();
 		final int end = start + range.getLength();
 		
-		ServiceRegistry.commonService().getAllAssignedTo(module, User.getUserId(), start, end, new AsyncCallback<ListQueryResult>() {
+		ServiceRegistry.readService().getAllAssignedTo(module, User.getUserId(), start, end, new AsyncCallback<ListQueryResult>() {
+//		ServiceRegistry.commonService().getAllAssignedTo(module, User.getUserId(), start, end, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				insertRefreshedData(display, result);

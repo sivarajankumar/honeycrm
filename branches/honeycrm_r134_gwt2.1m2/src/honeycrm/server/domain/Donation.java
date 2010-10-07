@@ -12,12 +12,12 @@ import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
 import java.util.Date;
 
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
-@PersistenceCapable
+import com.google.appengine.api.datastore.Key;
+
+//@PersistenceCapable
 @Searchable
 @ListViewable( { "marked", "donatorId", "assignedTo", "reaction", "amount" })
 @DetailViewable( { "donatorId,kind", "amount", "donatedFor,assignedTo", "reaction,reactedHow", "date", "receiptionDate,projectId" })
@@ -25,11 +25,11 @@ import org.compass.annotations.SearchableProperty;
 public class Donation extends AbstractEntity {
 	@Label("Donator")
 	@FieldRelateAnnotation(Contact.class)
-	public long donatorId; // contact
+	public Key donatorId; // contact
 
 	@Label("Project")
 	@FieldRelateAnnotation(Project.class)
-	public long projectId;
+	public Key projectId;
 
 	@SearchableProperty
 	@Label("Donated for")

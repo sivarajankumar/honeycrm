@@ -25,6 +25,7 @@ public class ModuleDto implements Serializable {
 	private HashMap<String, AbstractField> fields = new HashMap<String, AbstractField>();
 	private HashMap<String, String> relateFieldMappings = new HashMap<String, String>();
 	private HashMap<String, String> oneToManyMappings = new HashMap<String, String>();
+	private String[] fulltextFields = new String[0];
 	
 	public ModuleDto() {
 	}
@@ -128,6 +129,14 @@ public class ModuleDto implements Serializable {
 
 	public void setOneToManyMappings(HashMap<String, String> oneToManyMappings) {
 		this.oneToManyMappings = oneToManyMappings;
+	}
+
+	public String[] getFulltextFields() {
+		return fulltextFields;
+	}
+
+	public void setFulltextFields(String[] fulltextFields) {
+		this.fulltextFields = fulltextFields;
 	}
 
 	public AbstractField getFieldById(final String id) {

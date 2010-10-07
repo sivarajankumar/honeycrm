@@ -59,8 +59,11 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 				addStyleName("with_margin");
 				addStyleName("tab_layout");
 
+				add(new Dashboard(), "Dashboard"); // TODO insert as first tab
+				tabPos++;
+				
 				final Collection<ModuleDto> dtos = DtoModuleRegistry.instance().getDtos();
-
+				
 				for (final ModuleDto moduleDto : dtos) {
 					if (moduleDto.isHidden()) {
 						continue; // do not add this module to the tabs since it should be hidden
@@ -81,9 +84,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 					add((view), getTitlePanel(moduleDto.getTitle(), createBtn));
 				}
 
-				add(new Dashboard(), "Dashboard"); // TODO insert as first tab
 				add(new AdminWidget(), "Misc");
-//				add(new SampleReport(), "Reports");
 				add(new ReportSuggester(), "Reports");
 
 				addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {

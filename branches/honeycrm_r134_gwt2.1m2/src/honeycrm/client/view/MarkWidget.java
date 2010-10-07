@@ -26,7 +26,12 @@ public class MarkWidget extends AbstractView {
 			public void onClick(ClickEvent event) {
 				LoadIndicator.get().startLoading();
 
-				commonService.mark(viewable.getModule(), id, markBox.getValue(), new AsyncCallback<Void>() {
+				// mark dto on client side and do a usual update call on the server side.
+				// this assumes the data in the dto is still up to date.
+				viewable.set("marked", markBox.getValue());
+
+				updateService.update(viewable, new AsyncCallback<Void>() {
+//				commonService.mark(viewable.getModule(), id, markBox.getValue(), new AsyncCallback<Void>() {
 					@Override
 					public void onFailure(Throwable caught) {
 						displayError(caught);

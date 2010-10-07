@@ -2,10 +2,10 @@ package honeycrm.server.domain;
 
 import java.util.Date;
 
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
+
+import com.google.appengine.api.datastore.Key;
 
 import honeycrm.server.domain.decoration.DetailViewable;
 import honeycrm.server.domain.decoration.Label;
@@ -20,14 +20,14 @@ import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
 // TODO add scanned invoice as file upload
 @Searchable
-@PersistenceCapable
+//@PersistenceCapable
 @ListViewable({ "category", "account", "invoiceAmount" })
 @DetailViewable({ "account,invoiceAmount", "invoiceDate,invoiceNumber", "category" })
 @Quicksearchable("account")
 public class ExternalInvoice extends AbstractEntity {
 	@Label("Account")
 	@FieldRelateAnnotation(Account.class)
-	public long account;
+	public Key account;
 
 	@Label("Date")
 	@FieldDateAnnotation

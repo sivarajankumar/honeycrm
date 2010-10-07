@@ -12,35 +12,32 @@ import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import javax.jdo.annotations.PersistenceCapable;
-
 import org.compass.annotations.Searchable;
 
 import com.google.appengine.api.datastore.Key;
 
-@PersistenceCapable
+//@PersistenceCapable
 @Searchable
 @ListViewable({ "contactID", "deadline" })
-@DetailViewable({ "contactID", "assignedTo", "deadline", "services", "recurringServices" })
+@DetailViewable({ "contactID", "assignedTo", "deadline", "uniqueServices", "recurringServices" })
 @Quicksearchable({ "contactID" })
 @HasExtraButton(label = "Create Contract", action = CreateContractAction.class, show = ModuleAction.DETAIL)
 public class Offering extends AbstractEntity {
 	@Label("Unique Services")
 	@FieldTableAnnotation(UniqueService.class)
 	@OneToMany(UniqueService.class)
-	public List<Key> services;
+	public ArrayList<Key> uniqueServices;
 
 	@Label("Recurring Services")
 	@FieldTableAnnotation(RecurringService.class)
 	@OneToMany(RecurringService.class)
-	public List<Key> recurringServices;
+	public ArrayList<Key> recurringServices;
 	
 	@Label("Contact")
 	@FieldRelateAnnotation(Contact.class)
-	public Long contactID;
+	public Key contactID;
 
 	@FieldDateAnnotation
 	@Label("Deadline")
@@ -48,7 +45,7 @@ public class Offering extends AbstractEntity {
 
 	@Label("Contract")
 	@FieldRelateAnnotation(Contract.class)
-	public Long contractID;
+	public Key contractID;
 
 	/**
 	 * Calculate the sum of all services.

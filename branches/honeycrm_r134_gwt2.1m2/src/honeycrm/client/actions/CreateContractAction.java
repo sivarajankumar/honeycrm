@@ -16,13 +16,13 @@ public class CreateContractAction extends AbstractAction {
 	
 	@Override
 	public void doAction(final Dto offering) {
-		if (!"offering".equals(offering.getModule())) {
+		if (!"Offering".equals(offering.getModule())) {
 			LogConsole.log("This is no offering dto object: '" + offering.getModule() + "'");
 			return;
 		}
 		
 		final Dto contract = offering.copy();
-		contract.setModule("contract");
+		contract.setModule("Contract");
 		
 		linkOfferingToContract(offering, contract);
 	}
@@ -30,7 +30,7 @@ public class CreateContractAction extends AbstractAction {
 	private void linkOfferingToContract(final Dto offering, final Dto contract) {
 		contract.set("offeringID", offering.getId());
 		
-		ServiceRegistry.commonService().create(contract, new AsyncCallback<Long>() {
+		ServiceRegistry.createService().create(contract, new AsyncCallback<Long>() {
 			@Override
 			public void onSuccess(final Long contractID) {
 				linkContractToOffering(offering, contractID);
@@ -46,13 +46,13 @@ public class CreateContractAction extends AbstractAction {
 	private void linkContractToOffering(final Dto offering, final Long contractID) {
 		offering.set("contractID", contractID);
 		
-		ServiceRegistry.commonService().update(offering, offering.getId(), new AsyncCallback<Void>() {
+		ServiceRegistry.updateService().update(offering, new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
 				/**
 				 * forward the user to the created contract.
 				 */
-				TabCenterView.instance().openEditView("contract", contractID);
+				TabCenterView.instance().openEditView("Contract", contractID);
 			}
 			
 			@Override

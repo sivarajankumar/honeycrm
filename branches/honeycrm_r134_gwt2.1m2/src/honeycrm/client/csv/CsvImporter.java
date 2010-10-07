@@ -5,9 +5,8 @@ import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.Window;
@@ -16,9 +15,9 @@ abstract public class CsvImporter extends AbstractCsv {
 	private static final String GLUE = ",";
 
 	public static CsvImporter get(final String module) {
-		if ("contact".equals(module)) {
+		if ("Contact".equals(module)) {
 			return new CsvImporterContacts();
-		} else if ("account".equals(module)) {
+		} else if ("Account".equals(module)) {
 			return new CsvImporterAccounts();
 		}
 
@@ -26,7 +25,7 @@ abstract public class CsvImporter extends AbstractCsv {
 		throw new RuntimeException("No CSV importer available for '" + module + "'");
 	}
 
-	public List<Dto> parse(final String csvString) {
+	public Dto[] parse(final String csvString) {
 		if (null != csvString && !csvString.isEmpty()) {
 			final String[][] table = getData(csvString);
 
@@ -36,7 +35,7 @@ abstract public class CsvImporter extends AbstractCsv {
 		}
 
 		// return an empty list since the input has been empty
-		return new LinkedList<Dto>();
+		return new Dto[0];
 	}
 
 	abstract protected String getModule();
@@ -46,8 +45,8 @@ abstract public class CsvImporter extends AbstractCsv {
 	/**
 	 * Parse a given csv string and create a list of contact dto objects of it.
 	 */
-	protected List<Dto> internalParse(final String[][] table, final Map<String, Integer> positions) {
-		final List<Dto> list = new LinkedList<Dto>();
+	protected Dto[] internalParse(final String[][] table, final Map<String, Integer> positions) {
+		final ArrayList<Dto> list = new ArrayList<Dto>();
 
 		final Map<String, String> map = getMapping();
 
@@ -68,7 +67,7 @@ abstract public class CsvImporter extends AbstractCsv {
 			list.add(dto);
 		}
 
-		return list;
+		return list.toArray(new Dto[0]);
 	}
 
 	/**

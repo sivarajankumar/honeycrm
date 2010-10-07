@@ -69,7 +69,7 @@ public class ReflectionHelper {
 		}
 		return classes.toArray(new Class[classes.size()]);
 	}
-	
+
 	/**
 	 * Returns all classes of the specified package that extend the specified super class.
 	 */
@@ -121,17 +121,17 @@ public class ReflectionHelper {
 		System.arraycopy(array2, 0, array, array1.length, array2.length);
 		return array;
 	}
-	
+
 	public static Field[] getFieldsByType(final Field[] fields, final Class<?> type) {
 		final ArrayList<Field> filteredFields = new ArrayList<Field>(fields.length);
-		for (final Field field: fields) {
+		for (final Field field : fields) {
 			if (field.getType().equals(type)) {
 				filteredFields.add(field);
 			}
 		}
 		return filteredFields.toArray(new Field[0]);
 	}
-	
+
 	public String getFieldFQN(final Class<?> clazz, final String fieldName) {
 		return clazz.toString() + "." + fieldName;
 	}
