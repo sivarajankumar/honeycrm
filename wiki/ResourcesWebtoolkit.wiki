@@ -1,5 +1,16 @@
 #summary some resources about google web toolkit
 
+= Books =
+
+ * Programming Google App Engine: Build and Run Scalable Web Apps on Google's Infrastructure http://www.amazon.com/Programming-Google-App-Engine-Infrastructure/dp/059652272X
+
+= Related blogs =
+
+|| http://ikaisays.com/ || from ikai lan about gwt and app engine ||
+||  ||  ||
+||  ||  ||
+||  ||  ||
+
 = Project management =
  * *getting real* from 37signals.com http://gettingreal.37signals.com
 
