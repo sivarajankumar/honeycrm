@@ -10,6 +10,7 @@ import honeycrm.client.view.AbstractView.View;
 import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.RelateWidget;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,7 +38,7 @@ public class ServiceTableWidget extends ITableWidget {
 	private final ModuleDto moduleDto;
 	private final View view;
 	private final HTML sum = new HTML();
-	private final Map<Integer, Dto> model = new HashMap<Integer, Dto>();
+	private final HashMap<Integer, Dto> model = new HashMap<Integer, Dto>();
 	private final VerticalPanel panel = new VerticalPanel();
 	
 	public ServiceTableWidget(final Dto dto, final String fieldId, final View view) {
@@ -140,8 +141,8 @@ public class ServiceTableWidget extends ITableWidget {
 	}
 
 	@Override
-	public List<Dto> getData() {
-		final List<Dto> services = new LinkedList<Dto>();
+	public ArrayList<Dto> getData() {
+		final ArrayList<Dto> services = new ArrayList<Dto>();
 
 		for (int row = HEADER_ROWS; row < table.getRowCount(); row++) {
 			services.add(getDtoFromRow(row));
@@ -243,6 +244,6 @@ public class ServiceTableWidget extends ITableWidget {
 		final double discountValue = NumberParser.convertToDouble(service.get("discount"));
 		final double discount = ("%".equals(service.get("kindOfDiscount"))) ? (discountValue / 100 * price) : (discountValue);
 
-		return (price - discount) * (Integer) service.get("quantity");
+		return (price - discount) * (Long) service.get("quantity");
 	}
 }

@@ -25,7 +25,7 @@ public class CsvImportTest extends TestCase {
 				+ "\"73515873-c2ba-50a6-1705-4c1904494689\",\"06/16/2010 07:05 pm\",\"06/16/2010 07:05 pm\",\"1\",\"1\",\"\",\"0\",\"seed_will_id\",\"\",\"Alexandra\",\"Spring\",\"Director Sales\",\"\",\"0\",\"(376) 573-3885\",\"(238) 534-9821\",\"(743) 598-2149\",\"\",\"\",\"67321 West Siam St.\",\"San Mateo\",\"NY\",\"16675\",\"USA\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"Conference\",\"\",\"\",\"\",\"section80@example.biz\",\"Nelson Inc\",\"will\"\n"
 				+ "\"78159143-432f-5063-dc07-4c1904c0f30c\",\"06/16/2010 07:05 pm\",\"06/16/2010 07:05 pm\",\"1\",\"1\",\"\",\"0\",\"seed_sally_id\",\"\",\"Jerrell\",\"Lachance\",\"VP Sales\",\"\",\"0\",\"(170) 360-1699\",\"(989) 323-1320\",\"(320) 473-5892\",\"\",\"\",\"123 Anywhere Street\",\"Denver\",\"CA\",\"64860\",\"USA\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"Other\",\"\",\"\",\"\",\"vegan.im.section@example.com\",\"Cumberland Trails Inc\",\"sally\"";
 
-		final CsvImporter importer = CsvImporter.get("contact");
+		final CsvImporter importer = CsvImporter.get("Contact");
 		final Dto[] list = importer.parse(csv);
 
 		assertTrue(importer.parse("\n").length == 0);

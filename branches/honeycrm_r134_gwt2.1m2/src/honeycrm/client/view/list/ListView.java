@@ -3,6 +3,7 @@ package honeycrm.client.view.list;
 import honeycrm.client.admin.LogConsole;
 import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldRelate;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.ServiceRegistry;
@@ -207,13 +208,23 @@ public class ListView extends AbstractView {
 		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
 			final String id = moduleDto.getListFieldIds()[col];
 
-			final Column<Dto, String> column = new TextColumn<Dto>() {
-				// TODO this is hotspot #4 in the benchmark (firebug, detailed output style)
-				@Override
-				public String getValue(final Dto object) {
-					final Serializable value = object.get(id);
+			final Column<Dto, ?> column;
 
-					if (moduleDto.getFieldById(id) instanceof FieldRelate) {
+			if (moduleDto.getFieldById(id) instanceof FieldBoolean) {
+				// TODO make this read-only
+				column = new Column<Dto, Boolean>(new CheckboxCell(true)) {
+					@Override
+					public Boolean getValue(final Dto object) {
+						return (Boolean) object.get(id);
+					}
+				};
+			} else if (moduleDto.getFieldById(id) instanceof FieldRelate) {
+				// TODO since this change Memberships cannot be selected / clicked anymore in list views
+				column = new TextColumn<Dto>() {
+					@Override
+					public String getValue(final Dto object) {
+						final Serializable value = object.get(id);
+
 						if (null == value || 0 == (Long) value) {
 							return "";
 						} else {
@@ -221,14 +232,22 @@ public class ListView extends AbstractView {
 							if (null == resolved || null == ((Dto) resolved).get("name")) {
 								return "fail!";
 							} else {
-								return (String) ((Dto) resolved).get("name");
+								final Dto resolvedDto = (Dto) resolved;
+								return "<a href='#" + resolvedDto.getModule() + " detail " + resolvedDto.getId() + "'>" + resolvedDto.get("name") + "</a>";
+								// return (String) ((Dto) resolved).get("name");
 							}
 						}
-					} else {
-						return moduleDto.getFieldById(id).internalFormattedValue(value);
 					}
-				}
-			};
+				};
+			} else {
+				column = new TextColumn<Dto>() {
+					// TODO this is hotspot #4 in the benchmark (firebug, detailed output style)
+					@Override
+					public String getValue(final Dto object) {
+						return moduleDto.getFieldById(id).internalFormattedValue(object.get(id));
+					}
+				};
+			}
 
 			table.addColumn(column, moduleDto.getFieldById(id).getLabel());
 		}
@@ -271,9 +290,9 @@ public class ListView extends AbstractView {
 					initListView();
 					itemsHaveBeenLoadedOnce = true;
 				}
-				db.refresh();				
+				db.refresh();
 			}
-			
+
 			@Override
 			public void onFailure(Throwable reason) {
 				Window.alert("could not run code asynchronously.");

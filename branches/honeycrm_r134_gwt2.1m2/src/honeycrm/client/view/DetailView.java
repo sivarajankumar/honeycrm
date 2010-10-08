@@ -54,9 +54,9 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 
 		final VerticalPanel panel = new VerticalPanel();
 		initWidget(panel);
-	
+
 		final DetailView thisDetailView = this;
-		
+
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
@@ -66,7 +66,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 				panel.add(buttonBar = new DetailViewButtonBar(module, thisDetailView));
 				panel.add(relationshipsContainer = new RelationshipsContainer(module));
 			}
-			
+
 			@Override
 			public void onFailure(Throwable reason) {
 				Window.alert("Could not run code asynchronously");
@@ -80,11 +80,11 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	public void refresh() {
 		refresh(dto.getId());
 	}
-	
+
 	public void refresh(final long id) {
 		refresh(id, null);
 	}
-	
+
 	/**
 	 * Retrieve the item with the specified id, display its values in the detail view. Optionally execute the callback to tell clients when the item has successfully been retrieved.
 	 */
@@ -99,21 +99,21 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 						@Override
 						public void setValueAsynch(Dto result) {
 							table.setVisible(true);
-							//if (null == relationshipsContainer) {
-								// TODO fix creation of relationship container
-								relationshipsContainer.setVisible(true);
-								relationshipsContainer.refresh(id);
-							//}
+							// if (null == relationshipsContainer) {
+							// TODO fix creation of relationship container
+							relationshipsContainer.setVisible(true);
+							relationshipsContainer.refresh(id);
+							// }
 
 							if (null == result) {
-								Window.alert("Could not find account with id " + id);
+								Window.alert("Could not find " + moduleDto.getModule() + "/" + id);
 							} else {
 								// detailview should be responsible for rendering only return the field
 								// types here
 								refreshFields(result);
 								// currentId = result.getId();
 							}
-							
+
 							if (null != callback) {
 								callback.callback();
 							}
@@ -124,7 +124,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 							table.setVisible(false);
 
 							readService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
-//							commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
+								// commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
 								@Override
 								public void onFailure(Throwable caught) {
 									displayError(caught);
@@ -140,7 +140,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 					}, 60 * 1000, moduleDto.getModule(), id);
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable reason) {
 				Window.alert("Could not run code asynchronously");
@@ -358,10 +358,10 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
-		
+
 		if (2 <= token.length && token[0].equals(moduleDto.getModule())) {
 			final ModuleAction action = ModuleAction.fromString(token[1]);
-			
+
 			if (null != action) {
 				switch (action) {
 				case DETAIL:

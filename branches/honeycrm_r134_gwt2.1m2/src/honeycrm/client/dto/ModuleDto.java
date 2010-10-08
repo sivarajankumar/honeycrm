@@ -156,7 +156,7 @@ public class ModuleDto implements Serializable {
 	 */
 	public static ModuleDto getRelatedDto(final String originatingModuleName, final String relateFieldId) {
 		final ModuleDto originatingModule = DtoModuleRegistry.instance().get(originatingModuleName);
-		final String relatedModuleName = originatingModule.getRelateFieldMappings().get(relateFieldId);
+		final String relatedModuleName = originatingModule.getOneToManyMappings().get(relateFieldId);
 		return DtoModuleRegistry.instance().get(relatedModuleName);
 	}
 

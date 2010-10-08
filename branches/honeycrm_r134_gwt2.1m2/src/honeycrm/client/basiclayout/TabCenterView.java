@@ -50,7 +50,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 	private TabCenterView() {
 		super(25, Unit.PX);
-		
+
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
@@ -61,9 +61,9 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 				add(new Dashboard(), "Dashboard"); // TODO insert as first tab
 				tabPos++;
-				
+
 				final Collection<ModuleDto> dtos = DtoModuleRegistry.instance().getDtos();
-				
+
 				for (final ModuleDto moduleDto : dtos) {
 					if (moduleDto.isHidden()) {
 						continue; // do not add this module to the tabs since it should be hidden
@@ -107,15 +107,13 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 						}
 					}
 				});
-				
 
-				
 				/**
 				 * show the tab of the first module.
 				 */
 				History.newItem(tabPositionMapReverse.get(0));
 			}
-			
+
 			@Override
 			public void onFailure(Throwable reason) {
 				Window.alert("Could not execute asynchronously");
@@ -166,7 +164,7 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 	public void showModuleTab(String module) {
 		if (!tabPositionMap.containsKey(module) || !moduleViewMap.containsKey(module)) {
-			Window.alert("Cannot switch to module: '" + module + "'");
+			selectTab(0);
 			return;
 		}
 
@@ -182,6 +180,10 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 		if (2 <= token.length) {
 			final ModuleAction action = ModuleAction.fromString(token[1]);
+
+			if (null == action) {
+				return; // cannot handle this event
+			}
 
 			final String module = token[0];
 

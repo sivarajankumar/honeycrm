@@ -64,10 +64,11 @@ public abstract class NewService extends RemoteServiceServlet {
 				dto.set(fieldName, (Serializable) entry.getValue());
 			}
 
-			// if (resolveRelatedEntities) {
+			// ReadServiceTest only passes when this is commented out
+			//if (resolveRelatedEntities) {
 			// TODO resolve at most 2 (?) times: Contract -> Unique Services -> Product
 				resolveRelatedEntities(dto, entity);
-			// }
+			//}
 			if (isDetailView) {
 				resolveKeyLists(dto, entity);
 			}
