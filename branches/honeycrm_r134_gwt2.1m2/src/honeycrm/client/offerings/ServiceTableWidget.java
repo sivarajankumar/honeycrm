@@ -13,10 +13,7 @@ import honeycrm.client.view.RelateWidget;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -244,6 +241,14 @@ public class ServiceTableWidget extends ITableWidget {
 		final double discountValue = NumberParser.convertToDouble(service.get("discount"));
 		final double discount = ("%".equals(service.get("kindOfDiscount"))) ? (discountValue / 100 * price) : (discountValue);
 
-		return (price - discount) * (Long) service.get("quantity");
+		// TODO simplifiy this!
+		if (service.get("quantity") instanceof Long) {
+			return (price - discount) * (Long) service.get("quantity");
+		} else if (service.get("quantity") instanceof Integer) {
+			return (price - discount) * (Integer) service.get("quantity");
+		} else {
+			Window.alert("Cannot determine sum");
+			throw new RuntimeException("Cannot determine sum");
+		}
 	}
 }
