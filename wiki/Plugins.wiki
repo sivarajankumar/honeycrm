@@ -71,6 +71,7 @@ there are still a lot of questions. just to name a few:
  * *Embedding GWT into Eclipse/OSGi and accessing other Plugins/Bundles* http://groups.google.com/group/google-web-toolkit/browse_thread/thread/bf6ba94319c46be8/4b1489460f3a0775?lnk=gst&q=plugins#4b1489460f3a0775
  * *Sharing objects among modules running in an OSGi platform*: ideas about building a GWT application based in OSGi modules http://groups.google.com/group/google-web-toolkit/browse_thread/thread/cb2f1eaa36c34eea/b070bbc846eae53f?lnk=gst&q=osgi#b070bbc846eae53f
  * blog entry showing how to create a _hello world_ gwt application within the OSGi framework http://blog.ianbull.com/2008/09/gwt-and-osgi.html
+  * Equinox documentation provides details too http://wiki.eclipse.org/index.php/Google_Web_Toolkit_and_Equinox
 
 == GWT and native JavaScript ==
  * GWT JavaScript native interface (JSNI) http://code.google.com/intl/de-DE/webtoolkit/doc/latest/DevGuideCodingBasicsJSNI.html
