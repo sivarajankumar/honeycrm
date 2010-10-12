@@ -9,16 +9,13 @@ import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldMultiEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
+import honeycrm.server.domainNew.SearchableEntity;
 
 import java.util.Date;
 
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableProperty;
-
 import com.google.appengine.api.datastore.Key;
 
-//@PersistenceCapable
-@Searchable
+@SearchableEntity
 @ListViewable( { "marked", "donatorId", "assignedTo", "reaction", "amount" })
 @DetailViewable( { "donatorId,kind", "amount", "donatedFor,assignedTo", "reaction,reactedHow", "date", "receiptionDate,projectId" })
 @Quicksearchable( { "donatorId", "amount" })
@@ -31,12 +28,10 @@ public class Donation extends AbstractEntity {
 	@FieldRelateAnnotation(Project.class)
 	public Key projectId;
 
-	@SearchableProperty
 	@Label("Donated for")
 	@FieldEnumAnnotation( { "Foundation", "Project donation", "Unlinked donation" })
 	public String donatedFor; // foundation / project donation / unlinked donation
 
-	@SearchableProperty
 	@Label("Kind")
 	@FieldEnumAnnotation( { "Subscription", "Unique" })
 	public String kind; // subscription / once
@@ -45,13 +40,11 @@ public class Donation extends AbstractEntity {
 	@FieldDateAnnotation
 	public Date receiptionDate;
 
-	@SearchableProperty
 	@Label("Reaction")
 	@FieldEnumAnnotation( { "Thanked", "Receipt", "Certificate", "No" })
 	public String reaction; // thanked / receipt / certificate / no
 
 	@Label("Reaction Channel")
-	@SearchableProperty
 	@FieldMultiEnumAnnotation( { "E-Mail", "Letter", "Phone Call" })
 	public String reactedHow; // (=channel) email / mail / phone call
 

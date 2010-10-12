@@ -11,15 +11,14 @@ import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
+import honeycrm.server.domainNew.SearchableEntity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import org.compass.annotations.Searchable;
 
 import com.google.appengine.api.datastore.Key;
 
-//@PersistenceCapable
-@Searchable
+@SearchableEntity
 @ListViewable({ "contactID", "deadline" })
 @DetailViewable({ "contactID", "assignedTo", "deadline", "uniqueServices", "recurringServices" })
 @Quicksearchable({ "contactID" })

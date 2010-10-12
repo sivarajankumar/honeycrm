@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import com.google.appengine.api.datastore.Key;
 
-//@PersistenceCapable
 @DetailViewable({ "contactID", "assignedTo", "startDate", "endDate", "uniqueServices", "recurringServices" })
 @ListViewable({ "contactID", "assignedTo", "endDate" })
 @Quicksearchable({"contactID"})

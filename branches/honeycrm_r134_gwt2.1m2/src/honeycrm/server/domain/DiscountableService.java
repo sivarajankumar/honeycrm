@@ -10,8 +10,6 @@ import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 
-//@PersistenceCapable
-//@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
 @Hidden
 public abstract class DiscountableService extends AbstractEntity {
 	@FieldStringAnnotation

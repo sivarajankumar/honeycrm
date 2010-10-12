@@ -144,10 +144,8 @@ public abstract class NewService extends RemoteServiceServlet {
 					entity.setProperty(fieldName, null);
 				} else if ("id".equals(fieldName)) {
 					// Has already been set.
-					// This is the id field.
-					// Create a Key value for this field and store in instead of the long value.
-					// final Key key = KeyFactory.createKey(dto.getModule(), (Long) entry.getValue());
-					// entity.setProperty("id", key);
+				} else if (fieldName.endsWith("_resolved")) {
+					// Skip already resolved fields. We only want to store their id.
 				} else if (relationMap.containsKey(fieldName)) {
 					// This is a relate field.
 					// Want to store value as Key value. Create a new Key for the referenced entity.

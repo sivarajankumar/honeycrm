@@ -12,13 +12,8 @@ import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 
 import java.util.Date;
 
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableProperty;
-
 import com.google.appengine.api.datastore.Key;
 
-//@PersistenceCapable
-@Searchable
 @ListViewable( { "marked", "memberId", "assignedTo", "startDate" })
 @DetailViewable( { "memberId,assignedTo", "tiedToPurpose,purpose", "payment,paymentMethod", "startDate,endDate" })
 @Quicksearchable( { "memberId", "assignedTo" })
@@ -31,17 +26,14 @@ public class Membership extends AbstractEntity {
 	@Label("Contribution")
 	public double payment;
 
-	@SearchableProperty
 	@FieldEnumAnnotation( { "Yes", "No", "Soon" })
 	@Label("Tied to purpose")
 	public String tiedToPurpose; // yes, no, 'soon'
 
-	@SearchableProperty
 	@FieldTextAnnotation
 	@Label("Purpose")
 	public String purpose;
 
-	@SearchableProperty
 	@Label("Payment method")
 	@FieldEnumAnnotation( { "Direct Debit authorisation", "transaction" })
 	public String paymentMethod; // Direct Debit authorisation / transaction

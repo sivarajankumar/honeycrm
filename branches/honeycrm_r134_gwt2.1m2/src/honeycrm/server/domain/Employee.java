@@ -11,17 +11,13 @@ import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEmailAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
+import honeycrm.server.domainNew.SearchableEntity;
 
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableProperty;
-
-//@PersistenceCapable
-@Searchable
+@SearchableEntity
 @ListViewable({ "active", "name" })
 @DetailViewable({ "name,active", "title,phoneOffice", "employedSince", "department,email" })
 @Quicksearchable({ "name" })
 public class Employee extends AbstractEntity {
-	@SearchableProperty
 	@Label("Name")
 	@FieldStringAnnotation
 	public String name;

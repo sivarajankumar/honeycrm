@@ -42,7 +42,6 @@ import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import org.compass.annotations.SearchableProperty;
 
 /**
  * The wizard analyzes the domain classes and creates dto descriptions for them based on their fields and the annotations on the classes. Magically it creates a client side description for the domain classes.
@@ -168,7 +167,8 @@ public class DtoWizard {
 		/**
 		 * the searchable fields are all fields of a class that have the SearchableProperty annotation and are of type String
 		 */
-		searchableFields.put(domainClass, ReflectionHelper.getFieldsByType(reflectionHelper.getAllFieldsWithAnnotation(domainClass, SearchableProperty.class), String.class));
+		// TODO this is disabled since compass / lucene has been removed
+		// searchableFields.put(domainClass, ReflectionHelper.getFieldsByType(reflectionHelper.getAllFieldsWithAnnotation(domainClass, SearchableProperty.class), String.class));
 
 		moduleDto.setHidden(domainClass.isAnnotationPresent(Hidden.class));
 		moduleDto.setExtraButtons(getExtraButtons(domainClass));

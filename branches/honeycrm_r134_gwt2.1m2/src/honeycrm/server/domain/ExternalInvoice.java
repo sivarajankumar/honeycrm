@@ -2,9 +2,6 @@ package honeycrm.server.domain;
 
 import java.util.Date;
 
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableProperty;
-
 import com.google.appengine.api.datastore.Key;
 
 import honeycrm.server.domain.decoration.DetailViewable;
@@ -17,10 +14,9 @@ import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
+import honeycrm.server.domainNew.SearchableEntity;
 
-// TODO add scanned invoice as file upload
-@Searchable
-//@PersistenceCapable
+@SearchableEntity
 @ListViewable({ "category", "account", "invoiceAmount" })
 @DetailViewable({ "account,invoiceAmount", "invoiceDate,invoiceNumber", "category" })
 @Quicksearchable("account")
@@ -35,7 +31,6 @@ public class ExternalInvoice extends AbstractEntity {
 
 	@Label("Number")
 	@FieldStringAnnotation
-	@SearchableProperty
 	public String invoiceNumber;
 
 	@Label("Amount")
@@ -44,7 +39,6 @@ public class ExternalInvoice extends AbstractEntity {
 
 	@Label("Category")
 	@FieldEnumAnnotation({ "A", "B", "C" })
-	@SearchableProperty
 	public String category;
 
 }

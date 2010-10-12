@@ -9,26 +9,21 @@ import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
+import honeycrm.server.domainNew.SearchableEntity;
 
 import java.util.Date;
 
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableProperty;
-
-//@PersistenceCapable
-@Searchable
+@SearchableEntity
 @ListViewable( { "name", "assignedTo", "targetSum", "currentSum", "endDate" })
 @DetailViewable( { "name,assignedTo", "description,phase", "targetSum,currentSum", "startDate,endDate" })
 @Quicksearchable( { "name" })
 public class Project extends AbstractEntity {
-	@SearchableProperty
 	@FieldStringAnnotation
 	@Label("Name")
 	public String name;
 
 	@Label("Description")
 	@FieldTextAnnotation
-	@SearchableProperty
 	public String description;
 
 	@Label("Target sum")
@@ -47,7 +42,6 @@ public class Project extends AbstractEntity {
 	@FieldDateAnnotation
 	public Date endDate;
 
-	@SearchableProperty
 	@Label("Phase")
 	@FieldEnumAnnotation( { "not started", "in progress", "closed" })
 	public String phase;

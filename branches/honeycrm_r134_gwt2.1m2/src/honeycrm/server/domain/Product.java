@@ -13,7 +13,6 @@ import honeycrm.server.domainNew.SearchableEntity;
 
 import com.google.appengine.api.datastore.Key;
 
-//@PersistenceCapable
 @SearchableEntity
 @ListViewable( { "name", "price" })
 @DetailViewable( { "name", "price", "published", "predecessor", "description" })

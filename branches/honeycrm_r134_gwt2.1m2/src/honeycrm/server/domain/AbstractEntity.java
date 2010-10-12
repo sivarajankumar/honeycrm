@@ -8,16 +8,9 @@ import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 
 import java.util.Date;
 
-import org.compass.annotations.Searchable;
 import com.google.appengine.api.datastore.Key;
 
-//@PersistenceCapable
-//@Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
-@Searchable
 abstract public class AbstractEntity {
-	//	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	//	@PrimaryKey
-	//@SearchableId
 	// NOTE:
 	// To allow full text search with compass / lucene the id field has to be of type long.
 	// Additionally we have to use Long (not long) because of constrains of google app engine for

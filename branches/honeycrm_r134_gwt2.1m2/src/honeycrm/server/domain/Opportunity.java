@@ -9,14 +9,11 @@ import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
-
-import org.compass.annotations.Searchable;
-import org.compass.annotations.SearchableProperty;
+import honeycrm.server.domainNew.SearchableEntity;
 
 import com.google.appengine.api.datastore.Key;
 
-@Searchable
-//@PersistenceCapable
+@SearchableEntity
 @ListViewable( { "contactId", "probability", "amount" })
 @DetailViewable( { "contactId,amount", "assignedTo", "phase,probability", "reasonClosed", "description" })
 @Quicksearchable( { "contactId", "amount" })
@@ -35,16 +32,13 @@ public class Opportunity extends AbstractEntity {
 
 	@FieldEnumAnnotation( { "Open", "Cold Call", "Closed Won", "Closed Lost" })
 	@Label("Phase")
-	@SearchableProperty
 	public String phase;
 
 	@Label("Reason Closed")
 	@FieldEnumAnnotation( { "No Time", "Too Expensive" })
-	@SearchableProperty
 	public String reasonClosed;
 
 	@FieldTextAnnotation
 	@Label("Description")
-	@SearchableProperty
 	public String description;
 }

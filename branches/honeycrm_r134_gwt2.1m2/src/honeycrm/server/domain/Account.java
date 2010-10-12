@@ -14,37 +14,29 @@ import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
 import honeycrm.server.domainNew.SearchableEntity;
 
-import org.compass.annotations.SearchableProperty;
-
 import com.google.appengine.api.datastore.Key;
 
-//@PersistenceCapable
 @SearchableEntity
 @ListViewable( { "name", "phoneOffice" })
 @DetailViewable( { "name,parentId", "assignedTo", "email,phoneOffice", "website,phoneOther", "rating,annualRevenue", "industry,employees", "tickerSymbol", "shippingAddress", "billingAddress" })
 @Quicksearchable( { "name" })
 public class Account extends AbstractEntity {
-	@SearchableProperty
 	@Label("Name")
 	@FieldStringAnnotation
 	public String name;
 	
-	@SearchableProperty
 	@Label("Shipping Address")
 	@FieldStringAnnotation
 	public String shippingAddress;
 
-	@SearchableProperty
 	@Label("Billing Address")
 	@FieldStringAnnotation
 	public String billingAddress;
 	
-	@SearchableProperty
 	@Label("Rating")
 	@FieldEnumAnnotation({ "A", "B", "C", "D", "E", "F"})
 	public String rating;
 	
-	@SearchableProperty
 	@Label("Website")
 	@FieldWebsiteAnnotation
 	public String website;
@@ -53,7 +45,6 @@ public class Account extends AbstractEntity {
 	@FieldIntegerAnnotation(0)
 	public int employees;
 	
-	@SearchableProperty
 	@Label("Ticker Symbol")
 	@FieldStringAnnotation
 	public String tickerSymbol;
