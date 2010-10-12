@@ -1,6 +1,8 @@
 #summary Thoughts about an AppStore-ish framework for HoneyCRM.
 #labels Phase-Design
 
+#sidebar TableOfContents
+
 <wiki:toc max_depth="10" />
 
 = introduction =
