@@ -1,9 +1,7 @@
 #summary Thoughts about an AppStore-ish framework for HoneyCRM.
 #labels Phase-Design
 
-#sidebar
-
-<wiki:toc max_depth="10" />
+<wiki:toc  />
 
 = introduction =
 on this page we want to outline a possible plugin framework for the honeycrm application. users should be able to install plugins i.e. *apps* into honeycrm using an integrated app store.
