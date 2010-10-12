@@ -15,7 +15,6 @@ import honeycrm.client.view.relationship.RelationshipsContainer;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -39,6 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
  * This widget is responsible for displaying detail / edit / create - views for entities.
  */
 public class DetailView extends AbstractView implements ValueChangeHandler<String> {
+	// private static final Logger log = Logger.getLogger(DetailView.class.toString());
 	private DetailViewButtonBar buttonBar;
 	private RelationshipsContainer relationshipsContainer;
 	private Dto dto = moduleDto.createDto();
@@ -248,9 +248,11 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	 */
 	public void edit(final String focussedField) {
 		if (isShowing()) {
+	//		log.fine("edit");
 			resetFields(dto, View.EDIT, focussedField);
 			relationshipsContainer.setVisible(false);
 		} else {
+		//	log.warning("Do nothing because id is not defined");
 			LogConsole.log("startEditing(): Do nothing because id is not defined");
 		}
 	}

@@ -5,6 +5,8 @@
   <!-- inherits name="com.google.gwt.i18n.I18N"/-->
   <inherits name='com.google.gwt.junit.JUnit' />
   <inherits name='com.google.gwt.visualization.Visualization'/>
+  <!-- Enable client side logging -->
+  <!-- inherits name="com.google.gwt.logging.Logging"/-->
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->

@@ -143,7 +143,7 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 
 			switch (action) {
 			case REPORT:
-				if (0 <= reportId && reportId <= 1) {
+				if (0 <= reportId && reportId <= 2) {
 					showReport(reportId);
 				} else {
 					Window.alert("invalid report id");

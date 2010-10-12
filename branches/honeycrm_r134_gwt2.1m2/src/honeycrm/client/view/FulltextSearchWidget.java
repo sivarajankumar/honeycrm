@@ -9,6 +9,10 @@ import honeycrm.client.services.ReadServiceAsync;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -21,6 +25,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public class FulltextSearchWidget extends SuggestBox {
+	private static final String INITIAL_SEARCH_TEXT = "Global Search ...";
 	public static final int MIN_QUERY_LENGTH = 3;
 	protected static final ReadServiceAsync readService = ServiceRegistry.readService();
 	//	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
@@ -29,6 +34,8 @@ public class FulltextSearchWidget extends SuggestBox {
 
 	public FulltextSearchWidget() {
 		super(new FulltextSuggestOracle());
+
+		setupFocusAndBlur();
 
 		addStyleName("wide_search_field");
 		
@@ -62,6 +69,29 @@ public class FulltextSearchWidget extends SuggestBox {
 				redirectToDetailView(event);
 			}
 
+		});
+	}
+
+	/**
+	 * Display "Search..." if the user has not started typing yet.
+	 */
+	private void setupFocusAndBlur() {
+		setText(INITIAL_SEARCH_TEXT);
+		getTextBox().addFocusHandler(new FocusHandler() {
+			@Override
+			public void onFocus(FocusEvent event) {
+				if (getText().equals(INITIAL_SEARCH_TEXT)) {
+					setText("");
+				}
+			}
+		});
+		getTextBox().addBlurHandler(new BlurHandler() {
+			@Override
+			public void onBlur(BlurEvent event) {
+				if (getText().isEmpty()) {
+					setText(INITIAL_SEARCH_TEXT);
+				}
+			}
 		});
 	}
 

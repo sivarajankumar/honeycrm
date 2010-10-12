@@ -10,6 +10,8 @@ import honeycrm.client.services.CreateService;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.DeleteService;
 import honeycrm.client.services.DeleteServiceAsync;
+import honeycrm.client.services.PluginService;
+import honeycrm.client.services.PluginServiceAsync;
 import honeycrm.client.services.ReadService;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.ReportService;
@@ -31,6 +33,7 @@ public class ServiceRegistry {
 	private static ReadServiceAsync readService = null;
 	private static UpdateServiceAsync updateService = null;
 	private static DeleteServiceAsync deleteService = null;
+	private static PluginServiceAsync pluginService = null;
 
 	public static CommonServiceAsync commonService() {
 		// If we are in testing mode assume another commonService instance has been injected for testing. Return the common service instance.
@@ -88,13 +91,20 @@ public class ServiceRegistry {
 		if (null == createService) {
 			createService = GWT.create(CreateService.class);
 		}
-		return createService ;
+		return createService;
 	}
 
 	public static DeleteServiceAsync deleteService() {
 		if (null == deleteService) {
 			deleteService = GWT.create(DeleteService.class);
 		}
-		return deleteService ;
+		return deleteService;
+	}
+
+	public static PluginServiceAsync pluginService() {
+		if (null == pluginService) {
+			pluginService = GWT.create(PluginService.class);
+		}
+		return pluginService;
 	}
 }

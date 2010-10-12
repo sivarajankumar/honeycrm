@@ -132,19 +132,23 @@ public class Dto implements Serializable {
 	 */
 	public Dto copy() {
 		final Dto destination = new Dto();
+		destination.setModule(getModule());
 
 		for (final String key : data.keySet()) {
-			if (key.equals("id")) {
-				continue; // do not copy the id field as well
+			if (key.equals("id") || key.endsWith("_resolved")) {
+				// do not copy the id / a resolved field
+				continue;
 			}
 
-			destination.set(key, get(key));
-
-			if (destination.get(key) instanceof List<?>) {
-				// null the ids of the services to ensure they are created
-				for (final Dto item : (List<Dto>) destination.get(key)) {
-					item.setId(null);
+			if (get(key) instanceof ArrayList<?>) {
+				final ArrayList<Dto> list = (ArrayList<Dto>) get(key);
+				for (int i=0; i<list.size(); i++) {
+					// null the ids of the services to ensure they are created
+					list.set(i, list.get(i).copy());
 				}
+				destination.set(key, list);
+			} else {
+				destination.set(key, get(key));
 			}
 		}
 

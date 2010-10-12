@@ -2,6 +2,7 @@ package honeycrm.client.basiclayout;
 
 import honeycrm.client.login.User;
 import honeycrm.client.misc.WidgetJuggler;
+import honeycrm.client.plugin.HaveABreakGadget;
 import honeycrm.client.view.FulltextSearchWidget;
 
 import com.google.gwt.user.client.ui.Composite;
@@ -23,9 +24,10 @@ public class Header extends Composite {
 
 		p.add(WidgetJuggler.addStyles(new Label("Honeeeeeeeyyyyy CRM"), "header_logo"));
 		p.add(WidgetJuggler.addStyles(new FulltextSearchWidget(), "header_search"));
-		p.add(getHeaderLinks("Logout", "Profile", "Help", "Global Search"));
+		p.add(getHeaderLinks("Logout", "Profile", "Help"));
 		p.add(WidgetJuggler.addStyles(new Label("Welcome, " + User.getLogin() + "!"), "right"));
 		p.add(LoadIndicator.get());
+		p.add(new HaveABreakGadget().getWidget());
 		p.add(new HTML("<div class='clear'></div>"));
 	}
 

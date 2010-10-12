@@ -15,12 +15,16 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
@@ -118,9 +122,9 @@ public class ListView extends AbstractView {
 		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 
 		pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-		pager.setDisplay(table = new CellTable<Dto>());
+		pager.setDisplay(table = new CellTable<Dto>(ListViewDB.KEY_PROVIDER));
 
-		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>();
+		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>(ListViewDB.KEY_PROVIDER);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
@@ -128,9 +132,6 @@ public class ListView extends AbstractView {
 				History.newItem(HistoryTokenFactory.get(dto.getModule(), ModuleAction.DETAIL, dto.getId()));
 			}
 		});
-
-		table.setKeyProvider(ListViewDB.KEY_PROVIDER);
-		selectionModel.setKeyProvider(ListViewDB.KEY_PROVIDER);
 
 		table.setSelectionModel(selectionModel);
 		table.setPageSize(pageSize);
@@ -220,23 +221,26 @@ public class ListView extends AbstractView {
 				};
 			} else if (moduleDto.getFieldById(id) instanceof FieldRelate) {
 				// TODO since this change Memberships cannot be selected / clicked anymore in list views
-				column = new TextColumn<Dto>() {
-					@Override
-					public String getValue(final Dto object) {
+				column = new Column<Dto, SafeHtml>(new SafeHtmlCell()) {
+					public SafeHtml getValue(Dto object) {
 						final Serializable value = object.get(id);
-
+						
+						final SafeHtmlBuilder b = new SafeHtmlBuilder();
+						
 						if (null == value || 0 == (Long) value) {
-							return "";
+							// No related item
 						} else {
 							final Serializable resolved = object.get(id + "_resolved");
 							if (null == resolved || null == ((Dto) resolved).get("name")) {
-								return "fail!";
+								// Related item could not be found.
+								b.appendHtmlConstant("fail!");
 							} else {
 								final Dto resolvedDto = (Dto) resolved;
-								return "<a href='#" + resolvedDto.getModule() + " detail " + resolvedDto.getId() + "'>" + resolvedDto.get("name") + "</a>";
-								// return (String) ((Dto) resolved).get("name");
+								b.appendHtmlConstant("<a href='#" + resolvedDto.getModule() + " detail " + resolvedDto.getId() + "'>" + resolvedDto.get("name") + "</a>");
 							}
 						}
+						
+						return b.toSafeHtml();
 					}
 				};
 			} else {
