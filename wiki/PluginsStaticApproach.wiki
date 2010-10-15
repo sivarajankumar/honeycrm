@@ -3,7 +3,7 @@
 
 = Introduction =
 
-In this article we want to explain an approach to integrate plugins statically into the codebase. A sample project based on this idea can be found in the repository https://honeycrm.googlecode.com/svn/branches/PlatformTest. It consists of a minimalistic core system that is extended by two plugins that are loaded at runtime and integrated into the UI.
+In this article we want to explain an approach to integrate plugins statically into the codebase. A sample project based on this idea can be found in the repository https://honeycrm.googlecode.com/svn/branches/PlatformTest. This is deployed in the AppEngine here http://honeyplatform.appspot.com/. It consists of a minimalistic core system that is extended by two plugins that are loaded at runtime and integrated into the UI.
 
 Plugins are part of the platform i.e. the whole system. They can be (in-)activated per user using a front-end which is naturally part of the platform i.e. the *app store*. Thus users never leave the application: They use it for their _usual_ work *and* for browsing through available plugins.
 
