@@ -42,8 +42,10 @@ public class RelationshipsContainer extends AbstractView {
 	public void refresh(final Long relatedId) {
 		clear();
 
-		for (final ModuleDto originalDtoClass : DtoModuleRegistry.instance().getDtos()) {
-			panel.add(new SingleRelationshipPanel(originalDtoClass, relatedId, moduleDto.getModule()));
+		for (final ModuleDto originating : DtoModuleRegistry.instance().getDtos()) {
+			if (SingleRelationshipPanel.doesRelationshipExist(originating.getModule(), moduleDto.getModule())) {
+				panel.add(new SingleRelationshipPanel(originating, relatedId, moduleDto.getModule()));
+			}
 		}
 	}
 
@@ -86,29 +88,23 @@ class SingleRelationshipPanel extends Composite {
 		}
 
 		final VerticalPanel vpanel = new VerticalPanel();
+		vpanel.add(hpanel);
+		vpanel.add(table);
 
-		// only do something if this relationship really exists
-		if (doesRelationshipExist()) {
-			vpanel.add(hpanel);
-			vpanel.add(table);
-			// panel.setVisible(false);
-
-			refresh();
-		}
+		refresh();
 
 		initWidget(vpanel);
 	}
 
-	private boolean doesRelationshipExist() {
+	public static boolean doesRelationshipExist(final String originatingDomain, final String relatedDomain) {
 		final Map<String, Map<String, Set<String>>> r = DtoModuleRegistry.instance().getRelationships();
-		return r.containsKey(originatingDtoClass.getModule()) && r.get(originatingDtoClass.getModule()).containsKey(relatedDtoClass);
+		return r.containsKey(originatingDomain) && r.get(originatingDomain).containsKey(relatedDomain);
 	}
 
 	private boolean hasRelationshipUniqueFieldName() {
 		final Map<String, Map<String, Set<String>>> r = DtoModuleRegistry.instance().getRelationships();
-		// check whether the relationship exists before accessing the map. this way we can be sure
-		// we can make the get() calls without causing a null pointer exception.
-		return doesRelationshipExist() && 1 == r.get(originatingDtoClass.getModule()).get(relatedDtoClass).size();
+		// assume the relationship exists.
+		return 1 == r.get(originatingDtoClass.getModule()).get(relatedDtoClass).size();
 	}
 
 	private Widget getCreateBtn() {
@@ -158,36 +154,28 @@ class SingleRelationshipPanel extends Composite {
 	}
 
 	private void insertRelatedDtos(ListQueryResult result) {
-		/*
-		 * if (0 == result.getItemCount() || 0 == result.getResults().length) { // hide this
-		 * relationship since no entries have been found for this relationship // setVisible(false);
-		 * // } else
-		 */{
-			// setVisible(true);
+		final int headerRows = 1;
+		final int leadingCols = 1;
 
-			final int headerRows = 1;
-			final int leadingCols = 1;
+		for (int col = 0; col < originatingDtoClass.getListFieldIds().length; col++) {
+			final String id = originatingDtoClass.getListFieldIds()[col];
+
+			if (!isDuplicateRelateField(id)) {
+				table.setWidget(0, leadingCols + col, new Label(originatingDtoClass.getFieldById(id).getLabel()));
+			}
+		}
+
+		for (int row = 0; row < result.getResults().length; row++) {
+			final Dto originatingDto = result.getResults()[row];
+
+			table.setWidget(headerRows + row, 0, new Hyperlink("open", originatingDto.getHistoryToken() + " " + originatingDto.getId()));
 
 			for (int col = 0; col < originatingDtoClass.getListFieldIds().length; col++) {
 				final String id = originatingDtoClass.getListFieldIds()[col];
 
 				if (!isDuplicateRelateField(id)) {
-					table.setWidget(0, leadingCols + col, new Label(originatingDtoClass.getFieldById(id).getLabel()));
-				}
-			}
-
-			for (int row = 0; row < result.getResults().length; row++) {
-				final Dto originatingDto = result.getResults()[row];
-
-				table.setWidget(headerRows + row, 0, new Hyperlink("open", originatingDto.getHistoryToken() + " " + originatingDto.getId()));
-
-				for (int col = 0; col < originatingDtoClass.getListFieldIds().length; col++) {
-					final String id = originatingDtoClass.getListFieldIds()[col];
-
-					if (!isDuplicateRelateField(id)) {
-						final Widget w = originatingDto.getFieldById(id).getWidget(View.DETAIL, originatingDto.get(id));
-						table.setWidget(headerRows + row, leadingCols + col, w);
-					}
+					final Widget w = originatingDto.getFieldById(id).getWidget(View.DETAIL, originatingDto.get(id));
+					table.setWidget(headerRows + row, leadingCols + col, w);
 				}
 			}
 		}

@@ -30,7 +30,7 @@ import com.google.gwt.visualization.client.visualizations.Table.Options;
 // TODO implement pagination, deletion
 // TODO use google formatters instead of field classes of honeycrm 
 public class ListView extends AbstractView {
-	protected static final int MAX_ENTRIES = 10;
+	protected static final int MAX_ENTRIES = 15;
 
 	private boolean itemsHaveBeenLoadedOnce = false;
 	private final Table t;
