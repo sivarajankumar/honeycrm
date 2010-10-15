@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>commonServlet</servlet-name>
+		<servlet-class>honeycrm.server.CommonServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>commonServlet</servlet-name>
+		<url-pattern>/gae/common</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>authServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.AuthServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>authServlet</servlet-name>
+		<url-pattern>/gae/auth</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>configServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.ConfigServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>configServlet</servlet-name>
+		<url-pattern>/gae/config</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>reportServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.ReportServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>reportServlet</servlet-name>
+		<url-pattern>/gae/report</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>readServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.ReadServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>readServlet</servlet-name>
+		<url-pattern>/gae/read</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>createServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.CreateServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>createServlet</servlet-name>
+		<url-pattern>/gae/create</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>updateServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.UpdateServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>updateServlet</servlet-name>
+		<url-pattern>/gae/update</url-pattern>
+	</servlet-mapping>
+		
+	<servlet>
+		<servlet-name>deleteServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.DeleteServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>deleteServlet</servlet-name>
+		<url-pattern>/gae/delete</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>pluginServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.PluginServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>pluginServlet</servlet-name>
+		<url-pattern>/gae/plugin</url-pattern>
+	</servlet-mapping>
+	
+	<!-- See http://code.google.com/intl/de-DE/appengine/kb/java.html#What_Is_A_Loading_Request -->
+    <precompilation-enabled>true</precompilation-enabled>
+
+	<!-- servlet>
+		<servlet-name>jUnitHostImpl</servlet-name>
+		<servlet-class>com.google.gwt.junit.server.JUnitHostImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>jUnitHostImpl</servlet-name>
+		<url-pattern>/gae/junithost/*</url-pattern>
+	</servlet-mapping-->
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Gae.html</welcome-file>
+	</welcome-file-list>
+
+    <filter>
+        <filter-name>appstats</filter-name>
+        <filter-class>com.google.appengine.tools.appstats.AppstatsFilter</filter-class>
+        <init-param>
+            <param-name>logMessage</param-name>
+            <param-value>Appstats available: /appstats/details?time={ID}</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>appstats</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>appstats</servlet-name>
+        <servlet-class>com.google.appengine.tools.appstats.AppstatsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>appstats</servlet-name>
+        <url-pattern>/appstats/*</url-pattern>
+    </servlet-mapping>
+
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/appstats/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+</web-app>
