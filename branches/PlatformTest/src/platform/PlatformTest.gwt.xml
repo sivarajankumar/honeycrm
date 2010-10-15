@@ -15,6 +15,7 @@
 	<!-- List available plugins to ensure their js code is loaded. -->
 	<!-- Later on the js code should be loaded dynamically i.e. at runtime. -->
 	<inherits name="platform.FooPlugin" />
+	<inherits name="platform.ClockPlugin" />
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='platform.client.PlatformTest' />

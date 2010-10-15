@@ -1,20 +1,30 @@
 package platform.client;
 
+import java.util.HashSet;
+
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PluginPresenter extends Composite { 
+public class PluginPresenter extends Composite {
+	private HashSet<String> visiblePlugins = new HashSet<String>();
+
 	public PluginPresenter() {
-		final Label pluginLabel = new Label();
-		
+		final VerticalPanel panel = new VerticalPanel();
+
 		new Timer() {
 			@Override
 			public void run() {
-				pluginLabel.setText(PluginRegistry.getPlugins());
+				// check for new plugins that have not been added yet every 1000 ms
+				for (final AbstractPlugin plugin : PluginRegistry.getPlugins()) {
+					if (!visiblePlugins.contains(plugin.getName())) {
+						visiblePlugins.add(plugin.getName());
+						panel.add(plugin.getWidget());
+					}
+				}
 			}
-		}.scheduleRepeating(100);
-		
-		initWidget(pluginLabel);
+		}.scheduleRepeating(1000);
+
+		initWidget(panel);
 	}
 }

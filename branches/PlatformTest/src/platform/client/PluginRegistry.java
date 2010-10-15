@@ -5,22 +5,16 @@ import java.util.HashSet;
 import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.Exportable;
 
-@Export
 public class PluginRegistry implements Exportable {
-	private static final HashSet<String> plugins = new HashSet<String>();
+	private static final HashSet<AbstractPlugin> plugins = new HashSet<AbstractPlugin>();
 
-	public static void registerPlugin(final String pluginName) {
-		plugins.add(pluginName);
+	@Export
+	// Only (!) export this method.
+	public static void registerPluginObject(final AbstractPlugin plugin) {
+		plugins.add(plugin);
 	}
-
-	public static String getPlugins() {
-		if (plugins.isEmpty()) {
-			return "no plugins loaded";
-		}
-		String pluginString = "";
-		for (final String plugin : plugins) {
-			pluginString += plugin + " ";
-		}
-		return pluginString;
+	
+	public static HashSet<AbstractPlugin> getPlugins() {
+		return plugins;
 	}
 }
