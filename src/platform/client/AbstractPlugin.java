@@ -5,21 +5,24 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
 
 abstract public class AbstractPlugin implements EntryPoint {
-	private native void loadNewPlugin(final String name) /*-{
-		$wnd.platform.PluginRegistry.registerPlugin(name);
+	private native void loadNewPluginObject(final AbstractPlugin plugin) /*-{
+		$wnd.platform.PluginRegistry.registerPluginObject(plugin);
 	}-*/;
-
+	
 	@Override
 	public void onModuleLoad() {
+		final AbstractPlugin p = this;
 		new Timer() {
 			@Override
 			public void run() {
-				loadNewPlugin(getName());
+				loadNewPluginObject(p);
 			}
 		}.schedule(2 * 1000);
 	}
 
-	abstract protected String getName();
+	final public String getName() {
+		return this.getClass().toString();
+	}
 
 	abstract protected Widget getWidget();
 }
