@@ -76,6 +76,15 @@
 		<url-pattern>/gae/delete</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>pluginServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.PluginServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>pluginServlet</servlet-name>
+		<url-pattern>/gae/plugin</url-pattern>
+	</servlet-mapping>
+	
 	<!-- See http://code.google.com/intl/de-DE/appengine/kb/java.html#What_Is_A_Loading_Request -->
     <precompilation-enabled>true</precompilation-enabled>
 
