@@ -13,7 +13,7 @@ public class Gae implements EntryPoint {
 	private native void loadPlugin(final String code) /*-{
 		var d = document.createElement('div');
 		d.innerHTML = 'attached plugin';
-		@honeycrm.client.Header::attach(Lcom/google/gwt/dom/client/Element;)(d);
+		// @honeycrm.client.Header::attach(Lcom/google/gwt/dom/client/Element;)(d);
 		// eval(code);
 	}-*/;
 
