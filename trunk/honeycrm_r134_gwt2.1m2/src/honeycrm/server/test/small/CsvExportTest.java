@@ -2,13 +2,10 @@ package honeycrm.server.test.small;
 
 import honeycrm.client.csv.AbstractCsv;
 import honeycrm.client.csv.CsvExporter;
-import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.misc.CollectionHelper;
-import honeycrm.server.RelationshipFieldTable;
-import honeycrm.server.transfer.DtoWizard;
-
+import honeycrm.server.domainNew.NewDtoWizard;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -16,18 +13,17 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 public class CsvExportTest extends TestCase {
-	@Override
-	protected void setUp() throws Exception {
-		DtoModuleRegistry.create(new Configuration(DtoWizard.instance.getDtoConfiguration(), RelationshipFieldTable.instance.getMap()));
+	static {
+		DtoModuleRegistry.create(NewDtoWizard.getConfiguration());
 	}
 
 	public void testExport() {
 		final List<Dto> list = new LinkedList<Dto>();
 		final Dto foo = new Dto();
-		foo.setModule("contact");
+		foo.setModule("Contact");
 		foo.set("name", "Foo");
 		final Dto bar = new Dto();
-		bar.setModule("contact");
+		bar.setModule("Contact");
 		bar.set("name", "Bar");
 		list.add(foo);
 		list.add(bar);
