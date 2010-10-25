@@ -19,7 +19,7 @@ public class DashboardListView extends ListView {
 		setShowTitle(true);
 		setPageSize(20);
 		setAllowDelete(false);
-		
+		setStyleName("background_container");
 		setAdditionalButtons(getCreateButton());
 		
 		refresh();

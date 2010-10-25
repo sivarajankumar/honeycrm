@@ -23,7 +23,7 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 		super(module);
 
 		final FlowPanel panel = new FlowPanel();
-		panel.setStyleName("search_bar");
+		panel.setStyleName("tool_bar");
 		initWidget(panel);
 
 		History.addValueChangeHandler(this);
@@ -32,17 +32,17 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 			
 			@Override
 			public void onSuccess() {
-				searchBtn = getButton("Search", ModuleAction.ADVANCEDSEARCH, "left", "left_margin_small");
-				editBtn = getButton("Edit", ModuleAction.EDIT, "left", "left_margin_big");
-				deleteBtn = getButton("Delete", ModuleAction.DELETE, "left", "left_margin_small");
-				cancelBtn = getButton("Cancel", ModuleAction.CANCEL, "left", "left_margin_small");
-				saveBtn = getButton("Save", ModuleAction.SAVE, "left", "left_margin_big");
-				changesBtn = getButton("Changes", ModuleAction.CHANGES, "left", "left_margin_big");
-				printBtn = getButton("Print", ModuleAction.PRINT, "left", "left_margin_small");
-				duplicateBtn = getButton("Duplicate", ModuleAction.DUPLICATE, "left", "left_margin_big");
-				findDuplicatesBtn = getButton("Find Duplicates", ModuleAction.FINDDUPLICATES, "left", "left_margin_small");
-				importBtn = getButton("Import", ModuleAction.IMPORT, "left", "left_margin_big");
-				exportBtn = getButton("Export", ModuleAction.EXPORT, "left", "left_margin_small");
+				searchBtn = getButton("Search", ModuleAction.ADVANCEDSEARCH, "module_buttons", "left", "left_margin_small");
+				editBtn = getButton("Edit", ModuleAction.EDIT, "module_buttons", "left", "left_margin_big");
+				deleteBtn = getButton("Delete", ModuleAction.DELETE, "module_buttons", "left", "left_margin_small");
+				cancelBtn = getButton("Cancel", ModuleAction.CANCEL, "module_buttons", "left", "left_margin_small");
+				saveBtn = getButton("Save", ModuleAction.SAVE, "module_buttons", "left", "left_margin_big");
+				changesBtn = getButton("Changes", ModuleAction.CHANGES, "module_buttons", "left", "left_margin_big");
+				printBtn = getButton("Print", ModuleAction.PRINT, "module_buttons", "left", "left_margin_small");
+				duplicateBtn = getButton("Duplicate", ModuleAction.DUPLICATE, "module_buttons", "left", "left_margin_big");
+				findDuplicatesBtn = getButton("Find Duplicates", ModuleAction.FINDDUPLICATES, "module_buttons", "left", "left_margin_small");
+				importBtn = getButton("Import", ModuleAction.IMPORT, "module_buttons", "left", "left_margin_big");
+				exportBtn = getButton("Export", ModuleAction.EXPORT, "module_buttons", "left", "left_margin_small");
 
 				// do not add module fulltext widget because we only want to see one search box
 				// panel.add(new ModuleFulltextWidget(module));

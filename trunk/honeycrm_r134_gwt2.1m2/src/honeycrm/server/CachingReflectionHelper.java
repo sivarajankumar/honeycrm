@@ -23,12 +23,12 @@ public class CachingReflectionHelper extends ReflectionHelper {
 	private static final Map<Class<?>, Field[]> cacheGetAllFields = new HashMap<Class<?>, Field[]>();
 
 	static { // setup the cache instance once
-		try {
+		/*try {
 			try {
-				final CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
-				final Map props = new HashMap();
-				props.put(GCacheFactory.EXPIRATION_DELTA, 3600);
-				cache = cacheFactory.createCache(props);
+				//final CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+				// final Map props = new HashMap();
+				// props.put(GCacheFactory.EXPIRATION_DELTA, 3600);
+				// cache = cacheFactory.createCache(props);
 			} catch (RuntimeException e) {
 				log.warning("RuntimeException occured while creating cache. Disabled Caching.");
 				cache = null;
@@ -37,7 +37,7 @@ public class CachingReflectionHelper extends ReflectionHelper {
 		} catch (CacheException e) {
 			log.warning("Cannot instantiate cache. Disabled caching.");
 			cache = null;
-		}
+		}*/
 	}
 
 	private boolean isCacheEnabled() {

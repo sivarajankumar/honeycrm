@@ -7,7 +7,7 @@ div {
 
 body {
 	/* use gray background color to increase the difference between blue tabs and the background */
-	background-color: #efefef ! important;
+	background-color: #F4F2F2 ! important;
 /*	margin: 10px ! important; */
 }
 
@@ -23,23 +23,25 @@ body {
 }
 
 .with_margin {
-	margin: 10px;
+	/*margin: 10px;*/
 }
 
 .tab_layout {
+	top: 75px;
+	position: absolute;
+	left: 0px;
+	height: 100%;
+	width: 100%;
 }
 
 .content {
 	background-color: #ececec;
 }
 
-.search_bar {
-	background-color: #92c1f0;
-	padding: 3px;	
-}
-
-.demo_button {
-	float: left;
+.tool_bar {
+	background: url("/gae/images/preface-wrapper-bg.png") repeat-x scroll center top #000000;
+	padding: 3px;
+	height: 40px;	
 }
 
 .search_field {
@@ -52,17 +54,52 @@ body {
 	/* float: right;  */ /* for now put search buttons next to search field */
 	margin-right: 3px;
 }
+
+.dashboard {
+	padding: 0px !important;	
+}
+
 /* HEADER */
 
 .honey_header {
-	margin: 10px;	
-	color: #005fff;
-	width: 98%
+	/*margin: 10px;	
+	width: 98%;*/
+	color: white;
+	background: url('/gae/images/header-bg.jpg') no-repeat;
+	height: 100px;
+	position: absolute;
+	width: 100%;
+	top: 0px; 
+	left: 0px;
+}
+
+.honey_header_left {
+	float: left;
+	padding-top: 10px;
+	width: 600px;
+	font-weight: bold;	
+}
+
+.honey_header_right {
+	float: right;
 }
 
 .create_button {
 	margin-right: 5px ! important;	
 	font-weight: normal ! important;
+}
+
+.create_button a,
+.module_buttons a {
+	color: white;
+	text-decoration: none;
+}
+
+.create_button a:hover,
+.create_button a:visited,
+.module_buttons a:hover,
+.module_buttons a:visited {
+	color: #FFa700;
 }
 
 .header a {
@@ -71,6 +108,7 @@ body {
 
 .header_logo {
 	float: left;
+	margin-left: 10px;
 }
 
 .loadIndicator {
@@ -81,7 +119,7 @@ body {
 }
 
 .header_links {
-	float: right;
+	margin-right: 30px;
 }
 
 .header_link {
@@ -89,13 +127,52 @@ body {
 	padding-left: 5px;
 }
 
+.header_link a {
+	/*color: #154B70;*/
+	color: #000;
+	text-decoration: none;
+}
+
 .header_search {
-	float: right;
 	margin-left: 10px;
+    background: #dee2e7 url('/gae/images/bg-search.gif') repeat-x;
+  	border: 1px solid #555;
+  	padding: 8px;
+  	position: relative;
+  	top: 0;
+  	width: 368px;
+  	-moz-border-radius-bottomleft: 12px;
+  	-moz-border-radius-bottomright: 12px;
+  	-webkit-border-bottom-left-radius: 10px;
+  	-webkit-border-bottom-right-radius: 10px; 
+}
+
+input.header_search_input {
+	  background: #fff;
+	  border: 1px solid #777;
+	  color: #000;
+	  cursor: pointer; 
+	  font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+	  font-size: 1em;
+	  font-weight: normal;
+	  padding: 1px 3px 1px;
+	  outline: none;
+	  text-transform: none;
+	  -moz-border-radius: 0;
+	  -moz-outline-radius: 0;
+	  -webkit-border-radius: 0;	
+}
+
+.background_container {
+	border: 1px solid #ececec;
+	background-color: white;
+	margin: 10px;
+	padding: 10px;
+	width: 610px;	
 }
 
 .wide_search_field {
-	width: 400px; /* make this very big to assure it dominates the ui: users should encouraged to use this a lot */
+	width: 360px; /* make this very big to assure it dominates the ui: users should encouraged to use this a lot */
 }
 
 .module_search {
@@ -103,7 +180,6 @@ body {
 	margin-right: 5px;
 }	
 	
-
 .header_search_label {
 	float: left;
 	margin-right: 5px;
@@ -111,6 +187,11 @@ body {
 
 .header_search_field {
 	float: left;
+}
+
+.welcome_user {
+	float: right;
+	margin-right: 10px;	
 }
 
 .right {
@@ -135,6 +216,10 @@ body {
 }
 
 /* VIEWS */
+
+.content_container {
+	background: url("/gae/images/content-gradient.png") repeat-x scroll 0 1px transparent;	
+}
 
 .detail_view {
 	float: left;
