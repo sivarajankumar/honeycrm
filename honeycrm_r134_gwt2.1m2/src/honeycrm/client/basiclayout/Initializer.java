@@ -5,15 +5,16 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 
-public class Initializer extends DockLayoutPanel {
+public class Initializer extends FlowPanel {
 	/**
 	 * We need to be online to load visualizations. Allow developers to disable loading to be able to work off-line.
 	 */
-	public static final boolean SKIP_LOADING_VISUALISATIONS = false;
+	public static final boolean SKIP_LOADING_VISUALISATIONS = true;
 
 	public Initializer() {
-		super(Unit.PX);
+		//super(Unit.PX);
 		initRealUserInterface();
 	}
 	
@@ -21,7 +22,7 @@ public class Initializer extends DockLayoutPanel {
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
-				addNorth(new Header(), 40);
+				add(new Header());
 				add(TabCenterView.instance());
 			}
 			

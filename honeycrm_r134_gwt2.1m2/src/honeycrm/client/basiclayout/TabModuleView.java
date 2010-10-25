@@ -35,6 +35,7 @@ public class TabModuleView extends DockLayoutPanel {
 
 				final SplitLayoutPanel splitPanel = new SplitLayoutPanel();
 
+				splitPanel.addStyleName("content_container");
 				splitPanel.addWest(new ScrollPanel(listView), 500);
 				splitPanel.add(new ScrollPanel(detailView));
 

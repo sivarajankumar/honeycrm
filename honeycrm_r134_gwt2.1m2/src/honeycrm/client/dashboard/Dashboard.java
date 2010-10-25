@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,13 +20,16 @@ public class Dashboard extends Composite {
 
 	public Dashboard() {
 		final VerticalPanel panel = new VerticalPanel();
+		final FlowPanel pan = new FlowPanel();
 		initWidget(new ScrollPanel(panel));
 
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
 				final DashboardListView[] listViews = getListViews();
-				panel.add(getRefreshButton(listViews));
+				pan.add(getRefreshButton(listViews));
+				pan.setStyleName("tool_bar");
+				panel.add(pan);
 				panel.add(getTable(listViews));
 			}
 			
@@ -45,7 +49,7 @@ public class Dashboard extends Composite {
 	}
 
 	private Widget getRefreshButton(final DashboardListView[] listViews) {
-		return WidgetJuggler.getButton("Refresh", new ClickHandler() {
+		return WidgetJuggler.getButton("Refresh", new ClickHandler()  {
 			@Override
 			public void onClick(ClickEvent event) {
 				for (final DashboardListView listview : listViews) {

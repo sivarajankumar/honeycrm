@@ -5,6 +5,7 @@ import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dashboard.Dashboard;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.misc.WidgetJuggler;
 import honeycrm.client.reports.ReportSuggester;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.csvimport.CsvImportWidget;
@@ -22,6 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
@@ -59,7 +61,8 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 				addStyleName("with_margin");
 				addStyleName("tab_layout");
 
-				add(new Dashboard(), "Dashboard"); // TODO insert as first tab
+				add(WidgetJuggler.addStyles(new Dashboard(), "dashboard"), "Dashboard"); // TODO insert as first tab
+				//add(WidgetJuggler.addStyles(new HTML("Hallo"), "test"), WidgetJuggler.addStyles(new HTML("Test"), "testTab selected")); // TODO insert as first tab
 				tabPos++;
 
 				final Collection<ModuleDto> dtos = DtoModuleRegistry.instance().getDtos();
