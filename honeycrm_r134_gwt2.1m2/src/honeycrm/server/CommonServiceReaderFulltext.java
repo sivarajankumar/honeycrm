@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.jdo.Query;
 
+@Deprecated
 public class CommonServiceReaderFulltext extends AbstractCommonService {
 	public static final boolean ignoreCase = true;
 	private static final long serialVersionUID = -7000384067604090223L;

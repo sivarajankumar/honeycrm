@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+@Deprecated
 public class DomainClassRegistry {
 	private static final Logger log = Logger.getLogger(DomainClassRegistry.class.getSimpleName());
 	public static final DomainClassRegistry instance = new DomainClassRegistry();

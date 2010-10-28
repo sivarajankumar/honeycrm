@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 
+@Deprecated
 public class RelationshipFieldTable {
 	private static final ReflectionHelper reflectionHelper = new ReflectionHelper();
 	public static final RelationshipFieldTable instance = new RelationshipFieldTable();

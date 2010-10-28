@@ -21,6 +21,7 @@ import javax.jdo.Query;
 // TODO this throws ConcurrentModificationExceptions (e.g. during getAll).
 // TODO every modification should be wrapped into a transaction to avoid this. not sure if this
 // would solve the issue.
+@Deprecated
 public class CommonServiceReader extends AbstractCommonService {
 	private static final long serialVersionUID = 5202932343066860591L;
 
