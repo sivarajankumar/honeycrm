@@ -2,6 +2,7 @@ package honeycrm.server.test.medium;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.server.DemoDataProvider;
+import honeycrm.server.domain.Offering;
 
 import java.util.List;
 
@@ -16,17 +17,17 @@ public class OwnedOneToManyRelationshipTest extends DatastoreTest {
 			final Dto bar = DemoDataProvider.getOffering(2, childCountBar);
 			final Dto baz = DemoDataProvider.getOffering(3, childCountBaz);
 
-			final long idFoo = commonService.create(foo);
-			final long idBar = commonService.create(bar);
-			final long idBaz = commonService.create(baz);
+			final long idFoo = createService.create(foo);
+			final long idBar = createService.create(bar);
+			final long idBaz = createService.create(baz);
 
-			final Dto dtoFoo = commonService.get("offering", idFoo);
-			final Dto dtoBar = commonService.get("offering", idBar);
-			final Dto dtoBaz = commonService.get("offering", idBaz);
+			final Dto dtoFoo = readService.get(Offering.class.getSimpleName(), idFoo);
+			final Dto dtoBar = readService.get(Offering.class.getSimpleName(), idBar);
+			final Dto dtoBaz = readService.get(Offering.class.getSimpleName(), idBaz);
 
-			assertEquals(childCountFoo, ((List<?>) dtoFoo.get("services")).size());
-			assertEquals(childCountBar, ((List<?>) dtoBar.get("services")).size());
-			assertNull(dtoBaz.get("services_objects"));
+			assertEquals(childCountFoo, ((List<?>) dtoFoo.get("uniqueServices")).size());
+			assertEquals(childCountBar, ((List<?>) dtoBar.get("uniqueServices")).size());
+			assertTrue(((List<?>)dtoBaz.get("uniqueServices")).isEmpty());
 		}
 	}
 }

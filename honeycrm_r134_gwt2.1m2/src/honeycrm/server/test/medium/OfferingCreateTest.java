@@ -2,6 +2,7 @@ package honeycrm.server.test.medium;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.server.DemoDataProvider;
+import honeycrm.server.domain.Offering;
 import honeycrm.server.domain.UniqueService;
 
 import java.util.ArrayList;
@@ -18,20 +19,20 @@ public class OfferingCreateTest extends DatastoreTest {
 			final ArrayList<Dto> services = getServices(productIds);
 			final Dto offering = getOffering(services);
 
-			final long id = commonService.create(offering);
+			final long id = createService.create(offering);
 
-			final Dto o = commonService.get("offering", id);
+			final Dto o = readService.get(Offering.class.getSimpleName(), id);
 			assertNotNull(o.get("deadline"));
-			assertNotNull(o.get("services"));
-			assertEquals(productIds.size(), ((Collection<Dto>) o.get("services")).size());
+			assertNotNull(o.get("uniqueServices"));
+			assertEquals(productIds.size(), ((Collection<Dto>) o.get("uniqueServices")).size());
 		}
 	}
 
 	private Dto getOffering(final ArrayList<Dto> services) {
 		final Dto offering = new Dto();
-		offering.setModule("offering");
+		offering.setModule(Offering.class.getSimpleName());
 		offering.set("deadline", new Date(System.currentTimeMillis()));
-		offering.set("services", services);
+		offering.set("uniqueServices", services);
 		return offering;
 	}
 
@@ -40,7 +41,7 @@ public class OfferingCreateTest extends DatastoreTest {
 
 		for (final Long productId : productIds) {
 			final Dto s = new Dto();
-			s.setModule(UniqueService.class.getSimpleName().toLowerCase());
+			s.setModule(UniqueService.class.getSimpleName());
 			s.set("productID", productId);
 			services.add(s);
 		}
@@ -52,7 +53,7 @@ public class OfferingCreateTest extends DatastoreTest {
 		final Set<Long> ids = new HashSet<Long>();
 
 		for (final Dto product: DemoDataProvider.getProducts(2)) {
-			ids.add(commonService.create(product));
+			ids.add(createService.create(product));
 		}
 
 		return ids;

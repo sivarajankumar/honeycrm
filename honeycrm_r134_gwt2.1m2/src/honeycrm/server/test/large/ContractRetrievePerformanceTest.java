@@ -56,7 +56,7 @@ public class ContractRetrievePerformanceTest extends DatastoreTest {
 
 		final Dto contract = new Dto();
 		contract.setModule(Contract.class.getSimpleName());
-		contract.set("services", services);
+		contract.set("uniqueServices", services);
 		return contract;
 	}
 }

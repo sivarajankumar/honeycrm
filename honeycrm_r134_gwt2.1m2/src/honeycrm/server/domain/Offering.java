@@ -8,10 +8,10 @@ import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.OneToMany;
 import honeycrm.server.domain.decoration.Quicksearchable;
+import honeycrm.server.domain.decoration.SearchableEntity;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
-import honeycrm.server.domainNew.SearchableEntity;
 
 import java.util.ArrayList;
 import java.util.Date;

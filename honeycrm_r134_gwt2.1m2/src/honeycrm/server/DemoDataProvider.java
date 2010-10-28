@@ -19,24 +19,24 @@ import java.util.Random;
 public class DemoDataProvider {
 	private final static Random r = new Random();
 
-	public static Account account() {
-		Account a = new Account();
+	public static Dto account() {
+		final Dto a = new Dto(Account.class.getSimpleName());
 
-		a.name = DemoDataHolder.getRandomName();
-		a.annualRevenue = r.nextLong() % 1000000000;
-		a.billingAddress = DemoDataHolder.getRandomAddress();
-		a.shippingAddress = DemoDataHolder.getRandomAddress();
+		a.set("name", DemoDataHolder.getRandomName());
+		a.set("annualRevenue", r.nextLong() % 1000000000);
+		a.set("billingAddress", DemoDataHolder.getRandomAddress());
+		a.set("shippingAddress", DemoDataHolder.getRandomAddress());
 
 		return a;
 	}
 
-	public static Contact contact() {
-		Contact c = new Contact();
+	public static Dto contact() {
+		final Dto c = new Dto(Contact.class.getSimpleName());
 
-		c.name = (DemoDataHolder.getRandomName());
-		c.email = (DemoDataHolder.getRandomEmail());
-		c.city = (DemoDataHolder.getRandomAddress());
-		c.phone = (DemoDataHolder.getRandomPhoneNumber());
+		c.set("name", (DemoDataHolder.getRandomName()));
+		c.set("email", (DemoDataHolder.getRandomEmail()));
+		c.set("city", (DemoDataHolder.getRandomAddress()));
+		c.set("phone", (DemoDataHolder.getRandomPhoneNumber()));
 
 		return c;
 	}
@@ -87,7 +87,7 @@ public class DemoDataProvider {
 
 	public static Dto getService(final int name) {
 		final Dto service = new Dto();
-		service.setModule(UniqueService.class.getSimpleName().toLowerCase());
+		service.setModule(UniqueService.class.getSimpleName());
 		service.set("name", "service " + name);
 		return service;
 	}
@@ -96,9 +96,9 @@ public class DemoDataProvider {
 
 	public static Dto getOffering(final int name, final int childCount) {
 		final Dto offering = new Dto();
-		offering.setModule(Offering.class.getSimpleName().toLowerCase());
+		offering.setModule(Offering.class.getSimpleName());
 		offering.set("name", "offering " + name);
-		offering.set("services", getServices(childCount));
+		offering.set("uniqueServices", getServices(childCount));
 		return offering;
 	}
 

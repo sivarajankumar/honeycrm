@@ -1,4 +1,4 @@
-package honeycrm.server.domainNew;
+package honeycrm.server.domain.decoration;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

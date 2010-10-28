@@ -22,6 +22,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 
+@Deprecated
 public class DtoCopyMachine {
 	private static final HashMap<Class<?>, HashMap<Field, Class<?>>> RELATE_FIELDS = DtoWizard.instance.getRelateFields();
 	private static final ReflectionHelper reflectionHelper = new CachingReflectionHelper();

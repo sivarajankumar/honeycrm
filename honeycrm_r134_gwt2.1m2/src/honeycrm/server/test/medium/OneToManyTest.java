@@ -1,78 +1,63 @@
 package honeycrm.server.test.medium;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.server.PMF;
-import honeycrm.server.domain.DiscountableService;
 import honeycrm.server.domain.Offering;
 import honeycrm.server.domain.RecurringService;
 import honeycrm.server.domain.UniqueService;
-import honeycrm.server.transfer.DtoCopyMachine;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-
-import com.google.appengine.api.datastore.Key;
-
 public class OneToManyTest extends DatastoreTest {
-	private final PersistenceManager m = PMF.get().getPersistenceManager();
-	private final DtoCopyMachine copy = new DtoCopyMachine();
-
 	public void testCopyDtoWithOneToMany() {
 		final Dto dto = new Dto();
-		dto.setModule(Offering.class.getSimpleName().toLowerCase());
+		dto.setModule(Offering.class.getSimpleName());
 
 		final ArrayList<Dto> uniqueServices = new ArrayList<Dto>();
-		uniqueServices.add(getDtoService(UniqueService.class.getSimpleName().toLowerCase()));
+		uniqueServices.add(getDtoService(UniqueService.class.getSimpleName()));
 
 		final ArrayList<Dto> recurringServices = new ArrayList<Dto>();
-		recurringServices.add(getDtoService(RecurringService.class.getSimpleName().toLowerCase()));
-		
-		dto.set("services", uniqueServices);
+		recurringServices.add(getDtoService(RecurringService.class.getSimpleName()));
+
+		dto.set("uniqueServices", uniqueServices);
 		dto.set("recurringServices", recurringServices);
 
-		final Offering offering = (Offering) copy.copy(dto);
+		final long id = createService.create(dto);
+		final Dto offering = readService.get(Offering.class.getSimpleName(), id);
 
-		assertEquals(1, offering.uniqueServices.size());
-		assertEquals(1, offering.recurringServices.size());
+		assertEquals(1, ((List<?>) offering.get("uniqueServices")).size());
+		assertEquals(1, ((List<?>) offering.get("recurringServices")).size());
 	}
 
 	public void testCopyDomainObjectWithOneToMany() {
 		final int serviceCount = 1;
-		final Offering offering = new Offering();
-		offering.uniqueServices = createAndPersistServices(serviceCount, false);
-		offering.recurringServices = createAndPersistServices(serviceCount, true);
-		
-		final Dto dto = copy.copy(offering, true);
+		final Dto offering = new Dto(Offering.class.getSimpleName());
+		offering.set("uniqueServices", createAndPersistServices(serviceCount, false));
+		offering.set("recurringServices", createAndPersistServices(serviceCount, true));
 
-		assertNotNull(dto.get("services"));
-		assertEquals(serviceCount, ((List<?>) dto.get("services")).size());
+		final long id = createService.create(offering);
+		final Dto dto = readService.get(Offering.class.getSimpleName(), id);
+		
+		assertNotNull(dto.get("uniqueServices"));
+		assertEquals(serviceCount, ((List<?>) dto.get("uniqueServices")).size());
 		assertEquals(serviceCount, ((List<?>) dto.get("recurringServices")).size());
-		
-		final long id = commonService.create(dto);
-		
-		final Dto retrievedDto = commonService.get("offering", id);
-		assertEquals(serviceCount, ((List<?>) retrievedDto.get("services")).size());
-		assertEquals(serviceCount, ((List<?>) retrievedDto.get("recurringServices")).size());
 	}
 
-	private ArrayList<Key> createAndPersistServices(final int serviceCount, boolean uniqueServices) {
-		final ArrayList<Key> keys = new ArrayList<Key>();
+	private ArrayList<Dto> createAndPersistServices(final int serviceCount, boolean uniqueServices) {
+		final ArrayList<Dto> dtos = new ArrayList<Dto>();
 
 		for (int i = 0; i < serviceCount; i++) {
-			final DiscountableService s = getService(uniqueServices);
-			m.makePersistent(s);
-			keys.add(s.id);
+			final Dto s = getService(uniqueServices);
+			final long id = createService.create(s);
+			dtos.add(readService.get(s.getModule(), id));
 		}
 
-		return keys;
+		return dtos;
 	}
 
-	private DiscountableService getService(boolean uniqueServices) {
-		final DiscountableService service = uniqueServices ? new UniqueService() : new RecurringService();
-		service.name = "service" + random.nextInt();
-		service.price = random.nextDouble();
+	private Dto getService(boolean uniqueServices) {
+		final Dto service = new Dto((uniqueServices ? new UniqueService() : new RecurringService()).getClass().getSimpleName());
+		service.set("name", "service" + random.nextInt());
+		service.set("price", random.nextDouble());
 		return service;
 	}
 

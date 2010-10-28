@@ -4,6 +4,7 @@ import honeycrm.server.domain.decoration.DetailViewable;
 import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
+import honeycrm.server.domain.decoration.SearchableEntity;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEmailAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
@@ -12,7 +13,6 @@ import honeycrm.server.domain.decoration.fields.FieldMultiEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
-import honeycrm.server.domainNew.SearchableEntity;
 
 import com.google.appengine.api.datastore.Key;
 

@@ -4,7 +4,8 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.server.domain.UniqueService;
-import honeycrm.server.domainNew.NewDtoWizard;
+import honeycrm.server.transfer.NewDtoWizard;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
