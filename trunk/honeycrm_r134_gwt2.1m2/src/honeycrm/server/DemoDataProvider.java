@@ -4,6 +4,7 @@ import honeycrm.client.dto.Dto;
 import honeycrm.server.domain.Account;
 import honeycrm.server.domain.Contact;
 import honeycrm.server.domain.Offering;
+import honeycrm.server.domain.Product;
 import honeycrm.server.domain.UniqueService;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class DemoDataProvider {
 	public static List<Dto> getProducts(final int count) {
 		final List<Dto> products = new ArrayList<Dto>(count);
 		final Dto product = new Dto();
-		product.setModule("product");
+		product.setModule(Product.class.getSimpleName());
 
 		for (int i = 0; i < count; i++) {
 			product.set("name", DemoDataHolder.getRandomProductName());

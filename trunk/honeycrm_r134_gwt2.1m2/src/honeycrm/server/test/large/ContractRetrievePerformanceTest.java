@@ -12,12 +12,12 @@ public class ContractRetrievePerformanceTest extends DatastoreTest {
 	public void testCreateAndRead() throws InterruptedException {
 		final int count = 10;
 		
-		final String contractModule = Contract.class.getSimpleName().toLowerCase();
+		final String contractModule = Contract.class.getSimpleName();
 
 		final List<Long> productIds = new ArrayList<Long>();
 
 		for (final Dto product : DemoDataProvider.getProducts(100)) {
-			productIds.add(commonService.create(product));
+			productIds.add(createService.create(product));
 		}
 
 		final Dto contract = getContract(count, productIds);
@@ -26,19 +26,19 @@ public class ContractRetrievePerformanceTest extends DatastoreTest {
 
 		System.out.print("creating.. ");
 		for (int i=0; i<100; i++) {
-			lastId = commonService.create(contract);
+			lastId = createService.create(contract);
 		}
 		System.out.println("done.");
 
 		System.out.print("get all.. ");
 		for (int i=0; i<10; i++) {
-			commonService.getAll(contractModule, 0, 100);
+			readService.getAll(contractModule, 0, 100);
 		}
 		System.out.println("done.");
 		
 		System.out.print("get.. ");
 		for (int i = 0; i < 1000; i++) {
-			final Dto retrieved = commonService.get(contractModule, lastId);
+			final Dto retrieved = readService.get(contractModule, lastId);
 			assertNotNull(retrieved);
 		}
 		System.out.println("done.");
@@ -55,7 +55,7 @@ public class ContractRetrievePerformanceTest extends DatastoreTest {
 		}
 
 		final Dto contract = new Dto();
-		contract.setModule("contract");
+		contract.setModule(Contract.class.getSimpleName());
 		contract.set("services", services);
 		return contract;
 	}

@@ -1,6 +1,8 @@
 package honeycrm.server.test.medium;
 
 import honeycrm.server.CommonServiceImpl;
+import honeycrm.server.services.CreateServiceImpl;
+import honeycrm.server.services.ReadServiceImpl;
 
 import java.util.Random;
 
@@ -13,6 +15,8 @@ public abstract class DatastoreTest extends TestCase {
 	protected static final Random random = new Random(System.currentTimeMillis());
 	protected final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 	protected CommonServiceImpl commonService = new CommonServiceImpl();
+	protected CreateServiceImpl createService = new CreateServiceImpl();
+	protected ReadServiceImpl readService = new ReadServiceImpl();
 
 	@Override
 	protected void setUp() throws Exception {

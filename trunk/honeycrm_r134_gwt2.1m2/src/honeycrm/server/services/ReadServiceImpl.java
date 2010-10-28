@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.services.ReadService;
-import honeycrm.server.RelationshipFieldTable;
 import honeycrm.server.domain.Employee;
 import honeycrm.server.domainNew.NewDtoWizard;
 
@@ -37,7 +36,7 @@ public class ReadServiceImpl extends NewService implements ReadService {
 	@Override
 	public ListQueryResult getAll(String kind, final int from, final int to) {
 		final PreparedQuery pq = db.prepare(new Query(kind));
-		return copy.entitiesToDtoArray(kind, pq.countEntities(), pq.asIterable(withLimit(to - from + 1).offset(from)), false);
+		return copy.entitiesToDtoArray(kind, pq.countEntities(withDefaults()), pq.asIterable(withLimit(to - from + 1).offset(from)), false);
 	}
 
 	private PreparedQuery getFiltered(final String kind, final String field, final FilterOperator operator, final Object value) {
@@ -72,7 +71,13 @@ public class ReadServiceImpl extends NewService implements ReadService {
 
 	@Override
 	public ListQueryResult getAllRelated(String originating, Long id, String related) {
+		if (null == id || id < 1) {
+			log.warning("Invalid Id: " + id);
+			throw new RuntimeException("Invalid Id: " + id);
+		}
+		
 		final ArrayList<Dto> result = new ArrayList<Dto>();
+		
 		/**
 		 * Get all related entities where the id fields contain the id of the originating entity. E.g. return all contacts which have accountID == 23 where is the id of the originating account.
 		 */
@@ -97,10 +102,10 @@ public class ReadServiceImpl extends NewService implements ReadService {
 	@Override
 	public Map<String, ListQueryResult> getAllRelated(Long id, String related) {
 		final HashMap<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
-		final HashMap<String, HashMap<String, HashSet<String>>> relations = RelationshipFieldTable.instance.getMap();
+		final HashMap<String, HashMap<String, HashSet<String>>> r = NewDtoWizard.getConfiguration().getRelationships();
 
-		for (final String originating : relations.keySet()) {
-			if (relations.get(originating).containsKey(related)) {
+		for (final String originating : r.keySet()) {
+			if (r.get(originating).containsKey(related)) {
 				map.put(originating, getAllRelated(originating, id, related));
 			}
 		}
@@ -178,5 +183,14 @@ public class ReadServiceImpl extends NewService implements ReadService {
 			}
 		}
 		return new ListQueryResult(hits.toArray(new Dto[0]), hits.size());
+	}
+
+	@Override
+	public HashMap<String, ListQueryResult> getAllAssignedTo(long employeeID, int from, int to) {
+		final HashMap<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
+		for (final String kind: configuration.keySet()) {
+			map.put(kind, getAllAssignedTo(kind, employeeID, from, to));
+		}
+		return map;
 	}
 }
