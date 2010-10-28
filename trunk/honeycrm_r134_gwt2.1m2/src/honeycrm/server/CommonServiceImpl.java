@@ -25,6 +25,7 @@ import javax.jdo.Query;
 /**
  * Is somewhat the business layer.
  */
+@Deprecated
 public class CommonServiceImpl extends AbstractCommonService implements CommonService {
 	private static final Logger log = Logger.getLogger(CommonServiceImpl.class.getName());
 	private static final long serialVersionUID = -7312945910083902842L;

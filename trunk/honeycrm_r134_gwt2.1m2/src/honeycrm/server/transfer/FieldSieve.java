@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class FieldSieve {
 	public static final FieldSieve instance = new FieldSieve();
 	

@@ -6,6 +6,7 @@ import honeycrm.server.reports.OfferingReports;
 import java.util.Collection;
 import java.util.Map;
 
+@Deprecated
 public class CommonServiceReporter extends AbstractCommonService {
 	private static final long serialVersionUID = 6927835291341442947L;
 

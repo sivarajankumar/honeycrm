@@ -46,6 +46,7 @@ import java.util.HashMap;
 /**
  * The wizard analyzes the domain classes and creates dto descriptions for them based on their fields and the annotations on the classes. Magically it creates a client side description for the domain classes.
  */
+@Deprecated
 public class DtoWizard {
 	public static final DtoWizard instance = new DtoWizard();
 	private boolean initialized = false;

@@ -8,6 +8,7 @@ import java.util.Date;
 /**
  * Is part of the database layer.
  */
+@Deprecated
 public class CommonServiceCreator extends AbstractCommonService {
 	private static final long serialVersionUID = -272641981474976416L;
 
