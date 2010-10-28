@@ -21,6 +21,10 @@
 		<servlet-name>authServlet</servlet-name>
 		<url-pattern>/gae/auth</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>authServlet</servlet-name>
+		<url-pattern>/Honey/auth</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>configServlet</servlet-name>
@@ -30,7 +34,11 @@
 		<servlet-name>configServlet</servlet-name>
 		<url-pattern>/gae/config</url-pattern>
 	</servlet-mapping>
-
+	<servlet-mapping>
+		<servlet-name>configServlet</servlet-name>
+		<url-pattern>/Honey/config</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>reportServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.ReportServiceImpl</servlet-class>
@@ -39,7 +47,11 @@
 		<servlet-name>reportServlet</servlet-name>
 		<url-pattern>/gae/report</url-pattern>
 	</servlet-mapping>
-
+	<servlet-mapping>
+		<servlet-name>reportServlet</servlet-name>
+		<url-pattern>/Honey/report</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>readServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.ReadServiceImpl</servlet-class>
@@ -48,6 +60,10 @@
 		<servlet-name>readServlet</servlet-name>
 		<url-pattern>/gae/read</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>readServlet</servlet-name>
+		<url-pattern>/Honey/read</url-pattern>
+	</servlet-mapping>	
 	
 	<servlet>
 		<servlet-name>createServlet</servlet-name>
@@ -57,7 +73,11 @@
 		<servlet-name>createServlet</servlet-name>
 		<url-pattern>/gae/create</url-pattern>
 	</servlet-mapping>
-	
+	<servlet-mapping>
+		<servlet-name>createServlet</servlet-name>
+		<url-pattern>/Honey/create</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>updateServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.UpdateServiceImpl</servlet-class>
@@ -66,7 +86,11 @@
 		<servlet-name>updateServlet</servlet-name>
 		<url-pattern>/gae/update</url-pattern>
 	</servlet-mapping>
-		
+	<servlet-mapping>
+		<servlet-name>updateServlet</servlet-name>
+		<url-pattern>/Honey/update</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>deleteServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.DeleteServiceImpl</servlet-class>
@@ -99,7 +123,7 @@
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
-		<welcome-file>Gae.html</welcome-file>
+		<welcome-file>Honey.html</welcome-file>
 	</welcome-file-list>
 
     <filter>
