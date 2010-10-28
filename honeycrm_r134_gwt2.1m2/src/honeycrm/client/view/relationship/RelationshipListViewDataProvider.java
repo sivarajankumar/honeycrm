@@ -10,29 +10,42 @@ import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.view.list.ListViewDataProvider;
 
 public class RelationshipListViewDataProvider extends ListViewDataProvider {
-	final long originatingId;
+	long originatingId;
 	final String originatingModule;
-	
-	public RelationshipListViewDataProvider(final String relationshipModule, final String originating, final long relatedId) {
+
+	public RelationshipListViewDataProvider(final String relationshipModule, final String originating) {
 		super(relationshipModule);
-		this.originatingId = relatedId;
 		this.originatingModule = originating;
+	}
+
+	public void setOriginatingId(long originatingId) {
+		this.originatingId = originatingId;
 	}
 
 	@Override
 	public void refresh(final HasData<Dto> display) {
 		// TODO do only call getRelated(originating, originalModule, relationshipModule)
 		// TODO this has to be extremely fast
-		ServiceRegistry.readService().getAllRelated(originatingModule, originatingId, module, new AsyncCallback<ListQueryResult>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("could not load");
+		if (originatingId > 0) {
+			if (lastRefreshTooYoung()) {
+				return;
 			}
+			
+			lastRefresh = System.currentTimeMillis();
+			
+			ServiceRegistry.readService().getAllRelated(originatingModule, originatingId, module, new AsyncCallback<ListQueryResult>() {
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert("could not load");
+				}
 
-			@Override
-			public void onSuccess(ListQueryResult result) {
-				insertRefreshedData(display, result); 
-			}
-		});
+				@Override
+				public void onSuccess(ListQueryResult result) {
+					insertRefreshedData(display, result);
+				}
+			});
+		} else {
+			// ignore this since id is invalid.
+		}
 	}
 }

@@ -2,10 +2,8 @@ package honeycrm.client.basiclayout;
 
 import honeycrm.client.login.User;
 import honeycrm.client.misc.WidgetJuggler;
-import honeycrm.client.plugin.HaveABreakGadget;
 import honeycrm.client.view.FulltextSearchWidget;
 
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;

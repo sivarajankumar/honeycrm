@@ -8,11 +8,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheException;
-import net.sf.jsr107cache.CacheFactory;
-import net.sf.jsr107cache.CacheManager;
-
-import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 
 /**
  * Caching wrapper around ReflectionHelper class. Caches expensive reflective operations when possible.

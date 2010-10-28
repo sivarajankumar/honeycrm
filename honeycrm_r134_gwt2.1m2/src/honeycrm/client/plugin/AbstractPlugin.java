@@ -5,6 +5,10 @@ import java.io.Serializable;
 import com.google.gwt.user.client.ui.Widget;
 
 abstract public class AbstractPlugin implements Serializable {
+	public enum ModifactionPlace {
+		HEADER
+	}
+	
 	private static final long serialVersionUID = 7911325484912055158L;
 	private boolean enabled = false;
 
@@ -24,4 +28,5 @@ abstract public class AbstractPlugin implements Serializable {
 	}
 	
 	public abstract Widget getWidget();
+	public abstract ModifactionPlace getModificationPlace();
 }

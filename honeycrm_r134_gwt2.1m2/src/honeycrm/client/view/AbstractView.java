@@ -100,7 +100,8 @@ abstract public class AbstractView extends Composite {
 
 				@Override
 				public void onSuccess(Long result) {
-					TabCenterView.instance().get(moduleDto.getModule()).saveCompletedForId(result);
+					// TODO this won't work since we do not instantiate tabcenterview anymore.
+					// TabCenterView.instance().get(moduleDto.getModule()).saveCompletedForId(result);
 					LoadIndicator.get().endLoading();
 				}
 			});

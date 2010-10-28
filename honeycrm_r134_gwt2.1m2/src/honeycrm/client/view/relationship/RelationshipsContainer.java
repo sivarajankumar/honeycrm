@@ -93,7 +93,7 @@ class SingleRelationshipPanel extends ListView {
 
 	@Override
 	protected ListViewDataProvider getListDataProvider() {
-		return new RelationshipListViewDataProvider(moduleDto.getModule(), relatedDtoClass, id);
+		return new RelationshipListViewDataProvider(moduleDto.getModule(), relatedDtoClass);
 	}
 
 	private Button getCreateBtn() {

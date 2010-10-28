@@ -1,5 +1,6 @@
 package honeycrm.client.services;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import honeycrm.client.dto.Dto;
@@ -13,6 +14,7 @@ public interface ReadService extends RemoteService {
 	public ListQueryResult getAll(final String kind, final int from, final int to);
 	public Dto get(String dtoIndex, long id);
 	public Dto getByName(String dtoIndex, String name);
+	public HashMap<String, ListQueryResult> getAllAssignedTo(final long employeeID, int from, int to);
 	public ListQueryResult getAllAssignedTo(final String dtoIndex, final long employeeID, int from, int to);
 	public ListQueryResult getAllMarked(final String dtoIndex, int from, int to);
 	public ListQueryResult getAllByNamePrefix(final String dtoIndex, String prefix, int from, int to);

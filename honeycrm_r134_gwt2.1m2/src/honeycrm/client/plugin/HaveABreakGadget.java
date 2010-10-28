@@ -11,7 +11,7 @@ public class HaveABreakGadget extends AbstractPlugin {
 	private boolean hasBreak = false;
 	private static final long MAX_BREAK_TIME = 5 * 60 * 1000;
 	private static final long MAX_WORK_TIME = 20 * 60 * 1000;
-	private static final int UPDATE_INTERVAL = 1 * 1000;
+	private static final int UPDATE_INTERVAL = 100 * 1000;
 
 	public HaveABreakGadget() { // for serialisation
 	}
@@ -50,5 +50,10 @@ public class HaveABreakGadget extends AbstractPlugin {
 				return "WORK! still " + ((MAX_WORK_TIME - workTime) / 1000) + " seconds";
 			}
 		}
+	}
+
+	@Override
+	public ModifactionPlace getModificationPlace() {
+		return ModifactionPlace.HEADER;
 	}
 }
