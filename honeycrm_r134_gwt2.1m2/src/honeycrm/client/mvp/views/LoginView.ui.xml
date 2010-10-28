@@ -1,0 +1,20 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.centered { /*top: 50% ! important;
+					left: 50% ! important;
+					position: absolute ! important;
+					margin-left: -px ! important;
+					display: block ! important;*/
+			
+		}
+	</ui:style>
+	<g:ScrollPanel>
+		<g:DialogBox styleName="gwt-DialogBox {style.centered}"
+			ui:field="dialog"
+			text="Please login to honeycrm. Use login 'james' with no password for testing.">
+			<g:FlexTable ui:field="table" />
+		</g:DialogBox>
+	</g:ScrollPanel>
+</ui:UiBinder> 
