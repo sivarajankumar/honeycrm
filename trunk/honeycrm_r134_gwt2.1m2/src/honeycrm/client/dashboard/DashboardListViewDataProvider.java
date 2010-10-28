@@ -18,12 +18,16 @@ public class DashboardListViewDataProvider extends ListViewDataProvider {
 	
 	@Override
 	public void refresh(final HasData<Dto> display) {
+		if (lastRefreshTooYoung())
+			return;
+		
+		lastRefresh = System.currentTimeMillis();
+		
 		final Range range = display.getVisibleRange();
 		final int start = range.getStart();
 		final int end = start + range.getLength();
 		
 		ServiceRegistry.readService().getAllAssignedTo(module, User.getUserId(), start, end, new AsyncCallback<ListQueryResult>() {
-//		ServiceRegistry.commonService().getAllAssignedTo(module, User.getUserId(), start, end, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				insertRefreshedData(display, result);
@@ -34,7 +38,5 @@ public class DashboardListViewDataProvider extends ListViewDataProvider {
 				Window.alert("Could not load");
 			}
 		});
-
 	}
-
 }

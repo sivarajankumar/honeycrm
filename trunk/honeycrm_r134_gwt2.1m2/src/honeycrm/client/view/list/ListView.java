@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
@@ -222,6 +221,7 @@ public class ListView extends AbstractView {
 			} else if (moduleDto.getFieldById(id) instanceof FieldRelate) {
 				// TODO since this change Memberships cannot be selected / clicked anymore in list views
 				column = new Column<Dto, SafeHtml>(new SafeHtmlCell()) {
+					@Override
 					public SafeHtml getValue(Dto object) {
 						final Serializable value = object.get(id);
 						

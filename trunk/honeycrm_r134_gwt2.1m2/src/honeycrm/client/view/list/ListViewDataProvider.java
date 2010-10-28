@@ -16,8 +16,11 @@ import com.google.gwt.view.client.Range;
 
 public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 	protected final String module;
-	private long lastRefresh = 0;
-
+	// This setting simulates that at creation time a refresh has occurred.
+	// Setting this to the current time to avoid a refresh at startup.
+	// protected long lastRefresh = System.currentTimeMillis();
+	protected long lastRefresh = 0;
+	
 	public ListViewDataProvider(final String module) {
 		this.module = module;
 	}
@@ -27,7 +30,9 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 		refresh(display);
 	}
 
-	protected void insertRefreshedData(final HasData<Dto> display, final ListQueryResult result) {
+	public void insertRefreshedData(final HasData<Dto> display, final ListQueryResult result) {
+		lastRefresh = System.currentTimeMillis();
+
 		final List<Dto> list = new ArrayList<Dto>();
 
 		if (null != result && null != result.getResults()) {
@@ -35,26 +40,23 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 				list.add(dto);
 			}
 		}
-		
+
 		display.setRowCount(result == null ? 0 : result.getItemCount(), true);
 		display.setRowData(display.getVisibleRange().getStart(), list);
 	}
-	
+
 	public void refresh(final HasData<Dto> display) {
-		final long time = System.currentTimeMillis();
-		final long diff = time - lastRefresh;
-		
-		if (diff < 200) 
+		if (lastRefreshTooYoung())
 			return;
-		
-		lastRefresh = time;
-		
+
+		lastRefresh = System.currentTimeMillis();
+
 		final Range range = display.getVisibleRange();
 		final int start = range.getStart();
 		final int end = start + range.getLength();
 
 		LoadIndicator.get().startLoading();
-//		ServiceRegistry.commonService().getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
+		// ServiceRegistry.commonService().getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
 		ServiceRegistry.readService().getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
@@ -68,6 +70,10 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 				Window.alert("Could not load");
 			}
 		});
+	}
+
+	protected final boolean lastRefreshTooYoung() {
+		return System.currentTimeMillis() - lastRefresh < 500;
 	}
 
 }

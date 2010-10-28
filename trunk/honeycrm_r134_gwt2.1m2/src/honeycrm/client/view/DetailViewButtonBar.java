@@ -37,7 +37,8 @@ public class DetailViewButtonBar extends AbstractView implements ValueChangeHand
 		editButtons.add(WidgetJuggler.getButton("Save", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				History.newItem(HistoryTokenFactory.get(module, ModuleAction.SAVE));
+				detailview.saveChanges();
+				// History.newItem(HistoryTokenFactory.get(module, ModuleAction.SAVE));
 			}
 		}));
 		editButtons.add(WidgetJuggler.getButton("Cancel", new ClickHandler() {
@@ -82,8 +83,7 @@ public class DetailViewButtonBar extends AbstractView implements ValueChangeHand
 					WidgetJuggler.setVisible(true, detailButtons.toArray(new Widget[0]));
 					break;
 				default:
-					WidgetJuggler.setVisible(true, editButtons.toArray(new Widget[0]));
-					WidgetJuggler.setVisible(false, detailButtons.toArray(new Widget[0]));
+					startEditing();
 					break;
 				}
 			}
@@ -91,5 +91,10 @@ public class DetailViewButtonBar extends AbstractView implements ValueChangeHand
 			WidgetJuggler.setVisible(false, editButtons.toArray(new Widget[0]));
 			WidgetJuggler.setVisible(false, detailButtons.toArray(new Widget[0]));
 		}
+	}
+
+	public void startEditing() {
+		WidgetJuggler.setVisible(true, editButtons.toArray(new Widget[0]));
+		WidgetJuggler.setVisible(false, detailButtons.toArray(new Widget[0]));
 	}
 }

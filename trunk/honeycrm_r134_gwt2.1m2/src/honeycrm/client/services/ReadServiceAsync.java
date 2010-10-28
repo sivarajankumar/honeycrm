@@ -1,5 +1,6 @@
 package honeycrm.client.services;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import honeycrm.client.dto.Dto;
@@ -19,4 +20,5 @@ public interface ReadServiceAsync {
 	void getAllRelated(String originating, Long id, String related, AsyncCallback<ListQueryResult> callback);
 	void getAllRelated(Long id, String relatedDtoIndex, AsyncCallback<Map<String, ListQueryResult>> callback);
 	void fulltextSearchForModule(String dtoIndex, String query, int from, int to, AsyncCallback<ListQueryResult> callback);
+	void getAllAssignedTo(long employeeID, int from, int to, AsyncCallback<HashMap<String, ListQueryResult>> callback);
 }

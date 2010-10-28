@@ -10,14 +10,9 @@ import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;

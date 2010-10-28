@@ -5,6 +5,7 @@ import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dashboard.Dashboard;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.mvp.views.ModuleView;
 import honeycrm.client.misc.WidgetJuggler;
 import honeycrm.client.reports.ReportSuggester;
 import honeycrm.client.view.ModuleAction;
@@ -23,7 +24,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
@@ -31,7 +32,7 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 // TODO update history token when a new tab is selected
-public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<String> {
+public class TabCenterView extends Composite implements ValueChangeHandler<String> {
 	private static TabCenterView instance = new TabCenterView();
 
 	// use list instead of set to make sure the sequence stays the same
@@ -45,23 +46,24 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 	 */
 	private final Map<Integer, String> tabPositionMapReverse = new HashMap<Integer, String>();
 	private final Map<Integer, Widget> tabPosToCreateBtnMap = new HashMap<Integer, Widget>();
-
+	private final TabLayoutPanel panel;
+	
 	public static TabCenterView instance() {
 		return instance;
 	}
 
-	private TabCenterView() {
-		super(25, Unit.PX);
-
+	public TabCenterView() {
+		initWidget(panel = new TabLayoutPanel(25, Unit.PX));
+		
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
 				int tabPos = 0;
 
-				addStyleName("with_margin");
-				addStyleName("tab_layout");
+				panel.addStyleName("with_margin");
+				panel.addStyleName("tab_layout");
 
-				add(WidgetJuggler.addStyles(new Dashboard(), "dashboard"), "Dashboard"); // TODO insert as first tab
+				panel.add(WidgetJuggler.addStyles(new Dashboard(), "dashboard"), "Dashboard"); // TODO insert as first tab
 				//add(WidgetJuggler.addStyles(new HTML("Hallo"), "test"), WidgetJuggler.addStyles(new HTML("Test"), "testTab selected")); // TODO insert as first tab
 				tabPos++;
 
@@ -72,25 +74,28 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 						continue; // do not add this module to the tabs since it should be hidden
 					}
 
-					final TabModuleView view = new TabModuleView(moduleDto.getModule());
+					final ModuleView view = new ModuleView(moduleDto.getModule());
+					
+//					final TabModuleView view = new TabModuleView(moduleDto.getModule());
 					final Widget createBtn = getCreateButton(moduleDto.getModule());
 
-					moduleViewMap.put(moduleDto.getModule(), view);
+					// moduleViewMap.put(moduleDto.getModule(), view);
 					tabPositionMap.put(moduleDto.getModule(), tabPos);
 					tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
 					tabPosToCreateBtnMap.put(tabPos - 1, createBtn);
 
 					// refresh list view only for the first tab (which is the only visible tab at the beginning)
-					if (0 == tabPos)
-						view.refreshListView();
+					if (0 == tabPos) {
+					//	view.refreshListView();	
+					}
 
-					add((view), getTitlePanel(moduleDto.getTitle(), createBtn));
+					panel.add(view, getTitlePanel(moduleDto.getTitle(), createBtn));
 				}
 
-				add(new AdminWidget(), "Misc");
-				add(new ReportSuggester(), "Reports");
+				panel.add(new AdminWidget(), "Misc");
+				panel.add(new ReportSuggester(), "Reports");
 
-				addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+				panel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 					@Override
 					public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
 						// hide all create buttons
@@ -167,14 +172,14 @@ public class TabCenterView extends TabLayoutPanel implements ValueChangeHandler<
 
 	public void showModuleTab(String module) {
 		if (!tabPositionMap.containsKey(module) || !moduleViewMap.containsKey(module)) {
-			selectTab(0);
+			panel.selectTab(0);
 			return;
 		}
 
 		if (!moduleViewMap.get(module).isListViewInitialized()) {
 			moduleViewMap.get(module).refreshListView();
 		}
-		selectTab(tabPositionMap.get(module));
+		panel.selectTab(tabPositionMap.get(module));
 	}
 
 	@Override

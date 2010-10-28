@@ -6,8 +6,6 @@ import honeycrm.client.mvp.events.SuccessfulLoginEvent;
 import honeycrm.client.services.AuthServiceAsync;
 import honeycrm.client.services.ConfigServiceAsync;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -21,10 +19,6 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.visualization.client.VisualizationUtils;
-import com.google.gwt.visualization.client.visualizations.ColumnChart;
-import com.google.gwt.visualization.client.visualizations.LineChart;
-import com.google.gwt.visualization.client.visualizations.Table;
 
 public class LoginPresenter implements Presenter {
 	public interface Display {
