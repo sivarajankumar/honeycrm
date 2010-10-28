@@ -1,0 +1,60 @@
+package honeycrm.client.mvp.views;
+
+import honeycrm.client.mvp.presenters.ModulePresenter.Display;
+import honeycrm.client.view.ModuleButtonBar;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiFactory;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
+
+public class ModuleView extends Composite implements Display {
+	private static ModuleViewUiBinder uiBinder = GWT.create(ModuleViewUiBinder.class);
+
+	@UiTemplate("ModuleView.ui.xml")
+	interface ModuleViewUiBinder extends UiBinder<Widget, ModuleView> {
+	}
+
+	@UiField
+	ListView list;
+	@UiField
+	honeycrm.client.mvp.views.DetailView detail;
+	@UiField
+	ModuleButtonBar moduleButtonBar;
+
+	final String module;
+
+	public ModuleView(final String module) {
+		this.module = module; // IMPORTANT: set module _before_ all other initialisation
+
+		initWidget(uiBinder.createAndBindUi(this));
+	}
+	
+	@Override
+	public ListView getList() {
+		return list;
+	}
+	
+	@Override
+	public honeycrm.client.mvp.views.DetailView getDetail() {
+		return detail;
+	}
+
+	@UiFactory
+	honeycrm.client.mvp.views.DetailView makeDetailView() {
+		return detail = new honeycrm.client.mvp.views.DetailView(module);
+	}
+
+	@UiFactory
+	ListView makeListView() {
+		return new ListView(module);
+	}
+
+	@UiFactory
+	ModuleButtonBar makeModuleButtonBar() {
+		return new ModuleButtonBar(module, null /* detail = new DetailView(module)*/);
+	}
+}

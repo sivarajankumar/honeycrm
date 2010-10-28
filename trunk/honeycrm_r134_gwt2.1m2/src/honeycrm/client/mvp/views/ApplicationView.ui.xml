@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:honeycrm.client.basiclayout" xmlns:view="urn:import:honeycrm.client.mvp.views">
+	<g:DockLayoutPanel>
+		<g:north size="50">
+			<my:Header ui:field="header" />
+		</g:north>
+		<g:center>
+			<view:ContentView ui:field="content" />
+		</g:center>
+	</g:DockLayoutPanel>
+</ui:UiBinder> 
