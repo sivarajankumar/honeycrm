@@ -5,7 +5,7 @@ import java.util.Map;
 
 import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.ModuleDto;
-import honeycrm.server.domainNew.NewDtoWizard;
+import honeycrm.server.transfer.NewDtoWizard;
 import junit.framework.TestCase;
 
 public class NewDtoWizardTest extends TestCase {

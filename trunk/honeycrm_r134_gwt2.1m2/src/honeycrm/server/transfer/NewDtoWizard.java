@@ -1,4 +1,4 @@
-package honeycrm.server.domainNew;
+package honeycrm.server.transfer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -32,6 +32,7 @@ import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.OneToMany;
 import honeycrm.server.domain.decoration.Quicksearchable;
+import honeycrm.server.domain.decoration.SearchableEntity;
 import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldCurrencyAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldDateAnnotation;
@@ -44,7 +45,6 @@ import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
-import honeycrm.server.transfer.ReflectionHelper;
 
 public class NewDtoWizard {
 	private static final Logger log = Logger.getLogger(NewDtoWizard.class.getSimpleName());

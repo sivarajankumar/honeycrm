@@ -10,6 +10,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.server.DemoDataProvider;
 import honeycrm.server.domain.Contact;
 
@@ -21,10 +22,10 @@ public class LowLevelApiTest extends DatastoreTest {
 		final ArrayList<Key> keys = new ArrayList<Key>(COUNT);
 
 		for (int i = 0; i < COUNT; i++) {
-			final Contact c = DemoDataProvider.contact();
+			final Dto c = DemoDataProvider.contact();
 
 			final Entity e = new Entity(Contact.class.getSimpleName());
-			e.setProperty("name", c.name);
+			e.setProperty("name", c.get("name"));
 
 			keys.add(db.put(e));
 		}
