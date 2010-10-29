@@ -45,20 +45,28 @@ a, a:visited, a:hover {
 }
 
 .gwt-Button {
-  margin: 0;
-  padding: 3px 5px;
-  text-decoration: none;
-  font-size: small;
+  background: transparent url('/gae/images/blue-button.png') no-repeat left center;
+  border: 1px solid #fff;
+  color: #fff;
   cursor: pointer;
-  cursor: hand;
-  background: url("images/hborder.png") repeat-x 0px -27px;
-  border: 1px outset #ccc;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  font-size: 0.916em;
+  font-weight: bold;
+  margin: 0 4px;
+  padding: 2px 4px;
+  text-transform: uppercase;
+  outline: 1px solid #9BABB0;
+  -moz-border-radius: 4px;
+  -moz-outline-radius: 4px;
+  -webkit-border-radius: 4px;
 }
 .gwt-Button:active {
-  border: 1px inset #ccc;
+  background-position: right center;
+  cursor: pointer;
 }
 .gwt-Button:hover {
-  border-color: #9cf #69e #69e #7af;
+  background-position: right center;
+  cursor: pointer;
 }
 .gwt-Button[disabled] {
   cursor: default;
@@ -1109,27 +1117,31 @@ td.datePickerMonth {
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelContent {
-  border-color: #92c1f0;
-  border-style: solid;
-  border-width: 3px 2px 2px;
   overflow: hidden;
   padding: 6px;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
   margin-left: 6px;
-  padding: 3px 6px 3px 6px;
+  padding: 3px 6px;
   cursor: pointer;
   cursor: hand;
-  color: black;
+  color: #145B70;
   font-weight: bold;
   text-align: center;
-  background: #d0e4f6;
+  /*background: #d0e4f6;*/
+  background: url('/gae/images/tab-right.png') no-repeat scroll left 0px transparent;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
   cursor: default;
-  background: #92c1f0;
+  /*background: #92c1f0;*/
+  color: white;
+  background: url('/gae/images/tab-right.png') no-repeat scroll left -29px transparent;
 }
 
+.gwt-TabLayoutPanelTabInner {
+  /*background: url('/gae/images/tab-right.png') no-repeat scroll right -29px transparent;
+  padding: 6px 10px 3px 8px;*/
+}
 .gwt-SplitLayoutPanel-HDragger {
   background: #d0e4f6 url(images/splitPanelThumb.png) center center no-repeat;
   cursor: col-resize;

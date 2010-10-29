@@ -39,7 +39,7 @@ public class TabModuleView extends DockLayoutPanel {
 				splitPanel.addWest(new ScrollPanel(listView), 500);
 				splitPanel.add(new ScrollPanel(detailView));
 
-				addNorth(new ModuleButtonBar(module, detailView), 40);
+				addNorth(new ModuleButtonBar(module, detailView), 50);
 
 				add(splitPanel);
 			}
