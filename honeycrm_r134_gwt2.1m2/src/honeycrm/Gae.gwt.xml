@@ -1,56 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='gae'>
-  <!-- Inherit the core Web Toolkit stuff.                        -->
-  <inherits name='com.google.gwt.user.User'/>
-  <!-- inherits name="com.google.gwt.i18n.I18N"/-->
-  <inherits name='com.google.gwt.junit.JUnit' />
-  <inherits name='com.google.gwt.visualization.Visualization'/>
-  <!-- Enable client side logging -->
-  <!-- inherits name="com.google.gwt.logging.Logging"/-->
-
-  <!-- Inherit the default GWT style sheet.  You can change       -->
-  <!-- the theme of your GWT application by uncommenting          -->
-  <!-- any one of the following lines.                            -->
-  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
-  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
-
-  <!-- Other module inherits                                      -->
-
-  <!-- Specify the app entry point class.                         -->
-  <entry-point class='honeycrm.client.Gae'/>
-
-  <!-- Specify the paths for translatable code                    -->
-  <source path='client'/>
-  
-  <!-- This seems to be relevant for testing purposes. -->
-  <!-- See http://code.google.com/intl/de-DE/webtoolkit/doc/latest/FAQ_Troubleshooting.html#Resource_not_found -->
-  <servlet path="/common" class="honeycrm.server.CommonServiceImpl"/>
-  <servlet path="/auth" class="honeycrm.server.services.AuthServiceImpl"/>
-  <servlet path="/config" class="honeycrm.server.services.ConfigServiceImpl"/>
-  <servlet path="/report" class="honeycrm.server.services.ReportServiceImpl"/>
-  <servlet path="/read" class="honeycrm.server.services.ReadServiceImpl"/>
-  
-  <!-- extend-property name="locale" values="en"/>
-  <extend-property name="locale" values="ge"/>
-  <set-property-fallback name="locale" value="en"/-->
-  
-  <extend-configuration-property name="rpc.blacklist" value=".*"/>
-  <extend-configuration-property name="rpc.blacklist" value="com.google.gwt.user.client.rpc.SerializableException"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.long"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.String"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.int"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.long"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.double"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.boolean"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.util.Date"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.util.ArrayList"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.util.HashMap"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.util.HashSet"/>
-  <extend-configuration-property name="rpc.blacklist" value="+honeycrm.client.*"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.Integer"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.Long"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.Double"/>
-  <extend-configuration-property name="rpc.blacklist" value="+java.lang.Boolean"/>
-  <extend-configuration-property name="rpc.blacklist" value="+com.google.gwt.user.client.rpc.*"/>
+	<inherits name="com.google.gwt.user.User" />
+	<inherits name='com.google.gwt.visualization.Visualization' />
+	<inherits name='com.google.gwt.user.theme.standard.Standard' />
+	<!-- This file should be removed. -->
+	<!-- But when we remove it we cannot compile anymore because it is still referenced by something. -->
+	<entry-point class='honeycrm.client.Gae' />
+	<source path='client' />
+	<extend-configuration-property name="rpc.blacklist" value=".*" />
 </module>

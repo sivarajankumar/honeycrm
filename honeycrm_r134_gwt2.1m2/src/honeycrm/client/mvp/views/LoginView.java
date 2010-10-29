@@ -38,7 +38,6 @@ public class LoginView extends Composite implements Display {
 		table.getFlexCellFormatter().setColSpan(2, 0, 1);
 
 		dialog.setWidget(table);
-		// TODO this causes an Exception: "This widget does not implement HasWidgets"
 		dialog.center();
 	}
 
