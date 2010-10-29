@@ -4,7 +4,7 @@
 	xmlns:mylist="urn:import:honeycrm.client.mvp.views">
 	<ui:style>
 	.splitPanel {
-		background: url("/gae/images/content-gradient.png") repeat-x scroll 0 1px transparent;	
+		background: url("/images/content-gradient.png") repeat-x scroll 0 1px transparent;	
 	}
 	</ui:style>
 	
