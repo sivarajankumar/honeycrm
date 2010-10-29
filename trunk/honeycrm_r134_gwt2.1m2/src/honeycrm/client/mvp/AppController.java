@@ -21,6 +21,8 @@ import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
 import honeycrm.client.view.ModuleAction;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -94,30 +96,43 @@ public class AppController implements ValueChangeHandler<String> {
 		final String token = History.getToken();
 
 		if (null != token) {
-			Presenter presenter = null;
-
 			if (token.equals("logout") || !initialized || token.equals("login")) {
-				presenter = new LoginPresenter(authService, confService, eventBus, new LoginView());
+				new LoginPresenter(authService, confService, eventBus, new LoginView()).go(container);
 			} else if (token.equals("initialized")) {
-				presenter = new ApplicationPresenter(User.getUserId(), readService, createService, updateService, eventBus, new ApplicationView());
-			} else if (token.split("\\s+").length == 3) {
-				final String[] tokens = token.split("\\s+");
-
-				final String module = tokens[0];
-				final ModuleAction action = ModuleAction.fromString(tokens[1]);
-
-				if (null != action) {
-					switch (action) {
-					case DETAIL:
-						final Dto dto = new Dto(module);
-						dto.setId(NumberParser.convertToLong(tokens[2]));
-						eventBus.fireEvent(new OpenEvent(dto));
+				GWT.runAsync(AppController.class, new RunAsyncCallback() {
+					@Override
+					public void onSuccess() {
+						new ApplicationPresenter(User.getUserId(), readService, createService, updateService, eventBus, new ApplicationView()).go(container);
 					}
-				}
-			}
+					
+					@Override
+					public void onFailure(Throwable reason) {
+						
+					}
+				});
+			} else if (token.split("\\s+").length == 3) {
+				GWT.runAsync(AppController.class, new RunAsyncCallback() {
+					@Override
+					public void onSuccess() {
+						final String[] tokens = token.split("\\s+");
 
-			if (null != presenter) {
-				presenter.go(container);
+						final String module = tokens[0];
+						final ModuleAction action = ModuleAction.fromString(tokens[1]);
+
+						if (null != action) {
+							switch (action) {
+							case DETAIL:
+								final Dto dto = new Dto(module);
+								dto.setId(NumberParser.convertToLong(tokens[2]));
+								eventBus.fireEvent(new OpenEvent(dto));
+							}
+						}
+					}
+					
+					@Override
+					public void onFailure(Throwable reason) {
+					}
+				});
 			}
 		}
 	}

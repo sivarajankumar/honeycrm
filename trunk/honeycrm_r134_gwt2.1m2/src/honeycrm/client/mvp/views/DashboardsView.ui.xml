@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
 	.veryWide {
-		width = 100%;
+		width: 100%;
 	}
 	</ui:style>
 	
