@@ -35,11 +35,12 @@ body {
 }
 
 .content {
-	background-color: #ececec;
+/* disabling this makes all listviews transparent i.e. the background image is shown */
+/*	background-color: #ececec;*/
 }
 
 .tool_bar {
-	background: url("/gae/images/preface-wrapper-bg.png") repeat-x scroll center top #000000;
+	background: url("/images/preface-wrapper-bg.png") repeat-x scroll center top #000000;
 	padding: 10px 3px;
 	height: 30px;	
 }
@@ -65,7 +66,7 @@ body {
 	/*margin: 10px;	
 	width: 98%;*/
 	color: white;
-	background: url('/gae/images/header-bg.jpg') repeat-x;
+	background: url('/images/header-bg.jpg') repeat-x;
 	height: 100px;
 	position: absolute;
 	width: 100%;
@@ -135,7 +136,7 @@ body {
 
 .header_search {
 	margin-left: 10px;
-    background: #dee2e7 url('/gae/images/bg-search.gif') repeat-x;
+    background: #dee2e7 url('/images/bg-search.gif') repeat-x;
   	border: 1px solid #555;
   	padding: 8px;
   	position: relative;
@@ -218,7 +219,7 @@ input.header_search_input {
 /* VIEWS */
 
 .content_container {
-	background: url("/gae/images/content-gradient.png") repeat-x scroll 0 1px transparent;	
+	background: url("/images/content-gradient.png") repeat-x scroll 0 1px transparent;	
 }
 
 .detail_view {
