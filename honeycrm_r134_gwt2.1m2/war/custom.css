@@ -40,8 +40,8 @@ body {
 
 .tool_bar {
 	background: url("/gae/images/preface-wrapper-bg.png") repeat-x scroll center top #000000;
-	padding: 3px;
-	height: 40px;	
+	padding: 10px 3px;
+	height: 30px;	
 }
 
 .search_field {
@@ -65,7 +65,7 @@ body {
 	/*margin: 10px;	
 	width: 98%;*/
 	color: white;
-	background: url('/gae/images/header-bg.jpg') no-repeat;
+	background: url('/gae/images/header-bg.jpg') repeat-x;
 	height: 100px;
 	position: absolute;
 	width: 100%;

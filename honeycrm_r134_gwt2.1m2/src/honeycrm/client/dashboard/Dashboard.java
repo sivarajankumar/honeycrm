@@ -19,7 +19,9 @@ public class Dashboard extends Composite {
 	private static final String[] modules = new String[] { "Project", "Contact", "Donation", "Membership", "Offering", "Contract", "Account" };
 
 	public Dashboard() {
-		final VerticalPanel panel = new VerticalPanel();
+		final FlowPanel panel = new FlowPanel();
+		panel.setWidth("100%");
+		
 		final FlowPanel pan = new FlowPanel();
 		initWidget(new ScrollPanel(panel));
 
@@ -66,6 +68,8 @@ public class Dashboard extends Composite {
 				table.setWidget(row, col, listViews[row * COLS + col]);
 			}
 		}
+		table.setStyleName("content_container");
+		table.setWidth("100%");
 		return table;
 	}
 }
