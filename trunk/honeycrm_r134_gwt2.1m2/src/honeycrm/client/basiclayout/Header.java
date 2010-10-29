@@ -42,7 +42,8 @@ public class Header extends Composite {
 	}
 
 	private Widget getHeaderLink(final String label) {
-		return WidgetJuggler.addStyles(new Hyperlink(label, label.toLowerCase()), "header_link");
+		final String historyToken = label.split(" ")[0].toLowerCase();
+		return WidgetJuggler.addStyles(new Hyperlink(label, historyToken), "header_link");
 	}
 
 	private Widget getHeaderLinks(final String... labels) {

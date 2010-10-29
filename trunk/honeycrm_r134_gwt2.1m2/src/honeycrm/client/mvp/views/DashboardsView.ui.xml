@@ -1,10 +1,18 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.veryWide {
+		width = 100%;
+	}
+	</ui:style>
+	
 	<g:ScrollPanel>
-		<g:VerticalPanel>
-			<g:Button ui:field="refreshBtn" />
-			<g:FlexTable ui:field="table" />
+		<g:VerticalPanel addStyleNames="{style.veryWide}">
+			<g:FlowPanel addStyleNames="tool_bar">
+				<g:Button ui:field="refreshBtn" />
+			</g:FlowPanel>
+			<g:FlexTable addStyleNames="{style.veryWide} content_container" ui:field="table" />
 		</g:VerticalPanel>
 	</g:ScrollPanel>
 </ui:UiBinder> 
