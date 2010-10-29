@@ -5,22 +5,9 @@
 <web-app>
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>commonServlet</servlet-name>
-		<servlet-class>honeycrm.server.CommonServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>commonServlet</servlet-name>
-		<url-pattern>/gae/common</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
 		<servlet-name>authServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.AuthServiceImpl</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>authServlet</servlet-name>
-		<url-pattern>/gae/auth</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>authServlet</servlet-name>
 		<url-pattern>/Honey/auth</url-pattern>
@@ -32,10 +19,6 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>configServlet</servlet-name>
-		<url-pattern>/gae/config</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>configServlet</servlet-name>
 		<url-pattern>/Honey/config</url-pattern>
 	</servlet-mapping>
 	
@@ -43,10 +26,6 @@
 		<servlet-name>reportServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.ReportServiceImpl</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>reportServlet</servlet-name>
-		<url-pattern>/gae/report</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>reportServlet</servlet-name>
 		<url-pattern>/Honey/report</url-pattern>
@@ -58,10 +37,6 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>readServlet</servlet-name>
-		<url-pattern>/gae/read</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>readServlet</servlet-name>
 		<url-pattern>/Honey/read</url-pattern>
 	</servlet-mapping>	
 	
@@ -69,10 +44,6 @@
 		<servlet-name>createServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.CreateServiceImpl</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>createServlet</servlet-name>
-		<url-pattern>/gae/create</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>createServlet</servlet-name>
 		<url-pattern>/Honey/create</url-pattern>
@@ -84,10 +55,6 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>updateServlet</servlet-name>
-		<url-pattern>/gae/update</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>updateServlet</servlet-name>
 		<url-pattern>/Honey/update</url-pattern>
 	</servlet-mapping>
 	
@@ -97,7 +64,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>deleteServlet</servlet-name>
-		<url-pattern>/gae/delete</url-pattern>
+		<url-pattern>/Honey/delete</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -106,7 +73,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>pluginServlet</servlet-name>
-		<url-pattern>/gae/plugin</url-pattern>
+		<url-pattern>/Honey/plugin</url-pattern>
 	</servlet-mapping>
 	
 	<!-- See http://code.google.com/intl/de-DE/appengine/kb/java.html#What_Is_A_Loading_Request -->
@@ -118,7 +85,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>jUnitHostImpl</servlet-name>
-		<url-pattern>/gae/junithost/*</url-pattern>
+		<url-pattern>/Honey/junithost/*</url-pattern>
 	</servlet-mapping-->
 
 	<!-- Default page to serve -->

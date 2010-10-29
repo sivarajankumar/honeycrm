@@ -96,7 +96,7 @@ public class AppController implements ValueChangeHandler<String> {
 		if (null != token) {
 			Presenter presenter = null;
 
-			if (!initialized || token.equals("login")) {
+			if (token.equals("logout") || !initialized || token.equals("login")) {
 				presenter = new LoginPresenter(authService, confService, eventBus, new LoginView());
 			} else if (token.equals("initialized")) {
 				presenter = new ApplicationPresenter(User.getUserId(), readService, createService, updateService, eventBus, new ApplicationView());
