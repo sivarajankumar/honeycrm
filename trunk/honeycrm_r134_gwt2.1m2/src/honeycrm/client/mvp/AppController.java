@@ -9,8 +9,10 @@ import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.events.SuccessfulLoginEvent;
 import honeycrm.client.mvp.events.SuccessfulLoginEventHandler;
 import honeycrm.client.mvp.presenters.ApplicationPresenter;
+import honeycrm.client.mvp.presenters.CsvImportPresenter;
 import honeycrm.client.mvp.presenters.LoginPresenter;
 import honeycrm.client.mvp.views.ApplicationView;
+import honeycrm.client.mvp.views.CsvImportView;
 import honeycrm.client.mvp.views.LoginView;
 import honeycrm.client.services.AuthServiceAsync;
 import honeycrm.client.services.ConfigServiceAsync;
@@ -98,42 +100,67 @@ public class AppController implements ValueChangeHandler<String> {
 			if (token.equals("logout") || !initialized || token.equals("login")) {
 				new LoginPresenter(authService, confService, eventBus, new LoginView()).go(container);
 			} else if (token.equals("initialized")) {
-				GWT.runAsync(AppController.class, new RunAsyncCallback() {
-					@Override
-					public void onSuccess() {
-						new ApplicationPresenter(User.getUserId(), readService, createService, updateService, eventBus, new ApplicationView()).go(container);
-					}
-					
-					@Override
-					public void onFailure(Throwable reason) {
-						
-					}
-				});
+				handleInitialized();
+			} else if (token.split("\\s+").length == 2) {
+				handleImport(token);
 			} else if (token.split("\\s+").length == 3) {
-				GWT.runAsync(AppController.class, new RunAsyncCallback() {
-					@Override
-					public void onSuccess() {
-						final String[] tokens = token.split("\\s+");
-
-						final String module = tokens[0];
-						final ModuleAction action = ModuleAction.fromString(tokens[1]);
-
-						if (null != action) {
-							switch (action) {
-							case DETAIL:
-								final Dto dto = new Dto(module);
-								dto.setId(NumberParser.convertToLong(tokens[2]));
-								eventBus.fireEvent(new OpenEvent(dto));
-							}
-						}
-					}
-					
-					@Override
-					public void onFailure(Throwable reason) {
-					}
-				});
+				handleOpen(token);
 			}
 		}
+	}
+
+	protected void handleInitialized() {
+		GWT.runAsync(AppController.class, new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				new ApplicationPresenter(User.getUserId(), readService, createService, updateService, eventBus, new ApplicationView()).go(container);
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+			}
+		});
+	}
+
+	protected void handleImport(final String token) {
+		GWT.runAsync(AppController.class, new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				final String[] tokens = token.split("\\s+");
+				if ("import".equals(tokens[1])) {
+					new CsvImportPresenter(createService, eventBus, new CsvImportView(), tokens[0]).go(container);
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+			}
+		});
+	}
+
+	protected void handleOpen(final String token) {
+		GWT.runAsync(AppController.class, new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				final String[] tokens = token.split("\\s+");
+
+				final String module = tokens[0];
+				final ModuleAction action = ModuleAction.fromString(tokens[1]);
+
+				if (null != action) {
+					switch (action) {
+					case DETAIL:
+						final Dto dto = new Dto(module);
+						dto.setId(NumberParser.convertToLong(tokens[2]));
+						eventBus.fireEvent(new OpenEvent(dto));
+					}
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+			}
+		});
 	}
 
 	public void go(final HasWidgets container) {

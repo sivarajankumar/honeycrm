@@ -1,0 +1,14 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:DecoratedPopupPanel glassEnabled="true" ui:field="popup">
+		<g:VerticalPanel ui:field="p">
+			<g:Label ui:field="header" />
+			<g:TextArea ui:field="textArea" width="500px" height="400px" />
+			<g:Label ui:field="status" />
+			<g:HorizontalPanel>
+				<g:Button ui:field="cancel" />
+				<g:Button ui:field="importBtn" />
+			</g:HorizontalPanel>
+		</g:VerticalPanel>
+	</g:DecoratedPopupPanel>
+</ui:UiBinder> 
