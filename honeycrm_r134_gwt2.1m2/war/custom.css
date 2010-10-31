@@ -349,3 +349,51 @@ tr.table_row:active {
 tr {
 	vertical-align: top;
 }
+
+/* Overwrite some of GWTs settings */
+
+.gwt-Button {
+  background: transparent url('/gae/images/blue-button.png') no-repeat left center;
+  border: 1px solid #fff;
+  /*color: #fff;*/
+  color: #4B4A4A;
+  cursor: pointer;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  font-size: 0.916em;
+  font-weight: bold;
+  margin: 0 4px;
+  padding: 2px 4px;
+  text-transform: uppercase;
+  outline: 1px solid #9BABB0;
+  -moz-border-radius: 4px;
+  -moz-outline-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+
+.gwt-TabLayoutPanelContent {
+	/* This makes sure the dashboard page does not have too much padding around its tool bar. */
+	padding: 0px ! important; 
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+  margin-left: 6px;
+  padding: 3px 6px;
+  cursor: hand;
+  color: #145B70;
+  font-weight: bold;
+  text-align: center;
+  /*background: #d0e4f6;*/
+  background: url('/gae/images/tab-right.png') no-repeat scroll left 0px transparent;
+}
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+  cursor: default;
+  /*background: #92c1f0;*/
+  color: white;
+  background: url('/gae/images/tab-right.png') no-repeat scroll left -29px transparent;
+}
+
+.gwt-TabLayoutPanelTabInner {
+  /*background: url('/gae/images/tab-right.png') no-repeat scroll right -29px transparent;
+  padding: 6px 10px 3px 8px;*/
+}
+
