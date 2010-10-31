@@ -10,7 +10,7 @@ import honeycrm.server.test.medium.DatastoreTest;
 import com.google.gwt.user.client.Command;
 
 public class CrudOperationTests extends DatastoreTest {
-	private ReportServiceImpl reportService = reportService = new ReportServiceImpl();
+	private ReportServiceImpl reportService = new ReportServiceImpl();
 
 	public void testCreating() {
 		final Dto dto = new Dto(Contact.class.getSimpleName());
