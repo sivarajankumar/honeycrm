@@ -1,11 +1,9 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.ServiceRegistry;
-import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.DeleteServiceAsync;
@@ -78,7 +76,8 @@ abstract public class AbstractView extends Composite {
 					// mark cache invalid to make sure the changed values will be displayed
 					Prefetcher.instance.invalidate(moduleDto.getModule(), id);
 
-					TabCenterView.instance().get(moduleDto.getModule()).saveCompleted();
+					// TODO re-implement
+					// TabCenterView.instance().get(moduleDto.getModule()).saveCompleted();
 				}
 
 				@Override

@@ -1,9 +1,6 @@
 package honeycrm.client.reports;
 
-import honeycrm.client.basiclayout.Initializer;
 import honeycrm.client.misc.ServiceRegistry;
-import honeycrm.client.mvp.views.LoadView;
-
 import java.util.Date;
 import java.util.Map;
 
@@ -25,9 +22,6 @@ public class SampleReport extends Composite {
 	public SampleReport() {
 		final VerticalPanel p = new VerticalPanel();
 
-		if (Initializer.SKIP_LOADING_VISUALISATIONS) {
-			p.add(new Label("reports are currently disabled"));
-		} else {
 			final Label status = new Label("Status: ");
 			p.setStyleName("content");
 			p.add(status);
@@ -56,9 +50,8 @@ public class SampleReport extends Composite {
 					});
 				}
 			}.schedule(10 * 1000);
-		}
-		
-		initWidget(new ScrollPanel(p));
+
+			initWidget(new ScrollPanel(p));
 	}
 
 	private Options getAreaOptions() {

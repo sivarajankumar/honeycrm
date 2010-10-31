@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-import honeycrm.client.basiclayout.Initializer;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.view.ModuleAction;
@@ -40,9 +39,7 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
-				if (!Initializer.SKIP_LOADING_VISUALISATIONS) {
-					showReport(0);
-				}
+				showReport(0);
 			}
 
 			@Override

@@ -1,7 +1,6 @@
 package honeycrm.client.reports;
 
 import honeycrm.client.misc.ServiceRegistry;
-import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.profiling.ServiceCallStatistics;
 
 import java.util.Collection;

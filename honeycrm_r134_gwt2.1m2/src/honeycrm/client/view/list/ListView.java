@@ -7,7 +7,6 @@ import honeycrm.client.field.FieldRelate;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.misc.WidgetJuggler;
-import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.view.AbstractView;
 import honeycrm.client.view.ModuleAction;
 
@@ -48,6 +47,8 @@ import com.google.gwt.view.client.SingleSelectionModel;
 // TODO update cached items when forced to do so (every time user opens a page the first time) AND in
 // the background (polling)
 // TODO use google formatters instead of field classes of honeycrm 
+// TODO Before deleting the file we should implement all the things done here for the new MVP architecture, too.
+@Deprecated
 public class ListView extends AbstractView {
 	protected static final int DEFAULT_MAX_ENTRIES = 15;
 	private int pageSize = DEFAULT_MAX_ENTRIES;

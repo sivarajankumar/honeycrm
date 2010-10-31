@@ -9,7 +9,6 @@ import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.mvp.presenters.DetailPresenter;
 import honeycrm.client.mvp.presenters.RelationshipPresenter;
 import honeycrm.client.mvp.presenters.DetailPresenter.Display;
-import honeycrm.client.view.DetailViewButtonBar;
 import honeycrm.client.view.AbstractView.View;
 import honeycrm.client.view.relationship.RelationshipsContainer;
 
@@ -67,11 +66,6 @@ public class DetailView extends Composite implements Display {
 		editBtn.setText("Edit");
 		saveBtn.setText("Save");
 		cancelBtn.setText("Cancel");
-	}
-
-	@UiFactory
-	DetailViewButtonBar makeButtonBar() {
-		return new DetailViewButtonBar(module, null);
 	}
 
 	@UiFactory

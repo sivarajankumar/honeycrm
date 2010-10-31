@@ -1,7 +1,6 @@
 package honeycrm.client.actions;
 
 import honeycrm.client.admin.LogConsole;
-import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.ServiceRegistry;
 
@@ -52,7 +51,8 @@ public class CreateContractAction extends AbstractAction {
 				/**
 				 * forward the user to the created contract.
 				 */
-				TabCenterView.instance().openEditView("Contract", contractID);
+				// TODO re-implement
+				// TabCenterView.instance().openEditView("Contract", contractID);
 			}
 			
 			@Override
