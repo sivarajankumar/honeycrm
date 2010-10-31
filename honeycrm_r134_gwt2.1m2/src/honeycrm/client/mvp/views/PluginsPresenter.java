@@ -10,6 +10,6 @@ public class PluginsPresenter implements Presenter {
 	}
 	
 	@Override
-	public void go(final HasWidgets container) {
+	public void go(HasWidgets container) {
 	}
 }

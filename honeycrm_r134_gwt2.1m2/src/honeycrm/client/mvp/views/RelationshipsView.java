@@ -36,7 +36,7 @@ public class RelationshipsView extends Composite implements Display {
 	}
 
 	@Override
-	public void setPresenter(final RelationshipPresenter presenter) {
+	public void setPresenter(RelationshipPresenter presenter) {
 		this.presenter = presenter;
 	}
 
@@ -57,7 +57,7 @@ public class RelationshipsView extends Composite implements Display {
 	}
 
 	@Override
-	public void insertRefreshedData(final Map<String, ListQueryResult> relationshipData) {
+	public void insertRefreshedData(Map<String, ListQueryResult> relationshipData) {
 		for (final String relation : relationships) {
 			setupViews(relation);
 

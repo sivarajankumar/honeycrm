@@ -46,7 +46,7 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 			}
 
 			@Override
-			public void onFailure(final Throwable reason) {
+			public void onFailure(Throwable reason) {
 				Window.alert("Could not run code asynchronously");
 			}
 		});
@@ -55,7 +55,7 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 	protected void showReport(final int startingReport) {
 		ServiceRegistry.reportService().getReport(startingReport, new AsyncCallback<ReportData<Map<Integer, Map<String, Integer>>>>() {
 			@Override
-			public void onSuccess(final ReportData<Map<Integer, Map<String, Integer>>> reportData) {
+			public void onSuccess(ReportData<Map<Integer, Map<String, Integer>>> reportData) {
 				final ReportMetaData[] allMeta = reportData.getMeta();
 				final ReportMetaData reportMeta = ReportMetaData.getReportById(startingReport, allMeta);
 
@@ -65,14 +65,14 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 			}
 
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				Window.alert("Cannot get report data");
 			}
 		});
 	}
 
 	private Options getAreaOptions(final ReportMetaData report) {
-		final Options options = Options.create();
+		Options options = Options.create();
 		options.setEnableTooltip(true);
 		options.setTitleX("Year"); // TODO generalize
 		options.setTitle("EUR"); // TODO generalize
@@ -84,7 +84,7 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 	}
 
 	private AbstractDataTable getAbstractTable(final ReportData<Map<Integer, Map<String, Integer>>> report, final ReportMetaData reportMeta) {
-		final DataTable data = DataTable.create();
+		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Year"); // TODO generalize
 
 		for (final String column : reportMeta.getColumns()) {
@@ -130,7 +130,7 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 	}
 
 	@Override
-	public void onValueChange(final ValueChangeEvent<String> event) {
+	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().trim().split("\\s+");
 
 		if (2 <= token.length) {

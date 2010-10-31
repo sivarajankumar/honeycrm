@@ -1,6 +1,6 @@
 package honeycrm.client.prefetch;
 
-import honeycrm.client.mvp.views.LoadView;
+import honeycrm.client.basiclayout.LoadIndicator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +10,8 @@ import java.util.Map;
 // TODO otherwise cache only ever grows.
 public class Prefetcher {
 	public static final Prefetcher instance = new Prefetcher();
-	private final Map<CacheKey, CacheEntry> cache = new HashMap<CacheKey, CacheEntry>();
-	private final PrefetcherStats stats = new PrefetcherStats();
+	private Map<CacheKey, CacheEntry> cache = new HashMap<CacheKey, CacheEntry>();
+	private PrefetcherStats stats = new PrefetcherStats();
 	
 	private Prefetcher() {
 	}
@@ -47,12 +47,12 @@ public class Prefetcher {
 
 				entry.setLocked(true);
 
-				LoadView.get().startLoading();
+				LoadIndicator.get().startLoading();
 				
 				serverCallback.doRpc(new Consumer<T>() {
 					@Override
-					public void setValueAsynch(final T result) {
-						LoadView.get().endLoading();
+					public void setValueAsynch(T result) {
+						LoadIndicator.get().endLoading();
 						
 						entry.setValue(result);
 						entry.setLocked(false);

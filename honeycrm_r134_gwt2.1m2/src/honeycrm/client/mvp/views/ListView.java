@@ -42,7 +42,7 @@ public class ListView extends Composite implements Display {
 	protected static final int DEFAULT_MAX_ENTRIES = 15;
 	private int pageSize = DEFAULT_MAX_ENTRIES;
 	private ListViewDB db;
-	private final boolean allowDelete = true;
+	private boolean allowDelete = true;
 	final ModuleDto moduleDto;
 	private boolean disclose = false;
 	private boolean showTitle = false;
@@ -78,19 +78,19 @@ public class ListView extends Composite implements Display {
 		// db.refresh(); // <- for testing..
 	}
 	
-	public void setAdditionalButtons(final Button... additionalButtons) {
+	public void setAdditionalButtons(Button... additionalButtons) {
 		this.additionalButtons = additionalButtons;
 	}
 	
-	public void setDisclose(final boolean disclose) {
+	public void setDisclose(boolean disclose) {
 		this.disclose = disclose;
 	}
 	
-	public void setShowTitle(final boolean showTitle) {
+	public void setShowTitle(boolean showTitle) {
 		this.showTitle = showTitle;
 	}
 	
-	public void setPageSize(final int pageSize) {
+	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
 	
@@ -114,7 +114,7 @@ public class ListView extends Composite implements Display {
 				// TODO since this change Memberships cannot be selected / clicked anymore in list views
 				column = new Column<Dto, SafeHtml>(new SafeHtmlCell()) {
 					@Override
-					public SafeHtml getValue(final Dto object) {
+					public SafeHtml getValue(Dto object) {
 						final Serializable value = object.get(id);
 						
 						final SafeHtmlBuilder b = new SafeHtmlBuilder();
@@ -153,13 +153,13 @@ public class ListView extends Composite implements Display {
 		if (allowDelete) { // only attach delete column of the user is allowed to delete
 			final Column<Dto, Boolean> delCol = new Column<Dto, Boolean>(new CheckboxCell()) {
 				@Override
-				public Boolean getValue(final Dto object) {
+				public Boolean getValue(Dto object) {
 					return false;
 				}
 			};
 			delCol.setFieldUpdater(new FieldUpdater<Dto, Boolean>() {
 				@Override
-				public void update(final int index, final Dto object, final Boolean value) {
+				public void update(int index, Dto object, Boolean value) {
 					// mark this item for later deletion
 					object.set("deleteFlag", value);
 				}
@@ -185,7 +185,7 @@ public class ListView extends Composite implements Display {
 		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>(ListViewDB.KEY_PROVIDER);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			@Override
-			public void onSelectionChange(final SelectionChangeEvent event) {
+			public void onSelectionChange(SelectionChangeEvent event) {
 				if (null != presenter) {
 					presenter.onSelect(selectionModel.getSelectedObject());
 				}
@@ -216,7 +216,7 @@ public class ListView extends Composite implements Display {
 	}
 
 	@UiFactory SimplePager makePager() {
-		final SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 		pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
 		return pager;
 	}
@@ -227,7 +227,7 @@ public class ListView extends Composite implements Display {
 	}
 
 	@Override
-	public void setPresenter(final ListPresenter presenter) {
+	public void setPresenter(ListPresenter presenter) {
 		this.presenter = presenter;
 	}
 	

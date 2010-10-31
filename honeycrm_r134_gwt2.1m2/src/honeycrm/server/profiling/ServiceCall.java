@@ -36,7 +36,7 @@ public class ServiceCall {
 		return id;
 	}
 
-	public void setId(final Key id) {
+	public void setId(Key id) {
 		this.id = id;
 	}
 
@@ -44,7 +44,7 @@ public class ServiceCall {
 		return executionTime;
 	}
 
-	public void setExecutionTime(final long executionTime) {
+	public void setExecutionTime(long executionTime) {
 		this.executionTime = executionTime;
 	}
 
@@ -52,7 +52,7 @@ public class ServiceCall {
 		return startTimestamp;
 	}
 
-	public void setStartTimestamp(final long startTimestamp) {
+	public void setStartTimestamp(long startTimestamp) {
 		this.startTimestamp = startTimestamp;
 	}
 
@@ -60,7 +60,7 @@ public class ServiceCall {
 		return serviceName;
 	}
 
-	public void setServiceName(final String serviceName) {
+	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
 	}
 }

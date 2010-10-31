@@ -13,7 +13,7 @@ public class NumberParser {
 
 		try {
 			return Double.parseDouble(value.toString());
-		} catch (final NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return 0;
 		}
 	}
@@ -27,7 +27,7 @@ public class NumberParser {
 
 		try {
 			return Integer.parseInt(value.toString());
-		} catch (final NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return 0;
 		}
 	}	
@@ -44,7 +44,7 @@ public class NumberParser {
 
 		try {
 			return Long.parseLong(value.toString());
-		} catch (final NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return 0;
 		}
 	}

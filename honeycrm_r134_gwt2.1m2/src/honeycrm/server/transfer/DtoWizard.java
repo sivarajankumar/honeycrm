@@ -52,8 +52,8 @@ public class DtoWizard {
 	private boolean initialized = false;
 	private HashMap<String, ModuleDto> moduleNameToDto = null;
 	private HashMap<Class<? extends AbstractEntity>, Field[]> searchableFields = null;
-	private final CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
-	private final HashMap<Class<?>, HashMap<Field, Class<?>>> relateFields = new HashMap<Class<?>, HashMap<Field,Class<?>>>(2);
+	private CachingReflectionHelper reflectionHelper = new CachingReflectionHelper();
+	private HashMap<Class<?>, HashMap<Field, Class<?>>> relateFields = new HashMap<Class<?>, HashMap<Field,Class<?>>>(2);
 	
 	private DtoWizard() {
 	}
@@ -83,13 +83,13 @@ public class DtoWizard {
 			}
 
 			initialized = true;
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Cannot analyse domain class structure due to a " + e.getClass());
 		}
 	}
 
-	private void setupFields(final Class<AbstractEntity> domainClass, final ModuleDto moduleDto) {
+	private void setupFields(Class<AbstractEntity> domainClass, ModuleDto moduleDto) {
 		try {
 			final HashMap<String, AbstractField> fields = new HashMap<String, AbstractField>();
 			final HashMap<String, String> relateFieldMappings = new HashMap<String, String>();
@@ -114,7 +114,7 @@ public class DtoWizard {
 
 			moduleDto.setRelateFieldMappings(relateFieldMappings);
 			moduleDto.setFields(fields);
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -207,7 +207,7 @@ public class DtoWizard {
 
 				return new ExtraButton[] { b };
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

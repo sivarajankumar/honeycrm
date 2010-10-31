@@ -10,19 +10,19 @@ public class DeleteServiceImpl extends NewService implements DeleteService {
 	private static final long serialVersionUID = -6940187328929455534L;
 
 	@Override
-	public void delete(final String kind, final long id) {
+	public void delete(String kind, long id) {
 		db.delete(KeyFactory.createKey(kind, id));
 	}
 
 	@Override
-	public void deleteAll(final String kind, final Set<Long> ids) {
+	public void deleteAll(String kind, Set<Long> ids) {
 		for (final Long id: ids) {
 			db.delete(KeyFactory.createKey(kind, id));
 		}
 	}
 
 	@Override
-	public void deleteAll(final String kind) {
+	public void deleteAll(String kind) {
 		throw new RuntimeException("not implemented yet");
 	}
 

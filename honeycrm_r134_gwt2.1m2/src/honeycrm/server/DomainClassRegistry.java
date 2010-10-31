@@ -28,7 +28,7 @@ public class DomainClassRegistry {
 			for (final String dto : dtoToDomain.keySet()) {
 				domainToDto.put(dtoToDomain.get(dto), dto);
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Cannot initialize " + DomainClassRegistry.class.toString() + " class");
 		}

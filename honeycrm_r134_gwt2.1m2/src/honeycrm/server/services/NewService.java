@@ -29,7 +29,7 @@ public abstract class NewService extends RemoteServiceServlet {
 	class CopyMachine {
 		private final Logger log = Logger.getLogger(CopyMachine.class.toString());
 	
-		public ListQueryResult entitiesToDtoArray(final String kind, final int count, final Iterable<Entity> entities, final boolean isDetailView) {
+		public ListQueryResult entitiesToDtoArray(String kind, final int count, final Iterable<Entity> entities, boolean isDetailView) {
 			int i = 0;
 			final Dto[] dtos = new Dto[count];
 
@@ -77,7 +77,7 @@ public abstract class NewService extends RemoteServiceServlet {
 			return dto;
 		}
 
-		private void resolveKeyLists(final Dto dto, final Entity entity) {
+		private void resolveKeyLists(Dto dto, Entity entity) {
 			try {
 				for (final Map.Entry<String, String> oneToManyEntry : configuration.get(dto.getModule()).getOneToManyMappings().entrySet()) {
 					final String field = oneToManyEntry.getKey();
@@ -94,12 +94,12 @@ public abstract class NewService extends RemoteServiceServlet {
 
 					dto.set(field, children);
 				}
-			} catch (final Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
-		private void resolveRelatedEntities(final Dto dto, final Entity entity) {
+		private void resolveRelatedEntities(Dto dto, Entity entity) {
 			for (final Map.Entry<String, String> entry : configuration.get(dto.getModule()).getRelateFieldMappings().entrySet()) {
 				final String fieldName = entry.getKey();
 				final String relatedEntityName = entry.getValue();
@@ -178,10 +178,10 @@ public abstract class NewService extends RemoteServiceServlet {
 		}
 	}
 
-	public Dto get(final String kind, final long id) {
+	public Dto get(String kind, long id) {
 		try {
 			return copy.entityToDto(kind, db.get(KeyFactory.createKey(kind, id)), true, true);
-		} catch (final EntityNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 			e.printStackTrace();
 			return null;
 		}

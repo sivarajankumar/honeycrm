@@ -4,9 +4,9 @@ import com.google.gwt.event.shared.GwtEvent;
 
 public class UpdateEvent extends GwtEvent<UpdateEventHandler> {
 	public static Type<UpdateEventHandler> TYPE = new Type<UpdateEventHandler>();
-	private final String module;
+	private String module;
 
-	public UpdateEvent(final String module) {
+	public UpdateEvent(String module) {
 		this.module = module;
 	}
 	
@@ -20,7 +20,7 @@ public class UpdateEvent extends GwtEvent<UpdateEventHandler> {
 	}
 
 	@Override
-	protected void dispatch(final UpdateEventHandler handler) {
+	protected void dispatch(UpdateEventHandler handler) {
 		handler.onAddEvent(this);
 	}
 }

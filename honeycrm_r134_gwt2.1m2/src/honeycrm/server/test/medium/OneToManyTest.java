@@ -42,7 +42,7 @@ public class OneToManyTest extends DatastoreTest {
 		assertEquals(serviceCount, ((List<?>) dto.get("recurringServices")).size());
 	}
 
-	private ArrayList<Dto> createAndPersistServices(final int serviceCount, final boolean uniqueServices) {
+	private ArrayList<Dto> createAndPersistServices(final int serviceCount, boolean uniqueServices) {
 		final ArrayList<Dto> dtos = new ArrayList<Dto>();
 
 		for (int i = 0; i < serviceCount; i++) {
@@ -54,7 +54,7 @@ public class OneToManyTest extends DatastoreTest {
 		return dtos;
 	}
 
-	private Dto getService(final boolean uniqueServices) {
+	private Dto getService(boolean uniqueServices) {
 		final Dto service = new Dto((uniqueServices ? new UniqueService() : new RecurringService()).getClass().getSimpleName());
 		service.set("name", "service" + random.nextInt());
 		service.set("price", random.nextDouble());

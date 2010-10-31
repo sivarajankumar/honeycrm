@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:view="urn:import:honeycrm.client.mvp.views">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:honeycrm.client.basiclayout" xmlns:view="urn:import:honeycrm.client.mvp.views">
 	<ui:style>
 	.header {
 /* this makes the header completely invisible */
@@ -9,7 +9,7 @@
 	</ui:style>
 	<g:DockLayoutPanel>
 		<g:north size="100">
-			<view:HeaderView addStyleNames="{style.header}" ui:field="header" />
+			<my:Header addStyleNames="{style.header}" ui:field="header" />
 		</g:north>
 		<g:center>
 			<view:ContentView ui:field="content" />

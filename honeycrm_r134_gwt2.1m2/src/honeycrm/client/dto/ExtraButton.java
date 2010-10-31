@@ -20,7 +20,7 @@ public class ExtraButton implements Serializable, IsSerializable {
 		return label;
 	}
 
-	public void setLabel(final String label) {
+	public void setLabel(String label) {
 		this.label = label;
 	}
 
@@ -28,7 +28,7 @@ public class ExtraButton implements Serializable, IsSerializable {
 		return action;
 	}
 
-	public void setAction(final AbstractAction action) {
+	public void setAction(AbstractAction action) {
 		this.action = action;
 	}
 
@@ -36,7 +36,7 @@ public class ExtraButton implements Serializable, IsSerializable {
 		return show;
 	}
 
-	public void setShow(final ModuleAction show) {
+	public void setShow(ModuleAction show) {
 		this.show = show;
 	}
 }

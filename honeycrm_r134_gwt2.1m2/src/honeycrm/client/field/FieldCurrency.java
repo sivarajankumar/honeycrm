@@ -32,23 +32,23 @@ public class FieldCurrency extends AbstractField {
 	private TextBox addEvents(final TextBox textbox) {
 		textbox.addFocusHandler(new FocusHandler() {
 			@Override
-			public void onFocus(final FocusEvent event) {
+			public void onFocus(FocusEvent event) {
 				try {
 					// user clicked into the field. convert the read format "EUR 1.00" into the write format "1.00"
 					textbox.setText(formatWrite().format(formatRead().parse(textbox.getText())));
-				} catch (final NumberFormatException e) {
+				} catch (NumberFormatException e) {
 				}
 			}
 		});
 
 		textbox.addBlurHandler(new BlurHandler() {
 			@Override
-			public void onBlur(final BlurEvent event) {
+			public void onBlur(BlurEvent event) {
 				try {
 					// the user left the field. convert the editing format "1.00" back to the read format "EUR 1.00"
 					final String formatted = formatRead().format(formatWrite().parse(textbox.getText()));
 					textbox.setText(formatted);
-				} catch (final NumberFormatException e) {
+				} catch (NumberFormatException e) {
 				}
 			}
 		});
@@ -57,25 +57,25 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	public Serializable getData(final Widget w) {
+	public Serializable getData(Widget w) {
 		final String value = (String) super.getData(w);
 
 		try {
 			return NumberFormat.getCurrencyFormat("EUR").parse(value);
-		} catch (final NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			// Gwt throw a number format exception.
 			return NumberParser.convertToDouble(value);
 		}
 	}
 
 	@Override
-	protected void internalSetData(final Label widget, final Object value, final View view) {
+	protected void internalSetData(Label widget, Object value, View view) {
 		(widget).setText(formatRead().format(NumberParser.convertToDouble(value)));
 		(widget).setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 	}
 
 	@Override
-	protected void internalSetData(final TextBox widget, final Object value, final View view) {
+	protected void internalSetData(TextBox widget, Object value, View view) {
 		(widget).setText(formatRead().format(NumberParser.convertToDouble((value))));
 		(widget).setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 		addEvents(widget);
@@ -92,12 +92,12 @@ public class FieldCurrency extends AbstractField {
 	}
 
 	@Override
-	public Serializable getTypedData(final Object value) {
+	public Serializable getTypedData(Object value) {
 		return NumberParser.convertToDouble(value);
 	}
 	
 	@Override
-	public String internalFormattedValue(final Object value) {
+	public String internalFormattedValue(Object value) {
 		return formatRead().format(NumberParser.convertToDouble(value));
 	}
 }

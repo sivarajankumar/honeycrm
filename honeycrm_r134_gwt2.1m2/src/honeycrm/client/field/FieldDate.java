@@ -22,7 +22,7 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(final Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		return ((DateBox) w).getValue();
 	}
 
@@ -34,7 +34,7 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	protected void internalSetData(final DateBox widget, final Object value, final View view) {
+	protected void internalSetData(DateBox widget, Object value, View view) {
 		if (value instanceof Date) {
 			widget.setValue((Date) value);
 		} else {
@@ -43,12 +43,12 @@ public class FieldDate extends AbstractField {
 	}
 
 	@Override
-	protected void internalSetData(final Label widget, final Object value, final View view) {
+	protected void internalSetData(Label widget, Object value, View view) {
 		widget.setText(internalFormattedValue(value));
 	}
 	
 	@Override
-	public String internalFormattedValue(final Object value) {
+	public String internalFormattedValue(Object value) {
 		return null == value ? "" : DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG).format((Date) value);
 	}
 }

@@ -18,7 +18,7 @@ public class RelationshipListViewDataProvider extends ListViewDataProvider {
 		this.originatingModule = originating;
 	}
 
-	public void setOriginatingId(final long originatingId) {
+	public void setOriginatingId(long originatingId) {
 		this.originatingId = originatingId;
 	}
 
@@ -35,12 +35,12 @@ public class RelationshipListViewDataProvider extends ListViewDataProvider {
 			
 			ServiceRegistry.readService().getAllRelated(originatingModule, originatingId, module, new AsyncCallback<ListQueryResult>() {
 				@Override
-				public void onFailure(final Throwable caught) {
+				public void onFailure(Throwable caught) {
 					Window.alert("could not load");
 				}
 
 				@Override
-				public void onSuccess(final ListQueryResult result) {
+				public void onSuccess(ListQueryResult result) {
 					insertRefreshedData(display, result);
 				}
 			});

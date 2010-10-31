@@ -36,14 +36,14 @@ public class DetailViewButtonBar extends AbstractView implements ValueChangeHand
 	private void addButtons(final String module, final DetailView detailview) {
 		editButtons.add(WidgetJuggler.getButton("Save", new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
+			public void onClick(ClickEvent event) {
 				detailview.saveChanges();
 				// History.newItem(HistoryTokenFactory.get(module, ModuleAction.SAVE));
 			}
 		}));
 		editButtons.add(WidgetJuggler.getButton("Cancel", new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
+			public void onClick(ClickEvent event) {
 				History.newItem(HistoryTokenFactory.get(module, ModuleAction.CANCEL));
 			}
 		}));
@@ -51,7 +51,7 @@ public class DetailViewButtonBar extends AbstractView implements ValueChangeHand
 		for (final ExtraButton extraButton : moduleDto.getExtraButtons()) {
 			final Button button = WidgetJuggler.getButton(extraButton.getLabel(), new ClickHandler() {
 				@Override
-				public void onClick(final ClickEvent event) {
+				public void onClick(ClickEvent event) {
 					extraButton.getAction().doAction(detailview.getCurrentDto());
 				}
 			});
@@ -65,7 +65,7 @@ public class DetailViewButtonBar extends AbstractView implements ValueChangeHand
 	}
 
 	@Override
-	public void onValueChange(final ValueChangeEvent<String> event) {
+	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
 
 		if (2 <= token.length && token[0].equals(moduleDto.getModule())) {

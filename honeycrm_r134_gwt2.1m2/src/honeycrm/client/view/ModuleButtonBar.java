@@ -54,7 +54,7 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 			}
 			
 			@Override
-			public void onFailure(final Throwable reason) {
+			public void onFailure(Throwable reason) {
 				Window.alert("Could not run code asynchronously");
 			}
 		});
@@ -92,7 +92,7 @@ public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<
 	}
 
 	@Override
-	public void onValueChange(final ValueChangeEvent<String> event) {
+	public void onValueChange(ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
 
 		if (2 <= token.length && token[0].equals(moduleDto.getModule())) {

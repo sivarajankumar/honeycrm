@@ -24,7 +24,7 @@ public class ListViewDB {
 	
 	public static final ProvidesKey<Dto> KEY_PROVIDER = new ProvidesKey<Dto>() {
 		@Override
-		public Object getKey(final Dto item) {
+		public Object getKey(Dto item) {
 			return null == item ? null : item.getId();
 		}
 	};

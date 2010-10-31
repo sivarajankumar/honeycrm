@@ -73,7 +73,7 @@ abstract public class CsvImporter extends AbstractCsv {
 	/**
 	 * keySugar may contain some GLUE (e.g. ",") to express that several fields should be concatenated during import. If we find such a key we have to split the different keys and then resolve and concatenate their values.
 	 */
-	private String getGluedValues(final String[][] table, final Map<String, Integer> positions, final int y, final String keySugar) {
+	private String getGluedValues(final String[][] table, final Map<String, Integer> positions, int y, final String keySugar) {
 		if (keySugar.contains(GLUE)) {
 			final String[] actualKeys = keySugar.split(GLUE);
 			String str = "";

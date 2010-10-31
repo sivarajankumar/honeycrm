@@ -26,7 +26,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 	private static final long CACHE_EXPIRATION = 60 * 1000;
 	private long lastCacheUpdate = 0;
 
-	public ListQueryResult fulltextSearch(final String query, final int from, final int to) {
+	public ListQueryResult fulltextSearch(final String query, int from, int to) {
 		log.finest("fulltextSearch('" + query + "')");
 		final List<Dto> list = new LinkedList<Dto>();
 
@@ -34,7 +34,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 			for (final Class<? extends AbstractEntity> domainClass : registry.getDomainClasses()) {
 				list.addAll(fulltextSearchForModule(query, domainClass));
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -61,7 +61,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 					}
 				}
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -84,7 +84,7 @@ public class CommonServiceReaderFulltext extends AbstractCommonService {
 		return diff > CACHE_EXPIRATION;
 	}
 
-	public ListQueryResult fulltextSearchForModule(final String dtoIndex, final String query, final int from, final int to) {
+	public ListQueryResult fulltextSearchForModule(String dtoIndex, String query, int from, int to) {
 		final List<Dto> list = fulltextSearchForModule(query, registry.getDomain(dtoIndex));
 		return new ListQueryResult(list.toArray(new Dto[0]), list.size());
 	}

@@ -24,7 +24,7 @@ public class AdminWidget extends Composite {
 			}
 			
 			@Override
-			public void onFailure(final Throwable reason) {
+			public void onFailure(Throwable reason) {
 				Window.alert("Could not run code asynchronously");
 			}
 		});

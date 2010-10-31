@@ -36,7 +36,7 @@ public class ApplicationPresenterTest extends TestCase {
 			presenter = new ApplicationPresenter(1, readService, createService, updateService, eventBus, applicationView);
 			fail();
 			// should not work because configuration has not been initialised yet.
-		} catch (final RuntimeException e) {
+		} catch (RuntimeException e) {
 		}
 	}
 	

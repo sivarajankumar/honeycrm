@@ -18,7 +18,7 @@ public class OpenEvent extends GwtEvent<OpenEventHandler> {
 	}
 
 	@Override
-	protected void dispatch(final OpenEventHandler handler) {
+	protected void dispatch(OpenEventHandler handler) {
 		handler.onOpen(this);
 	}
 	

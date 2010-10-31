@@ -33,14 +33,14 @@ public class OfferingReportsTest extends TestCase {
 	}
 
 	private Double getOfferings(final List<Offering> offerings) {
-		final Double sum = 0.0;
+		Double sum = 0.0;
 
 		final int offeringsCount = 2 + (random.nextInt() % 100);
 		for (int i = 0; i < offeringsCount; i++) {
 			final Calendar c = Calendar.getInstance();
 			c.set(Calendar.YEAR, random.nextInt() % 3 + 100);
 
-			final Offering o = new Offering();
+			Offering o = new Offering();
 			o.deadline = (c.getTime());
 			// TODO will see how to do that
 			//o.services_objects = (new LinkedList<UniqueService>());
