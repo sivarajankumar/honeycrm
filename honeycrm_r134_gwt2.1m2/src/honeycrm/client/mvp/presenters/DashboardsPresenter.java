@@ -6,6 +6,8 @@ import java.util.HashMap;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.mvp.events.RpcBeginEvent;
+import honeycrm.client.mvp.events.RpcEndEvent;
 import honeycrm.client.mvp.events.UpdateEvent;
 import honeycrm.client.mvp.events.UpdateEventHandler;
 import honeycrm.client.services.ReadServiceAsync;
@@ -69,15 +71,17 @@ public class DashboardsPresenter implements Presenter {
 
 	protected void refresh() {
 		if (userId > 0) {
+			eventBus.fireEvent(new RpcBeginEvent());
 			readService.getAllAssignedTo(userId, 0, 20, new AsyncCallback<HashMap<String,ListQueryResult>>() {
 				@Override
 				public void onSuccess(HashMap<String, ListQueryResult> result) {
 					view.insertRefreshedData(result);
+					eventBus.fireEvent(new RpcEndEvent());
 				}
 				
 				@Override
 				public void onFailure(Throwable caught) {
-					
+					eventBus.fireEvent(new RpcEndEvent());
 				}
 			});
 		}

@@ -1,7 +1,7 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.mvp.views.LoadView;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -40,18 +40,18 @@ public class EmailFeedbackWidget extends Composite {
 		button.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				LoadIndicator.get().startLoading();
+				LoadView.get().startLoading();
 
 				ServiceRegistry.commonService().feedback(box.getText(), new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 						status.setText("Status: Mail has been sent to mailing list. Thank you very much!");
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 						status.setText("Status: An error occured during delivery");
 					}
 				});

@@ -1,12 +1,12 @@
 package honeycrm.client.view;
 
 import honeycrm.client.admin.LogConsole;
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.NumberParser;
+import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -273,18 +273,18 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 
 	public void delete() {
 		if (isShowing()) {
-			LoadIndicator.get().startLoading();
+			LoadView.get().startLoading();
 
 			deleteService.delete(moduleDto.getModule(), dto.getId(), new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
-					LoadIndicator.get().endLoading();
+					LoadView.get().endLoading();
 					displayError(caught);
 				}
 
 				@Override
 				public void onSuccess(Void result) {
-					LoadIndicator.get().endLoading();
+					LoadView.get().endLoading();
 					TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
 					stopViewing();
 				}
