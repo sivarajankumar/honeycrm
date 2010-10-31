@@ -24,7 +24,7 @@ public class DtoWizardTest extends TestCase {
 	public void testFieldnameValidity() {
 		final Set<String> nonExistingFields = new HashSet<String>();
 
-		final Map<String, ModuleDto> list = DtoWizard.instance.getDtoConfiguration();
+		Map<String, ModuleDto> list = DtoWizard.instance.getDtoConfiguration();
 		assertFalse(list.isEmpty());
 
 		for (final Class<? extends AbstractEntity> domainClass : DomainClassRegistry.instance.getDomainClasses()) {
@@ -58,7 +58,7 @@ public class DtoWizardTest extends TestCase {
 				assertNotSame(UniqueService.class.getField("id"), UniqueService.class.getField("id"));
 				assertTrue(UniqueService.class.getField("id").hashCode() == RecurringService.class.getField("id").hashCode());
 
-				final Set<Field> set = new HashSet<Field>();
+				Set<Field> set = new HashSet<Field>();
 
 				set.add(UniqueService.class.getField("id"));
 				set.add(UniqueService.class.getField("id"));
@@ -69,7 +69,7 @@ public class DtoWizardTest extends TestCase {
 
 				// ok, great. we cannot distinguish between the id field in both classes since it is declared in the upper class and thus appears to be the same field.
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -78,7 +78,7 @@ public class DtoWizardTest extends TestCase {
 	private void checkFieldExistance(final Set<String> nonExistingFields, final Class<? extends AbstractEntity> domainClass, final String fieldName) {
 		try {
 			domainClass.getField(fieldName);
-		} catch (final NoSuchFieldException e) {
+		} catch (NoSuchFieldException e) {
 			nonExistingFields.add(domainClass.toString() + "." + fieldName);
 		}
 	}

@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.view.client.HasData;
 
 public class RelationshipView extends ListView implements Display {
-	private final String relatedDtoClass;
+	private String relatedDtoClass;
 	private final RelationshipListViewDataProvider provider;
 
 	public RelationshipView(final String originatingDto, final String relatedDto) {
@@ -52,7 +52,7 @@ public class RelationshipView extends ListView implements Display {
 		final Button btn = new Button("Create");
 		btn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
+			public void onClick(ClickEvent event) {
 				final HashMap<String, HashMap<String, HashSet<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
 
 				/**
@@ -69,14 +69,14 @@ public class RelationshipView extends ListView implements Display {
 	}
 
 	@Override
-	public void setId(final Long relatedId) {
+	public void setId(Long relatedId) {
 		if (null != provider) {
 			provider.setOriginatingId(relatedId);
 		}
 	}
 
 	@Override
-	public void insertRefreshedData(final ListQueryResult relationshipData) {
+	public void insertRefreshedData(ListQueryResult relationshipData) {
 		if (null != provider) {
 			initialize();
 			for (final HasData<Dto> display: provider.getDataDisplays()) {

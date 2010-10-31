@@ -69,7 +69,7 @@ public class CommonServiceReader extends AbstractCommonService {
 					}
 				}
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -88,7 +88,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult getAll(final String dtoIndex, final int from, final int to) {
+	public ListQueryResult getAll(final String dtoIndex, int from, int to) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex));
 		// order by number of views descending -> most viewed items at the top
 		// TODO allow user defined order as well i.e. sorting by arbitrary columns
@@ -111,11 +111,11 @@ public class CommonServiceReader extends AbstractCommonService {
 		}
 	}
 
-	public ListQueryResult search(final String dtoIndex, final Dto searchDto, final int from, final int to) {
+	public ListQueryResult search(String dtoIndex, Dto searchDto, int from, int to) {
 		return searchWithOperator(dtoIndex, searchDto, from, to, BoolOperator.AND);
 	}
 
-	protected ListQueryResult searchWithOperator(final String dtoIndex, final Dto searchDto, final int from, final int to, final BoolOperator operator) {
+	protected ListQueryResult searchWithOperator(String dtoIndex, Dto searchDto, int from, int to, final BoolOperator operator) {
 		// TODO
 		return getAll(dtoIndex, from, to);
 		/*
@@ -133,7 +133,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		 */
 	}
 
-	public ListQueryResult getAllByNamePrefix(final String dtoIndex, final String prefix, final int from, final int to) {
+	public ListQueryResult getAllByNamePrefix(String dtoIndex, String prefix, int from, int to) {
 		if (prefix.trim().isEmpty()) {
 			return new ListQueryResult(new Dto[0], 0);
 		} else {
@@ -146,14 +146,14 @@ public class CommonServiceReader extends AbstractCommonService {
 				final List<AbstractEntity> collection = (List<AbstractEntity>) query.execute(prefix);
 				System.out.println("getAllByNamePrefix('" + prefix + "')");
 				return new ListQueryResult(getArrayFromQueryResult(dtoIndex, collection), collection.size());
-			} catch (final RuntimeException e) {
+			} catch (RuntimeException e) {
 				log.warning("Exception occured during getAllByNamePrefix(" + dtoIndex + "," + prefix + "," + from + "," + to + ")");
 				return new ListQueryResult(new Dto[0], 0);
 			}
 		}
 	}
 
-	public Dto getByName(final String dtoIndex, final String name) {
+	public Dto getByName(String dtoIndex, String name) {
 		final Query query = m.newQuery(getDomainClass(dtoIndex), "name == nameParam");
 		query.declareParameters("String nameParam");
 		final Collection<AbstractEntity> collection = (Collection<AbstractEntity>) query.execute(name);
@@ -190,11 +190,11 @@ public class CommonServiceReader extends AbstractCommonService {
 	 * return result; }
 	 */
 
-	public ListQueryResult getAllMarked(final String dtoIndex, final int from, final int to) {
+	public ListQueryResult getAllMarked(String dtoIndex, int from, int to) {
 		return getAllFiltered(dtoIndex, "marked == true", from, to);
 	}
 
-	public ListQueryResult getAllRelated(final String originating, final Long id, final String related) {
+	public ListQueryResult getAllRelated(String originating, Long id, String related) {
 		final List<AbstractEntity> result = new ArrayList<AbstractEntity>();
 		/**
 		 * Get all related entities where the id fields contain the id of the originating entity e.g. return all contacts which have accountID == 23 where is the id of the originating account.
@@ -246,7 +246,7 @@ public class CommonServiceReader extends AbstractCommonService {
 		return map;
 	}
 
-	public ListQueryResult getAllAssignedTo(final String dtoIndex, final long employeeID, final int from, final int to) {
+	public ListQueryResult getAllAssignedTo(String dtoIndex, long employeeID, int from, int to) {
 		return getAllFiltered(dtoIndex, "assignedTo == " + employeeID, from, to);
 	}
 

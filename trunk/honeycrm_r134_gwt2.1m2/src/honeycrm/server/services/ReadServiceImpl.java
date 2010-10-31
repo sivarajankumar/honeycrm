@@ -34,7 +34,7 @@ public class ReadServiceImpl extends NewService implements ReadService {
 
 	// TODO only transmit required fields for listview - do not copy all fields into dto to save bandwidth
 	@Override
-	public ListQueryResult getAll(final String kind, final int from, final int to) {
+	public ListQueryResult getAll(String kind, final int from, final int to) {
 		final PreparedQuery pq = db.prepare(new Query(kind));
 		return copy.entitiesToDtoArray(kind, pq.countEntities(withDefaults()), pq.asIterable(withLimit(to - from + 1).offset(from)), false);
 	}
@@ -46,31 +46,31 @@ public class ReadServiceImpl extends NewService implements ReadService {
 	}
 
 	@Override
-	public Dto getByName(final String kind, final String name) {
+	public Dto getByName(String kind, String name) {
 		final PreparedQuery pq = getFiltered(kind, "name", FilterOperator.EQUAL, name);
 		return copy.entityToDto(kind, pq.asSingleEntity(), false, false);
 	}
 
 	@Override
-	public ListQueryResult getAllAssignedTo(final String kind, final long assignedTo, final int from, final int to) {
+	public ListQueryResult getAllAssignedTo(String kind, long assignedTo, int from, int to) {
 		final PreparedQuery pq = getFiltered(kind, "assignedTo", FilterOperator.EQUAL, KeyFactory.createKey(Employee.class.getSimpleName(), assignedTo));
 		return copy.entitiesToDtoArray(kind, pq.countEntities(), pq.asIterable(), false);
 	}
 
 	@Override
-	public ListQueryResult getAllMarked(final String kind, final int from, final int to) {
+	public ListQueryResult getAllMarked(String kind, int from, int to) {
 		final PreparedQuery pq = getFiltered(kind, "marked", FilterOperator.EQUAL, true);
 		return copy.entitiesToDtoArray(kind, pq.countEntities(), pq.asIterable(), false);
 	}
 
 	@Override
-	public ListQueryResult search(final String dtoIndex, final Dto searchContact, final int from, final int to) {
+	public ListQueryResult search(String dtoIndex, Dto searchContact, int from, int to) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ListQueryResult getAllRelated(final String originating, final Long id, final String related) {
+	public ListQueryResult getAllRelated(String originating, Long id, String related) {
 		if (null == id || id < 1) {
 			log.warning("Invalid Id: " + id);
 			throw new RuntimeException("Invalid Id: " + id);
@@ -100,7 +100,7 @@ public class ReadServiceImpl extends NewService implements ReadService {
 	}
 
 	@Override
-	public Map<String, ListQueryResult> getAllRelated(final Long id, final String related) {
+	public Map<String, ListQueryResult> getAllRelated(Long id, String related) {
 		final HashMap<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
 		final HashMap<String, HashMap<String, HashSet<String>>> r = NewDtoWizard.getConfiguration().getRelationships();
 
@@ -114,7 +114,7 @@ public class ReadServiceImpl extends NewService implements ReadService {
 	}
 
 	@Override
-	public ListQueryResult getAllByNamePrefix(final String kind, final String prefix, final int from, final int to) {
+	public ListQueryResult getAllByNamePrefix(String kind, String prefix, int from, int to) {
 		final ArrayList<Dto> hits = new ArrayList<Dto>();
 		final PreparedQuery pq = getFiltered(kind, "name", FilterOperator.GREATER_THAN_OR_EQUAL, prefix);
 
@@ -143,7 +143,7 @@ public class ReadServiceImpl extends NewService implements ReadService {
 		return cache.get(kind);
 	}
 
-	private ArrayList<Dto> internalFulltextSearchForModule(final String kind, final String query) {
+	private ArrayList<Dto> internalFulltextSearchForModule(String kind, String query) {
 		final ArrayList<Dto> hits = new ArrayList<Dto>();
 
 		try {
@@ -161,7 +161,7 @@ public class ReadServiceImpl extends NewService implements ReadService {
 					}
 				}
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			log.warning("fulltextSearchForModule failed with an exception: " + e.toString());
 		}
@@ -169,13 +169,13 @@ public class ReadServiceImpl extends NewService implements ReadService {
 	}
 
 	@Override
-	public ListQueryResult fulltextSearchForModule(final String kind, final String query, final int from, final int to) {
+	public ListQueryResult fulltextSearchForModule(String kind, String query, int from, int to) {
 		final ArrayList<Dto> hits = internalFulltextSearchForModule(kind, query);
 		return new ListQueryResult(hits.toArray(new Dto[0]), hits.size());
 	}
 
 	@Override
-	public ListQueryResult fulltextSearch(final String query, final int from, final int to) {
+	public ListQueryResult fulltextSearch(String query, int from, int to) {
 		final ArrayList<Dto> hits = new ArrayList<Dto>();
 		for (final String kind : configuration.keySet()) {
 			if (configuration.get(kind).getFulltextFields().length > 0) {
@@ -186,7 +186,7 @@ public class ReadServiceImpl extends NewService implements ReadService {
 	}
 
 	@Override
-	public HashMap<String, ListQueryResult> getAllAssignedTo(final long employeeID, final int from, final int to) {
+	public HashMap<String, ListQueryResult> getAllAssignedTo(long employeeID, int from, int to) {
 		final HashMap<String, ListQueryResult> map = new HashMap<String, ListQueryResult>();
 		for (final String kind: configuration.keySet()) {
 			map.put(kind, getAllAssignedTo(kind, employeeID, from, to));

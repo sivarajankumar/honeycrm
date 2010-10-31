@@ -1,6 +1,5 @@
 package honeycrm.client.mvp.presenters;
 
-import honeycrm.client.mvp.views.HeaderView;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
@@ -12,21 +11,19 @@ import com.google.gwt.user.client.ui.Widget;
 public class ApplicationPresenter implements Presenter {
 	public interface Display {
 		ContentPresenter.Display getContentView();
-		HeaderView getHeader();
 		Widget asWidget();
 	}
 	
 	private final Display view;
 	
-	public ApplicationPresenter(final long userId, final ReadServiceAsync readService, final CreateServiceAsync createService, final UpdateServiceAsync updateService, final SimpleEventBus eventBus, final Display applicationView) {
+	public ApplicationPresenter(long userId, ReadServiceAsync readService, final CreateServiceAsync createService, final UpdateServiceAsync updateService, SimpleEventBus eventBus, Display applicationView) {
 		this.view = applicationView;
 		
-		new LoadPresenter(view.getHeader().getLoadView(), eventBus);
 		new ContentPresenter(userId, view.getContentView(), eventBus, readService, updateService, createService);
 	}
 
 	@Override
-	public void go(final HasWidgets container) {
+	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
 	}

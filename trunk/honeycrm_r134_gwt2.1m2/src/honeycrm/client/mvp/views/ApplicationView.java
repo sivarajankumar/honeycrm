@@ -19,8 +19,6 @@ public class ApplicationView extends Composite implements Display {
 	
 	@UiField
 	ContentView content;
-	@UiField
-	HeaderView header;
 	
 	public ApplicationView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -29,10 +27,5 @@ public class ApplicationView extends Composite implements Display {
 	@Override
 	public ContentPresenter.Display getContentView() {
 		return content;
-	}
-
-	@Override
-	public HeaderView getHeader() {
-		return header;
 	}
 }

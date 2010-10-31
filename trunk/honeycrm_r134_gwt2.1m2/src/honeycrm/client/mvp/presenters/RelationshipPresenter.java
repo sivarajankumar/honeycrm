@@ -5,8 +5,6 @@ import java.util.Map;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.events.OpenEventHandler;
-import honeycrm.client.mvp.events.RpcBeginEvent;
-import honeycrm.client.mvp.events.RpcEndEvent;
 import honeycrm.client.services.ReadServiceAsync;
 
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -42,34 +40,31 @@ public class RelationshipPresenter implements Presenter {
 
 		eventBus.addHandler(OpenEvent.TYPE, new OpenEventHandler() {
 			@Override
-			public void onOpen(final OpenEvent event) {
+			public void onOpen(OpenEvent event) {
 				refreshRelationships(event);
 			}
 		});
 	}
 
 	@Override
-	public void go(final HasWidgets container) {
+	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
 	}
 
-	private void refreshRelationships(final OpenEvent event) {
+	private void refreshRelationships(OpenEvent event) {
 		if (module.equals(event.getDto().getModule())) {
 			view.makeVisible();
 			// view.refresh(event.getDto().getId());
 			
-			eventBus.fireEvent(new RpcBeginEvent());
 			readService.getAllRelated(event.getDto().getId(), event.getDto().getModule(), new AsyncCallback<Map<String,ListQueryResult>>() {
 				@Override
-				public void onSuccess(final Map<String, ListQueryResult> result) {
-					eventBus.fireEvent(new RpcEndEvent());
+				public void onSuccess(Map<String, ListQueryResult> result) {
 					view.insertRefreshedData(result);
 				}
 				
 				@Override
-				public void onFailure(final Throwable caught) {
-					eventBus.fireEvent(new RpcEndEvent());
+				public void onFailure(Throwable caught) {
 				}
 			});
 		}

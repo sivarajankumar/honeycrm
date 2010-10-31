@@ -53,20 +53,20 @@ public class ContentPresenter implements Presenter {
 		
 		eventBus.addHandler(OpenEvent.TYPE, new OpenEventHandler() {
 			@Override
-			public void onOpen(final OpenEvent event) {
+			public void onOpen(OpenEvent event) {
 				view.showModule(event.getDto().getModule());
 			}
 		});
 		view.getPanel().addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override
-			public void onBeforeSelection(final BeforeSelectionEvent<Integer> event) {
+			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
 				eventBus.fireEvent(new OpenModuleEvent(view.getModuleAtPosition(event.getItem())));
 			}
 		});
 	}
 
 	@Override
-	public void go(final HasWidgets container) {
+	public void go(HasWidgets container) {
 		container.clear();
 	}
 

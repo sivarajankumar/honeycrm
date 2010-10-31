@@ -1,8 +1,8 @@
 package honeycrm.client.reports;
 
 import honeycrm.client.basiclayout.Initializer;
+import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.misc.ServiceRegistry;
-import honeycrm.client.mvp.views.LoadView;
 
 import java.util.Date;
 import java.util.Map;
@@ -37,12 +37,12 @@ public class SampleReport extends Composite {
 			new Timer() {
 				@Override
 				public void run() {
-					LoadView.get().startLoading();
+					LoadIndicator.get().startLoading();
 
 					ServiceRegistry.reportService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
 						@Override
 						public void onSuccess(final Map<Integer, Double> result) {
-							LoadView.get().endLoading();
+							LoadIndicator.get().endLoading();
 
 							status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
 
@@ -54,8 +54,8 @@ public class SampleReport extends Composite {
 						}
 
 						@Override
-						public void onFailure(final Throwable caught) {
-							LoadView.get().endLoading();
+						public void onFailure(Throwable caught) {
+							LoadIndicator.get().endLoading();
 
 						}
 					});
@@ -67,7 +67,7 @@ public class SampleReport extends Composite {
 	}
 
 	private Options getAreaOptions() {
-		final Options options = Options.create();
+		Options options = Options.create();
 		options.setEnableTooltip(true);
 		options.setTitleX("Year");
 		options.setTitle("EUR");
@@ -77,8 +77,8 @@ public class SampleReport extends Composite {
 		return options;
 	}
 
-	private AbstractDataTable getAbstractTable(final Map<Integer, Double> result) {
-		final DataTable data = DataTable.create();
+	private AbstractDataTable getAbstractTable(Map<Integer, Double> result) {
+		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Year");
 		data.addColumn(ColumnType.NUMBER, "Annually Volume");
 

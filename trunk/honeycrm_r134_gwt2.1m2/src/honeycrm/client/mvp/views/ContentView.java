@@ -77,7 +77,7 @@ public class ContentView extends Composite implements Display {
 
 		panel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override
-			public void onBeforeSelection(final BeforeSelectionEvent<Integer> event) {
+			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
 				// hide all create buttons
 				for (final Integer pos : tabPosToCreateBtnMap.keySet()) {
 					tabPosToCreateBtnMap.get(pos).setVisible(false);
@@ -108,7 +108,7 @@ public class ContentView extends Composite implements Display {
 	}
 
 	@Override
-	public void setPresenter(final ContentPresenter presenter) {
+	public void setPresenter(ContentPresenter presenter) {
 		this.presenter = presenter;
 	}
 
@@ -126,7 +126,7 @@ public class ContentView extends Composite implements Display {
 		createBtn.setVisible(false);
 		createBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
+			public void onClick(ClickEvent event) {
 				if (null != presenter) {
 					presenter.onCreate(module);
 				}
@@ -136,12 +136,12 @@ public class ContentView extends Composite implements Display {
 	}
 
 	@Override
-	public String getModuleAtPosition(final Integer position) {
+	public String getModuleAtPosition(Integer position) {
 		return tabPositionMapReverse.get(position);
 	}
 
 	@Override
-	public void showModule(final String module) {
+	public void showModule(String module) {
 		panel.selectTab(tabPositionMap.get(module));
 	}
 

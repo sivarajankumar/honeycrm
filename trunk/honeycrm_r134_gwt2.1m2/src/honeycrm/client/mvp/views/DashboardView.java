@@ -11,7 +11,7 @@ import honeycrm.client.view.list.ListViewDataProvider;
 public class DashboardView extends ListView implements Display {
 	final DashboardListViewDataProvider provider;
 
-	public DashboardView(final String module) {
+	public DashboardView(String module) {
 		super(module);
 
 		setPageSize(20);
@@ -26,7 +26,7 @@ public class DashboardView extends ListView implements Display {
 	}
 
 	@Override
-	public void insertRefreshedData(final ListQueryResult value) {
+	public void insertRefreshedData(ListQueryResult value) {
 		if (null != provider) {
 			initialize();
 			for (final HasData<Dto> display : provider.getDataDisplays()) {

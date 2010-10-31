@@ -81,9 +81,9 @@ public class FieldRelate extends AbstractField {
 
 		details.addMouseOverHandler(new MouseOverHandler() {
 			@Override
-			public void onMouseOver(final MouseOverEvent event) {
-				final int left = link.getAbsoluteLeft();
-				final int top = link.getAbsoluteTop() + 16;
+			public void onMouseOver(MouseOverEvent event) {
+				int left = link.getAbsoluteLeft();
+				int top = link.getAbsoluteTop() + 16;
 				popup.setPopupPosition(left, top);
 				popup.show();
 			}
@@ -91,7 +91,7 @@ public class FieldRelate extends AbstractField {
 
 		details.addMouseOutHandler(new MouseOutHandler() {
 			@Override
-			public void onMouseOut(final MouseOutEvent event) {
+			public void onMouseOut(MouseOutEvent event) {
 				popup.hide();
 			}
 		});
@@ -131,7 +131,7 @@ public class FieldRelate extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(final Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		if (w instanceof RelateWidget) {
 			return ((RelateWidget) w).getId();
 		} else if (w instanceof Hyperlink) {

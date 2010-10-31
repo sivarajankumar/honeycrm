@@ -58,7 +58,7 @@ public class ServiceTableWidget extends ITableWidget {
 			final Button addBtn = new Button("Add");
 			addBtn.addClickHandler(new ClickHandler() {
 				@Override
-				public void onClick(final ClickEvent event) {
+				public void onClick(ClickEvent event) {
 					final int rows = table.getRowCount();
 					final int newRowId = rows;
 					final String[] fields = moduleDto.getListFieldIds();
@@ -88,7 +88,7 @@ public class ServiceTableWidget extends ITableWidget {
 			if (widget instanceof TextBox) {
 				((TextBox) widget).addChangeHandler(new ChangeHandler() {
 					@Override
-					public void onChange(final ChangeEvent event) {
+					public void onChange(ChangeEvent event) {
 						rowChanged(row);
 					}
 				});
@@ -166,7 +166,7 @@ public class ServiceTableWidget extends ITableWidget {
 	}
 
 	@Override
-	public void setData(final List<Dto> data) {
+	public void setData(List<Dto> data) {
 		if (null == data) {
 			return;
 		}
@@ -197,7 +197,7 @@ public class ServiceTableWidget extends ITableWidget {
 	 * @param row
 	 *            The number of the row that has been changed.
 	 */
-	private void insertDtoInTableRow(final Dto dto, final boolean isUpdate, final int row) {
+	private void insertDtoInTableRow(final Dto dto, final boolean isUpdate, int row) {
 		// make sure the dto is stored
 		model.put(row, dto);
 
@@ -230,7 +230,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 	private double getSum(final Collection<Dto> data) {
 		double currentSum = 0.0;
-		for (final Dto service : data) {
+		for (Dto service : data) {
 			currentSum += getSumForSingleDto(service);
 		}
 		return currentSum;

@@ -57,33 +57,33 @@ public class DetailPresenter implements Presenter {
 
 		view.getSaveBtn().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
+			public void onClick(ClickEvent event) {
 				onSave();
 			}
 		});
 		
 		view.getCancelBtn().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
+			public void onClick(ClickEvent event) {
 				//view.
 			}
 		});
 		view.getEditBtn().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
+			public void onClick(ClickEvent event) {
 				view.startEdit();
 			}
 		});
 		view.getCreateBtn().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(final ClickEvent event) {
+			public void onClick(ClickEvent event) {
 				view.startCreate();
 			}
 		});
 
 		eventBus.addHandler(CreateEvent.TYPE, new CreateEventHandler() {
 			@Override
-			public void onCreate(final CreateEvent event) {
+			public void onCreate(CreateEvent event) {
 				if (module.equals(event.getModule())) {
 					view.startCreate();
 				}
@@ -91,19 +91,19 @@ public class DetailPresenter implements Presenter {
 		});
 		eventBus.addHandler(OpenEvent.TYPE, new OpenEventHandler() {
 			@Override
-			public void onOpen(final OpenEvent event) {
+			public void onOpen(OpenEvent event) {
 				if (module.equals(event.getDto().getModule())) {
 					// get item again from the server.
 					// infact we could use the dto object that we received but it may not contain all the necessary fields
 					// especially relate fields will not be resolved yet.
 					readService.get(event.getDto().getModule(), event.getDto().getId(), new AsyncCallback<Dto>() {
 						@Override
-						public void onSuccess(final Dto result) {
+						public void onSuccess(Dto result) {
 							view.setData(result);
 						}
 						
 						@Override
-						public void onFailure(final Throwable caught) {
+						public void onFailure(Throwable caught) {
 							
 						}
 					});
@@ -124,27 +124,27 @@ public class DetailPresenter implements Presenter {
 		if (isUpdate) {
 			updateService.update(dto, new AsyncCallback<Void>() {
 				@Override
-				public void onSuccess(final Void result) {
+				public void onSuccess(Void result) {
 					eventBus.fireEvent(new UpdateEvent(module));
 					eventBus.fireEvent(new OpenEvent(dto));
 				}
 
 				@Override
-				public void onFailure(final Throwable caught) {
+				public void onFailure(Throwable caught) {
 
 				}
 			});
 		} else {
 			createService.create(dto, new AsyncCallback<Long>() {
 				@Override
-				public void onSuccess(final Long result) {
+				public void onSuccess(Long result) {
 					dto.setId(result);
 					eventBus.fireEvent(new UpdateEvent(module));
 					eventBus.fireEvent(new OpenEvent(dto));
 				}
 
 				@Override
-				public void onFailure(final Throwable caught) {
+				public void onFailure(Throwable caught) {
 
 				}
 			});
@@ -152,7 +152,7 @@ public class DetailPresenter implements Presenter {
 	}
 
 	@Override
-	public void go(final HasWidgets container) {
+	public void go(HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
 	}

@@ -25,7 +25,7 @@ public class ProfilingStatisticsCollector {
 		for (final String serviceName : executionTimes.keySet()) {
 			final List<Long> execTimes = executionTimes.get(serviceName);
 
-			final ServiceCallStatistics stat = new ServiceCallStatistics();
+			ServiceCallStatistics stat = new ServiceCallStatistics();
 
 			stat.setCalls(execTimes.size());
 			stat.setServiceName(serviceName);
@@ -39,13 +39,13 @@ public class ProfilingStatisticsCollector {
 		return stats;
 	}
 
-	private long getAvg(final List<Long> execTimes) {
+	private long getAvg(List<Long> execTimes) {
 		if (execTimes.isEmpty()) {
 			return 0;
 		} else {
 			long sum = 0;
 			
-			for (final Long time : execTimes) {
+			for (Long time : execTimes) {
 				sum += time;
 			}
 

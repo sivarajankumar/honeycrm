@@ -48,7 +48,7 @@ public class FieldMark extends AbstractField {
 	};
 */
 	@Override
-	public Serializable getData(final Widget w) {
+	public Serializable getData(Widget w) {
 		throw new RuntimeException("Not Supported");
 	}
 	

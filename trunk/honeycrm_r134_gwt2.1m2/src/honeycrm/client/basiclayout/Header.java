@@ -1,8 +1,7 @@
-package honeycrm.client.mvp.views;
+package honeycrm.client.basiclayout;
 
 import honeycrm.client.login.User;
 import honeycrm.client.misc.WidgetJuggler;
-import honeycrm.client.mvp.presenters.HeaderPresenter.Display;
 import honeycrm.client.view.FulltextSearchWidget;
 
 import com.google.gwt.user.client.ui.Composite;
@@ -13,10 +12,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class HeaderView extends Composite implements Display {
-	private final LoadView loadView;
-	
-	public HeaderView() {
+public class Header extends Composite {
+	public Header() {
 		/*
 		 * logo | loadIndicator | header_links | | | | login | profile | help | searchPanel | ------------------------------------------------------------------
 		 */
@@ -26,7 +23,7 @@ public class HeaderView extends Composite implements Display {
 		initWidget(container);
 		p.add(WidgetJuggler.addStyles(new Label("Honeeeeeeeyyyyy CRM"), "header_logo"));
 		p.add(WidgetJuggler.addStyles(new Label("Welcome, " + User.getLogin() + "!"), "welcome_user"));
-		p.add(loadView = new LoadView());
+		p.add(LoadIndicator.get());
 		//p.add(new HaveABreakGadget().getWidget());
 		
 		panel.addStyleName("honey_header with_margin");
@@ -61,10 +58,5 @@ public class HeaderView extends Composite implements Display {
 		}
 
 		return p;
-	}
-
-	@Override
-	public honeycrm.client.mvp.presenters.LoadPresenter.Display getLoadView() {
-		return loadView;
 	}
 }

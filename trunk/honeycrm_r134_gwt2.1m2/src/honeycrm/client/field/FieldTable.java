@@ -52,7 +52,7 @@ public class FieldTable extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(final Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		return (Serializable) ((ITableWidget) w).getData();
 	}
 }

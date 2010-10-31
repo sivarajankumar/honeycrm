@@ -69,7 +69,7 @@ public class NewDtoWizard {
 			}
 
 			configuration = new Configuration(dtoModuleData, null);
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Cannot create configuration.");
 		}
@@ -79,7 +79,7 @@ public class NewDtoWizard {
 		return configuration;
 	}
 
-	private static String getLabel(final Field field) {
+	private static String getLabel(Field field) {
 		return field.isAnnotationPresent(Label.class) ? field.getAnnotation(Label.class).value() : "";
 	}
 
@@ -101,7 +101,7 @@ public class NewDtoWizard {
 			b.setLabel(label);
 			try {
 				b.setAction(action.newInstance());
-			} catch (final Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				log.warning("Cannot instantiate action for " + ExtraButton.class);
 			}

@@ -41,7 +41,7 @@ public class DashboardsView extends Composite implements Display {
 	}
 
 	@Override
-	public void setDashboardModules(final ArrayList<String> modules) {
+	public void setDashboardModules(ArrayList<String> modules) {
 		setupViews(modules);
 
 		for (int row = 0; row < modules.size() / COLS; row++) {
@@ -51,14 +51,14 @@ public class DashboardsView extends Composite implements Display {
 		}
 	}
 
-	private void setupViews(final ArrayList<String> modules) {
+	private void setupViews(ArrayList<String> modules) {
 		for (int i = 0; i < modules.size(); i++) {
 			views.put(modules.get(i), new DashboardView(modules.get(i)));
 		}
 	}
 
 	@Override
-	public void insertRefreshedData(final HashMap<String, ListQueryResult> result) {
+	public void insertRefreshedData(HashMap<String, ListQueryResult> result) {
 		for (final Map.Entry<String, ListQueryResult> entry : result.entrySet()) {
 			if (views.containsKey(entry.getKey())) {
 				views.get(entry.getKey()).insertRefreshedData(entry.getValue());

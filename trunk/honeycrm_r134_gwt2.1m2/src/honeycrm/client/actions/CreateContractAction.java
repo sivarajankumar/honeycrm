@@ -37,7 +37,7 @@ public class CreateContractAction extends AbstractAction {
 			}
 			
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				Window.alert("Could not create contract");
 			}
 		});
@@ -48,7 +48,7 @@ public class CreateContractAction extends AbstractAction {
 		
 		ServiceRegistry.updateService().update(offering, new AsyncCallback<Void>() {
 			@Override
-			public void onSuccess(final Void result) {
+			public void onSuccess(Void result) {
 				/**
 				 * forward the user to the created contract.
 				 */
@@ -56,7 +56,7 @@ public class CreateContractAction extends AbstractAction {
 			}
 			
 			@Override
-			public void onFailure(final Throwable caught) {
+			public void onFailure(Throwable caught) {
 				Window.alert("Could not update offering");
 			}
 		});

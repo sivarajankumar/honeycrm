@@ -45,7 +45,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 	private void setValueForId(final long id) {
 		Prefetcher.instance.get(new Consumer<Dto>() {
 			@Override
-			public void setValueAsynch(final Dto result) {
+			public void setValueAsynch(Dto result) {
 				if (null != result) { 
 					setValue(result.getQuicksearch());
 				}
@@ -61,7 +61,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 					}
 
 					@Override
-					public void onFailure(final Throwable caught) {
+					public void onFailure(Throwable caught) {
 						Window.alert("Could not get item by id");
 					}
 				});
@@ -72,7 +72,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 	private void addHandlers() {
 		addKeyPressHandler(new KeyPressHandler() {
 			@Override
-			public void onKeyPress(final KeyPressEvent event) {
+			public void onKeyPress(KeyPressEvent event) {
 				final String lastQuery = getText().trim() + event.getCharCode();
 				
 				if (!timerRunning) {
@@ -88,14 +88,14 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 
 		addSelectionHandler(new SelectionHandler<Suggestion>() {
 			@Override
-			public void onSelection(final SelectionEvent<Suggestion> event) {
+			public void onSelection(SelectionEvent<Suggestion> event) {
 				// determine id of this item and store the id in the gui to make sure it is
 				// available on submit
 				final String selected = event.getSelectedItem().getReplacementString();
 
 				Prefetcher.instance.get(new Consumer<Dto>() {
 					@Override
-					public void setValueAsynch(final Dto value) {
+					public void setValueAsynch(Dto value) {
 						if (null == value) {
 							// the related entity could not be found or the search returned more
 							// than one result.
@@ -115,12 +115,12 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 						ServiceRegistry.readService().getByName(kind, selected, new AsyncCallback<Dto>() {
 //						commonService.getByName(marshalledClass, selected, new AsyncCallback<Dto>() {
 							@Override
-							public void onFailure(final Throwable caught) {
+							public void onFailure(Throwable caught) {
 								Window.alert("Could not get id of selected item = " + selected);
 							}
 
 							@Override
-							public void onSuccess(final Dto result) {
+							public void onSuccess(Dto result) {
 								internalCacheCallback.setValueAsynch(result);
 							}
 						});						
@@ -155,12 +155,12 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 					ServiceRegistry.readService().getAllByNamePrefix(kind, query, 0, 20, new AsyncCallback<ListQueryResult>() {
 //					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
 						@Override
-						public void onSuccess(final ListQueryResult result) {
+						public void onSuccess(ListQueryResult result) {
 							internalCacheCallback.setValueAsynch(result);
 						}
 
 						@Override
-						public void onFailure(final Throwable caught) {
+						public void onFailure(Throwable caught) {
 	//						LoadIndicator.get().endLoading();
 							indicateNoResults();
 						}
@@ -174,7 +174,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 	}
 	
 	private void indicateNoResults() {
-		final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
+		MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
 
 		o.clear();
 		o.add("No Results");

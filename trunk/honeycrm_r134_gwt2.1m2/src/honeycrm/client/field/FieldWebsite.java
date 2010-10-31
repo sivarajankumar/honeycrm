@@ -22,7 +22,7 @@ public class FieldWebsite extends AbstractField {
 	}
 
 	@Override
-	protected void internalSetData(final Anchor widget, final Object value, final View view) {
+	protected void internalSetData(Anchor widget, Object value, View view) {
 		widget.setHref(withHttp(stringify(value)));
 		widget.setText(stringify(value));
 	}

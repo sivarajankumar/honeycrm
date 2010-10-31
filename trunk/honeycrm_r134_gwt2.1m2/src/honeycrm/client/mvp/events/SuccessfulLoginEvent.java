@@ -3,8 +3,8 @@ package honeycrm.client.mvp.events;
 import com.google.gwt.event.shared.GwtEvent;
 
 public class SuccessfulLoginEvent extends GwtEvent<SuccessfulLoginEventHandler> {
-	private final String login;
-	private final long userId;
+	private String login;
+	private long userId;
 	public static Type<SuccessfulLoginEventHandler> TYPE = new Type<SuccessfulLoginEventHandler>();
 
 	public SuccessfulLoginEvent(final String login, final long userId) {
@@ -13,7 +13,7 @@ public class SuccessfulLoginEvent extends GwtEvent<SuccessfulLoginEventHandler> 
 	}
 
 	@Override
-	protected void dispatch(final SuccessfulLoginEventHandler handler) {
+	protected void dispatch(SuccessfulLoginEventHandler handler) {
 		handler.onLogin(this);
 	}
 

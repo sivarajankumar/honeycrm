@@ -18,7 +18,7 @@ public class ServiceCallStatistics implements Serializable {
 		return serviceName;
 	}
 
-	public void setServiceName(final String serviceName) {
+	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
 	}
 
@@ -26,7 +26,7 @@ public class ServiceCallStatistics implements Serializable {
 		return calls;
 	}
 
-	public void setCalls(final long calls) {
+	public void setCalls(long calls) {
 		this.calls = calls;
 	}
 
@@ -34,7 +34,7 @@ public class ServiceCallStatistics implements Serializable {
 		return executionTimeAvg;
 	}
 
-	public void setExecutionTimeAvg(final long executionTimeAvg) {
+	public void setExecutionTimeAvg(long executionTimeAvg) {
 		this.executionTimeAvg = executionTimeAvg;
 	}
 
@@ -42,7 +42,7 @@ public class ServiceCallStatistics implements Serializable {
 		return executionTimeMin;
 	}
 
-	public void setExecutionTimeMin(final long executionTimeMin) {
+	public void setExecutionTimeMin(long executionTimeMin) {
 		this.executionTimeMin = executionTimeMin;
 	}
 
@@ -50,7 +50,7 @@ public class ServiceCallStatistics implements Serializable {
 		return executionTimeMax;
 	}
 
-	public void setExecutionTimeMax(final long executionTimeMax) {
+	public void setExecutionTimeMax(long executionTimeMax) {
 		this.executionTimeMax = executionTimeMax;
 	}
 }

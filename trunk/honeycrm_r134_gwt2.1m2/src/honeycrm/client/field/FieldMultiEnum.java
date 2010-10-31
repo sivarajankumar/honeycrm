@@ -30,7 +30,7 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 	
 	@Override
-	protected void internalSetData(final ListBox widget, final Object value, final View view) {
+	protected void internalSetData(ListBox widget, Object value, View view) {
 		if (view == View.CREATE) {
 			final String[] options = getOptions();
 			for (int i = 0; i < options.length; i++) {
@@ -51,7 +51,7 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 
 	@Override
-	protected void internalSetData(final HTML widget, final Object value, final View view) {
+	protected void internalSetData(HTML widget, Object value, View view) {
 		if (value.toString().isEmpty()) {
 		} else {
 			String ul = "";
@@ -68,7 +68,7 @@ public class FieldMultiEnum extends FieldEnum {
 	}
 
 	@Override
-	protected Serializable internalGetData(final Widget w) {
+	protected Serializable internalGetData(Widget w) {
 		final ListBox box = (ListBox) w;
 		final Set<String> selectedValues = new HashSet<String>();
 

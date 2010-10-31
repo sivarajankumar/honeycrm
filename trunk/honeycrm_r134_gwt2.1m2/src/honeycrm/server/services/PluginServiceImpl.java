@@ -26,7 +26,7 @@ public class PluginServiceImpl extends RemoteServiceServlet implements PluginSer
 			for (final Class<?> clazz : ReflectionHelper.getClassesWithSuperclass("honeycrm.client.plugin", AbstractPlugin.class)) {
 				list.add((AbstractPlugin) clazz.newInstance());
 			}
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			log.warning("Exception '" + e.toString() + "' occured while instantiating available plugins.");
 			throw new RuntimeException("Exception '" + e.toString() + "' occured while instantiating available plugins.");

@@ -18,7 +18,7 @@ public class ReadTest {
 		return id;
 	}
 
-	public void setId(final Key id) {
+	public void setId(Key id) {
 		this.id = id;
 	}
 
@@ -26,7 +26,7 @@ public class ReadTest {
 		return foo;
 	}
 
-	public void setFoo(final long foo) {
+	public void setFoo(long foo) {
 		this.foo = foo;
 	}
 }
