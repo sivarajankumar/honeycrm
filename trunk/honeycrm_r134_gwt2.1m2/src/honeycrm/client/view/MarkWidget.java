@@ -24,8 +24,6 @@ public class MarkWidget extends AbstractView {
 		markBox.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				LoadView.get().startLoading();
-
 				// mark dto on client side and do a usual update call on the server side.
 				// this assumes the data in the dto is still up to date.
 				viewable.set("marked", markBox.getValue());
@@ -35,14 +33,12 @@ public class MarkWidget extends AbstractView {
 					@Override
 					public void onFailure(Throwable caught) {
 						displayError(caught);
-						LoadView.get().endLoading();
 					}
 
 					@Override
 					public void onSuccess(Void result) {
 						// tell container that mark has been completed
 						TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
-						LoadView.get().endLoading();
 					}
 				});
 			}

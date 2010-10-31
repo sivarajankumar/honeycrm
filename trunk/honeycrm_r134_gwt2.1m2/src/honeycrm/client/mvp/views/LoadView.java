@@ -17,17 +17,7 @@ public class LoadView extends Composite implements Display {
 	}
 
 	@UiField
-	Label loadIndicator; 
-	
-	/**
-	 * Save how many actions have been triggered on the server by the client. The request to remove the load indicator will be fulfilled if all actions are finished.
-	 */
-	@Deprecated
-	private long concurrentActions = 0;
-	@Deprecated
-	private final Label loading = new Label("Loading.. ");
-
-	private static final LoadView instance = new LoadView();
+	Label loadIndicator;
 
 	public LoadView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -38,33 +28,8 @@ public class LoadView extends Composite implements Display {
 		return loadIndicator;
 	}
 
-	@Deprecated
-	public static LoadView get() {
-		return instance;
-	}
-
-	@Deprecated
-	public void startLoading() {
-		loading.setVisible(true);
-		++concurrentActions;
-	}
-
-	@Deprecated
-	public void endLoading() {
-		if (--concurrentActions == 0) {
-			loading.setVisible(false);
-		} else if (concurrentActions < 0) {
-			Window.alert("end loading too often called");
-		}
-	}
-
 	@Override
 	public void showLoadingIndicator(final boolean isVisible) {
 		loadIndicator.setVisible(isVisible);
-	}
-
-	@Override
-	public void onTooManyRpcEndEvents() {
-		Window.alert("Too many RpcEndEvents occurred.");
 	}
 }

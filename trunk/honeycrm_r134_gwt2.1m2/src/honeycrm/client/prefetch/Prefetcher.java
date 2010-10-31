@@ -47,13 +47,9 @@ public class Prefetcher {
 
 				entry.setLocked(true);
 
-				LoadView.get().startLoading();
-				
 				serverCallback.doRpc(new Consumer<T>() {
 					@Override
 					public void setValueAsynch(T result) {
-						LoadView.get().endLoading();
-						
 						entry.setValue(result);
 						entry.setLocked(false);
 

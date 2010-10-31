@@ -55,18 +55,15 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 		final int start = range.getStart();
 		final int end = start + range.getLength();
 
-		LoadView.get().startLoading();
 		// ServiceRegistry.commonService().getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
 		ServiceRegistry.readService().getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
-				LoadView.get().endLoading();
 				insertRefreshedData(display, result);
 			}
 
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadView.get().endLoading();
 				Window.alert("Could not load");
 			}
 		});

@@ -67,8 +67,6 @@ abstract public class AbstractView extends Composite {
 		// thus if id != -1 we know the id -> we do an update
 		final boolean isUpdate = -1 != id && 0 != id;
 
-		LoadView.get().startLoading();
-
 		if (isUpdate) {
 			tmpDto.setId(id);
 		}
@@ -81,13 +79,11 @@ abstract public class AbstractView extends Composite {
 					Prefetcher.instance.invalidate(moduleDto.getModule(), id);
 
 					TabCenterView.instance().get(moduleDto.getModule()).saveCompleted();
-					LoadView.get().endLoading();
 				}
 
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
-					LoadView.get().endLoading();
 				}
 			});
 		} else {
@@ -95,14 +91,12 @@ abstract public class AbstractView extends Composite {
 				@Override
 				public void onFailure(Throwable caught) {
 					displayError(caught);
-					LoadView.get().endLoading();
 				}
 
 				@Override
 				public void onSuccess(Long result) {
 					// TODO this won't work since we do not instantiate tabcenterview anymore.
 					// TabCenterView.instance().get(moduleDto.getModule()).saveCompletedForId(result);
-					LoadView.get().endLoading();
 				}
 			});
 		}
@@ -140,7 +134,6 @@ abstract public class AbstractView extends Composite {
 	}
 
 	protected void displayError(final Throwable caught) {
-		LoadView.get().endLoading();
 		Window.alert(caught.getClass().toString());
 		// throw new RuntimeException(caught.getLocalizedMessage());
 	}

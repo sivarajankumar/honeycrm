@@ -40,18 +40,14 @@ public class EmailFeedbackWidget extends Composite {
 		button.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				LoadView.get().startLoading();
-
 				ServiceRegistry.commonService().feedback(box.getText(), new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
-						LoadView.get().endLoading();
 						status.setText("Status: Mail has been sent to mailing list. Thank you very much!");
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
-						LoadView.get().endLoading();
 						status.setText("Status: An error occured during delivery");
 					}
 				});

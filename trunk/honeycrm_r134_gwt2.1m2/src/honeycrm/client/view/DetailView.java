@@ -273,18 +273,14 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 
 	public void delete() {
 		if (isShowing()) {
-			LoadView.get().startLoading();
-
 			deleteService.delete(moduleDto.getModule(), dto.getId(), new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
-					LoadView.get().endLoading();
 					displayError(caught);
 				}
 
 				@Override
 				public void onSuccess(Void result) {
-					LoadView.get().endLoading();
 					TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
 					stopViewing();
 				}

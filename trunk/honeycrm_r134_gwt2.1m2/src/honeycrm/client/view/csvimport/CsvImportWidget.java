@@ -83,7 +83,6 @@ public class CsvImportWidget {
 
 	private void importDto(final Dto[] dtos, final int currentIndex, final Label statusLabel) {
 		if (0 == currentIndex) {
-			LoadView.get().startLoading();
 			statusLabel.setText("Status: Started Import");
 		}
 		
@@ -95,7 +94,6 @@ public class CsvImportWidget {
 				final boolean isImportDone = currentIndex == dtos.length - 1;
 
 				if (isImportDone) {
-					LoadView.get().endLoading();
 					statusLabel.setText("Status: Import completed");
 					TabCenterView.instance().get(module).refreshListView();
 				} else {
@@ -105,7 +103,6 @@ public class CsvImportWidget {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadView.get().endLoading();
 				statusLabel.setText("Status: Import failed.");
 			}
 		});

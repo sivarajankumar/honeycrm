@@ -25,13 +25,9 @@ public class ProfilingReport extends Composite {
 		vpanel.add(new Label("Profiling is enabled? " + ServiceCallStatistics.PROFILING_ENABLED));
 		vpanel.add(panel);
 
-		LoadView.get().startLoading();
-
 		ServiceRegistry.commonService().getServiceCallStatistics(new AsyncCallback<Collection<ServiceCallStatistics>>() {
 			@Override
 			public void onSuccess(final Collection<ServiceCallStatistics> result) {
-				LoadView.get().endLoading();
-
 				final ColumnChart chartCalls = new ColumnChart(getDataTableCalls(result), getOptions("Calls"));
 				final ColumnChart chartAvg = new ColumnChart(getDataTableAvg(result), getOptions("Avg"));
 				panel.add(chartCalls);
@@ -40,7 +36,6 @@ public class ProfilingReport extends Composite {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadView.get().endLoading();
 			}
 		});
 
