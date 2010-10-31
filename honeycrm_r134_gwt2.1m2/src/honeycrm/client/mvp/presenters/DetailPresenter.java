@@ -30,7 +30,7 @@ public class DetailPresenter implements Presenter {
 		HasClickHandlers getEditBtn();
 		HasClickHandlers getCancelBtn();
 		void startEdit();
-		RelationshipPresenter.Display getRelationshipsView();
+		RelationshipsPresenter.Display getRelationshipsView();
 	}
 
 	final Display view;
@@ -53,7 +53,7 @@ public class DetailPresenter implements Presenter {
 
 	private void bind() {
 		// Create a presenter that takes care of the RelationshipsView.
-		new RelationshipPresenter(module, view.getRelationshipsView(), readService, eventBus);
+		new RelationshipsPresenter(module, view.getRelationshipsView(), readService, eventBus);
 
 		view.getSaveBtn().addClickHandler(new ClickHandler() {
 			@Override

@@ -7,7 +7,7 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.mvp.presenters.DetailPresenter;
-import honeycrm.client.mvp.presenters.RelationshipPresenter;
+import honeycrm.client.mvp.presenters.RelationshipsPresenter;
 import honeycrm.client.mvp.presenters.DetailPresenter.Display;
 import honeycrm.client.view.AbstractView.View;
 import honeycrm.client.view.relationship.RelationshipsContainer;
@@ -205,7 +205,7 @@ public class DetailView extends Composite implements Display {
 	}
 	
 	@Override
-	public RelationshipPresenter.Display getRelationshipsView() {
+	public RelationshipsPresenter.Display getRelationshipsView() {
 		return relationshipsView;
 	}
 

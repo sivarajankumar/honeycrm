@@ -12,6 +12,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
 
+@Deprecated
 public class DashboardListView extends ListView {
 	public DashboardListView(String module) {
 		super(module);

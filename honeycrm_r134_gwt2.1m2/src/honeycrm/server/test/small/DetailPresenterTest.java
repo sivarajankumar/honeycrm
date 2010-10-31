@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.presenters.DetailPresenter;
-import honeycrm.client.mvp.presenters.RelationshipPresenter;
+import honeycrm.client.mvp.presenters.RelationshipsPresenter;
 import honeycrm.client.mvp.presenters.DetailPresenter.Display;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
@@ -25,7 +25,7 @@ public class DetailPresenterTest extends TestCase {
 	private UpdateServiceAsync updateService;
 	private Display view;
 	private DetailPresenter presenter;
-	private honeycrm.client.mvp.presenters.RelationshipPresenter.Display relView;
+	private honeycrm.client.mvp.presenters.RelationshipsPresenter.Display relView;
 	private HasClickHandlers saveBtn;
 	private HasClickHandlers cancelBtn;
 	private HasClickHandlers editBtn;
@@ -39,7 +39,7 @@ public class DetailPresenterTest extends TestCase {
 		this.readService = createNiceMock(ReadServiceAsync.class);
 		this.updateService = createNiceMock(UpdateServiceAsync.class);
 		this.view = createNiceMock(DetailPresenter.Display.class);
-		this.relView = createNiceMock(RelationshipPresenter.Display.class);
+		this.relView = createNiceMock(RelationshipsPresenter.Display.class);
 		this.saveBtn = createNiceMock(HasClickHandlers.class);
 		this.cancelBtn = createNiceMock(HasClickHandlers.class);
 		this.editBtn = createNiceMock(HasClickHandlers.class);

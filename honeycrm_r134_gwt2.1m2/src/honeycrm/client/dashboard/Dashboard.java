@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+@Deprecated
 public class Dashboard extends Composite {
 	private static final int COLS = 2;
 	private static final String[] modules = new String[] { "Project", "Contact", "Donation", "Membership", "Offering", "Contract", "Account" };

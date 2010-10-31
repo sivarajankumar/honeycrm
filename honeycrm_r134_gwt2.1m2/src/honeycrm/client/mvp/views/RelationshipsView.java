@@ -1,12 +1,13 @@
 package honeycrm.client.mvp.views;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.mvp.presenters.RelationshipPresenter;
-import honeycrm.client.mvp.presenters.RelationshipPresenter.Display;
+import honeycrm.client.mvp.presenters.RelationshipsPresenter;
+import honeycrm.client.mvp.presenters.RelationshipsPresenter.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -24,7 +25,7 @@ public class RelationshipsView extends Composite implements Display {
 	final HashMap<String, RelationshipView> views = new HashMap<String, RelationshipView>();
 	final ArrayList<String> relationships;
 	final String module;
-	RelationshipPresenter presenter;
+	RelationshipsPresenter presenter;
 	@UiField
 	VerticalPanel panel;
 
@@ -36,14 +37,14 @@ public class RelationshipsView extends Composite implements Display {
 	}
 
 	@Override
-	public void setPresenter(RelationshipPresenter presenter) {
+	public void setPresenter(RelationshipsPresenter presenter) {
 		this.presenter = presenter;
 	}
 
 	@Override
 	public void refresh(final Long relatedId) {
 		for (final String relation : relationships) {
-			setupViews(relation);
+			setupView(relation);
 
 			// TODO refresh with specified id!
 			views.get(relation).setId(relatedId);
@@ -59,7 +60,7 @@ public class RelationshipsView extends Composite implements Display {
 	@Override
 	public void insertRefreshedData(Map<String, ListQueryResult> relationshipData) {
 		for (final String relation : relationships) {
-			setupViews(relation);
+			setupView(relation);
 
 			if (relationshipData.containsKey(relation)) {
 				views.get(relation).insertRefreshedData(relationshipData.get(relation));
@@ -67,10 +68,15 @@ public class RelationshipsView extends Composite implements Display {
 		}
 	}
 
-	private void setupViews(final String relation) {
+	private void setupView(final String relation) {
 		if (views.isEmpty() || !views.containsKey(relation)) {
 			views.put(relation, new RelationshipView(relation, module));
 			panel.add(views.get(relation));
 		}
+	}
+	
+	@Override
+	public Collection<RelationshipView> getViews() {
+		return views.values();
 	}
 }

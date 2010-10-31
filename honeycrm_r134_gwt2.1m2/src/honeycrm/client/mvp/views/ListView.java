@@ -33,7 +33,6 @@ import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldRelate;
-import honeycrm.client.mvp.presenters.ListPresenter;
 import honeycrm.client.mvp.presenters.ListPresenter.Display;
 import honeycrm.client.view.list.ListViewDB;
 import honeycrm.client.view.list.ListViewDataProvider;
@@ -65,7 +64,7 @@ public class ListView extends Composite implements Display {
 	SimplePager pager;
 
 	final String module;
-	ListPresenter presenter;	
+	private SelectionHandler handler;	
 
 	public ListView(final String module) {
 		this.module = module;
@@ -104,7 +103,7 @@ public class ListView extends Composite implements Display {
 
 			if (moduleDto.getFieldById(id) instanceof FieldBoolean) {
 				// TODO make this read-only
-				column = new Column<Dto, Boolean>(new CheckboxCell(true)) {
+				column = new Column<Dto, Boolean>(new CheckboxCell()) {
 					@Override
 					public Boolean getValue(final Dto object) {
 						return (Boolean) object.get(id);
@@ -186,8 +185,8 @@ public class ListView extends Composite implements Display {
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				if (null != presenter) {
-					presenter.onSelect(selectionModel.getSelectedObject());
+				if (null != handler) {
+					handler.onSelect(selectionModel.getSelectedObject());
 				}
 			}
 		});
@@ -226,9 +225,10 @@ public class ListView extends Composite implements Display {
 		return table;
 	}
 
+
 	@Override
-	public void setPresenter(ListPresenter presenter) {
-		this.presenter = presenter;
+	public void setSelectionHandler(SelectionHandler handler) {
+		this.handler = handler;
 	}
 	
 	protected ListViewDataProvider getListDataProvider() {
