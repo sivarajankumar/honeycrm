@@ -37,13 +37,9 @@ public class SampleReport extends Composite {
 			new Timer() {
 				@Override
 				public void run() {
-					LoadView.get().startLoading();
-
 					ServiceRegistry.reportService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
 						@Override
 						public void onSuccess(final Map<Integer, Double> result) {
-							LoadView.get().endLoading();
-
 							status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
 
 							if (null == offeringsReport) {
@@ -55,7 +51,6 @@ public class SampleReport extends Composite {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							LoadView.get().endLoading();
 
 						}
 					});

@@ -88,18 +88,14 @@ public class ListView extends AbstractView {
 			}
 
 			private void deleteSelected(final Set<Long> ids) {
-				LoadView.get().startLoading();
-
 				ServiceRegistry.deleteService().deleteAll(moduleDto.getModule(), ids, new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
-						LoadView.get().endLoading();
 						refresh();
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
-						LoadView.get().endLoading();
 						displayError(caught);
 					}
 				});

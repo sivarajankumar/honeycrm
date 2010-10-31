@@ -12,7 +12,6 @@ public class LoadPresenter {
 	public interface Display {
 		HasText getLoadIndicator();
 		void showLoadingIndicator(boolean isVisible);
-		void onTooManyRpcEndEvents();
 	}
 
 	private final Display view;
@@ -45,9 +44,6 @@ public class LoadPresenter {
 					concurrentRpcs = 0;
 				}
 				toggleIndicatorVisibility();
-/*				if (concurrentRpcs < 0) {
-					int i = 0;
-				}*/
 			}
 		});
 	}

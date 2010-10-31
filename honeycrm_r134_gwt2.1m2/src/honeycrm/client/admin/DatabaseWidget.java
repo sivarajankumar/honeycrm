@@ -58,18 +58,14 @@ public class DatabaseWidget extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				LoadView.get().startLoading();
-
 				ServiceRegistry.deleteService().deleteAllItems(new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
-						LoadView.get().endLoading();
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert("delete all failed");
-						LoadView.get().endLoading();
 					}
 				});
 			}
