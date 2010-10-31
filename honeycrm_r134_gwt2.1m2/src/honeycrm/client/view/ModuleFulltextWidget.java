@@ -59,12 +59,12 @@ public class ModuleFulltextWidget extends FulltextSearchWidget {
 				readService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 				// commonService.fulltextSearchForModule(dtoClazz.getModule(), queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 					@Override
-					public void onSuccess(ListQueryResult result) {
+					public void onSuccess(final ListQueryResult result) {
 						internalCacheCallback.setValueAsynch(result);
 					}
 
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						Window.alert("fulltext search failed");
 					}
 				});

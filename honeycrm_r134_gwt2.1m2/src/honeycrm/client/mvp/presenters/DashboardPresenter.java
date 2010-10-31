@@ -10,6 +10,6 @@ public class DashboardPresenter implements Presenter {
 	}
 
 	@Override
-	public void go(HasWidgets container) {
+	public void go(final HasWidgets container) {
 	}
 }

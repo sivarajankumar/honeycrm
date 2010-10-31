@@ -1,10 +1,10 @@
 package honeycrm.client.view.csvimport;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.csv.CsvImporter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.mvp.views.LoadView;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -60,7 +60,7 @@ public class CsvImportWidget {
 		final Button cancelBtn = new Button("Cancel");
 		cancelBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				popup.hide();
 			}
 		});
@@ -68,7 +68,7 @@ public class CsvImportWidget {
 		final Button importBtn = new Button("Import");
 		importBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				final CsvImporter importer = CsvImporter.get(module);
 				importDto(importer.parse(textArea.getText()), 0, statusLabel);
 			}
@@ -83,19 +83,19 @@ public class CsvImportWidget {
 
 	private void importDto(final Dto[] dtos, final int currentIndex, final Label statusLabel) {
 		if (0 == currentIndex) {
-			LoadIndicator.get().startLoading();
+			LoadView.get().startLoading();
 			statusLabel.setText("Status: Started Import");
 		}
 		
 		ServiceRegistry.createService().create(dtos[currentIndex], new AsyncCallback<Long>() {
 			@Override
-			public void onSuccess(Long result) {
+			public void onSuccess(final Long result) {
 				statusLabel.setText("Status: Imported " + String.valueOf(currentIndex) + " / " + dtos.length);
 
 				final boolean isImportDone = currentIndex == dtos.length - 1;
 
 				if (isImportDone) {
-					LoadIndicator.get().endLoading();
+					LoadView.get().endLoading();
 					statusLabel.setText("Status: Import completed");
 					TabCenterView.instance().get(module).refreshListView();
 				} else {
@@ -104,8 +104,8 @@ public class CsvImportWidget {
 			}
 
 			@Override
-			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
+			public void onFailure(final Throwable caught) {
+				LoadView.get().endLoading();
 				statusLabel.setText("Status: Import failed.");
 			}
 		});

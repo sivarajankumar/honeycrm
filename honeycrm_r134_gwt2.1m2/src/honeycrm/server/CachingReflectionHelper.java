@@ -40,7 +40,7 @@ public class CachingReflectionHelper extends ReflectionHelper {
 	}
 
 	@Override
-	public Field[] getAllFields(Class classSrc) {
+	public Field[] getAllFields(final Class classSrc) {
 		// if (isCacheEnabled()) {
 		if (!cacheGetAllFields.containsKey(classSrc)) {
 			cacheGetAllFields.put(classSrc, super.getAllFields(classSrc));

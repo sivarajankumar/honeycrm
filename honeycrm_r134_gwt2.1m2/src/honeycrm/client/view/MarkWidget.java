@@ -1,8 +1,8 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.mvp.views.LoadView;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -23,8 +23,8 @@ public class MarkWidget extends AbstractView {
 
 		markBox.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
-				LoadIndicator.get().startLoading();
+			public void onClick(final ClickEvent event) {
+				LoadView.get().startLoading();
 
 				// mark dto on client side and do a usual update call on the server side.
 				// this assumes the data in the dto is still up to date.
@@ -33,16 +33,16 @@ public class MarkWidget extends AbstractView {
 				updateService.update(viewable, new AsyncCallback<Void>() {
 //				commonService.mark(viewable.getModule(), id, markBox.getValue(), new AsyncCallback<Void>() {
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						displayError(caught);
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 					}
 
 					@Override
-					public void onSuccess(Void result) {
+					public void onSuccess(final Void result) {
 						// tell container that mark has been completed
 						TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 					}
 				});
 			}

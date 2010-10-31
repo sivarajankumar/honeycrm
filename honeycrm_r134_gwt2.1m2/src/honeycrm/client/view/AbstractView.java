@@ -1,11 +1,11 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.DeleteServiceAsync;
@@ -67,7 +67,7 @@ abstract public class AbstractView extends Composite {
 		// thus if id != -1 we know the id -> we do an update
 		final boolean isUpdate = -1 != id && 0 != id;
 
-		LoadIndicator.get().startLoading();
+		LoadView.get().startLoading();
 
 		if (isUpdate) {
 			tmpDto.setId(id);
@@ -76,33 +76,33 @@ abstract public class AbstractView extends Composite {
 		if (isUpdate) {
 			updateService.update(tmpDto, new AsyncCallback<Void>() {
 				@Override
-				public void onSuccess(Void result) {
+				public void onSuccess(final Void result) {
 					// mark cache invalid to make sure the changed values will be displayed
 					Prefetcher.instance.invalidate(moduleDto.getModule(), id);
 
 					TabCenterView.instance().get(moduleDto.getModule()).saveCompleted();
-					LoadIndicator.get().endLoading();
+					LoadView.get().endLoading();
 				}
 
 				@Override
-				public void onFailure(Throwable caught) {
+				public void onFailure(final Throwable caught) {
 					displayError(caught);
-					LoadIndicator.get().endLoading();
+					LoadView.get().endLoading();
 				}
 			});
 		} else {
 			createService.create(tmpDto, new AsyncCallback<Long>() {
 				@Override
-				public void onFailure(Throwable caught) {
+				public void onFailure(final Throwable caught) {
 					displayError(caught);
-					LoadIndicator.get().endLoading();
+					LoadView.get().endLoading();
 				}
 
 				@Override
-				public void onSuccess(Long result) {
+				public void onSuccess(final Long result) {
 					// TODO this won't work since we do not instantiate tabcenterview anymore.
 					// TabCenterView.instance().get(moduleDto.getModule()).saveCompletedForId(result);
-					LoadIndicator.get().endLoading();
+					LoadView.get().endLoading();
 				}
 			});
 		}
@@ -140,7 +140,7 @@ abstract public class AbstractView extends Composite {
 	}
 
 	protected void displayError(final Throwable caught) {
-		LoadIndicator.get().endLoading();
+		LoadView.get().endLoading();
 		Window.alert(caught.getClass().toString());
 		// throw new RuntimeException(caught.getLocalizedMessage());
 	}

@@ -53,7 +53,7 @@ public class ListPresenter implements Presenter {
 		
 		view.getDeleteButton().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (view.shouldDelete()) {
 					eventBus.fireEvent(new DeleteEvent(module, new HashSet<Long>()));
 				}
@@ -62,13 +62,13 @@ public class ListPresenter implements Presenter {
 		
 		eventBus.addHandler(UpdateEvent.TYPE, new UpdateEventHandler() {
 			@Override
-			public void onAddEvent(UpdateEvent event) {
+			public void onAddEvent(final UpdateEvent event) {
 				refresh(event.getModule());
 			}
 		});
 		eventBus.addHandler(OpenModuleEvent.TYPE, new OpenModuleEventHandler() {
 			@Override
-			public void onOpenModule(OpenModuleEvent event) {
+			public void onOpenModule(final OpenModuleEvent event) {
 				refresh(event.getModule());
 			}
 		});
@@ -81,7 +81,7 @@ public class ListPresenter implements Presenter {
 	}
 	
 	@Override
-	public void go(HasWidgets container) {
+	public void go(final HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
 	}

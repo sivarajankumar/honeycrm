@@ -1,7 +1,7 @@
 package honeycrm.client.reports;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.profiling.ServiceCallStatistics;
 
 import java.util.Collection;
@@ -25,12 +25,12 @@ public class ProfilingReport extends Composite {
 		vpanel.add(new Label("Profiling is enabled? " + ServiceCallStatistics.PROFILING_ENABLED));
 		vpanel.add(panel);
 
-		LoadIndicator.get().startLoading();
+		LoadView.get().startLoading();
 
 		ServiceRegistry.commonService().getServiceCallStatistics(new AsyncCallback<Collection<ServiceCallStatistics>>() {
 			@Override
 			public void onSuccess(final Collection<ServiceCallStatistics> result) {
-				LoadIndicator.get().endLoading();
+				LoadView.get().endLoading();
 
 				final ColumnChart chartCalls = new ColumnChart(getDataTableCalls(result), getOptions("Calls"));
 				final ColumnChart chartAvg = new ColumnChart(getDataTableAvg(result), getOptions("Avg"));
@@ -39,8 +39,8 @@ public class ProfilingReport extends Composite {
 			}
 
 			@Override
-			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
+			public void onFailure(final Throwable caught) {
+				LoadView.get().endLoading();
 			}
 		});
 
@@ -48,7 +48,7 @@ public class ProfilingReport extends Composite {
 	}
 
 	private Options getOptions(final String title) {
-		Options options = Options.create();
+		final Options options = Options.create();
 		options.setEnableTooltip(true);
 		options.setWidth(200);
 		options.setLegendFontSize(10);

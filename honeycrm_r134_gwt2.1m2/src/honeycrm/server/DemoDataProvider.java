@@ -46,7 +46,7 @@ public class DemoDataProvider {
 		String str = "";
 
 		for (int i = 0; i < length; i++) {
-			char randomChar = (char) (48 + r.nextInt(58));
+			final char randomChar = (char) (48 + r.nextInt(58));
 			str += randomChar;
 		}
 

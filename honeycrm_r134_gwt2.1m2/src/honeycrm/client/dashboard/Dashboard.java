@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Dashboard extends Composite {
@@ -36,14 +35,14 @@ public class Dashboard extends Composite {
 			}
 			
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("Could not run code asynchronously");
 			}
 		});
 	}
 
 	private DashboardListView[] getListViews() {
-		DashboardListView[] listViews = new DashboardListView[modules.length];
+		final DashboardListView[] listViews = new DashboardListView[modules.length];
 		for (int i = 0; i < modules.length; i++) {
 			listViews[i] = new DashboardListView(modules[i]);
 		}
@@ -53,7 +52,7 @@ public class Dashboard extends Composite {
 	private Widget getRefreshButton(final DashboardListView[] listViews) {
 		return WidgetJuggler.getButton("Refresh", new ClickHandler()  {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				for (final DashboardListView listview : listViews) {
 					listview.refresh();
 				}

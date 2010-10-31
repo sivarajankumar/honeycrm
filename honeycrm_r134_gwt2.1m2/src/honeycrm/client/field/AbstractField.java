@@ -47,7 +47,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		this.label = label;
 	}
 
-	public AbstractField(String id, String label, String defaultValue) {
+	public AbstractField(final String id, final String label, final String defaultValue) {
 		this(id, label);
 		this.defaultValue = defaultValue;
 	}
@@ -130,7 +130,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		} else {
 			try {
 				return internalGetData(w);
-			} catch (RuntimeException e) {
+			} catch (final RuntimeException e) {
 				// open a dialog and re-throw exception
 				Window.alert("Unexpected type: " + w.getClass());
 				throw e;
@@ -184,7 +184,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	/**
 	 * Adjust the width of the widget and the enable / disable it depending on the field settings.
 	 */
-	private Widget decorateWidget(Widget widget, final boolean readOnly) {
+	private Widget decorateWidget(final Widget widget, final boolean readOnly) {
 		if (readOnly && widget instanceof FocusWidget) {
 			((FocusWidget) widget).setEnabled(false);
 		}
@@ -205,44 +205,44 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 		return stringify(value);
 	}
 
-	protected String stringify(Object value) {
+	protected String stringify(final Object value) {
 		return null == value ? "" : String.valueOf(value);
 	}
 
 	/**
 	 * Subclasses may override this class to initialize values on the widgets they use.
 	 */
-	protected void internalSetData(Anchor widget, Object value, View view) {
+	protected void internalSetData(final Anchor widget, final Object value, final View view) {
 		notImplemented();
 	}
 	
-	protected void internalSetData(DateBox widget, Object value, View view) {
+	protected void internalSetData(final DateBox widget, final Object value, final View view) {
 		notImplemented();
 	}
 
-	protected void internalSetData(CheckBox widget, Object value, View view) {
+	protected void internalSetData(final CheckBox widget, final Object value, final View view) {
 		if (value instanceof Boolean) {
 			widget.setValue((Boolean) value);
 		}
 	}
 
-	protected void internalSetData(HTML widget, Object value, View view) {
+	protected void internalSetData(final HTML widget, final Object value, final View view) {
 		notImplemented();
 	}
 	
-	protected void internalSetData(Label widget, Object value, View view) {
+	protected void internalSetData(final Label widget, final Object value, final View view) {
 		widget.setText(formattedValue(value, view));
 	}
 
-	protected void internalSetData(TextBox widget, Object value, View view) {
+	protected void internalSetData(final TextBox widget, final Object value, final View view) {
 		widget.setText(formattedValue(value, view));
 	}
 
-	protected void internalSetData(TextArea widget, Object value, View view) {
+	protected void internalSetData(final TextArea widget, final Object value, final View view) {
 		widget.setText(formattedValue(value, view));
 	}
 
-	protected void internalSetData(ListBox widget, Object value, View view) {
+	protected void internalSetData(final ListBox widget, final Object value, final View view) {
 		notImplemented();
 	}
 	

@@ -21,9 +21,9 @@ public class CacheKey implements Serializable {
 	 * Two cache entries are equals if they store the same parameters.
 	 */
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj instanceof CacheKey) {
-			CacheKey e = (CacheKey) obj;
+			final CacheKey e = (CacheKey) obj;
 			if (e.getParameters().length == this.getParameters().length) {
 				return Arrays.equals(e.getParameters(), this.getParameters());
 			}
@@ -43,7 +43,7 @@ public class CacheKey implements Serializable {
 		return parameters;
 	}
 
-	public void setParameters(Object[] parameters) {
+	public void setParameters(final Object[] parameters) {
 		this.parameters = parameters;
 	}
 

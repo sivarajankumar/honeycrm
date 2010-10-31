@@ -29,12 +29,12 @@ public class DashboardListViewDataProvider extends ListViewDataProvider {
 		
 		ServiceRegistry.readService().getAllAssignedTo(module, User.getUserId(), start, end, new AsyncCallback<ListQueryResult>() {
 			@Override
-			public void onSuccess(ListQueryResult result) {
+			public void onSuccess(final ListQueryResult result) {
 				insertRefreshedData(display, result);
 			}
 
 			@Override
-			public void onFailure(Throwable caught) {
+			public void onFailure(final Throwable caught) {
 				Window.alert("Could not load");
 			}
 		});

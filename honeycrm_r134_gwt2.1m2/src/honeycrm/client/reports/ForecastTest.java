@@ -33,7 +33,7 @@ public class ForecastTest extends Composite {
 
 		price.addChangeHandler(new ChangeHandler() {
 			@Override
-			public void onChange(ChangeEvent event) {
+			public void onChange(final ChangeEvent event) {
 				redrawChart(NumberParser.convertToDouble(price.getText()));
 			}
 		});
@@ -60,7 +60,7 @@ public class ForecastTest extends Composite {
 	}
 
 	private Options getAreaOptions() {
-		Options options = Options.create();
+		final Options options = Options.create();
 		options.setEnableTooltip(true);
 		options.setTitleX("Week");
 		options.setTitleY("Revenue");
@@ -72,9 +72,9 @@ public class ForecastTest extends Composite {
 	}
 
 	private AbstractDataTable getAbstractTable(final double factor) {
-		Map<Integer, Double> result = getSampleData();
+		final Map<Integer, Double> result = getSampleData();
 
-		DataTable data = DataTable.create();
+		final DataTable data = DataTable.create();
 
 		data.addColumn(ColumnType.NUMBER, "Real revenue created by foo");
 		data.addColumn(ColumnType.NUMBER, "Real overall revenue");

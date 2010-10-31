@@ -1,7 +1,8 @@
 package honeycrm.client.admin;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.mvp.views.LoadView;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -18,14 +19,14 @@ public class DatabaseWidget extends Composite {
 		final Button createBulkBtn = new Button("Create Bulk (Creates 100k items)");
 		createBulkBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				ServiceRegistry.commonService().bulkCreate(new AsyncCallback<Void>() {
 					@Override
-					public void onSuccess(Void result) {
+					public void onSuccess(final Void result) {
 					}
 					
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						Window.alert("epic fail");
 					}
 				});
@@ -35,14 +36,14 @@ public class DatabaseWidget extends Composite {
 		final Button readBulkBtn = new Button("Read Bulk (does full table scan)");
 		readBulkBtn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				ServiceRegistry.commonService().bulkRead(new AsyncCallback<Void>() {
 					@Override
-					public void onSuccess(Void result) {
+					public void onSuccess(final Void result) {
 					}
 					
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						Window.alert("epic fail");
 					}
 				});
@@ -56,19 +57,19 @@ public class DatabaseWidget extends Composite {
 		deleteAllBtn.addClickHandler(new ClickHandler() {
 
 			@Override
-			public void onClick(ClickEvent event) {
-				LoadIndicator.get().startLoading();
+			public void onClick(final ClickEvent event) {
+				LoadView.get().startLoading();
 
 				ServiceRegistry.deleteService().deleteAllItems(new AsyncCallback<Void>() {
 					@Override
-					public void onSuccess(Void result) {
-						LoadIndicator.get().endLoading();
+					public void onSuccess(final Void result) {
+						LoadView.get().endLoading();
 					}
 
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						Window.alert("delete all failed");
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 					}
 				});
 			}

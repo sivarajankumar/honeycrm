@@ -17,7 +17,7 @@ public class AllTestsRunner {
 	}
 	
 	protected static Test getTestSuite(final String packageName) throws ClassNotFoundException, IOException {
-		TestSuite suite = new TestSuite("All tests of " + packageName);
+		final TestSuite suite = new TestSuite("All tests of " + packageName);
 		
 		for (final Class<?> testcase : ReflectionHelper.getClasses(packageName)) {
 			if (Modifier.isAbstract(testcase.getModifiers()) || testcase.isAnonymousClass() || testcase.equals(AllMediumTestsRunner.class) || testcase.equals(AllTestsRunner.class) || testcase.equals(AllSmallTestsRunner.class) || testcase.equals(AllLargeTestsRunner.class)) {

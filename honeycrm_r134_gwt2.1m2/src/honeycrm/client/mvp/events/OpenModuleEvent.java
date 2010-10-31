@@ -16,7 +16,7 @@ public class OpenModuleEvent extends GwtEvent<OpenModuleEventHandler> {
 	}
 
 	@Override
-	protected void dispatch(OpenModuleEventHandler handler) {
+	protected void dispatch(final OpenModuleEventHandler handler) {
 		handler.onOpenModule(this);
 	}
 	

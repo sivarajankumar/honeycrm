@@ -20,9 +20,9 @@ public class CommonServiceEmail extends AbstractCommonService {
 	public void feedback(final String message) {
 		log.fine("Start sending mail..");
 
-		Properties props = new Properties();
-		Session session = Session.getDefaultInstance(props, null);
-		Message msg = new MimeMessage(session);
+		final Properties props = new Properties();
+		final Session session = Session.getDefaultInstance(props, null);
+		final Message msg = new MimeMessage(session);
 
 		try {
 			msg.setFrom(new InternetAddress(EMAIL_FROM, "HoneyCRM App"));
@@ -32,9 +32,9 @@ public class CommonServiceEmail extends AbstractCommonService {
 			Transport.send(msg);
 
 			log.info("E-Mail has been send.");
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			e.printStackTrace();
-		} catch (MessagingException e) {
+		} catch (final MessagingException e) {
 			e.printStackTrace();
 		}
 	}

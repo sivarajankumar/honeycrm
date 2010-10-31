@@ -86,14 +86,14 @@ public class LoginScreen extends DialogBox {
 					}
 
 					@Override
-					public void onFailure(Throwable caught) {
+					public void onFailure(final Throwable caught) {
 						Window.alert("Could not get configuration");
 					}
 				});
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("Could not execute initialisation code asynchronous.");
 			}
 		});
@@ -110,7 +110,7 @@ public class LoginScreen extends DialogBox {
 		box.setValue("james"); // suggest a sample login
 		box.addKeyDownHandler(new KeyDownHandler() {
 			@Override
-			public void onKeyDown(KeyDownEvent event) {
+			public void onKeyDown(final KeyDownEvent event) {
 				if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
 					tryLogin(callback);
 				}
@@ -129,7 +129,7 @@ public class LoginScreen extends DialogBox {
 		final Button button = new Button("Login");
 		button.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				tryLogin(callback);
 			}
 		});
@@ -153,7 +153,7 @@ public class LoginScreen extends DialogBox {
 
 						ServiceRegistry.authService().login(loginBox.getText(), "password", new AsyncCallback<Long>() {
 							@Override
-							public void onSuccess(Long result) {
+							public void onSuccess(final Long result) {
 								loadingLbl.setVisible(false);
 								
 								allowLogin(true);
@@ -173,7 +173,7 @@ public class LoginScreen extends DialogBox {
 							}
 
 							@Override
-							public void onFailure(Throwable caught) {
+							public void onFailure(final Throwable caught) {
 								loadingLbl.setVisible(false);
 								errorLbl.setVisible(true);
 								allowLogin(true); // allow user to login again with new login/password
@@ -186,13 +186,13 @@ public class LoginScreen extends DialogBox {
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("Could not execute code asynchronously.");
 			}
 		});
 	}
 
-	private void allowLogin(boolean allow) {
+	private void allowLogin(final boolean allow) {
 		loginBox.setEnabled(allow);
 		passwordBox.setEnabled(allow);
 		loginBtn.setEnabled(allow);
