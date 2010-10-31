@@ -1,6 +1,7 @@
 package honeycrm.client.view;
 
 import honeycrm.client.misc.WidgetJuggler;
+import honeycrm.client.mvp.views.DetailView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;

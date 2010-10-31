@@ -10,7 +10,6 @@ import honeycrm.client.mvp.events.SuccessfulLoginEvent;
 import honeycrm.client.mvp.events.SuccessfulLoginEventHandler;
 import honeycrm.client.mvp.presenters.ApplicationPresenter;
 import honeycrm.client.mvp.presenters.LoginPresenter;
-import honeycrm.client.mvp.presenters.Presenter;
 import honeycrm.client.mvp.views.ApplicationView;
 import honeycrm.client.mvp.views.LoginView;
 import honeycrm.client.services.AuthServiceAsync;

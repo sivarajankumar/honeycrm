@@ -1,11 +1,8 @@
 package honeycrm.client.view.csvimport;
 
-import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.csv.CsvImporter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.ServiceRegistry;
-import honeycrm.client.mvp.views.LoadView;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -95,7 +92,8 @@ public class CsvImportWidget {
 
 				if (isImportDone) {
 					statusLabel.setText("Status: Import completed");
-					TabCenterView.instance().get(module).refreshListView();
+					// TODO re-implement
+					// TabCenterView.instance().get(module).refreshListView();
 				} else {
 					importDto(dtos, 1 + currentIndex, statusLabel);
 				}

@@ -1,7 +1,5 @@
 package honeycrm.client.prefetch;
 
-import honeycrm.client.mvp.views.LoadView;
-
 import java.util.HashMap;
 import java.util.Map;
 

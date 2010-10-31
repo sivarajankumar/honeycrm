@@ -3,8 +3,6 @@ package honeycrm.client.view.list;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.ServiceRegistry;
-import honeycrm.client.mvp.views.LoadView;
-
 import java.util.ArrayList;
 import java.util.List;
 

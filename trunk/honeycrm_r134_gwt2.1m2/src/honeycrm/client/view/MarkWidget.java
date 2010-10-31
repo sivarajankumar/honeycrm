@@ -1,9 +1,6 @@
 package honeycrm.client.view;
 
-import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.mvp.views.LoadView;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -38,7 +35,8 @@ public class MarkWidget extends AbstractView {
 					@Override
 					public void onSuccess(Void result) {
 						// tell container that mark has been completed
-						TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
+						// TODO reimplement
+						// TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
 					}
 				});
 			}
