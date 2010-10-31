@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -44,7 +45,21 @@ public class ContentView extends Composite implements Display {
 
 		panel.add((Composite) (dashboard = new DashboardsView()), "Dashboard"); // TODO insert as first tab
 
+		hiddenDirtyHack();
 		inititializeLazy(1);
+	}
+
+	/**
+	 * This overwrites the style attribute of the surrounding div element. Currently setting the style attribut only works deferred.
+	 * This is just a big hack and should be done properly asap. 
+	 */
+	protected void hiddenDirtyHack() {
+		new Timer() {
+			@Override
+			public void run() {
+				panel.getElement().getParentElement().setAttribute("style", "left: 0px; right: 0px; bottom: 0px; overflow: hidden; top: 75px; position: absolute;");
+			}
+		}.schedule(1000);
 	}
 
 	protected void inititializeLazy(int tabPos) {
