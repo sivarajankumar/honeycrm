@@ -1,13 +1,13 @@
 package honeycrm.client.view.list;
 
 import honeycrm.client.admin.LogConsole;
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldRelate;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.misc.WidgetJuggler;
+import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.view.AbstractView;
 import honeycrm.client.view.ModuleAction;
 
@@ -88,18 +88,18 @@ public class ListView extends AbstractView {
 			}
 
 			private void deleteSelected(final Set<Long> ids) {
-				LoadIndicator.get().startLoading();
+				LoadView.get().startLoading();
 
 				ServiceRegistry.deleteService().deleteAll(moduleDto.getModule(), ids, new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 						refresh();
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 						displayError(caught);
 					}
 				});

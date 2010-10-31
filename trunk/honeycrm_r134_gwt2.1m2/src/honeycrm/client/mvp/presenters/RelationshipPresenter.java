@@ -5,6 +5,8 @@ import java.util.Map;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.events.OpenEventHandler;
+import honeycrm.client.mvp.events.RpcBeginEvent;
+import honeycrm.client.mvp.events.RpcEndEvent;
 import honeycrm.client.services.ReadServiceAsync;
 
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -57,14 +59,17 @@ public class RelationshipPresenter implements Presenter {
 			view.makeVisible();
 			// view.refresh(event.getDto().getId());
 			
+			eventBus.fireEvent(new RpcBeginEvent());
 			readService.getAllRelated(event.getDto().getId(), event.getDto().getModule(), new AsyncCallback<Map<String,ListQueryResult>>() {
 				@Override
 				public void onSuccess(Map<String, ListQueryResult> result) {
 					view.insertRefreshedData(result);
+					eventBus.fireEvent(new RpcEndEvent());
 				}
 				
 				@Override
 				public void onFailure(Throwable caught) {
+					eventBus.fireEvent(new RpcEndEvent());
 				}
 			});
 		}

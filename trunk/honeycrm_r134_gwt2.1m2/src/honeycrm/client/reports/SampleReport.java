@@ -1,8 +1,8 @@
 package honeycrm.client.reports;
 
 import honeycrm.client.basiclayout.Initializer;
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.mvp.views.LoadView;
 
 import java.util.Date;
 import java.util.Map;
@@ -37,12 +37,12 @@ public class SampleReport extends Composite {
 			new Timer() {
 				@Override
 				public void run() {
-					LoadIndicator.get().startLoading();
+					LoadView.get().startLoading();
 
 					ServiceRegistry.reportService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
 						@Override
 						public void onSuccess(final Map<Integer, Double> result) {
-							LoadIndicator.get().endLoading();
+							LoadView.get().endLoading();
 
 							status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
 
@@ -55,7 +55,7 @@ public class SampleReport extends Composite {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							LoadIndicator.get().endLoading();
+							LoadView.get().endLoading();
 
 						}
 					});

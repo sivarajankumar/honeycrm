@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	.load {
+	    float: right;
+        font-weight: bold;
+        text-align: center;
+        margin-right: 10px;
+	}
+	</ui:style>
+	<g:Label addStyleNames="{style.load}" ui:field="loadIndicator" />
+</ui:UiBinder>  

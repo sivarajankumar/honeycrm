@@ -1,10 +1,10 @@
 package honeycrm.client.view.csvimport;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.csv.CsvImporter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.mvp.views.LoadView;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -83,7 +83,7 @@ public class CsvImportWidget {
 
 	private void importDto(final Dto[] dtos, final int currentIndex, final Label statusLabel) {
 		if (0 == currentIndex) {
-			LoadIndicator.get().startLoading();
+			LoadView.get().startLoading();
 			statusLabel.setText("Status: Started Import");
 		}
 		
@@ -95,7 +95,7 @@ public class CsvImportWidget {
 				final boolean isImportDone = currentIndex == dtos.length - 1;
 
 				if (isImportDone) {
-					LoadIndicator.get().endLoading();
+					LoadView.get().endLoading();
 					statusLabel.setText("Status: Import completed");
 					TabCenterView.instance().get(module).refreshListView();
 				} else {
@@ -105,7 +105,7 @@ public class CsvImportWidget {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadIndicator.get().endLoading();
+				LoadView.get().endLoading();
 				statusLabel.setText("Status: Import failed.");
 			}
 		});

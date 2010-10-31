@@ -1,7 +1,8 @@
 package honeycrm.client.admin;
 
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.mvp.views.LoadView;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -57,18 +58,18 @@ public class DatabaseWidget extends Composite {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				LoadIndicator.get().startLoading();
+				LoadView.get().startLoading();
 
 				ServiceRegistry.deleteService().deleteAllItems(new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert("delete all failed");
-						LoadIndicator.get().endLoading();
+						LoadView.get().endLoading();
 					}
 				});
 			}
