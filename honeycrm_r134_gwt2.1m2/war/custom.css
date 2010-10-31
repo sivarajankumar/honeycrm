@@ -353,21 +353,21 @@ tr {
 /* Overwrite some of GWTs settings */
 
 .gwt-Button {
-  background: transparent url('/gae/images/blue-button.png') no-repeat left center;
-  border: 1px solid #fff;
-  /*color: #fff;*/
-  color: #4B4A4A;
-  cursor: pointer;
-  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-  font-size: 0.916em;
-  font-weight: bold;
-  margin: 0 4px;
-  padding: 2px 4px;
-  text-transform: uppercase;
-  outline: 1px solid #9BABB0;
-  -moz-border-radius: 4px;
-  -moz-outline-radius: 4px;
-  -webkit-border-radius: 4px;
+  background: transparent url('/images/blue-button.png') no-repeat left center ! important;
+  border: 1px solid #fff ! important;
+  color: #fff ! important;
+  /*color: #4B4A4A;*/
+  cursor: pointer ! important;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif ! important;
+  font-size: 0.916em ! important;
+  font-weight: bold ! important;
+  margin: 0 4px ! important;
+  padding: 2px 4px ! important;
+  text-transform: uppercase ! important;
+  outline: 1px solid #9BABB0 ! important;
+  -moz-border-radius: 4px ! important;
+  -moz-outline-radius: 4px ! important;
+  -webkit-border-radius: 4px ! important;
 }
 
 .gwt-TabLayoutPanelContent {
@@ -383,17 +383,17 @@ tr {
   font-weight: bold;
   text-align: center;
   /*background: #d0e4f6;*/
-  background: url('/gae/images/tab-right.png') no-repeat scroll left 0px transparent;
+  background: url('/images/tab-right.png') no-repeat scroll left 0px transparent;
 }
 .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
   cursor: default;
   /*background: #92c1f0;*/
   color: white;
-  background: url('/gae/images/tab-right.png') no-repeat scroll left -29px transparent;
+  background: url('/images/tab-right.png') no-repeat scroll left -29px transparent;
 }
 
 .gwt-TabLayoutPanelTabInner {
-  /*background: url('/gae/images/tab-right.png') no-repeat scroll right -29px transparent;
+  /*background: url('/images/tab-right.png') no-repeat scroll right -29px transparent;
   padding: 6px 10px 3px 8px;*/
 }
 
