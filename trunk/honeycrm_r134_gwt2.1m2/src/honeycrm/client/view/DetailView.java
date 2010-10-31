@@ -1,12 +1,12 @@
 package honeycrm.client.view;
 
 import honeycrm.client.admin.LogConsole;
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.basiclayout.TabCenterView;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.NumberParser;
+import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
@@ -42,12 +42,12 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	private DetailViewButtonBar buttonBar;
 	private RelationshipsContainer relationshipsContainer;
 	private Dto dto = moduleDto.createDto();
-	private Map<String, Serializable> prefilledMap = new HashMap<String, Serializable>();
+	private final Map<String, Serializable> prefilledMap = new HashMap<String, Serializable>();
 
 	/**
 	 * table containing the labels and the actual field values (or input fields if we are in edit mode).
 	 */
-	private FlexTable table = new FlexTable();
+	private final FlexTable table = new FlexTable();
 
 	public DetailView(final String module) {
 		super(module);
@@ -68,7 +68,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("Could not run code asynchronously");
 			}
 		});
@@ -97,7 +97,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 				} else {
 					Prefetcher.instance.get(new Consumer<Dto>() {
 						@Override
-						public void setValueAsynch(Dto result) {
+						public void setValueAsynch(final Dto result) {
 							table.setVisible(true);
 							// if (null == relationshipsContainer) {
 							// TODO fix creation of relationship container
@@ -126,13 +126,13 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 							readService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
 								// commonService.get(moduleDto.getModule(), id, new AsyncCallback<Dto>() {
 								@Override
-								public void onFailure(Throwable caught) {
+								public void onFailure(final Throwable caught) {
 									displayError(caught);
 									table.setVisible(true);
 								}
 
 								@Override
-								public void onSuccess(Dto result) {
+								public void onSuccess(final Dto result) {
 									internalCacheCallback.setValueAsynch(result);
 								}
 							});
@@ -142,7 +142,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("Could not run code asynchronously");
 			}
 		});
@@ -192,7 +192,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 		}
 	}
 
-	private void addFocus(View view, Widget widgetValue, String id, String focussedField) {
+	private void addFocus(final View view, final Widget widgetValue, final String id, final String focussedField) {
 		if (View.EDIT == view && null != focussedField && id.equals(focussedField) && widgetValue instanceof FocusWidget) {
 			// TODO Cursor is still not put into the widget (e.g. text box) even with focus properly set.
 			((FocusWidget) widgetValue).setFocus(true);
@@ -221,7 +221,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 			if (widgetLabel instanceof Label) {
 				((Label) widgetLabel).addClickHandler(new ClickHandler() {
 					@Override
-					public void onClick(ClickEvent event) {
+					public void onClick(final ClickEvent event) {
 						// the label of this field has been clicked. we assume the user
 						// wanted to express that he would like to start editing the entity
 						// so we start editing of this entity for him
@@ -233,7 +233,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 			if (widgetValue instanceof TextBox) {
 				((TextBox) widgetValue).addKeyDownHandler(new KeyDownHandler() {
 					@Override
-					public void onKeyDown(KeyDownEvent event) {
+					public void onKeyDown(final KeyDownEvent event) {
 						if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
 							saveChanges();
 						}
@@ -273,18 +273,18 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 
 	public void delete() {
 		if (isShowing()) {
-			LoadIndicator.get().startLoading();
+			LoadView.get().startLoading();
 
 			deleteService.delete(moduleDto.getModule(), dto.getId(), new AsyncCallback<Void>() {
 				@Override
-				public void onFailure(Throwable caught) {
-					LoadIndicator.get().endLoading();
+				public void onFailure(final Throwable caught) {
+					LoadView.get().endLoading();
 					displayError(caught);
 				}
 
 				@Override
-				public void onSuccess(Void result) {
-					LoadIndicator.get().endLoading();
+				public void onSuccess(final Void result) {
+					LoadView.get().endLoading();
 					TabCenterView.instance().get(moduleDto.getModule()).refreshListView();
 					stopViewing();
 				}
@@ -313,7 +313,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	/**
 	 * Set all the fields in the given dto instance stored in the map storing prefilled fields.
 	 */
-	private Dto addPrefilledData(Dto dto) {
+	private Dto addPrefilledData(final Dto dto) {
 		for (int row = 0; row < moduleDto.getFormFieldIds().length; row++) {
 			for (int col = 0; col < moduleDto.getFormFieldIds()[row].length; col++) {
 				final String fieldId = moduleDto.getFormFieldIds()[row][col];
@@ -340,7 +340,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 		return buttonBar;
 	}
 
-	private void prefill(String fieldId, Serializable value) {
+	private void prefill(final String fieldId, final Serializable value) {
 		prefilledMap.put(fieldId, value);
 	}
 
@@ -358,7 +358,7 @@ public class DetailView extends AbstractView implements ValueChangeHandler<Strin
 	}
 
 	@Override
-	public void onValueChange(ValueChangeEvent<String> event) {
+	public void onValueChange(final ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().split("\\s+");
 
 		if (2 <= token.length && token[0].equals(moduleDto.getModule())) {

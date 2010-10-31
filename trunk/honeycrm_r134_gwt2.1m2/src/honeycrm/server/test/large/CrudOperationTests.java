@@ -23,7 +23,7 @@ public class CrudOperationTests extends DatastoreTest {
 		try {
 			readService.getAllRelated(0L, Contact.class.getSimpleName());
 			fail();
-		} catch (RuntimeException e) {
+		} catch (final RuntimeException e) {
 		}
 		assertNotNull(readService.getAllAssignedTo(Contact.class.getSimpleName(), 1, 0, 20));
 

@@ -27,7 +27,7 @@ public class FieldEnum extends AbstractField {
 	}
 
 	@Override
-	protected void internalSetData(ListBox widget, Object value, View view) {
+	protected void internalSetData(final ListBox widget, final Object value, final View view) {
 		if (view == View.CREATE) {
 			final String[] options = getOptions();
 			for (int i = 0; i < options.length; i++) {
@@ -48,7 +48,7 @@ public class FieldEnum extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(Widget w) {
+	protected Serializable internalGetData(final Widget w) {
 		final ListBox box = (ListBox) w;
 
 		if (box.getSelectedIndex() == -1) {

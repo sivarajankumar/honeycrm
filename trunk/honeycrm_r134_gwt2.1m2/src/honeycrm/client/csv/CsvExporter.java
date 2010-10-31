@@ -22,7 +22,7 @@ public class CsvExporter extends AbstractCsv {
 		final String[] fields = moduleDto.getListFieldIds();
 		String csv = "";
 
-		for (Dto entry : list) {
+		for (final Dto entry : list) {
 			final Collection<String> line = new LinkedList<String>();
 
 			for (int i = 0; i < fields.length; i++) {

@@ -45,7 +45,7 @@ public class TabModuleView extends DockLayoutPanel {
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("Cannot run code asynchronously");
 			}
 		});

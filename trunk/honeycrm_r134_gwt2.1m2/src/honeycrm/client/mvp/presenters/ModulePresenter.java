@@ -30,7 +30,7 @@ public class ModulePresenter implements Presenter {
 	}
 
 	@Override
-	public void go(HasWidgets container) {
+	public void go(final HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
 	}

@@ -119,7 +119,7 @@ public class DetailView extends Composite implements Display {
 		return moduleDto.getFieldById(fieldId).getWidget(view, tmpDto, fieldId);
 	}
 
-	private void addFocus(View view, Widget widgetValue, String id, String focussedField) {
+	private void addFocus(final View view, final Widget widgetValue, final String id, final String focussedField) {
 		if (View.EDIT == view && null != focussedField && id.equals(focussedField) && widgetValue instanceof FocusWidget) {
 			// TODO Cursor is still not put into the widget (e.g. text box) even with focus properly set.
 			((FocusWidget) widgetValue).setFocus(true);
@@ -149,7 +149,7 @@ public class DetailView extends Composite implements Display {
 			if (widgetLabel instanceof Label) {
 				((Label) widgetLabel).addClickHandler(new ClickHandler() {
 					@Override
-					public void onClick(ClickEvent event) {
+					public void onClick(final ClickEvent event) {
 						// the label of this field has been clicked. we assume the user
 						// wanted to express that he would like to start editing the entity
 						// so we start editing of this entity for him
@@ -162,7 +162,7 @@ public class DetailView extends Composite implements Display {
 			if (widgetValue instanceof TextBox) {
 				((TextBox) widgetValue).addKeyDownHandler(new KeyDownHandler() {
 					@Override
-					public void onKeyDown(KeyDownEvent event) {
+					public void onKeyDown(final KeyDownEvent event) {
 						if (KeyCodes.KEY_ENTER == event.getNativeKeyCode()) {
 							if (null != presenter) {
 								presenter.onSave();
@@ -175,12 +175,12 @@ public class DetailView extends Composite implements Display {
 	}
 
 	@Override
-	public void setPresenter(DetailPresenter modulePresenter) {
+	public void setPresenter(final DetailPresenter modulePresenter) {
 		this.presenter = modulePresenter;
 	}
 
 	@Override
-	public void setData(Dto dto) {
+	public void setData(final Dto dto) {
 		createBtn.setVisible(true);
 		editBtn.setVisible(true);
 		cancelBtn.setVisible(false);

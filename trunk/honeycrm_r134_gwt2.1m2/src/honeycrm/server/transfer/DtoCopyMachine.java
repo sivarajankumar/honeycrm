@@ -30,7 +30,7 @@ public class DtoCopyMachine {
 	private static final PersistenceManager m = PMF.get().getPersistenceManager();
 	private static final DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-	public AbstractEntity copy(Dto dto) {
+	public AbstractEntity copy(final Dto dto) {
 		return copy(dto, null);
 	}
 
@@ -57,7 +57,7 @@ public class DtoCopyMachine {
 			}
 
 			return entity;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -96,7 +96,7 @@ public class DtoCopyMachine {
 				 */
 				try {
 					field.set(entity, value);
-				} catch (IllegalArgumentException e) {
+				} catch (final IllegalArgumentException e) {
 					System.err.println("asdas");
 				}
 			}
@@ -138,12 +138,12 @@ public class DtoCopyMachine {
 		// store child keys in entity
 		try {
 			field.set(entity, keys);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Dto copy(AbstractEntity entity) {
+	public Dto copy(final AbstractEntity entity) {
 		return copy(entity, false);
 	}
 
@@ -151,7 +151,7 @@ public class DtoCopyMachine {
 	 * Copy data from a domain class instance into a Dto. This is usually the case whenever the server responds to clients (read).
 	 */
 	// application hotspot 2nd place
-	public Dto copy(AbstractEntity entity, final boolean resolveLists) {
+	public Dto copy(final AbstractEntity entity, final boolean resolveLists) {
 		final Dto dto = new Dto();
 
 		if (null == entity) {
@@ -176,7 +176,7 @@ public class DtoCopyMachine {
 				} else if ("id".equals(fieldName)) {
 					try {
 						dto.set(fieldName, ((Key) value).getId());
-					} catch (NullPointerException e) {
+					} catch (final NullPointerException e) {
 						System.out.println("npe!");
 					}
 				} else if (RELATE_FIELDS.containsKey(entityClass) && RELATE_FIELDS.get(entityClass).containsKey(field)) {
@@ -188,7 +188,7 @@ public class DtoCopyMachine {
 					dto.set(fieldName, (Serializable) value);
 				}
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
@@ -220,7 +220,7 @@ public class DtoCopyMachine {
 					CommonServiceReader.resolveRelatedEntities(childDomainObject, childDto, queryClass);
 
 					children.add(childDto);
-				} catch (NoSuchElementException e) {
+				} catch (final NoSuchElementException e) {
 					System.err.println("Cannot find " + queryClass.toString() + "/" + key.getId());
 				}
 			}

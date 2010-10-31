@@ -1,5 +1,7 @@
 package honeycrm.client.basiclayout;
 
+import honeycrm.client.mvp.views.HeaderView;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.Window;
@@ -20,12 +22,12 @@ public class Initializer extends FlowPanel {
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
-				add(new Header());
+				add(new HeaderView());
 				add(TabCenterView.instance());
 			}
 			
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("Could not run code asynchronously");
 			}
 		});

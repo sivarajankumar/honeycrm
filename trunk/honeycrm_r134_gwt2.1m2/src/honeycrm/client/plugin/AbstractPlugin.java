@@ -19,7 +19,7 @@ abstract public class AbstractPlugin implements Serializable {
 		return getClass().toString();
 	}
 	
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 	

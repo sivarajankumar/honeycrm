@@ -58,7 +58,7 @@ public class RelationshipsContainer extends AbstractView {
 // side since there the RelatesTo annotation is read using reflection
 class SingleRelationshipPanel extends ListView {
 	private final String relatedDtoClass;
-	private Long id;
+	private final Long id;
 
 	public SingleRelationshipPanel(final String originatingDto, final Long id, final String relatedDto) {
 		super(originatingDto);
@@ -100,7 +100,7 @@ class SingleRelationshipPanel extends ListView {
 		final Button btn = new Button("Create");
 		btn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				final HashMap<String, HashMap<String, HashSet<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
 
 				/**

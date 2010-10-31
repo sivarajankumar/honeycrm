@@ -21,7 +21,7 @@ public class Dto implements Serializable {
 	private static final long serialVersionUID = 2098126312789586977L;
 
 	private String module;
-	private HashMap<String, Serializable> data = new HashMap<String, Serializable>();
+	private final HashMap<String, Serializable> data = new HashMap<String, Serializable>();
 
 	public Dto() {
 		data.put("id", null);
@@ -44,7 +44,7 @@ public class Dto implements Serializable {
 		return module;
 	}
 
-	public void setModule(String module) {
+	public void setModule(final String module) {
 		this.module = module;
 	}
 
@@ -57,7 +57,7 @@ public class Dto implements Serializable {
 	}
 
 	public static Dto getByModuleName(final List<Dto> dtos, final String moduleName) {
-		for (Dto dto : dtos) {
+		for (final Dto dto : dtos) {
 			if (dto.getModule().equals(moduleName)) {
 				return dto;
 			}
@@ -67,7 +67,7 @@ public class Dto implements Serializable {
 		throw new RuntimeException();
 	}
 
-	public static boolean isInternalReadOnlyField(String id) {
+	public static boolean isInternalReadOnlyField(final String id) {
 		final Set<String> internalFields = new HashSet<String>();
 		internalFields.add("createdAt");
 		internalFields.add("lastUpdatedAt");
@@ -96,7 +96,7 @@ public class Dto implements Serializable {
 		return DtoModuleRegistry.instance().get(module).getQuickSearchItems();
 	}
 
-	public void setMarked(boolean marked) {
+	public void setMarked(final boolean marked) {
 		set("marked", marked);
 	}
 

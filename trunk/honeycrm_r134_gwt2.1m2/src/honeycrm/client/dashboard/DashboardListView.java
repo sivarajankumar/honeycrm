@@ -13,7 +13,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Button;
 
 public class DashboardListView extends ListView {
-	public DashboardListView(String module) {
+	public DashboardListView(final String module) {
 		super(module);
 
 		setShowTitle(true);
@@ -28,7 +28,7 @@ public class DashboardListView extends ListView {
 	private Button getCreateButton() {
 		return WidgetJuggler.getButton("Create", new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				History.newItem(HistoryTokenFactory.get(moduleDto.getModule(), ModuleAction.CREATE, "assignedTo", User.getUserId()));
 			}
 		});

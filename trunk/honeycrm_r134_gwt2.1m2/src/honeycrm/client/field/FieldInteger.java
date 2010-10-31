@@ -17,19 +17,19 @@ public class FieldInteger extends AbstractField {
 	public FieldInteger() {
 	}
 
-	public FieldInteger(final String index, final String label, int defaultValue) {
+	public FieldInteger(final String index, final String label, final int defaultValue) {
 		super(index, label, String.valueOf(defaultValue));
 		this.width = DEFAULT_WIDTH;
 	}
 
 	@Override
-	public Serializable getData(Widget w) {
+	public Serializable getData(final Widget w) {
 		final String value = (String) super.getData(w);
 		return NumberParser.convertToInteger(value);
 	}
 
 	@Override
-	public Serializable getTypedData(Object value) {
+	public Serializable getTypedData(final Object value) {
 		return NumberParser.convertToInteger(value);
 	}
 	

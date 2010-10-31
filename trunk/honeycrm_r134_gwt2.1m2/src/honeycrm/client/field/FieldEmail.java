@@ -20,22 +20,22 @@ public class FieldEmail extends AbstractField {
 	}
 
 	@Override
-	protected Serializable internalGetData(Widget w) {
+	protected Serializable internalGetData(final Widget w) {
 		return ((Anchor) w).getHTML();
 	}
 
 	@Override
-	public String internalFormattedValue(Object value) {
+	public String internalFormattedValue(final Object value) {
 		return StringAbbreviation.shorten(stringify(value), 10);
 	}
 
 	@Override
-	protected void internalSetData(TextBox widget, Object value, View view) {
+	protected void internalSetData(final TextBox widget, final Object value, final View view) {
 		widget.setValue(stringify(value)); // declare this to avoid shortening of address in edit view
 	}
 	
 	@Override
-	protected void internalSetData(Anchor widget, Object value, View view) {
+	protected void internalSetData(final Anchor widget, final Object value, final View view) {
 		// TODO do this only for value != null
 		// TODO use Label when value == null
 		widget.setTitle(stringify(value));

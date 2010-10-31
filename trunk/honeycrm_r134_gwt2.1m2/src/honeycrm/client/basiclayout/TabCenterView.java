@@ -97,7 +97,7 @@ public class TabCenterView extends Composite implements ValueChangeHandler<Strin
 
 				panel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 					@Override
-					public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+					public void onBeforeSelection(final BeforeSelectionEvent<Integer> event) {
 						// hide all create buttons
 						for (final Integer pos : tabPosToCreateBtnMap.keySet()) {
 							tabPosToCreateBtnMap.get(pos).setVisible(false);
@@ -123,7 +123,7 @@ public class TabCenterView extends Composite implements ValueChangeHandler<Strin
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("Could not execute asynchronously");
 			}
 		});
@@ -146,7 +146,7 @@ public class TabCenterView extends Composite implements ValueChangeHandler<Strin
 		return titlePanel;
 	}
 
-	public TabModuleView get(String moduleName) {
+	public TabModuleView get(final String moduleName) {
 		return moduleViewMap.get(moduleName);
 	}
 
@@ -170,7 +170,7 @@ public class TabCenterView extends Composite implements ValueChangeHandler<Strin
 		}
 	}
 
-	public void showModuleTab(String module) {
+	public void showModuleTab(final String module) {
 		if (!tabPositionMap.containsKey(module) || !moduleViewMap.containsKey(module)) {
 			panel.selectTab(0);
 			return;
@@ -183,7 +183,7 @@ public class TabCenterView extends Composite implements ValueChangeHandler<Strin
 	}
 
 	@Override
-	public void onValueChange(ValueChangeEvent<String> event) {
+	public void onValueChange(final ValueChangeEvent<String> event) {
 		final String[] token = event.getValue().trim().split("\\s+");
 
 		if (2 <= token.length) {

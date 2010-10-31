@@ -10,7 +10,6 @@ import honeycrm.client.mvp.events.SuccessfulLoginEvent;
 import honeycrm.client.mvp.events.SuccessfulLoginEventHandler;
 import honeycrm.client.mvp.presenters.ApplicationPresenter;
 import honeycrm.client.mvp.presenters.LoginPresenter;
-import honeycrm.client.mvp.presenters.Presenter;
 import honeycrm.client.mvp.views.ApplicationView;
 import honeycrm.client.mvp.views.LoginView;
 import honeycrm.client.services.AuthServiceAsync;
@@ -64,21 +63,21 @@ public class AppController implements ValueChangeHandler<String> {
 		});
 		eventBus.addHandler(DeleteEvent.TYPE, new DeleteEventHandler() {
 			@Override
-			public void onDeleteEvent(DeleteEvent event) {
+			public void onDeleteEvent(final DeleteEvent event) {
 				doDelete(event);
 			}
 		});
 	}
 
-	private void doDelete(DeleteEvent event) {
+	private void doDelete(final DeleteEvent event) {
 		deleteService.deleteAll(event.getKind(), event.getDeleteIds(), new AsyncCallback<Void>() {
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccess(final Void result) {
 
 			}
 
 			@Override
-			public void onFailure(Throwable caught) {
+			public void onFailure(final Throwable caught) {
 				Window.alert("Could not delete");
 			}
 		});
@@ -92,7 +91,7 @@ public class AppController implements ValueChangeHandler<String> {
 	}
 
 	@Override
-	public void onValueChange(ValueChangeEvent<String> event) {
+	public void onValueChange(final ValueChangeEvent<String> event) {
 		final String token = History.getToken();
 
 		if (null != token) {
@@ -106,7 +105,7 @@ public class AppController implements ValueChangeHandler<String> {
 					}
 					
 					@Override
-					public void onFailure(Throwable reason) {
+					public void onFailure(final Throwable reason) {
 						
 					}
 				});
@@ -130,7 +129,7 @@ public class AppController implements ValueChangeHandler<String> {
 					}
 					
 					@Override
-					public void onFailure(Throwable reason) {
+					public void onFailure(final Throwable reason) {
 					}
 				});
 			}

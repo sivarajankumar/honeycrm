@@ -1,13 +1,13 @@
 package honeycrm.client.view.list;
 
 import honeycrm.client.admin.LogConsole;
-import honeycrm.client.basiclayout.LoadIndicator;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldRelate;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.misc.WidgetJuggler;
+import honeycrm.client.mvp.views.LoadView;
 import honeycrm.client.view.AbstractView;
 import honeycrm.client.view.ModuleAction;
 
@@ -79,7 +79,7 @@ public class ListView extends AbstractView {
 		final Button btn = new Button("Delete selected");
 		btn.addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (getDeletedIds().size() > 0) {
 					if (Window.confirm("Do you want to delete the selected items?")) {
 						deleteSelected(getDeletedIds());
@@ -88,18 +88,18 @@ public class ListView extends AbstractView {
 			}
 
 			private void deleteSelected(final Set<Long> ids) {
-				LoadIndicator.get().startLoading();
+				LoadView.get().startLoading();
 
 				ServiceRegistry.deleteService().deleteAll(moduleDto.getModule(), ids, new AsyncCallback<Void>() {
 					@Override
-					public void onSuccess(Void result) {
-						LoadIndicator.get().endLoading();
+					public void onSuccess(final Void result) {
+						LoadView.get().endLoading();
 						refresh();
 					}
 
 					@Override
-					public void onFailure(Throwable caught) {
-						LoadIndicator.get().endLoading();
+					public void onFailure(final Throwable caught) {
+						LoadView.get().endLoading();
 						displayError(caught);
 					}
 				});
@@ -118,7 +118,7 @@ public class ListView extends AbstractView {
 	}
 
 	protected void initListView() {
-		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+		final SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
 
 		pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
 		pager.setDisplay(table = new CellTable<Dto>(ListViewDB.KEY_PROVIDER));
@@ -126,7 +126,7 @@ public class ListView extends AbstractView {
 		final SingleSelectionModel<Dto> selectionModel = new SingleSelectionModel<Dto>(ListViewDB.KEY_PROVIDER);
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
+			public void onSelectionChange(final SelectionChangeEvent event) {
 				final Dto dto = selectionModel.getSelectedObject();
 				History.newItem(HistoryTokenFactory.get(dto.getModule(), ModuleAction.DETAIL, dto.getId()));
 			}
@@ -222,7 +222,7 @@ public class ListView extends AbstractView {
 				// TODO since this change Memberships cannot be selected / clicked anymore in list views
 				column = new Column<Dto, SafeHtml>(new SafeHtmlCell()) {
 					@Override
-					public SafeHtml getValue(Dto object) {
+					public SafeHtml getValue(final Dto object) {
 						final Serializable value = object.get(id);
 						
 						final SafeHtmlBuilder b = new SafeHtmlBuilder();
@@ -261,13 +261,13 @@ public class ListView extends AbstractView {
 		if (allowDelete) { // only attach delete column of the user is allowed to delete
 			final Column<Dto, Boolean> delCol = new Column<Dto, Boolean>(new CheckboxCell()) {
 				@Override
-				public Boolean getValue(Dto object) {
+				public Boolean getValue(final Dto object) {
 					return false;
 				}
 			};
 			delCol.setFieldUpdater(new FieldUpdater<Dto, Boolean>() {
 				@Override
-				public void update(int index, Dto object, Boolean value) {
+				public void update(final int index, final Dto object, final Boolean value) {
 					// mark this item for later deletion
 					object.set("deleteFlag", value);
 				}
@@ -298,7 +298,7 @@ public class ListView extends AbstractView {
 			}
 
 			@Override
-			public void onFailure(Throwable reason) {
+			public void onFailure(final Throwable reason) {
 				Window.alert("could not run code asynchronously.");
 			}
 		});
@@ -316,23 +316,23 @@ public class ListView extends AbstractView {
 		return itemsHaveBeenLoadedOnce;
 	}
 
-	public void setPageSize(int pageSize) {
+	public void setPageSize(final int pageSize) {
 		this.pageSize = pageSize;
 	}
 
-	public void setShowTitle(boolean showTitle) {
+	public void setShowTitle(final boolean showTitle) {
 		this.showTitle = showTitle;
 	}
 
-	public void setDisclose(boolean disclose) {
+	public void setDisclose(final boolean disclose) {
 		this.disclose = disclose;
 	}
 
-	public void setAllowDelete(boolean allowDelete) {
+	public void setAllowDelete(final boolean allowDelete) {
 		this.allowDelete = allowDelete;
 	}
 
-	public void setAdditionalButtons(Button... additionalButtons) {
+	public void setAdditionalButtons(final Button... additionalButtons) {
 		this.additionalButtons = additionalButtons;
 	}
 

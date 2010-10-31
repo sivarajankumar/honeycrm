@@ -94,7 +94,7 @@ public class DemoDataHolder {
 	}
 
 	private static long getMinDateTimestamp() {
-		Calendar c = Calendar.getInstance();
+		final Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, 1990);
 		c.set(Calendar.MONTH, 0);
 		c.set(Calendar.DAY_OF_MONTH, 1);
@@ -103,17 +103,17 @@ public class DemoDataHolder {
 	}
 
 	private static long getMaxDateTimespan(final long firstDateTimestamp) {
-		Calendar c = Calendar.getInstance();
+		final Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, 2020);
 		c.set(Calendar.MONTH, 11);
 		c.set(Calendar.DAY_OF_MONTH, 1);
-		Date lastDate = c.getTime();
+		final Date lastDate = c.getTime();
 		return lastDate.getTime() - firstDateTimestamp;
 	}
 
 	private static String getRandomEmailAddress() {
-		String name = getRandomName();
-		String host = hosts.get(r.nextInt(hosts.size()));
+		final String name = getRandomName();
+		final String host = hosts.get(r.nextInt(hosts.size()));
 		return (name + "@" + host).toLowerCase();
 	}
 

@@ -31,7 +31,7 @@ public class LoginPresenter implements Presenter {
 		void hide();
 	}
 
-	private static final boolean AUTO_LOGIN = true;
+	private static final boolean AUTO_LOGIN = false;
 	private static final String AUTO_LOGIN_USERNAME = "james";
 	private static final String AUTO_LOGIN_PASSWORD = "";
 	private final AuthServiceAsync authService;
@@ -41,7 +41,7 @@ public class LoginPresenter implements Presenter {
 	private boolean loginDeferred = false;
 	private boolean initializationDone = false;
 
-	public LoginPresenter(final AuthServiceAsync authService, final ConfigServiceAsync confService, SimpleEventBus eventBus, Display loginView) {
+	public LoginPresenter(final AuthServiceAsync authService, final ConfigServiceAsync confService, final SimpleEventBus eventBus, final Display loginView) {
 		this.authService = authService;
 		this.confService = confService;
 		this.eventBus = eventBus;
@@ -67,7 +67,7 @@ public class LoginPresenter implements Presenter {
 			}
 
 			@Override
-			public void onFailure(Throwable caught) {
+			public void onFailure(final Throwable caught) {
 				Window.alert("Could not get configuration");
 			}
 		});
@@ -82,7 +82,7 @@ public class LoginPresenter implements Presenter {
 			view.getStatusLabel().setText("Checking credentials..");
 			authService.login(login, pass, new AsyncCallback<Long>() {
 				@Override
-				public void onSuccess(Long result) {
+				public void onSuccess(final Long result) {
 					if (null == result) {
 						view.getStatusLabel().setText("Invalid login or password.");
 					} else {
@@ -93,7 +93,7 @@ public class LoginPresenter implements Presenter {
 				}
 
 				@Override
-				public void onFailure(Throwable caught) {
+				public void onFailure(final Throwable caught) {
 
 				}
 			});
@@ -107,20 +107,20 @@ public class LoginPresenter implements Presenter {
 	private void bind() {
 		view.getLoginAsKeyHandler().addKeyDownHandler(new KeyDownHandler() {
 			@Override
-			public void onKeyDown(KeyDownEvent event) {
+			public void onKeyDown(final KeyDownEvent event) {
 				tryLogin();
 			}
 		});
 		view.getLoginButton().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				tryLogin();
 			}
 		});
 	}
 
 	@Override
-	public void go(HasWidgets container) {
+	public void go(final HasWidgets container) {
 		container.clear();
 		container.add(view.asWidget());
 		populate();

@@ -59,7 +59,7 @@ public class DetailPresenterTest extends TestCase {
 			@Override
 			public Object answer() throws Throwable {
 				final Object[] arguments = getCurrentArguments();
-				AsyncCallback callback = (AsyncCallback) arguments[arguments.length - 1];
+				final AsyncCallback callback = (AsyncCallback) arguments[arguments.length - 1];
 				callback.onSuccess(1L);
 				return null;
 			}
@@ -93,7 +93,7 @@ public class DetailPresenterTest extends TestCase {
 			@Override
 			public Object answer() throws Throwable {
 				final Object[] arguments = getCurrentArguments();
-				AsyncCallback<Void> callback = (AsyncCallback<Void>) arguments[arguments.length - 1];
+				final AsyncCallback<Void> callback = (AsyncCallback<Void>) arguments[arguments.length - 1];
 				callback.onSuccess(null);
 				return null;
 			}

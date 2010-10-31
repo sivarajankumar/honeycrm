@@ -6,6 +6,8 @@ import java.util.HashMap;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.mvp.events.RpcBeginEvent;
+import honeycrm.client.mvp.events.RpcEndEvent;
 import honeycrm.client.mvp.events.UpdateEvent;
 import honeycrm.client.mvp.events.UpdateEventHandler;
 import honeycrm.client.services.ReadServiceAsync;
@@ -52,14 +54,14 @@ public class DashboardsPresenter implements Presenter {
 	private void bind() {
 		view.getRefreshBtn().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				refresh();
 			}
 		});
 		
 		eventBus.addHandler(UpdateEvent.TYPE, new UpdateEventHandler() {
 			@Override
-			public void onAddEvent(UpdateEvent event) {
+			public void onAddEvent(final UpdateEvent event) {
 				// Refresh dashboard automatically if user changed an item.
 				// We do not remove the refresh button to allow the user to refresh to see the changes done by other users.
 				refresh();
@@ -69,21 +71,23 @@ public class DashboardsPresenter implements Presenter {
 
 	protected void refresh() {
 		if (userId > 0) {
+			eventBus.fireEvent(new RpcBeginEvent());
 			readService.getAllAssignedTo(userId, 0, 20, new AsyncCallback<HashMap<String,ListQueryResult>>() {
 				@Override
-				public void onSuccess(HashMap<String, ListQueryResult> result) {
+				public void onSuccess(final HashMap<String, ListQueryResult> result) {
+					eventBus.fireEvent(new RpcEndEvent());
 					view.insertRefreshedData(result);
 				}
 				
 				@Override
-				public void onFailure(Throwable caught) {
-					
+				public void onFailure(final Throwable caught) {
+					eventBus.fireEvent(new RpcEndEvent());
 				}
 			});
 		}
 	}
 
 	@Override
-	public void go(HasWidgets container) {
+	public void go(final HasWidgets container) {
 	}
 }

@@ -41,7 +41,7 @@ public class FulltextSearchWidget extends SuggestBox {
 		
 		addKeyPressHandler(new KeyPressHandler() {
 			@Override
-			public void onKeyPress(KeyPressEvent event) {
+			public void onKeyPress(final KeyPressEvent event) {
 				if (KeyCodes.KEY_ESCAPE == event.getNativeEvent().getKeyCode()) {
 					setText("");
 					emptySuggestOracle();
@@ -65,7 +65,7 @@ public class FulltextSearchWidget extends SuggestBox {
 
 		addSelectionHandler(new SelectionHandler<Suggestion>() {
 			@Override
-			public void onSelection(SelectionEvent<Suggestion> event) {
+			public void onSelection(final SelectionEvent<Suggestion> event) {
 				redirectToDetailView(event);
 			}
 
@@ -79,7 +79,7 @@ public class FulltextSearchWidget extends SuggestBox {
 		setText(INITIAL_SEARCH_TEXT);
 		getTextBox().addFocusHandler(new FocusHandler() {
 			@Override
-			public void onFocus(FocusEvent event) {
+			public void onFocus(final FocusEvent event) {
 				if (getText().equals(INITIAL_SEARCH_TEXT)) {
 					setText("");
 				}
@@ -87,7 +87,7 @@ public class FulltextSearchWidget extends SuggestBox {
 		});
 		getTextBox().addBlurHandler(new BlurHandler() {
 			@Override
-			public void onBlur(BlurEvent event) {
+			public void onBlur(final BlurEvent event) {
 				if (getText().isEmpty()) {
 					setText(INITIAL_SEARCH_TEXT);
 				}
@@ -95,7 +95,7 @@ public class FulltextSearchWidget extends SuggestBox {
 		});
 	}
 
-	protected void redirectToDetailView(SelectionEvent<Suggestion> event) {
+	protected void redirectToDetailView(final SelectionEvent<Suggestion> event) {
 		final String label = event.getSelectedItem().getReplacementString();
 
 		if (nameToDto.containsKey(label)) {
@@ -111,7 +111,7 @@ public class FulltextSearchWidget extends SuggestBox {
 		readService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 		// commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 			@Override
-			public void onSuccess(ListQueryResult result) {
+			public void onSuccess(final ListQueryResult result) {
 				if (null != result && result.getItemCount() > 0) {
 					final FulltextSuggestOracle o = emptySuggestOracle();
 					final Map<String, Integer> quicksearchLabels = new HashMap<String, Integer>();
@@ -139,7 +139,7 @@ public class FulltextSearchWidget extends SuggestBox {
 			}
 
 			@Override
-			public void onFailure(Throwable caught) {
+			public void onFailure(final Throwable caught) {
 				Window.alert("fulltext search failed");
 			}
 		});
