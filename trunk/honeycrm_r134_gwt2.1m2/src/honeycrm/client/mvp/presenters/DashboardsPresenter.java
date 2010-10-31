@@ -1,6 +1,7 @@
 package honeycrm.client.mvp.presenters;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import honeycrm.client.dto.DtoModuleRegistry;
@@ -10,6 +11,7 @@ import honeycrm.client.mvp.events.RpcBeginEvent;
 import honeycrm.client.mvp.events.RpcEndEvent;
 import honeycrm.client.mvp.events.UpdateEvent;
 import honeycrm.client.mvp.events.UpdateEventHandler;
+import honeycrm.client.mvp.views.DashboardView;
 import honeycrm.client.services.ReadServiceAsync;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,6 +23,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 public class DashboardsPresenter implements Presenter {
 	public interface Display {
+		Collection<DashboardView> getDashboardViews(); 
 		HasClickHandlers getRefreshBtn();
 		void setDashboardModules(ArrayList<String> modules);
 		void insertRefreshedData(HashMap<String, ListQueryResult> result);
@@ -45,6 +48,9 @@ public class DashboardsPresenter implements Presenter {
 			modules.add(moduleDto.getModule());
 		}
 		view.setDashboardModules(modules);
+		for (final DashboardView v: view.getDashboardViews()) {
+			new DashboardPresenter(eventBus, v);
+		}
 		
 		bind();
 		

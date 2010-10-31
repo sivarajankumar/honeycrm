@@ -9,6 +9,8 @@ import honeycrm.client.mvp.events.OpenModuleEvent;
 import honeycrm.client.mvp.events.OpenModuleEventHandler;
 import honeycrm.client.mvp.events.UpdateEvent;
 import honeycrm.client.mvp.events.UpdateEventHandler;
+import honeycrm.client.mvp.views.HasSelectionHandler;
+import honeycrm.client.mvp.views.SelectionHandler;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
@@ -17,16 +19,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ListPresenter implements Presenter {
-	public interface Display {
+public class ListPresenter extends Selector {
+	public interface Display extends HasSelectionHandler {
 		boolean shouldDelete();
 		HasClickHandlers getDeleteButton();
 		Widget asWidget();
 		void refresh();
-		void setPresenter(ListPresenter presenter);
 	}
 
 	boolean listViewInitialized = false;
@@ -38,6 +38,8 @@ public class ListPresenter implements Presenter {
 	final CreateServiceAsync createService;
 
 	public ListPresenter(final ReadServiceAsync readService, final UpdateServiceAsync updateService, final CreateServiceAsync createService, final Display view, final SimpleEventBus eventBus, final String kind) {
+		super(eventBus, view);
+		
 		this.view = view;
 		this.readService = readService;
 		this.updateService = updateService;
@@ -49,7 +51,12 @@ public class ListPresenter implements Presenter {
 	}
 
 	private void bind() {
-		view.setPresenter(this);
+		view.setSelectionHandler(new SelectionHandler() {
+			@Override
+			public void onSelect(Dto dto) {
+				eventBus.fireEvent(new OpenEvent(dto));				
+			}
+		});
 		
 		view.getDeleteButton().addClickHandler(new ClickHandler() {
 			@Override
@@ -78,15 +85,5 @@ public class ListPresenter implements Presenter {
 		if (module.equals(refreshModule)) {
 			view.refresh();
 		}
-	}
-	
-	@Override
-	public void go(HasWidgets container) {
-		container.clear();
-		container.add(view.asWidget());
-	}
-
-	public void onSelect(final Dto dto) {
-		eventBus.fireEvent(new OpenEvent(dto));
 	}
 }

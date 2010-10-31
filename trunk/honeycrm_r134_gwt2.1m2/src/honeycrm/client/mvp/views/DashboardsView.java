@@ -1,6 +1,7 @@
 package honeycrm.client.mvp.views;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,5 +65,10 @@ public class DashboardsView extends Composite implements Display {
 				views.get(entry.getKey()).insertRefreshedData(entry.getValue());
 			}
 		}
+	}
+
+	@Override
+	public Collection<DashboardView> getDashboardViews() {
+		return views.values();
 	}
 }

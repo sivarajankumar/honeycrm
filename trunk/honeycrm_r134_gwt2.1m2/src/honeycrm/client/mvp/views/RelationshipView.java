@@ -6,7 +6,7 @@ import java.util.HashSet;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.mvp.presenters.SingleRelationshipPresenter.Display;
+import honeycrm.client.mvp.presenters.RelationshipPresenter.Display;
 import honeycrm.client.view.list.ListViewDataProvider;
 import honeycrm.client.view.relationship.RelationshipListViewDataProvider;
 
