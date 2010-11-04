@@ -352,7 +352,7 @@ tr {
 
 /* Overwrite some of GWTs settings */
 
-.gwt-Button {
+.honey .gwt-Button {
   background: transparent url('/images/blue-button.png') no-repeat left center ! important;
   border: 1px solid #fff ! important;
   color: #fff ! important;
@@ -375,7 +375,7 @@ tr {
 	padding: 0px ! important; 
 }
 
-.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
+.honey .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab {
   margin-left: 6px;
   padding: 3px 6px;
   cursor: hand;
@@ -385,7 +385,7 @@ tr {
   /*background: #d0e4f6;*/
   background: url('/images/tab-right.png') no-repeat scroll left 0px transparent;
 }
-.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
+.honey .gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected {
   cursor: default;
   /*background: #92c1f0;*/
   color: white;
