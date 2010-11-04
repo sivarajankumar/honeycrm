@@ -31,7 +31,7 @@ public class LoginPresenter implements Presenter {
 		void hide();
 	}
 
-	private static final boolean AUTO_LOGIN = true;
+	private static final boolean AUTO_LOGIN = false;
 	private static final String AUTO_LOGIN_USERNAME = "james";
 	private static final String AUTO_LOGIN_PASSWORD = "";
 	private final AuthServiceAsync authService;
