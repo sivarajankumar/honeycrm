@@ -370,7 +370,7 @@ tr {
   -webkit-border-radius: 4px ! important;
 }
 
-.gwt-TabLayoutPanelContent {
+.honey .gwt-TabLayoutPanelContent {
 	/* This makes sure the dashboard page does not have too much padding around its tool bar. */
 	padding: 0px ! important; 
 }
@@ -392,7 +392,7 @@ tr {
   background: url('/images/tab-right.png') no-repeat scroll left -29px transparent;
 }
 
-.gwt-TabLayoutPanelTabInner {
+.honey .gwt-TabLayoutPanelTabInner {
   /*background: url('/images/tab-right.png') no-repeat scroll right -29px transparent;
   padding: 6px 10px 3px 8px;*/
 }
