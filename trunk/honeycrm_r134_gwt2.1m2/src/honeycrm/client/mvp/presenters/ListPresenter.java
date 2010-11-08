@@ -3,6 +3,7 @@ package honeycrm.client.mvp.presenters;
 import java.util.HashSet;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.mvp.events.CreateEvent;
 import honeycrm.client.mvp.events.DeleteEvent;
 import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.events.OpenModuleEvent;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class ListPresenter extends Selector {
 	public interface Display extends HasSelectionHandler {
 		boolean shouldDelete();
+		HasClickHandlers getAddButton();
 		HasClickHandlers getDeleteButton();
 		Widget asWidget();
 		void refresh();

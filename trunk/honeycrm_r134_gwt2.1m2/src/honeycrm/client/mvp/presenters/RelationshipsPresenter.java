@@ -22,21 +22,21 @@ public class RelationshipsPresenter implements Presenter {
 		void setPresenter(RelationshipsPresenter presenter);
 		void refresh(Long relatedId);
 		void makeVisible();
-		void insertRefreshedData(Map<String, ListQueryResult> result);
-		Collection<RelationshipView> getViews();
+		void insertRefreshedData(Map<String, ListQueryResult> result, long relatedId);
 	}
 
 	final String module;
 	final Display view;
 	final ReadServiceAsync readService;
 	final SimpleEventBus eventBus;
-	
+	private boolean createdPresenters = false;
+
 	public RelationshipsPresenter(final String module, final Display view, final ReadServiceAsync readService, final SimpleEventBus eventBus) {
 		this.module = module;
 		this.view = view;
 		this.readService = readService;
 		this.eventBus = eventBus;
-		
+
 		bind();
 	}
 
@@ -49,10 +49,6 @@ public class RelationshipsPresenter implements Presenter {
 				refreshRelationships(event);
 			}
 		});
-		
-		for (final RelationshipView v: view.getViews()) {
-			new RelationshipPresenter(eventBus, v);
-		}
 	}
 
 	@Override
@@ -61,24 +57,34 @@ public class RelationshipsPresenter implements Presenter {
 		container.add(view.asWidget());
 	}
 
-	private void refreshRelationships(OpenEvent event) {
+	private void refreshRelationships(final OpenEvent event) {
 		if (module.equals(event.getDto().getModule())) {
 			view.makeVisible();
 			// view.refresh(event.getDto().getId());
-			
+
 			eventBus.fireEvent(new RpcBeginEvent());
-			readService.getAllRelated(event.getDto().getId(), event.getDto().getModule(), new AsyncCallback<Map<String,ListQueryResult>>() {
+			readService.getAllRelated(event.getDto().getId(), event.getDto().getModule(), new AsyncCallback<Map<String, ListQueryResult>>() {
 				@Override
 				public void onSuccess(Map<String, ListQueryResult> result) {
-					view.insertRefreshedData(result);
+					view.insertRefreshedData(result, event.getDto().getId());
 					eventBus.fireEvent(new RpcEndEvent());
 				}
-				
+
 				@Override
 				public void onFailure(Throwable caught) {
 					eventBus.fireEvent(new RpcEndEvent());
 				}
 			});
+		}
+	}
+
+	public void onViewsInitialized(final Collection<RelationshipView> values) {
+		if (!createdPresenters) {
+			// Now we can create the RelationshipPresenters since we now know all the existing views.
+			for (final RelationshipView v : values) {
+				new RelationshipPresenter(eventBus, v);
+			}
+			createdPresenters = true;
 		}
 	}
 

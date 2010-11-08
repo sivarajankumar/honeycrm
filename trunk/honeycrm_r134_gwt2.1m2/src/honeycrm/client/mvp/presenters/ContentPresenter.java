@@ -3,6 +3,7 @@ package honeycrm.client.mvp.presenters;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.mvp.events.CreateEvent;
+import honeycrm.client.mvp.events.CreateEventHandler;
 import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.events.OpenEventHandler;
 import honeycrm.client.mvp.events.OpenModuleEvent;
@@ -55,6 +56,13 @@ public class ContentPresenter implements Presenter {
 			@Override
 			public void onOpen(OpenEvent event) {
 				view.showModule(event.getDto().getModule());
+			}
+		});
+		eventBus.addHandler(CreateEvent.TYPE, new CreateEventHandler() {
+			@Override
+			public void onCreate(CreateEvent event) {
+				// Make sure the module tab is opened, too.
+				view.showModule(event.getModule());
 			}
 		});
 		view.getPanel().addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
