@@ -123,7 +123,7 @@ public class DtoWizard {
 		final String label = getLabel(field);
 
 		if (field.isAnnotationPresent(FieldBooleanAnnotation.class)) {
-			fields.put(name, new FieldBoolean(name, label));
+			fields.put(name, new FieldBoolean(name, label, false));
 		} else if (field.isAnnotationPresent(FieldStringAnnotation.class)) {
 			fields.put(name, new FieldString(name, label));
 		} else if (field.isAnnotationPresent(FieldCurrencyAnnotation.class)) {

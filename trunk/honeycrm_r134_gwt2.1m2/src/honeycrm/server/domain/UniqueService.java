@@ -7,12 +7,12 @@ import honeycrm.server.domain.decoration.ListViewable;
 import honeycrm.server.domain.decoration.Quicksearchable;
 import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 
-@ListViewable({ "productID", "price", "quantity", "unit", "discount", "kindOfDiscount", "sum" })
-@DetailViewable({ "name,productID", "discount,quantity", "kindOfDiscount", "price", "sum" })
+@ListViewable({ "vat", "productID", "productCode", "price", "quantity", "unit", "discount", "kindOfDiscount", "sum" })
+@DetailViewable({ "name,productID", "vat", "discount,quantity", "productCode", "kindOfDiscount", "price", "sum" })
 @Quicksearchable({ "name" })
 @Hidden
 public class UniqueService extends DiscountableService {
 	@Label("Unit")
-	@FieldEnumAnnotation({ "hours", "pieces" })
+	@FieldEnumAnnotation({ "pieces", "hours" })
 	public String unit;
 }

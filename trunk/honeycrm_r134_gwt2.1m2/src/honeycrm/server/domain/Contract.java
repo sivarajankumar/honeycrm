@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import com.google.appengine.api.datastore.Key;
 
-@DetailViewable({ "contactID", "assignedTo", "startDate", "endDate", "uniqueServices", "recurringServices" })
+@DetailViewable({ "accountID", "contactID", "assignedTo", "startDate", "endDate", "uniqueServices", "recurringServices" })
 @ListViewable({ "contactID", "assignedTo", "endDate" })
 @Quicksearchable({"contactID"})
 public class Contract extends AbstractEntity {
@@ -34,6 +34,10 @@ public class Contract extends AbstractEntity {
 	@Label("Contact")
 	@FieldRelateAnnotation(Contact.class)
 	public Key contactID;
+	
+	@Label("Account")
+	@FieldRelateAnnotation(Account.class)
+	public Key accountID;
 
 	@Label("Start Date")
 	@FieldDateAnnotation
