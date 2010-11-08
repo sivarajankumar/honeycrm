@@ -83,15 +83,15 @@ public class ReadServiceImpl extends NewService implements ReadService {
 		 */
 		final HashMap<String, HashMap<String, HashSet<String>>> r = NewDtoWizard.getConfiguration().getRelationships();
 
-		if (r.get(related).containsKey(originating)) {
-			final Key keyOrigin = KeyFactory.createKey(originating, id);
+		if (r.get(originating).containsKey(related)) {
+			final Key keyOrigin = KeyFactory.createKey(related, id);
 
-			for (final String fieldName : r.get(related).get(originating)) {
+			for (final String fieldName : r.get(originating).get(related)) {
 				// TODO use parallel fetch instead if possible
-				final PreparedQuery pq = getFiltered(related, fieldName, FilterOperator.EQUAL, keyOrigin);
+				final PreparedQuery pq = getFiltered(originating, fieldName, FilterOperator.EQUAL, keyOrigin);
 
 				for (final Entity entity : pq.asIterable()) {
-					result.add(copy.entityToDto(related, entity, false, false));
+					result.add(copy.entityToDto(originating, entity, false, false));
 				}
 			}
 		}
