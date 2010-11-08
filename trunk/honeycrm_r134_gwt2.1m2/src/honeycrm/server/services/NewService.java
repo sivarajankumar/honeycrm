@@ -87,7 +87,8 @@ public abstract class NewService extends RemoteServiceServlet {
 
 					if (null != keys) {
 						for (final Map.Entry<Key, Entity> entry : db.get(keys).entrySet()) {
-							final Dto child = entityToDto(UniqueService.class.getSimpleName(), entry.getValue(), false, false);
+							final String kindOfChild = entry.getValue().getKind();
+							final Dto child = entityToDto(kindOfChild, entry.getValue(), false, false);
 							children.add(child);
 						}
 					}
