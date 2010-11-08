@@ -57,6 +57,8 @@ public class ListView extends Composite implements Display {
 	@UiField
 	DisclosurePanel panel;
 	@UiField
+	Button addButton;
+	@UiField
 	Button deleteButton;
 	@UiField
 	CellTable<Dto> table;
@@ -73,6 +75,7 @@ public class ListView extends Composite implements Display {
 		
 		initWidget(uiBinder.createAndBindUi(this));
 
+		addButton.setText("Add");
 		deleteButton.setText("Delete");
 		// db.refresh(); // <- for testing..
 	}
@@ -168,7 +171,6 @@ public class ListView extends Composite implements Display {
 			final Header<Boolean> h = new Header<Boolean>(new CheckboxCell()) {
 				@Override
 				public Boolean getValue() {
-					LogConsole.log("get value");
 					return false;
 				}
 			};
@@ -252,5 +254,10 @@ public class ListView extends Composite implements Display {
 	
 	@UiFactory DisclosurePanel makePanel() {
 		return new DisclosurePanel(module);
+	}
+
+	@Override
+	public HasClickHandlers getAddButton() {
+		return addButton;
 	}
 }

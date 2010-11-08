@@ -2,6 +2,8 @@ package honeycrm.client.mvp.views;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
@@ -61,7 +63,7 @@ public class DetailView extends Composite implements Display {
 		this.moduleDto = DtoModuleRegistry.instance().get(module);
 
 		initWidget(uiBinder.createAndBindUi(this));
-		
+
 		createBtn.setText("Create");
 		editBtn.setText("Edit");
 		saveBtn.setText("Save");
@@ -78,7 +80,9 @@ public class DetailView extends Composite implements Display {
 		return new RelationshipsContainer(module);
 	}
 
-	private void resetFields(final Dto newDto, final View view, final String focussedField) {
+	private void resetFields(final Dto newDto, final View view, final HashMap<String, Object> prefilledFields) {
+		insertDataFromPrefilledFields(newDto, prefilledFields, view);
+
 		this.dto = newDto;
 
 		final String[][] fieldIds = moduleDto.getFormFieldIds();
@@ -97,7 +101,8 @@ public class DetailView extends Composite implements Display {
 				widgetValue.setStyleName("detail_view_value");
 
 				addEvents(view, widgetLabel, widgetValue, id);
-				addFocus(view, widgetValue, id, focussedField);
+				// Do not do it since it does not work anyway.
+				// addFocus(view, widgetValue, id, prefilledFields);
 
 				if (view == View.DETAIL || (view != View.DETAIL && !Dto.isInternalReadOnlyField(id))) {
 					// display the widget because we are in readonly mode or we
@@ -105,6 +110,14 @@ public class DetailView extends Composite implements Display {
 					table.setWidget(labelY, labelX, widgetLabel);
 					table.setWidget(valueY, valueX, widgetValue);
 				}
+			}
+		}
+	}
+
+	protected void insertDataFromPrefilledFields(final Dto newDto, final HashMap<String, Object> prefilledFields, final View view) {
+		if (null != prefilledFields && view != View.DETAIL) {
+			for (final Entry<String, Object> entry : prefilledFields.entrySet()) {
+				newDto.set(entry.getKey(), (Serializable) entry.getValue());
 			}
 		}
 	}
@@ -184,13 +197,13 @@ public class DetailView extends Composite implements Display {
 	}
 
 	@Override
-	public void startCreate() {
+	public void startCreate(final HashMap<String, Object> prefilledFields) {
 		createBtn.setVisible(false);
 		editBtn.setVisible(false);
 		cancelBtn.setVisible(true);
 		saveBtn.setVisible(true);
 
-		resetFields(moduleDto.createDto(), View.CREATE, null);
+		resetFields(moduleDto.createDto(), View.CREATE, prefilledFields);
 	}
 
 	@Override
@@ -203,7 +216,7 @@ public class DetailView extends Composite implements Display {
 		resetFields(dto, View.EDIT, null);
 		relationshipsView.setVisible(false);
 	}
-	
+
 	@Override
 	public RelationshipsPresenter.Display getRelationshipsView() {
 		return relationshipsView;
@@ -213,7 +226,7 @@ public class DetailView extends Composite implements Display {
 	public HasClickHandlers getCreateBtn() {
 		return createBtn;
 	}
-	
+
 	@Override
 	public HasClickHandlers getSaveBtn() {
 		return saveBtn;
@@ -252,8 +265,9 @@ public class DetailView extends Composite implements Display {
 
 		return newDto;
 	}
-	
-	@UiFactory RelationshipsView makeRelationshipsView() {
+
+	@UiFactory
+	RelationshipsView makeRelationshipsView() {
 		final ArrayList<String> list = DtoModuleRegistry.instance().getRelatedModules(moduleDto.getModule());
 		java.util.Collections.sort(list);
 		return new RelationshipsView(module, list);

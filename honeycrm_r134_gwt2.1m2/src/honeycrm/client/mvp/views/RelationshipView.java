@@ -17,6 +17,7 @@ import com.google.gwt.view.client.HasData;
 
 public class RelationshipView extends ListView implements Display {
 	private String relatedDtoClass;
+	private long relatedId;
 	private final RelationshipListViewDataProvider provider;
 
 	public RelationshipView(final String originatingDto, final String relatedDto) {
@@ -58,11 +59,13 @@ public class RelationshipView extends ListView implements Display {
 				/**
 				 * name of the field that should be pre-filled e.g. contactId
 				 */
-				/*
-				 * final String field = relationships.get(moduleDto.getModule()).get(relatedDtoClass).iterator().next(); History.newItem(HistoryTokenFactory.get(moduleDto.getModule(), ModuleAction.CREATE, field, id));
-				 * 
-				 * if (null != presenter) { presenter.onCreate(); }
-				 */
+
+				/*final String field = relationships.get(moduleDto.getModule()).get(relatedDtoClass).iterator().next();
+				History.newItem(HistoryTokenFactory.get(moduleDto.getModule(), ModuleAction.CREATE, field, id));
+
+				if (null != presenter) {
+					presenter.onCreate();
+				}*/
 			}
 		});
 		return btn;
@@ -71,17 +74,33 @@ public class RelationshipView extends ListView implements Display {
 	@Override
 	public void setId(Long relatedId) {
 		if (null != provider) {
-			provider.setOriginatingId(relatedId);
+			provider.setOriginatingId(this.relatedId = relatedId);
 		}
 	}
 
 	@Override
-	public void insertRefreshedData(ListQueryResult relationshipData) {
+	public void insertRefreshedData(ListQueryResult relationshipData, final long relatedId) {
 		if (null != provider) {
 			initialize();
-			for (final HasData<Dto> display: provider.getDataDisplays()) {
+			setId(relatedId);
+			for (final HasData<Dto> display : provider.getDataDisplays()) {
 				provider.insertRefreshedData(display, relationshipData);
 			}
 		}
+	}
+
+	@Override
+	public String getRelatedModule() {
+		return relatedDtoClass;
+	}
+
+	@Override
+	public String getOriginatingModule() {
+		return moduleDto.getModule();
+	}
+	
+	@Override
+	public long getId() {
+		return relatedId;
 	}
 }
