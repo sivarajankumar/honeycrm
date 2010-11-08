@@ -223,6 +223,8 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	protected void internalSetData(CheckBox widget, Object value, View view) {
 		if (value instanceof Boolean) {
 			widget.setValue((Boolean) value);
+		} else if (value instanceof String) {
+			widget.setValue(value.toString().equals("true"));
 		}
 	}
 

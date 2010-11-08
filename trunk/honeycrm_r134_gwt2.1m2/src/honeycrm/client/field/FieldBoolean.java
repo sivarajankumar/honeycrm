@@ -11,15 +11,15 @@ public class FieldBoolean extends AbstractField {
 	public FieldBoolean() {
 	}
 
-	public FieldBoolean(final String index, final String label) {
-		super(index, label);
+	public FieldBoolean(final String index, final String label, final boolean defaultValue) {
+		super(index, label, String.valueOf(defaultValue));
 	}
 	
 	@Override
 	protected Serializable internalGetData(Widget w) {
 		return ((CheckBox) w).getValue();
 	}
-
+	
 	@Override
 	protected Widget editField() {
 		return new CheckBox();
