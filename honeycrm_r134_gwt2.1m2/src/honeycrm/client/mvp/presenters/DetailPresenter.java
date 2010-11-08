@@ -1,6 +1,10 @@
 package honeycrm.client.mvp.presenters;
 
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import honeycrm.client.dto.Dto;
+import honeycrm.client.login.User;
 import honeycrm.client.mvp.events.CreateEvent;
 import honeycrm.client.mvp.events.CreateEventHandler;
 import honeycrm.client.mvp.events.OpenEvent;
@@ -24,7 +28,7 @@ public class DetailPresenter implements Presenter {
 		Dto getData();
 		Widget asWidget();
 		void setPresenter(DetailPresenter modulePresenter);
-		void startCreate();
+		void startCreate(HashMap<String, Object> prefilledFields);
 		HasClickHandlers getCreateBtn();
 		HasClickHandlers getSaveBtn();
 		HasClickHandlers getEditBtn();
@@ -77,15 +81,26 @@ public class DetailPresenter implements Presenter {
 		view.getCreateBtn().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				view.startCreate();
+				view.startCreate(getDefaultPrefilledFields());
 			}
+
 		});
 
 		eventBus.addHandler(CreateEvent.TYPE, new CreateEventHandler() {
 			@Override
 			public void onCreate(CreateEvent event) {
 				if (module.equals(event.getModule())) {
-					view.startCreate();
+					final HashMap<String, Object> prefilledFields = getDefaultPrefilledFields();
+					
+					// add more prefilled fields
+					if (null != event.getPrefilledFields()) {
+						for (final Entry<String, Object> entry: event.getPrefilledFields().entrySet()) {
+							prefilledFields.put(entry.getKey(), entry.getValue());
+						}
+					}
+					
+					// kommt an bringt aber nichts.
+					view.startCreate(prefilledFields);
 				}
 			}
 		});
@@ -112,6 +127,12 @@ public class DetailPresenter implements Presenter {
 		});
 
 		view.setPresenter(this);
+	}
+	
+	protected HashMap<String, Object> getDefaultPrefilledFields() {
+		final HashMap<String, Object> prefilledFields = new HashMap<String, Object>();
+		prefilledFields.put("assignedTo", (Long) User.getUserId());
+		return prefilledFields;
 	}
 
 	public void onSave() {
