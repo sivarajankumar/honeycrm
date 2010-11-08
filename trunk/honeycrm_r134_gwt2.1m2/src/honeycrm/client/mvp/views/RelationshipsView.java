@@ -58,13 +58,16 @@ public class RelationshipsView extends Composite implements Display {
 	}
 
 	@Override
-	public void insertRefreshedData(Map<String, ListQueryResult> relationshipData) {
+	public void insertRefreshedData(Map<String, ListQueryResult> relationshipData, final long relatedId) {
 		for (final String relation : relationships) {
 			setupView(relation);
 
 			if (relationshipData.containsKey(relation)) {
-				views.get(relation).insertRefreshedData(relationshipData.get(relation));
+				views.get(relation).insertRefreshedData(relationshipData.get(relation), relatedId);
 			}
+		}
+		if (null != presenter) {
+			presenter.onViewsInitialized(views.values());
 		}
 	}
 
@@ -73,10 +76,5 @@ public class RelationshipsView extends Composite implements Display {
 			views.put(relation, new RelationshipView(relation, module));
 			panel.add(views.get(relation));
 		}
-	}
-	
-	@Override
-	public Collection<RelationshipView> getViews() {
-		return views.values();
 	}
 }
