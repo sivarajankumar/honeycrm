@@ -14,8 +14,8 @@ import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 import com.google.appengine.api.datastore.Key;
 
 @SearchableEntity
-@ListViewable( { "name", "price" })
-@DetailViewable( { "name", "price", "published", "predecessor", "description" })
+@ListViewable( { "name", "price", "productCode" })
+@DetailViewable( { "name", "price", "productCode", "published", "predecessor", "description" })
 @Quicksearchable( { "name" })
 public class Product extends AbstractEntity {
 	@FieldRelateAnnotation(Product.class)
@@ -25,6 +25,10 @@ public class Product extends AbstractEntity {
 	@FieldStringAnnotation
 	@Label("Name")
 	public String name;
+	
+	@FieldStringAnnotation
+	@Label("Product Code")
+	public String productCode;
 	
 	@FieldCurrencyAnnotation("0")
 	@Label("Price")

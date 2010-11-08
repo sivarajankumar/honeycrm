@@ -212,7 +212,8 @@ public class NewDtoWizard {
 			} else if (field.isAnnotationPresent(FieldWebsiteAnnotation.class)) {
 				fields.put(name, new FieldWebsite(name, label));
 			} else if (field.isAnnotationPresent(FieldBooleanAnnotation.class)) {
-				fields.put(name, new FieldBoolean(name, label));
+				final boolean defaultValue = field.getAnnotation(FieldBooleanAnnotation.class).defaultValue();
+				fields.put(name, new FieldBoolean(name, label, defaultValue));
 			} else if (field.isAnnotationPresent(FieldEmailAnnotation.class)) {
 				fields.put(name, new FieldEmail(name, label));
 			} else {

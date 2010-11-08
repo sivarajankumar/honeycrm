@@ -20,7 +20,7 @@ import com.google.appengine.api.datastore.Key;
 
 @SearchableEntity
 @ListViewable({ "contactID", "deadline" })
-@DetailViewable({ "contactID", "assignedTo", "deadline", "uniqueServices", "recurringServices" })
+@DetailViewable({  "accountID", "contactID", "assignedTo", "deadline", "uniqueServices", "recurringServices" })
 @Quicksearchable({ "contactID" })
 @HasExtraButton(label = "Create Contract", action = CreateContractAction.class, show = ModuleAction.DETAIL)
 public class Offering extends AbstractEntity {
@@ -45,6 +45,10 @@ public class Offering extends AbstractEntity {
 	@Label("Contract")
 	@FieldRelateAnnotation(Contract.class)
 	public Key contractID;
+	
+	@Label("Account")
+	@FieldRelateAnnotation(Account.class)
+	public Key accountID;
 
 	/**
 	 * Calculate the sum of all services.
