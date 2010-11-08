@@ -67,7 +67,7 @@ public class ServiceTableWidget extends ITableWidget {
 
 					for (int x = 0; x < fields.length; x++) {
 						final String index = fields[x];
-						table.setWidget(rows, x, addChangeEvents(index, moduleDto.getFieldById(index).getWidget(view, moduleDto.createDto(), index), newRowId));
+						table.setWidget(rows, x, addChangeEvents(index, moduleDto.getFieldById(index).getWidget(View.CREATE, moduleDto.createDto(), index), newRowId));
 					}
 				}
 			});
@@ -102,6 +102,7 @@ public class ServiceTableWidget extends ITableWidget {
 						if (model.containsKey(row) && null != value.get("price")) {
 							final Dto updatedDto = getDtoFromRow(row);
 							updatedDto.set("price", value.get("price"));
+							updatedDto.set("productCode", value.get("productCode"));
 
 							insertDtoInTableRow(updatedDto, true, row);
 						}
