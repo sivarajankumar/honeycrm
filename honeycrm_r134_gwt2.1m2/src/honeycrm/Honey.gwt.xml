@@ -3,11 +3,9 @@
 <module rename-to="Honey">
 	<inherits name="com.google.gwt.user.User" />
 	<!-- inherits name="com.google.gwt.i18n.I18N"/ -->
-	<inherits name='com.google.gwt.junit.JUnit' />
 	<inherits name='com.google.gwt.visualization.Visualization' />
 	<inherits name='com.google.gwt.user.theme.standard.Standard' />
 
-	<servlet path="/common" class="honeycrm.server.CommonServiceImpl" />
 	<servlet path="/auth" class="honeycrm.server.services.AuthServiceImpl" />
 	<servlet path="/config" class="honeycrm.server.services.ConfigServiceImpl" />
 	<servlet path="/report" class="honeycrm.server.services.ReportServiceImpl" />
