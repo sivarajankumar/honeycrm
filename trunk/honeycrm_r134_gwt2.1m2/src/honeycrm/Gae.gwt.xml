@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='gae'>
 	<inherits name="com.google.gwt.user.User" />
-	<inherits name='com.google.gwt.visualization.Visualization' />
 	<inherits name='com.google.gwt.user.theme.standard.Standard' />
 	<!-- This file should be removed. -->
 	<!-- But when we remove it we cannot compile anymore because it is still referenced by something. -->
