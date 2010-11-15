@@ -27,8 +27,6 @@ public class HaveABreakGadgetPresenter extends AbstractPlugin {
 	@Override
 	public void internalRunPlugin() {
 		final Display view = new HaveABreakGadgetView();
-		view.getLabel().setText(":-)");
-
 		final IPlatform platform = PlatformProvider.platform();
 		
 		platform.scheduleRepeating(new Command() {
@@ -49,7 +47,7 @@ public class HaveABreakGadgetPresenter extends AbstractPlugin {
 				return "WORK AGAIN!";
 			} else {
 				breakTime += UPDATE_INTERVAL;
-				return "BREAK! still " + ((MAX_BREAK_TIME - breakTime) / 1000) + " seconds";
+				return "BREAK";
 			}
 		} else {
 			if (workTime >= MAX_WORK_TIME) {
@@ -58,7 +56,7 @@ public class HaveABreakGadgetPresenter extends AbstractPlugin {
 				return "BREAK AGAIN!";
 			} else {
 				workTime += UPDATE_INTERVAL;
-				return "WORK! still " + ((MAX_WORK_TIME - workTime) / 1000) + " seconds";
+				return "WORK!";
 			}
 		}
 	}
