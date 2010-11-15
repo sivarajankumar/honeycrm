@@ -6,7 +6,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import honeycrm.client.misc.PlatformProvider;
 import honeycrm.client.mvp.presenters.HeaderPresenter.Display;
-import honeycrm.client.mvp.views.Platform;
 import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.services.PluginServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
