@@ -16,14 +16,19 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class HeaderView extends Composite implements Display {
-	private final LoadView loadView;
+	private LoadView loadView;
 	
+//	public HeaderView() {
+//	}
+	
+	private final FlowPanel panel;
+
 	public HeaderView(final ReadServiceAsync readService) {
 		/*
 		 * logo | loadIndicator | header_links | | | | login | profile | help | searchPanel | ------------------------------------------------------------------
 		 */
 		final Panel container = (Panel) WidgetJuggler.addStyles(new FlowPanel(), "honey_header", "with_margin");
-		final FlowPanel panel = new FlowPanel();
+		panel = new FlowPanel();
 		final Panel p = (Panel) WidgetJuggler.addStyles(new FlowPanel(), "honey_header_left");
 		initWidget(container);
 		p.add(WidgetJuggler.addStyles(new Label("Honeeeeeeeyyyyy CRM"), "header_logo"));
@@ -43,7 +48,6 @@ public class HeaderView extends Composite implements Display {
 		panel.add(search_con);
 		panel.add(new HTML("<div class='clear'></div>"));
 		container.add(panel);
-		
 	}
 
 	private Widget getHeaderLink(final String label) {
@@ -72,6 +76,6 @@ public class HeaderView extends Composite implements Display {
 
 	@Override
 	public void attachPluginWidget(Widget w) {
-		Window.alert("attached plugin");
+		panel.add(w);
 	}
 }

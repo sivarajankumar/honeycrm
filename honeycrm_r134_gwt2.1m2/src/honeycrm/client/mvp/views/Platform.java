@@ -1,24 +1,23 @@
-package honeycrm.client.plugin;
-
-import java.io.Serializable;
+package honeycrm.client.mvp.views;
 
 import honeycrm.client.mvp.presenters.HeaderPresenter.Display;
+import honeycrm.client.plugin.IPlatform;
 import honeycrm.client.services.ReadServiceAsync;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Platform implements IPlatform, Serializable {
+public class Platform implements IPlatform {
 	private static final long serialVersionUID = 8984048542396863556L;
-	// private Display header;
+	private Display header;
 	// private ReadServiceAsync readService;
-
+/*
 	public Platform() {
 	}
-	
+	*/
 	public Platform(final Display header, final ReadServiceAsync readService) {
-//		this.header = header;
+		this.header = header;
 //		this.readService = readService;
 	}
 
@@ -30,7 +29,9 @@ public class Platform implements IPlatform, Serializable {
 
 	@Override
 	public void attachToHeader(Widget w) {
-	//	header.attachPluginWidget(w);
+
+		
+		header.attachPluginWidget(w);
 	}
 
 	@Override

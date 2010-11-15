@@ -1,5 +1,8 @@
 package honeycrm.client.plugin;
 
+import honeycrm.client.misc.PlatformProvider;
+import honeycrm.client.pluginviews.HaveABreakGadgetView;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
@@ -16,24 +19,26 @@ public class HaveABreakGadgetPresenter extends AbstractPlugin {
 	private boolean hasBreak = false;
 	private static final long MAX_BREAK_TIME = 5 * 60 * 1000;
 	private static final long MAX_WORK_TIME = 20 * 60 * 1000;
-	private static final int UPDATE_INTERVAL = 100 * 1000;
-	// private Display view;
+	private static final int UPDATE_INTERVAL = 1 * 1000;
 
 	public HaveABreakGadgetPresenter() { // for serialisation
 	}
 
 	@Override
 	public void internalRunPlugin() {
-		//view.getLabel().setText(":-)");
+		final Display view = new HaveABreakGadgetView();
+		view.getLabel().setText(":-)");
 
+		final IPlatform platform = PlatformProvider.platform();
+		
 		platform.scheduleRepeating(new Command() {
 			@Override
 			public void execute() {
-				//view.getLabel().setText(getTimeString());
+				view.getLabel().setText(getTimeString());
 			}
 		}, UPDATE_INTERVAL);
 
-		//platform.attachToHeader(view.asWidget());
+		platform.attachToHeader(view.asWidget());
 	}
 
 	private String getTimeString() {
