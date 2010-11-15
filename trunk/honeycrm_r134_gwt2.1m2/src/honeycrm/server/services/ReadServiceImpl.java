@@ -9,8 +9,8 @@ import java.util.logging.Logger;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.services.NewDtoWizard;
 import honeycrm.client.services.ReadService;
+import honeycrm.server.NewDtoWizard;
 import honeycrm.server.domain.Employee;
 
 import com.google.appengine.api.datastore.Entity;
