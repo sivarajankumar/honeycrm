@@ -7,7 +7,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.services.PluginService;
-import honeycrm.server.transfer.ReflectionHelper;
+import honeycrm.client.services.ReflectionHelper;
 
 public class PluginServiceImpl extends RemoteServiceServlet implements PluginService {
 	private static final long serialVersionUID = -5770355812567630413L;

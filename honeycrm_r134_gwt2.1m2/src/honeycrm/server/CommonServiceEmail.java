@@ -11,7 +11,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class CommonServiceEmail extends AbstractCommonService {
+public class CommonServiceEmail {
 	private static final Logger log = Logger.getLogger(CommonServiceEmail.class.getName());
 	private static final String EMAIL_FROM = "ingo.jaeckel@googlemail.com"; // "honeycrm.feedback@honeyyycrm.appspot.com";
 	private static final String EMAIL_TO = "ingo.jaeckel@googlemail.com"; // "honeycrm-users@googlegroups.com";
