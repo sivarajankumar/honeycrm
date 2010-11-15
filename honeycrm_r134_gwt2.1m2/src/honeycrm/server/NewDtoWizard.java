@@ -1,4 +1,4 @@
-package honeycrm.client.services;
+package honeycrm.server;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -24,7 +24,6 @@ import honeycrm.client.field.FieldTable;
 import honeycrm.client.field.FieldText;
 import honeycrm.client.field.FieldWebsite;
 import honeycrm.client.view.ModuleAction;
-import honeycrm.server.CachingReflectionHelper;
 import honeycrm.server.domain.decoration.DetailViewable;
 import honeycrm.server.domain.decoration.HasExtraButton;
 import honeycrm.server.domain.decoration.Hidden;
@@ -48,11 +47,6 @@ import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
 
 public class NewDtoWizard {
 	private static final Logger log = Logger.getLogger(NewDtoWizard.class.getSimpleName());
-	
-	// private static final Class<?> ENTITIES_SUPERCLASS = AbstractEntity.class;
-	// private static final String ENTITIES_PACKAGE = "honeycrm.server.domainNew";
-
-	// private static final Class<?> ENTITIES_SUPERCLASS = honeycrm.server.domain.AbstractEntity.class;
 	private static final String ENTITIES_PACKAGE = "honeycrm.server.domain";
 	private static final CachingReflectionHelper reflection = new CachingReflectionHelper();
 	private static final Configuration configuration;

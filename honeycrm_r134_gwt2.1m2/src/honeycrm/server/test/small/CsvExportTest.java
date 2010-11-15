@@ -5,7 +5,7 @@ import honeycrm.client.csv.CsvExporter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.misc.CollectionHelper;
-import honeycrm.client.services.NewDtoWizard;
+import honeycrm.server.NewDtoWizard;
 
 import java.util.LinkedList;
 import java.util.List;

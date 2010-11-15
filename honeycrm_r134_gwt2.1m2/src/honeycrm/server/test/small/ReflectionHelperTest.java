@@ -1,7 +1,7 @@
 package honeycrm.server.test.small;
 
-import honeycrm.client.services.ReflectionHelper;
 import honeycrm.server.CachingReflectionHelper;
+import honeycrm.server.ReflectionHelper;
 import honeycrm.server.domain.Contact;
 
 import java.lang.reflect.Field;
