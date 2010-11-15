@@ -13,6 +13,7 @@ import honeycrm.client.services.PluginService;
 import honeycrm.client.services.PluginServiceAsync;
 import honeycrm.client.services.ReadService;
 import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.services.ReportService;
 import honeycrm.client.services.ReportServiceAsync;
 import honeycrm.client.services.UpdateService;
 import honeycrm.client.services.UpdateServiceAsync;
@@ -32,7 +33,7 @@ public class Honey implements EntryPoint {
 		final AuthServiceAsync authService = GWT.create(AuthService.class);
 		final ConfigServiceAsync configService = GWT.create(ConfigService.class);
 		final PluginServiceAsync pluginService = GWT.create(PluginService.class);
-		final ReportServiceAsync reportService = GWT.create(ReportServiceAsync.class);
+		final ReportServiceAsync reportService = GWT.create(ReportService.class);
 		
 		final SimpleEventBus eventBus = new SimpleEventBus();
 		final AppController appViewer = new AppController(readService, createSerice, updateService, deleteService, authService, configService, pluginService, reportService, eventBus);
