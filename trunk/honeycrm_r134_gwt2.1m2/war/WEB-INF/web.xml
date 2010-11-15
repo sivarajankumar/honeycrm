@@ -12,6 +12,15 @@
 		<servlet-name>authServlet</servlet-name>
 		<url-pattern>/Honey/auth</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>pluginServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.PluginServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>pluginServlet</servlet-name>
+		<url-pattern>/Honey/plugin</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<servlet-name>configServlet</servlet-name>
