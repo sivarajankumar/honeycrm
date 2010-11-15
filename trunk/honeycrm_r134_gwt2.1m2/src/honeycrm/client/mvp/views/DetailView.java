@@ -8,11 +8,11 @@ import java.util.Map.Entry;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.misc.View;
 import honeycrm.client.mvp.presenters.DetailPresenter;
 import honeycrm.client.mvp.presenters.RelationshipsPresenter;
 import honeycrm.client.mvp.presenters.DetailPresenter.Display;
-import honeycrm.client.view.AbstractView.View;
-import honeycrm.client.view.relationship.RelationshipsContainer;
+import honeycrm.client.services.ReadServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -57,9 +57,11 @@ public class DetailView extends Composite implements Display {
 	DetailPresenter presenter;
 	ModuleDto moduleDto;
 	Dto dto;
+	private final ReadServiceAsync readService;
 
-	public DetailView(final String module) {
+	public DetailView(final String module, final ReadServiceAsync readService) {
 		this.module = module;
+		this.readService = readService;
 		this.moduleDto = DtoModuleRegistry.instance().get(module);
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -73,11 +75,6 @@ public class DetailView extends Composite implements Display {
 	@UiFactory
 	FlexTable makeTable() {
 		return new FlexTable();
-	}
-
-	@UiFactory
-	RelationshipsContainer makeRelationshipContainer() {
-		return new RelationshipsContainer(module);
 	}
 
 	private void resetFields(final Dto newDto, final View view, final HashMap<String, Object> prefilledFields) {
@@ -270,6 +267,6 @@ public class DetailView extends Composite implements Display {
 	RelationshipsView makeRelationshipsView() {
 		final ArrayList<String> list = DtoModuleRegistry.instance().getRelatedModules(moduleDto.getModule());
 		java.util.Collections.sort(list);
-		return new RelationshipsView(module, list);
+		return new RelationshipsView(module, list, readService);
 	}
 }

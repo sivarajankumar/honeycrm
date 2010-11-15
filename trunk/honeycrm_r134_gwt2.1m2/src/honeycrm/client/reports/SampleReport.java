@@ -1,11 +1,10 @@
 package honeycrm.client.reports;
 
-import honeycrm.client.misc.ServiceRegistry;
-import java.util.Date;
+import honeycrm.client.services.CommonServiceAsync;
+
 import java.util.Map;
 
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -19,19 +18,19 @@ import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 public class SampleReport extends Composite {
 	private LineChart offeringsReport;
 
-	public SampleReport() {
+	public SampleReport(final CommonServiceAsync commonService) {
 		final VerticalPanel p = new VerticalPanel();
 
 			final Label status = new Label("Status: ");
 			p.setStyleName("content");
 			p.add(status);
-			p.add(new ProfilingReport());
+			p.add(new ProfilingReport(commonService));
 			p.add(new ForecastTest());
 
 			new Timer() {
 				@Override
 				public void run() {
-					ServiceRegistry.reportService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
+					/*ServiceRegistry.reportService().getAnnuallyOfferingVolumes(new AsyncCallback<Map<Integer, Double>>() {
 						@Override
 						public void onSuccess(final Map<Integer, Double> result) {
 							status.setText("Status: Last refreshed at " + new Date(System.currentTimeMillis()));
@@ -47,7 +46,7 @@ public class SampleReport extends Composite {
 						public void onFailure(Throwable caught) {
 
 						}
-					});
+					});*/
 				}
 			}.schedule(10 * 1000);
 

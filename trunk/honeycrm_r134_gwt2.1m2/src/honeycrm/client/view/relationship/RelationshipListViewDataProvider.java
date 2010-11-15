@@ -6,15 +6,15 @@ import com.google.gwt.view.client.HasData;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.view.list.ListViewDataProvider;
 
 public class RelationshipListViewDataProvider extends ListViewDataProvider {
 	long originatingId;
 	final String originatingModule;
 
-	public RelationshipListViewDataProvider(final String relationshipModule, final String originating) {
-		super(relationshipModule);
+	public RelationshipListViewDataProvider(final String relationshipModule, final String originating, final ReadServiceAsync readService) {
+		super(relationshipModule, readService);
 		this.originatingModule = originating;
 	}
 
@@ -33,7 +33,7 @@ public class RelationshipListViewDataProvider extends ListViewDataProvider {
 			
 			lastRefresh = System.currentTimeMillis();
 			
-			ServiceRegistry.readService().getAllRelated(originatingModule, originatingId, module, new AsyncCallback<ListQueryResult>() {
+			readService.getAllRelated(originatingModule, originatingId, module, new AsyncCallback<ListQueryResult>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					Window.alert("could not load");

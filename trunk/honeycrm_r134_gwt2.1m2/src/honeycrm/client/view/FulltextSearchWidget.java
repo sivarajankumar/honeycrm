@@ -3,7 +3,6 @@ package honeycrm.client.view;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.HistoryTokenFactory;
-import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.services.ReadServiceAsync;
 
 import java.util.HashMap;
@@ -27,13 +26,14 @@ import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 public class FulltextSearchWidget extends SuggestBox {
 	private static final String INITIAL_SEARCH_TEXT = "Global Search ...";
 	public static final int MIN_QUERY_LENGTH = 3;
-	protected static final ReadServiceAsync readService = ServiceRegistry.readService();
-	//	protected static final CommonServiceAsync commonService = ServiceRegistry.commonService();
 	protected String lastQueryString;
 	protected final Map<String, Dto> nameToDto = new HashMap<String, Dto>();
+	private final ReadServiceAsync readService;
 
-	public FulltextSearchWidget() {
+	public FulltextSearchWidget(final ReadServiceAsync readService) {
 		super(new FulltextSuggestOracle());
+		
+		this.readService = readService;
 
 		setupFocusAndBlur();
 

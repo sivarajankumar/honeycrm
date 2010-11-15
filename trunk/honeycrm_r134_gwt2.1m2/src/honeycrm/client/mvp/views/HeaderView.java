@@ -3,8 +3,10 @@ package honeycrm.client.mvp.views;
 import honeycrm.client.login.User;
 import honeycrm.client.misc.WidgetJuggler;
 import honeycrm.client.mvp.presenters.HeaderPresenter.Display;
+import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.view.FulltextSearchWidget;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -13,10 +15,10 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class HeaderView extends Composite  implements Display {
+public class HeaderView extends Composite implements Display {
 	private final LoadView loadView;
 	
-	public HeaderView() {
+	public HeaderView(final ReadServiceAsync readService) {
 		/*
 		 * logo | loadIndicator | header_links | | | | login | profile | help | searchPanel | ------------------------------------------------------------------
 		 */
@@ -32,7 +34,7 @@ public class HeaderView extends Composite  implements Display {
 		panel.addStyleName("honey_header with_margin");
 		final Panel search_con = (Panel) WidgetJuggler.addStyles(new FlowPanel(), "honey_header_right");
 		final Panel search = (Panel) WidgetJuggler.addStyles(new FlowPanel(), "header_search");
-		search.add(WidgetJuggler.addStyles(new FulltextSearchWidget(), "header_search_input"));
+		search.add(WidgetJuggler.addStyles(new FulltextSearchWidget(readService), "header_search_input"));
 		
 		search_con.add(search);
 		search_con.add(getHeaderLinks("Logout |", "Profile |", "Help "));
@@ -66,5 +68,10 @@ public class HeaderView extends Composite  implements Display {
 	@Override
 	public honeycrm.client.mvp.presenters.LoadPresenter.Display getLoadView() {
 		return loadView;
+	}
+
+	@Override
+	public void attachPluginWidget(Widget w) {
+		Window.alert("attached plugin");
 	}
 }

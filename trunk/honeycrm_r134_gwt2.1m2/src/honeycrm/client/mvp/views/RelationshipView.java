@@ -7,6 +7,7 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.RelationshipPresenter.Display;
+import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.view.list.ListViewDataProvider;
 import honeycrm.client.view.relationship.RelationshipListViewDataProvider;
 
@@ -20,15 +21,15 @@ public class RelationshipView extends ListView implements Display {
 	private long relatedId;
 	private final RelationshipListViewDataProvider provider;
 
-	public RelationshipView(final String originatingDto, final String relatedDto) {
-		super(originatingDto);
+	public RelationshipView(final String originatingDto, final String relatedDto, final ReadServiceAsync readService) {
+		super(originatingDto, readService);
 
 		setDisclose(true);
 		setShowTitle(true);
 		setPageSize(5);
 
 		this.relatedDtoClass = relatedDto;
-		this.provider = new RelationshipListViewDataProvider(moduleDto.getModule(), relatedDtoClass);
+		this.provider = new RelationshipListViewDataProvider(moduleDto.getModule(), relatedDtoClass, readService);
 
 		/*
 		 * only add the create button if this relationship has is represented by a single id field e.g. no create button should be displayed in the contact <-> contact relationship because there are three different fields in each contact referencing other contacts. just clicking the create button it is not clear which of the fields should be pre-filled.

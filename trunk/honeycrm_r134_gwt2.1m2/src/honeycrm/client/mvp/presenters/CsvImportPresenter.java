@@ -2,9 +2,7 @@ package honeycrm.client.mvp.presenters;
 
 import honeycrm.client.csv.CsvImporter;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.mvp.events.UpdateEvent;
-import honeycrm.client.mvp.presenters.CsvImportPresenter.Display;
 import honeycrm.client.services.CreateServiceAsync;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,7 +13,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CsvImportPresenter implements Presenter {

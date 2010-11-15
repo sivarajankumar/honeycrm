@@ -1,7 +1,7 @@
 package honeycrm.client.reports;
 
-import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.profiling.ServiceCallStatistics;
+import honeycrm.client.services.CommonServiceAsync;
 
 import java.util.Collection;
 
@@ -17,14 +17,14 @@ import com.google.gwt.visualization.client.visualizations.ColumnChart;
 import com.google.gwt.visualization.client.visualizations.ColumnChart.Options;
 
 public class ProfilingReport extends Composite {
-	public ProfilingReport() {
+	public ProfilingReport(final CommonServiceAsync commonService) {
 		final VerticalPanel vpanel = new VerticalPanel();
 		final HorizontalPanel panel = new HorizontalPanel();
 
 		vpanel.add(new Label("Profiling is enabled? " + ServiceCallStatistics.PROFILING_ENABLED));
 		vpanel.add(panel);
 
-		ServiceRegistry.commonService().getServiceCallStatistics(new AsyncCallback<Collection<ServiceCallStatistics>>() {
+		commonService.getServiceCallStatistics(new AsyncCallback<Collection<ServiceCallStatistics>>() {
 			@Override
 			public void onSuccess(final Collection<ServiceCallStatistics> result) {
 				final ColumnChart chartCalls = new ColumnChart(getDataTableCalls(result), getOptions("Calls"));

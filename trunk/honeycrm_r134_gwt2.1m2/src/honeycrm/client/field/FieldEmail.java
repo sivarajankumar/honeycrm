@@ -1,7 +1,7 @@
 package honeycrm.client.field;
 
 import honeycrm.client.misc.StringAbbreviation;
-import honeycrm.client.view.AbstractView.View;
+import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 

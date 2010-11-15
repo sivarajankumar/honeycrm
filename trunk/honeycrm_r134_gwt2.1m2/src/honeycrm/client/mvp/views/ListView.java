@@ -27,13 +27,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
-import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.FieldBoolean;
 import honeycrm.client.field.FieldRelate;
 import honeycrm.client.mvp.presenters.ListPresenter.Display;
+import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.view.list.ListViewDB;
 import honeycrm.client.view.list.ListViewDataProvider;
 
@@ -66,9 +66,11 @@ public class ListView extends Composite implements Display {
 	SimplePager pager;
 
 	final String module;
-	private SelectionHandler handler;	
+	private SelectionHandler handler;
+	private final ReadServiceAsync readService;	
 
-	public ListView(final String module) {
+	public ListView(final String module, final ReadServiceAsync readService) {
+		this.readService = readService;
 		this.module = module;
 		// TODO this is bad - ui should not know about dto module registry..
 		this.moduleDto = DtoModuleRegistry.instance().get(module);
@@ -234,7 +236,7 @@ public class ListView extends Composite implements Display {
 	}
 	
 	protected ListViewDataProvider getListDataProvider() {
-		return new ListViewDataProvider(module);
+		return new ListViewDataProvider(module, readService);
 	}
 
 	@Override

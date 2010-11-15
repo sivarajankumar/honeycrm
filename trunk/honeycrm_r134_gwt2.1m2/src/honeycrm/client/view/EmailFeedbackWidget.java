@@ -1,9 +1,7 @@
 package honeycrm.client.view;
 
-import honeycrm.client.misc.ServiceRegistry;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -38,7 +36,7 @@ public class EmailFeedbackWidget extends Composite {
 		button.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				ServiceRegistry.commonService().feedback(box.getText(), new AsyncCallback<Void>() {
+				/*ServiceRegistry.commonService().feedback(box.getText(), new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
 						status.setText("Status: Mail has been sent to mailing list. Thank you very much!");
@@ -48,7 +46,7 @@ public class EmailFeedbackWidget extends Composite {
 					public void onFailure(Throwable caught) {
 						status.setText("Status: An error occured during delivery");
 					}
-				});
+				});*/
 			}
 		});
 
