@@ -6,7 +6,7 @@ import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.Observer;
-import honeycrm.client.view.AbstractView.View;
+import honeycrm.client.misc.View;
 import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.RelateWidget;
 

@@ -1,6 +1,7 @@
 package honeycrm.client.mvp.views;
 
 import honeycrm.client.mvp.presenters.ModulePresenter.Display;
+import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.view.ModuleButtonBar;
 
 import com.google.gwt.core.client.GWT;
@@ -26,8 +27,10 @@ public class ModuleView extends Composite implements Display {
 	ModuleButtonBar moduleButtonBar;
 
 	final String module;
+	private final ReadServiceAsync readService;
 
-	public ModuleView(final String module) {
+	public ModuleView(final String module, final ReadServiceAsync readService) {
+		this.readService = readService;
 		this.module = module; // IMPORTANT: set module _before_ all other initialisation
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -45,12 +48,12 @@ public class ModuleView extends Composite implements Display {
 
 	@UiFactory
 	honeycrm.client.mvp.views.DetailView makeDetailView() {
-		return detail = new honeycrm.client.mvp.views.DetailView(module);
+		return detail = new honeycrm.client.mvp.views.DetailView(module, readService);
 	}
 
 	@UiFactory
 	ListView makeListView() {
-		return new ListView(module);
+		return new ListView(module, readService);
 	}
 
 	@UiFactory

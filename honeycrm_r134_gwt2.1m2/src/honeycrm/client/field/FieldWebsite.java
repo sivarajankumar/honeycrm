@@ -1,6 +1,6 @@
 package honeycrm.client.field;
 
-import honeycrm.client.view.AbstractView.View;
+import honeycrm.client.misc.View;
 
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;

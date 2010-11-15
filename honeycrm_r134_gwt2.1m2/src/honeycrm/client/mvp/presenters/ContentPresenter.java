@@ -11,6 +11,8 @@ import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
@@ -34,19 +36,31 @@ public class ContentPresenter implements Presenter {
 		this.eventBus = eventBus;
 		this.view = view;
 		
-		for (final ModuleDto module : DtoModuleRegistry.instance().getDtos()) {
-			if (!module.isHidden()) {
-				// Create a presenter for each ModuleView instance
-				// This sets up the required communication between view and presenters.
-				final ModulePresenter.Display moduleView = view.getModuleViewByName(module.getModule());
-				new ModulePresenter(module.getModule(), moduleView, eventBus, readService, updateService, createService);
-			}
-		}
-		
 		// Create a DashboardPresenter that takes care of the dashboard.
 		new DashboardsPresenter(userId, view.getDashboard(), readService, eventBus);
-
 		bind();
+		
+		lazilyCreateModulePresenters(view, eventBus, readService, updateService, createService);
+	}
+
+	protected void lazilyCreateModulePresenters(final Display view, final SimpleEventBus eventBus, final ReadServiceAsync readService, final UpdateServiceAsync updateService, final CreateServiceAsync createService) {
+		GWT.runAsync(ContentPresenter.class, new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				for (final ModuleDto module : DtoModuleRegistry.instance().getDtos()) {
+					if (!module.isHidden()) {
+						// Create a presenter for each ModuleView instance
+						// This sets up the required communication between view and presenters.
+						final ModulePresenter.Display moduleView = view.getModuleViewByName(module.getModule());
+						new ModulePresenter(module.getModule(), moduleView, eventBus, readService, updateService, createService);
+					}
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+			}
+		});
 	}
 
 	private void bind() {

@@ -1,5 +1,7 @@
 package honeycrm.client.view;
 
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.WidgetJuggler;
 import honeycrm.client.mvp.views.DetailView;
 
@@ -9,6 +11,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -17,11 +20,12 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * This widget contains everything (buttons, fulltext search field) above the list view and detail view of the currently active module.
  */
-public class ModuleButtonBar extends AbstractView implements ValueChangeHandler<String> {
+public class ModuleButtonBar extends Composite implements ValueChangeHandler<String> {
 	private Widget editBtn, deleteBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn, cancelBtn, saveBtn, searchBtn;
+	private final ModuleDto moduleDto;
 
 	public ModuleButtonBar(final String module, final DetailView detailView) {
-		super(module);
+		this.moduleDto = DtoModuleRegistry.instance().get(module);
 
 		final FlowPanel panel = new FlowPanel();
 		panel.setStyleName("tool_bar");

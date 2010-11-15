@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import honeycrm.client.misc.NumberParser;
-import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.services.ReportServiceAsync;
 import honeycrm.client.view.ModuleAction;
 
 import com.google.gwt.core.client.GWT;
@@ -31,8 +31,11 @@ import com.google.gwt.visualization.client.visualizations.LineChart.Options;
 
 public class ReportSuggester extends Composite implements ValueChangeHandler<String> {
 	final Panel panel = new HorizontalPanel();
+	private final ReportServiceAsync reportService;
 
-	public ReportSuggester() {
+	public ReportSuggester(final ReportServiceAsync reportService) {
+		this.reportService = reportService;
+		
 		initWidget(new ScrollPanel(panel));
 		History.addValueChangeHandler(this);
 
@@ -50,7 +53,7 @@ public class ReportSuggester extends Composite implements ValueChangeHandler<Str
 	}
 
 	protected void showReport(final int startingReport) {
-		ServiceRegistry.reportService().getReport(startingReport, new AsyncCallback<ReportData<Map<Integer, Map<String, Integer>>>>() {
+		reportService.getReport(startingReport, new AsyncCallback<ReportData<Map<Integer, Map<String, Integer>>>>() {
 			@Override
 			public void onSuccess(ReportData<Map<Integer, Map<String, Integer>>> reportData) {
 				final ReportMetaData[] allMeta = reportData.getMeta();

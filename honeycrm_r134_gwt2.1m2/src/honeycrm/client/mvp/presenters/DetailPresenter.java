@@ -131,7 +131,7 @@ public class DetailPresenter implements Presenter {
 	
 	protected HashMap<String, Object> getDefaultPrefilledFields() {
 		final HashMap<String, Object> prefilledFields = new HashMap<String, Object>();
-		prefilledFields.put("assignedTo", (Long) User.getUserId());
+		prefilledFields.put("assignedTo", User.getUserId());
 		return prefilledFields;
 	}
 

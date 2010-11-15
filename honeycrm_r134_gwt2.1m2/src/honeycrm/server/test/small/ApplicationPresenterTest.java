@@ -6,9 +6,12 @@ import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.mvp.presenters.ApplicationPresenter;
 import honeycrm.client.mvp.presenters.ApplicationPresenter.Display;
 import honeycrm.client.services.CreateServiceAsync;
+import honeycrm.client.services.PluginServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
 import honeycrm.server.services.ConfigServiceImpl;
+import honeycrm.server.test.small.mocks.LoadViewMock;
+import honeycrm.server.test.small.mocks.HeaderViewMock;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
 
@@ -17,23 +20,31 @@ public class ApplicationPresenterTest extends TestCase {
 	private ReadServiceAsync readService;
 	private UpdateServiceAsync updateService;
 	private CreateServiceAsync createService;
+	private PluginServiceAsync pluginService;
 
 	private SimpleEventBus eventBus;
 	private Display applicationView;
+	private honeycrm.client.mvp.presenters.LoadPresenter.Display loadView;
+	private honeycrm.client.mvp.presenters.HeaderPresenter.Display headerView;
 
 	@Override
 	protected void setUp() throws Exception {
-		readService = createMock(ReadServiceAsync.class);
-		createService = createStrictMock(CreateServiceAsync.class);
-		updateService = createStrictMock(UpdateServiceAsync.class);
-
+		readService = createNiceMock(ReadServiceAsync.class);
+		createService = createNiceMock(CreateServiceAsync.class);
+		updateService = createNiceMock(UpdateServiceAsync.class);
+		pluginService = createNiceMock(PluginServiceAsync.class);
+		
 		eventBus = new SimpleEventBus();
-		applicationView = createStrictMock(ApplicationPresenter.Display.class);
+		loadView = new LoadViewMock();
+		headerView = new HeaderViewMock(loadView);
+		applicationView = createNiceMock(ApplicationPresenter.Display.class);
+
+		expect(applicationView.getHeader()).andReturn(headerView);
 	}
 
 	public void testCreateUnitialized() {
 		try {
-			presenter = new ApplicationPresenter(1, readService, createService, updateService, eventBus, applicationView);
+			presenter = new ApplicationPresenter(42, readService, createService, updateService, pluginService, eventBus, applicationView);
 			fail();
 			// should not work because configuration has not been initialised yet.
 		} catch (RuntimeException e) {
@@ -41,11 +52,9 @@ public class ApplicationPresenterTest extends TestCase {
 	}
 	
 	public void testCreateInitialized() {
+		replay(applicationView);
+		
 		DtoModuleRegistry.create(new ConfigServiceImpl().getConfiguration());
-		presenter = new ApplicationPresenter(1, readService, createService, updateService, eventBus, applicationView);
-	}
-
-	public void testFoo() {
-		applicationView.getContentView();
+		presenter = new ApplicationPresenter(42, readService, createService, updateService, pluginService, eventBus, applicationView);
 	}
 }

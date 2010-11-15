@@ -7,6 +7,7 @@ import java.util.Map;
 
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.DashboardsPresenter.Display;
+import honeycrm.client.services.ReadServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -29,8 +30,11 @@ public class DashboardsView extends Composite implements Display {
 	Button refreshBtn;
 	@UiField
 	FlexTable table;
+	private final ReadServiceAsync readService;
 
-	public DashboardsView() {
+	public DashboardsView(final ReadServiceAsync readService) {
+		this.readService = readService;
+		
 		initWidget(uiBinder.createAndBindUi(this));
 
 		refreshBtn.setText("Refresh");
@@ -54,7 +58,7 @@ public class DashboardsView extends Composite implements Display {
 
 	private void setupViews(ArrayList<String> modules) {
 		for (int i = 0; i < modules.size(); i++) {
-			views.put(modules.get(i), new DashboardView(modules.get(i)));
+			views.put(modules.get(i), new DashboardView(modules.get(i), readService));
 		}
 	}
 

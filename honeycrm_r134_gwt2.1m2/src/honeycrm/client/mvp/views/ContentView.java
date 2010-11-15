@@ -11,9 +11,9 @@ import honeycrm.client.mvp.presenters.DashboardsPresenter;
 import honeycrm.client.mvp.presenters.ModulePresenter;
 import honeycrm.client.mvp.presenters.ContentPresenter.Display;
 import honeycrm.client.reports.ReportSuggester;
+import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.services.ReportServiceAsync;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -38,14 +38,19 @@ public class ContentView extends Composite implements Display {
 	ContentPresenter presenter;
 
 	final TabLayoutPanel panel;
+	private final ReadServiceAsync readService;
+	private final ReportServiceAsync reportService;
 
-	public ContentView() {
+	public ContentView(final ReadServiceAsync readService, final ReportServiceAsync reportService) {
 		initWidget(panel = new TabLayoutPanel(25, Unit.PX));
+		
+		this.readService = readService;
+		this.reportService = reportService;
 
 		panel.addStyleName("with_margin");
 		panel.addStyleName("tab_layout");
 
-		panel.add((Composite) (dashboard = new DashboardsView()), "Dashboard"); // TODO insert as first tab
+		panel.add((Composite) (dashboard = new DashboardsView(readService)), "Dashboard"); // TODO insert as first tab
 
 		hiddenDirtyHack();
 		inititializeLazy(1);
@@ -72,7 +77,7 @@ public class ContentView extends Composite implements Display {
 				continue; // do not add this module to the tabs since it should be hidden
 			}
 
-			final ModuleView view = new ModuleView(moduleDto.getModule());
+			final ModuleView view = new ModuleView(moduleDto.getModule(), readService);
 			moduleViewMap.put(moduleDto.getModule(), view);
 			final Widget createBtn = getCreateButton(moduleDto.getModule());
 
@@ -89,8 +94,8 @@ public class ContentView extends Composite implements Display {
 			panel.add(view, getTitlePanel(moduleDto.getTitle(), createBtn));
 		}
 
-		panel.add(new AdminWidget(), "Misc");
-		panel.add(new ReportSuggester(), "Reports");
+		panel.add(new AdminWidget(null, null), "Misc");
+		panel.add(new ReportSuggester(reportService), "Reports");
 
 		panel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override

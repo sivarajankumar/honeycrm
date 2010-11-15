@@ -1,6 +1,6 @@
 package honeycrm.client.field;
 
-import honeycrm.client.view.AbstractView.View;
+import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 import java.util.Date;

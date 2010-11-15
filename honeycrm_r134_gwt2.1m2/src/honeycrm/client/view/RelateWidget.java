@@ -3,11 +3,14 @@ package honeycrm.client.view;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.Observer;
-import honeycrm.client.misc.ServiceRegistry;
 import honeycrm.client.misc.Subscriber;
 import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
+import honeycrm.client.services.ReadService;
+import honeycrm.client.services.ReadServiceAsync;import com.google.gwt.core.client.GWT;
+
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,17 +25,18 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
+// TODO split this into presenter and view
 public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 	private long id = 0; // start with id == 0L to indicate that nothing has been selected.
 	private final String kind;
 	private boolean timerRunning;
 	private final Set<Observer<Dto>> observers = new HashSet<Observer<Dto>>();
+	private static final ReadServiceAsync readService = GWT.create(ReadService.class);
 	
 	public RelateWidget(final String kind, final long id) {
 		super(new MultiWordSuggestOracle());
 		this.kind = kind;
 		addHandlers();
-
 		
 		if (0 != id) {
 			// an id of 0 indicates that nothing has been selected yet. if something has been
@@ -53,8 +57,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 		}, new ServerCallback<Dto>() {
 			@Override
 			public void doRpc(final Consumer<Dto> internalCacheCallback) {
-				ServiceRegistry.readService().get(kind, id, new AsyncCallback<Dto>() {
-//				commonService.get(marshalledClass, id, new AsyncCallback<Dto>() {
+				readService.get(kind, id, new AsyncCallback<Dto>() {
 					@Override
 					public void onSuccess(final Dto result) {
 						internalCacheCallback.setValueAsynch(result);
@@ -112,7 +115,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 				}, new ServerCallback<Dto>() {
 					@Override
 					public void doRpc(final Consumer<Dto> internalCacheCallback) {
-						ServiceRegistry.readService().getByName(kind, selected, new AsyncCallback<Dto>() {
+						readService.getByName(kind, selected, new AsyncCallback<Dto>() {
 //						commonService.getByName(marshalledClass, selected, new AsyncCallback<Dto>() {
 							@Override
 							public void onFailure(Throwable caught) {
@@ -152,8 +155,7 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 				@Override
 				public void doRpc(final Consumer<ListQueryResult> internalCacheCallback) {
 		//			LoadIndicator.get().startLoading();
-					ServiceRegistry.readService().getAllByNamePrefix(kind, query, 0, 20, new AsyncCallback<ListQueryResult>() {
-//					commonService.getAllByNamePrefix(marshalledClass, query, 0, 20, new AsyncCallback<ListQueryResult>() {
+					readService.getAllByNamePrefix(kind, query, 0, 20, new AsyncCallback<ListQueryResult>() {
 						@Override
 						public void onSuccess(ListQueryResult result) {
 							internalCacheCallback.setValueAsynch(result);
@@ -161,7 +163,6 @@ public class RelateWidget extends SuggestBox implements Subscriber<Dto> {
 
 						@Override
 						public void onFailure(Throwable caught) {
-	//						LoadIndicator.get().endLoading();
 							indicateNoResults();
 						}
 					});

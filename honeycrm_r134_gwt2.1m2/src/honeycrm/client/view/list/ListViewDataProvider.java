@@ -2,7 +2,8 @@ package honeycrm.client.view.list;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.services.ReadServiceAsync;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +19,11 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 	// Setting this to the current time to avoid a refresh at startup.
 	// protected long lastRefresh = System.currentTimeMillis();
 	protected long lastRefresh = 0;
+	protected final ReadServiceAsync readService;
 	
-	public ListViewDataProvider(final String module) {
+	public ListViewDataProvider(final String module, final ReadServiceAsync readService) {
 		this.module = module;
+		this.readService = readService;
 	}
 
 	@Override
@@ -54,7 +57,7 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 		final int end = start + range.getLength();
 
 		// ServiceRegistry.commonService().getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
-		ServiceRegistry.readService().getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
+		readService.getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				insertRefreshedData(display, result);

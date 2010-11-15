@@ -18,7 +18,9 @@ import honeycrm.client.services.AuthServiceAsync;
 import honeycrm.client.services.ConfigServiceAsync;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.DeleteServiceAsync;
+import honeycrm.client.services.PluginServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.services.ReportServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
 import honeycrm.client.view.ModuleAction;
 
@@ -39,17 +41,21 @@ public class AppController implements ValueChangeHandler<String> {
 	private final CreateServiceAsync createService;
 	private final UpdateServiceAsync updateService;
 	private final DeleteServiceAsync deleteService;
+	private final PluginServiceAsync pluginService;
+	private final ReportServiceAsync reportService;
 	private final SimpleEventBus eventBus;
 	private HasWidgets container;
 	private boolean initialized = false;
 
-	public AppController(final ReadServiceAsync readService, final CreateServiceAsync createService, final UpdateServiceAsync updateService, final DeleteServiceAsync deleteService, final AuthServiceAsync authService, final ConfigServiceAsync confService, final SimpleEventBus eventBus) {
+	public AppController(final ReadServiceAsync readService, final CreateServiceAsync createService, final UpdateServiceAsync updateService, final DeleteServiceAsync deleteService, final AuthServiceAsync authService, final ConfigServiceAsync confService, final PluginServiceAsync pluginService, final ReportServiceAsync reportService, final SimpleEventBus eventBus) {
 		this.authService = authService;
 		this.createService = createService;
 		this.updateService = updateService;
 		this.readService = readService;
 		this.deleteService = deleteService;
+		this.pluginService = pluginService;
 		this.confService = confService;
+		this.reportService = reportService;
 		this.eventBus = eventBus;
 		bind();
 	}
@@ -113,7 +119,7 @@ public class AppController implements ValueChangeHandler<String> {
 		GWT.runAsync(AppController.class, new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
-				new ApplicationPresenter(User.getUserId(), readService, createService, updateService, eventBus, new ApplicationView()).go(container);
+				new ApplicationPresenter(User.getUserId(), readService, createService, updateService, pluginService, eventBus, new ApplicationView(readService, reportService)).go(container);
 			}
 			
 			@Override

@@ -66,6 +66,6 @@ public class FieldMark extends AbstractField {
 		dto.setId(dtoId);
 		dto.setMarked(value);
 
-		return new MarkWidget(dto);
+		return new MarkWidget(dto, null);
 	}
 }

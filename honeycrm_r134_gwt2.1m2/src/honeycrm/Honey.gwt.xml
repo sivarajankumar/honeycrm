@@ -10,6 +10,7 @@
 	<servlet path="/config" class="honeycrm.server.services.ConfigServiceImpl" />
 	<servlet path="/report" class="honeycrm.server.services.ReportServiceImpl" />
 	<servlet path="/read" class="honeycrm.server.services.ReadServiceImpl" />
+	<servlet path="/plugin" class="honeycrm.server.services.PluginServiceImpl" />
 
 	<entry-point class='honeycrm.client.Honey' />
 	<source path="client" />

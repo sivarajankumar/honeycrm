@@ -1,13 +1,13 @@
 package honeycrm.client.mvp.views;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.RelationshipsPresenter;
 import honeycrm.client.mvp.presenters.RelationshipsPresenter.Display;
+import honeycrm.client.services.ReadServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -28,8 +28,10 @@ public class RelationshipsView extends Composite implements Display {
 	RelationshipsPresenter presenter;
 	@UiField
 	VerticalPanel panel;
+	private final ReadServiceAsync readService;
 
-	public RelationshipsView(final String module, final ArrayList<String> relationships) {
+	public RelationshipsView(final String module, final ArrayList<String> relationships, final ReadServiceAsync readService) {
+		this.readService = readService;
 		this.module = module;
 		this.relationships = relationships;
 
@@ -73,7 +75,7 @@ public class RelationshipsView extends Composite implements Display {
 
 	private void setupView(final String relation) {
 		if (views.isEmpty() || !views.containsKey(relation)) {
-			views.put(relation, new RelationshipView(relation, module));
+			views.put(relation, new RelationshipView(relation, module, readService));
 			panel.add(views.get(relation));
 		}
 	}

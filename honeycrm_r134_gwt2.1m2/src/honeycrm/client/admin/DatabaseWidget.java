@@ -1,6 +1,8 @@
 package honeycrm.client.admin;
 
-import honeycrm.client.misc.ServiceRegistry;
+import honeycrm.client.services.CommonServiceAsync;
+import honeycrm.client.services.DeleteServiceAsync;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -11,14 +13,15 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class DatabaseWidget extends Composite {
 	private final Button deleteAllBtn = new Button("Delete all items");
-	public DatabaseWidget() {
+	
+	public DatabaseWidget(final CommonServiceAsync commonService, final DeleteServiceAsync deleteService) {
 		final VerticalPanel panel = new VerticalPanel();
 		
 		final Button createBulkBtn = new Button("Create Bulk (Creates 100k items)");
 		createBulkBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				ServiceRegistry.commonService().bulkCreate(new AsyncCallback<Void>() {
+				commonService.bulkCreate(new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
 					}
@@ -35,7 +38,7 @@ public class DatabaseWidget extends Composite {
 		readBulkBtn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				ServiceRegistry.commonService().bulkRead(new AsyncCallback<Void>() {
+				commonService.bulkRead(new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
 					}
@@ -53,10 +56,9 @@ public class DatabaseWidget extends Composite {
 		panel.add(deleteAllBtn);
 		
 		deleteAllBtn.addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
-				ServiceRegistry.deleteService().deleteAllItems(new AsyncCallback<Void>() {
+				deleteService.deleteAllItems(new AsyncCallback<Void>() {
 					@Override
 					public void onSuccess(Void result) {
 					}
