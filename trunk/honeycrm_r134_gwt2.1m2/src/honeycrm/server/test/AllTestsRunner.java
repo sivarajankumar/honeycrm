@@ -1,9 +1,9 @@
 package honeycrm.server.test;
 
+import honeycrm.client.services.ReflectionHelper;
 import honeycrm.server.test.large.AllLargeTestsRunner;
 import honeycrm.server.test.medium.AllMediumTestsRunner;
 import honeycrm.server.test.small.AllSmallTestsRunner;
-import honeycrm.server.transfer.ReflectionHelper;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;

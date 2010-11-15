@@ -3,7 +3,7 @@ package honeycrm.server.test.small;
 import honeycrm.client.csv.CsvImporter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
-import honeycrm.server.transfer.NewDtoWizard;
+import honeycrm.client.services.NewDtoWizard;
 import junit.framework.TestCase;
 
 public class CsvImportTest extends TestCase {

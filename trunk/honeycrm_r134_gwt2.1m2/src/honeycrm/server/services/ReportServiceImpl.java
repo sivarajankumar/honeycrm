@@ -1,26 +1,32 @@
 package honeycrm.server.services;
 
+import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.reports.ReportData;
 import honeycrm.client.reports.ReportMetaData;
 import honeycrm.client.services.ReportService;
-import honeycrm.server.CommonServiceReporter;
+import honeycrm.server.domain.Offering;
+import honeycrm.server.reports.OfferingReports;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import static com.google.appengine.api.datastore.FetchOptions.Builder.*;
 
-public class ReportServiceImpl extends RemoteServiceServlet implements ReportService {
+public class ReportServiceImpl extends NewService implements ReportService {
 	private static final long serialVersionUID = 9188964651846980485L;
-	private static final CommonServiceReporter reporter = new CommonServiceReporter();
 	private static final Random random = new Random(System.currentTimeMillis());
+	private static final ReadServiceImpl readService = new ReadServiceImpl();
 	private ReportMetaData[] metaData;
 
 	@Override
 	public Map<Integer, Double> getAnnuallyOfferingVolumes() {
-		return reporter.getAnnuallyOfferingVolumes();
+		final PreparedQuery pq = db.prepare(new Query(Offering.class.getSimpleName()));
+		final ListQueryResult r = copy.entitiesToDtoArray(Offering.class.getSimpleName(), pq.countEntities(withDefaults()), pq.asIterable(withDefaults()), false);
+		return new OfferingReports().getAnnuallyOfferingVolumes(r.getResults());
 	}
 
 	@Override
@@ -79,9 +85,9 @@ public class ReportServiceImpl extends RemoteServiceServlet implements ReportSer
 		for (double x = 0; x < 1; x += 0.1) {
 			final HashMap<String, Integer> here = new HashMap<String, Integer>();
 
-			here.put("a", (int) (100*Math.sin(x)));
-			here.put("b", (int) (100*Math.cos(x)));
-			here.put("c", (int) (100*Math.tan(x)));
+			here.put("a", (int) (100 * Math.sin(x)));
+			here.put("b", (int) (100 * Math.cos(x)));
+			here.put("c", (int) (100 * Math.tan(x)));
 
 			data.put((int) (x * 10), here);
 		}

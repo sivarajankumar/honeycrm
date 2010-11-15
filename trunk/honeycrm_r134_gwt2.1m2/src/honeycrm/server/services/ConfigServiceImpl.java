@@ -2,7 +2,7 @@ package honeycrm.server.services;
 
 import honeycrm.client.dto.Configuration;
 import honeycrm.client.services.ConfigService;
-import honeycrm.server.transfer.NewDtoWizard;
+import honeycrm.client.services.NewDtoWizard;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

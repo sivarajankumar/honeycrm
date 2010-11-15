@@ -1,4 +1,4 @@
-package honeycrm.server.transfer;
+package honeycrm.client.services;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

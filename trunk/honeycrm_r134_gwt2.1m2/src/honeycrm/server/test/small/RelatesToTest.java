@@ -1,9 +1,9 @@
 package honeycrm.server.test.small;
 
+import honeycrm.client.services.ReflectionHelper;
 import honeycrm.server.CachingReflectionHelper;
 import honeycrm.server.domain.AbstractEntity;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
-import honeycrm.server.transfer.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
