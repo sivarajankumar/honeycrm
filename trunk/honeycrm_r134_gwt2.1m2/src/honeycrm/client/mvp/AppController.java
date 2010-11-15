@@ -6,14 +6,17 @@ import honeycrm.client.misc.NumberParser;
 import honeycrm.client.mvp.events.DeleteEvent;
 import honeycrm.client.mvp.events.DeleteEventHandler;
 import honeycrm.client.mvp.events.OpenEvent;
+import honeycrm.client.mvp.events.OpenReportEvent;
 import honeycrm.client.mvp.events.SuccessfulLoginEvent;
 import honeycrm.client.mvp.events.SuccessfulLoginEventHandler;
 import honeycrm.client.mvp.presenters.ApplicationPresenter;
 import honeycrm.client.mvp.presenters.CsvImportPresenter;
 import honeycrm.client.mvp.presenters.LoginPresenter;
+import honeycrm.client.mvp.presenters.ReportsSuggestionPresenter;
 import honeycrm.client.mvp.views.ApplicationView;
 import honeycrm.client.mvp.views.CsvImportView;
 import honeycrm.client.mvp.views.LoginView;
+import honeycrm.client.mvp.views.ReportsSuggestionView;
 import honeycrm.client.services.AuthServiceAsync;
 import honeycrm.client.services.ConfigServiceAsync;
 import honeycrm.client.services.CreateServiceAsync;
@@ -92,7 +95,7 @@ public class AppController implements ValueChangeHandler<String> {
 	}
 
 	private void startInitialisation(final SuccessfulLoginEvent event) {
-		this.initialized  = true;
+		this.initialized = true;
 		User.initUser(event.getUserId(), event.getLogin());
 		History.newItem("initialized");
 		History.fireCurrentHistoryState();
@@ -107,6 +110,12 @@ public class AppController implements ValueChangeHandler<String> {
 				new LoginPresenter(authService, confService, eventBus, new LoginView()).go(container);
 			} else if (token.equals("initialized")) {
 				handleInitialized();
+			} else if ("misc".equals(token)) {
+				handleMisc();
+			} else if ("report".equals(token)) {
+				handleReports();
+			} else if (token.split("\\s+").length == 2 && "report".equals(token.split("\\s+")[0])) {
+				eventBus.fireEvent(new OpenReportEvent(NumberParser.convertToInteger(token.split("\\s+")[1])));
 			} else if (token.split("\\s+").length == 2) {
 				handleImport(token);
 			} else if (token.split("\\s+").length == 3) {
@@ -115,13 +124,31 @@ public class AppController implements ValueChangeHandler<String> {
 		}
 	}
 
+	private void handleMisc() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void handleReports() {
+		GWT.runAsync(AppController.class, new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				new ReportsSuggestionPresenter(new ReportsSuggestionView(), eventBus, reportService).go(container);
+			}
+
+			@Override
+			public void onFailure(Throwable reason) {
+			}
+		});
+	}
+
 	protected void handleInitialized() {
 		GWT.runAsync(AppController.class, new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
 				new ApplicationPresenter(User.getUserId(), readService, createService, updateService, pluginService, eventBus, new ApplicationView(readService, reportService)).go(container);
 			}
-			
+
 			@Override
 			public void onFailure(Throwable reason) {
 			}
@@ -137,7 +164,7 @@ public class AppController implements ValueChangeHandler<String> {
 					new CsvImportPresenter(createService, eventBus, new CsvImportView(), tokens[0]).go(container);
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable reason) {
 			}
@@ -162,7 +189,7 @@ public class AppController implements ValueChangeHandler<String> {
 					}
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable reason) {
 			}

@@ -3,14 +3,12 @@ package honeycrm.client.mvp.views;
 import java.util.Collection;
 import java.util.HashMap;
 
-import honeycrm.client.admin.AdminWidget;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.mvp.presenters.ContentPresenter;
 import honeycrm.client.mvp.presenters.DashboardsPresenter;
 import honeycrm.client.mvp.presenters.ModulePresenter;
 import honeycrm.client.mvp.presenters.ContentPresenter.Display;
-import honeycrm.client.reports.ReportSuggester;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.ReportServiceAsync;
 
@@ -86,16 +84,11 @@ public class ContentView extends Composite implements Display {
 			tabPositionMapReverse.put(tabPos++, moduleDto.getModule());
 			tabPosToCreateBtnMap.put(tabPos - 1, createBtn);
 
-			// refresh list view only for the first tab (which is the only visible tab at the beginning)
-			if (0 == tabPos) {
-				// view.refreshListView();
-			}
-
 			panel.add(view, getTitlePanel(moduleDto.getTitle(), createBtn));
 		}
 
-		panel.add(new AdminWidget(null, null), "Misc");
-		panel.add(new ReportSuggester(reportService), "Reports");
+//		panel.add(new AdminWidget(null, null), "Misc");
+//		panel.add(new ReportSuggester(reportService), "Reports");
 
 		panel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
 			@Override

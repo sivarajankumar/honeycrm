@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:v="com.google.gwt.visualization.client.visualizations">
+	<g:DecoratedPopupPanel ui:field="panel">
+		<g:ScrollPanel>
+			<g:VerticalPanel>
+				<g:HorizontalPanel width="700px" height="400px">
+					<g:FlowPanel ui:field="chartPanel" />
+					<g:VerticalPanel width="150px">
+						<g:Label ui:field="relatedReportsLbl" />
+						<g:VerticalPanel ui:field="relatedReportsPanel" />
+						<g:Label ui:field="moreReportsLbl" />
+						<g:VerticalPanel ui:field="moreReportsPanel" />
+					</g:VerticalPanel>
+				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:Button ui:field="close" />
+				</g:HorizontalPanel>
+			</g:VerticalPanel>
+		</g:ScrollPanel>
+	</g:DecoratedPopupPanel>
+</ui:UiBinder> 
