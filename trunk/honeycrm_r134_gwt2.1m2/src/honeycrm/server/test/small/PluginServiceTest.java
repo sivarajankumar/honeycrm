@@ -17,8 +17,8 @@ public class PluginServiceTest extends TestCase {
 		assertTrue(0 < plugins.length);
 		
 		for (final AbstractPlugin plugin: plugins  ) {
-			plugin.initialize(app/*, null*/);
-			plugin.runPlugin();
+			plugin.initialize(); //app/*, null*/);
+			// plugin.runPlugin();
 		}
 	}
 }

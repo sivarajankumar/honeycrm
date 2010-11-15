@@ -8,13 +8,13 @@ abstract public class AbstractPlugin implements Serializable {
 
 	private static final long serialVersionUID = 7911325484912055158L;
 	private boolean enabled = false;
-	protected IPlatform platform;
+	// protected IPlatform platform;
 
 	public AbstractPlugin() { // for serialisation
 	}
 
-	public void initialize(final IPlatform app/* , final PluginView view */) {
-		this.platform = app;
+	public void initialize(/*final IPlatform app/* , final PluginView view */) {
+		// this.platform = app;
 		// setView(view);
 	}
 
@@ -22,7 +22,8 @@ abstract public class AbstractPlugin implements Serializable {
 	 * @return True if the platform and view have been set for the plugin. False otherwise.
 	 */
 	public boolean isInitialized() {
-		return null != platform/* && null != getView() */;
+		return true;
+//		return null != platform/* && null != getView() */;
 	}
 
 	public String getName() {
