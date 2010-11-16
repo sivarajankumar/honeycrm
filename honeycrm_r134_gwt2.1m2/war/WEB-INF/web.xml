@@ -85,6 +85,16 @@
 		<url-pattern>/Honey/plugin</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+        <servlet-name>pdf</servlet-name>
+        <servlet-class>honeycrm.server.services.Pdf</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>pdf</servlet-name>
+        <url-pattern>/pdf</url-pattern>
+    </servlet-mapping>
+	
+	
 	<!-- See http://code.google.com/intl/de-DE/appengine/kb/java.html#What_Is_A_Loading_Request -->
     <precompilation-enabled>true</precompilation-enabled>
 
