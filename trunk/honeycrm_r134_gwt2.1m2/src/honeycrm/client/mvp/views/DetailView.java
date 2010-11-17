@@ -25,6 +25,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -52,6 +53,8 @@ public class DetailView extends Composite implements Display {
 	Button saveBtn;
 	@UiField
 	Button cancelBtn;
+	@UiField
+	Anchor pdfBtn;
 
 	final String module;
 	DetailPresenter presenter;
@@ -70,6 +73,13 @@ public class DetailView extends Composite implements Display {
 		editBtn.setText("Edit");
 		saveBtn.setText("Save");
 		cancelBtn.setText("Cancel");
+		pdfBtn.setText("Create PDF");
+
+		// TODO add "email pdf" button: generate pdf file and email it to customer (for invoices)
+	}
+
+	private void updatePdfCreateUrl(final long id) {
+		pdfBtn.setHref("/Honey/pdf?m=" + moduleDto.getModule() + "&id=" + String.valueOf(id));
 	}
 
 	@UiFactory
@@ -79,7 +89,8 @@ public class DetailView extends Composite implements Display {
 
 	private void resetFields(final Dto newDto, final View view, final HashMap<String, Object> prefilledFields) {
 		insertDataFromPrefilledFields(newDto, prefilledFields, view);
-
+		updatePdfCreateUrl(newDto.getId());
+		
 		this.dto = newDto;
 
 		final String[][] fieldIds = moduleDto.getFormFieldIds();
@@ -189,6 +200,7 @@ public class DetailView extends Composite implements Display {
 		editBtn.setVisible(true);
 		cancelBtn.setVisible(false);
 		saveBtn.setVisible(false);
+		pdfBtn.setVisible(true);
 
 		resetFields(dto, View.DETAIL, null);
 	}
@@ -199,6 +211,7 @@ public class DetailView extends Composite implements Display {
 		editBtn.setVisible(false);
 		cancelBtn.setVisible(true);
 		saveBtn.setVisible(true);
+		pdfBtn.setVisible(false);
 
 		resetFields(moduleDto.createDto(), View.CREATE, prefilledFields);
 	}
@@ -209,6 +222,7 @@ public class DetailView extends Composite implements Display {
 		editBtn.setVisible(false);
 		cancelBtn.setVisible(true);
 		saveBtn.setVisible(true);
+		pdfBtn.setVisible(false);
 
 		resetFields(dto, View.EDIT, null);
 		relationshipsView.setVisible(false);

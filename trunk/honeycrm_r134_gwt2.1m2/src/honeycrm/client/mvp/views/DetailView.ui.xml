@@ -8,6 +8,8 @@
 			<g:Button ui:field="saveBtn" visible="false" />
 			<g:Button ui:field="cancelBtn" visible="false" />
 			<g:Button ui:field="editBtn" visible="false" />
+			<!-- TODO This link should look like the other buttons. -->
+			<g:Anchor ui:field="pdfBtn" visible="false" />
 		</g:HorizontalPanel>
 		<g:FlexTable ui:field="table" />
 		<my:RelationshipsView ui:field="relationshipsView" />
