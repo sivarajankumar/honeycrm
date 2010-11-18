@@ -1,9 +1,13 @@
 package honeycrm.server.services;
 
+import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.ModuleDto;
+import honeycrm.server.NewDtoWizard;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map.Entry;
 
 import javax.servlet.ServletConfig;
@@ -19,12 +23,14 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class Pdf extends HttpServlet {
 	private static final long serialVersionUID = -5755890768164436414L;
 	private static final ReadServiceImpl readService = new ReadServiceImpl();
+	private static final Configuration config = NewDtoWizard.getConfiguration();
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -64,27 +70,53 @@ public class Pdf extends HttpServlet {
 			response.setHeader("Content-Disposition", "inline; filename=" + module + ".pdf"); // TODO add more information about the entity into the filename.
 
 			final Dto dto = readService.get(module, id);
+			final ModuleDto moduleDto = config.getModuleDtos().get(module);
 
+			document.add(new Paragraph(moduleDto.getTitle(), new Font(FontFamily.HELVETICA, 20, Font.BOLD)));
+			
 			for (final Entry<String, Serializable> entry : dto.getAllData().entrySet()) {
-				final String value = String.valueOf((entry.getKey().endsWith("_resolved")) ? ((Dto) entry.getValue()).get("name") : entry.getValue());
-				document.add(getAttributeParagraph(entry.getKey(), value));
+				if ("id".equals(entry.getKey()) || entry.getKey().endsWith("_resolved")) {
+					continue;
+				}
+				final String label = moduleDto.getFieldById(entry.getKey()).getLabel();
+				final String value;
+				
+				if (dto.getAllData().containsKey(entry.getKey() + "_resolved")) {
+					final Dto resolved = (Dto) dto.getAllData().get(entry.getKey() + "_resolved");
+					value = String.valueOf(resolved.get("name"));
+				} else {
+					value = null == entry.getValue() ? "-" : String.valueOf(entry.getValue());
+				}
+
+				if (entry.getValue() instanceof List<?>) {
+					if (!((List<?>)entry.getValue() ).isEmpty()) {
+						final List<Dto> list = (List<Dto>) entry.getValue();
+						final ModuleDto listModuleDto = config.getModuleDtos().get(list.get(0).getModule());
+						
+						PdfPTable table = new PdfPTable(listModuleDto.getListFieldIds().length);
+						table.setHeaderRows(1);
+
+						for (final String col: listModuleDto.getListFieldIds()) {
+							final String colHeader = listModuleDto.getFieldById(col).getLabel();
+							table.addCell(new Phrase(colHeader, new Font(FontFamily.HELVETICA, 12, Font.BOLD)));
+						}
+						
+						for (int i = 0; i < list.size(); i++) {
+							for (final String col: listModuleDto.getListFieldIds()) {
+								table.addCell(new Phrase(String.valueOf(list.get(i).get(col))));
+							}
+						}
+						
+						document.add(new Chunk(label, new Font(FontFamily.HELVETICA, 12, Font.BOLD)));
+						document.add(new Chunk(Chunk.NEWLINE));
+						document.add(table);
+						document.add(new Chunk(Chunk.NEWLINE));
+					}
+				} else {
+					document.add(getAttributeParagraph(label, value));
+				}
 			}
 
-			PdfPTable table = new PdfPTable(2);
-			table.setHeaderRows(1);
-			table.addCell("Foo");
-			table.addCell("Bar");
-			for (int i = 0; i < 100; i++) {
-				table.addCell(String.valueOf(i));
-				table.addCell(String.valueOf(i + 1));
-			}
-			document.add(new Paragraph("Offering", new Font(FontFamily.HELVETICA, 20, Font.BOLD)));
-
-			document.add(getAttributeParagraph("Description", "The description"));
-			document.add(getAttributeParagraph("Assigned To", "James"));
-
-			document.add(new Chunk(Chunk.NEWLINE));
-			document.add(table);
 			document.close();
 		} catch (DocumentException ex) {
 			ex.printStackTrace();

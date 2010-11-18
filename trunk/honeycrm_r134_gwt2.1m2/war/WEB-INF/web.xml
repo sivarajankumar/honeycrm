@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Honey.html</welcome-file>
+	</welcome-file-list>
+	
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>authServlet</servlet-name>
@@ -91,7 +93,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>pdf</servlet-name>
-        <url-pattern>/pdf</url-pattern>
+        <url-pattern>/Honey/pdf</url-pattern>
     </servlet-mapping>
 	
 	
@@ -106,11 +108,6 @@
 		<servlet-name>jUnitHostImpl</servlet-name>
 		<url-pattern>/Honey/junithost/*</url-pattern>
 	</servlet-mapping-->
-
-	<!-- Default page to serve -->
-	<welcome-file-list>
-		<welcome-file>Honey.html</welcome-file>
-	</welcome-file-list>
 
     <filter>
         <filter-name>appstats</filter-name>

@@ -143,7 +143,7 @@ public class ModuleDto implements Serializable {
 		if (fields.containsKey(id)) {
 			return fields.get(id);
 		} else {
-			Window.alert("Could not find field with id " + id + " in " + ModuleDto.class);
+			// Window.alert("Could not find field with id " + id + " in " + ModuleDto.class);
 			// did not find a field with this id. should never reach this point.
 			throw new RuntimeException("Could not find field with id " + id + " in " + ModuleDto.class);
 		}
