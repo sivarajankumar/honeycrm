@@ -1,13 +1,148 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
-	<g:DisclosurePanel ui:field="panel" animationEnabled="true" open="true">
-		<g:VerticalPanel>
-			<g:HorizontalPanel>
-				<g:Button ui:field="deleteButton" />
-				<g:Button ui:field="addButton" />
-			</g:HorizontalPanel>
-			<c:SimplePager ui:field="pager" />
-			<c:CellTable ui:field="table" />
-		</g:VerticalPanel>
-	</g:DisclosurePanel>
+
+	<ui:style>
+		.rounded-block {
+		  margin-top: -1px;                               /* use negative margin to overlap stacked blocks */
+		}
+		p.rounded-topspace {
+  			margin-top: -14px;                                  /* removes unwanted space */
+		}
+
+		p.rounded-bottomspace {
+  			margin: 10px 0 -10px;                               /* removes unwanted space */
+		}
+
+		div.rounded-block-top-left, 
+		div.rounded-block-top-right, 
+		div.rounded-block-bottom-left, 
+		div.rounded-block-bottom-right { 
+		  background: transparent url('images/rounded-block.png') no-repeat;                         /* combined rounded corner image */
+		  font-size: 2px;                                 /* IE div correction */
+		  height: 11px;    								  /* height of an image corner */
+		}
+		
+		div.rounded-block-top-right {                        /* anchor image in top right */
+		  background-position: 100% 0;
+		}
+		
+		div.rounded-block-top-right,
+		div.rounded-block-bottom-right { 
+		  margin-left: 11px;                              /* width of an image corner */
+		  margin-top: -11px;                              /* height of an image corner */
+		}
+		
+		div.rounded-block-bottom-left  { 
+		  background-position: 0 -11px;                   /* negative height of an image corner */
+		  margin-right: 11px;         					  /* width of an image corner */                       
+		}
+		
+		div.rounded-block-top-left {
+			margin-right: 11px;
+		}
+		
+		div.rounded-block-bottom-right { 
+		  background-position: 100% -11px;                /* negative height of an image corner */
+		}
+		
+		div.rounded-outside,
+		div.rounded-inside {
+		  background: transparent url('images/rounded-block-inner.png') repeat-y right;
+		  padding: 0 8px 0 0;
+		  margin: 0;
+		}
+		
+		div.rounded-inside {
+		  background-position: left;
+		  padding: 0 0 0 8px;
+		}
+		
+		div.block {
+		  position: relative;
+		}
+
+		div.block-blog div.block-icon,
+		div.block-comment div.block-icon,
+		div.block-forum div.block-icon,
+		div.block-search div.block-icon,
+		div.block-menu div.block-icon,
+		div.comments-block-icon,
+		div.block-user div.block-icon,
+		div.block-tagadelic div.block-icon,
+		#block-blog-0 div.block-icon,
+		#block-book-0 div.block-icon,
+		#block-menu-devel div.block-icon,
+		#block-user-0 div.block-icon,
+		#block-views-archive-block div.block-icon,
+		#block-views-comments_recent-block div.block-icon
+		#block-tagadelic-2 div.block-icon {
+		  height: 48px;
+		  left: 0;
+		  position: absolute;
+		  top: -0.666em;
+		  width: 48px;
+		  background: transparent url('images/tnt_icon_06.png') no-repeat left center;
+		}
+		
+		h2.block-title {
+		  background-color: #3D70E6;
+		  font-size: 1.3em;
+		  color: #fff;
+		  padding: 4px 8px 1px 46px;
+		  text-align: right;
+		  text-shadow: #545454 1px 1px; 
+		  -moz-border-radius-topleft: 3px;
+		  -moz-border-radius-topright: 3px;
+		  -webkit-border-top-left-radius: 4px;
+		  -webkit-border-top-right-radius: 4px;
+		  font-family: Myriad Pro, Myriad Web Pro Regular, Lucida Grande, Geneva, Trebuchet MS, sans-serif;
+  		  font-weight: 600;
+		  text-transform: uppercase;
+		}
+	
+		div.block div.content
+		{
+		  background: transparent url('images/block-gradient.gif') no-repeat center bottom;
+		  border-bottom: 3px solid #F1F5F7;
+		  padding: 10px 10px 8px;
+		  -moz-border-radius-bottomleft: 6px;
+		  -moz-border-radius-bottomright: 6px;
+		  -webkit-border-bottom-left-radius: 4px;
+		  -webkit-border-bottom-right-radius: 4px; 
+		  overflow: hidden;
+		  margin: 0;
+		}
+  	</ui:style>
+
+	<g:HTMLPanel>
+	
+		<div class='{style.rounded-block}'>
+			<div class='{style.rounded-block-top-left}'></div>
+			<div class='{style.rounded-block-top-right}'></div>
+			<div class='{style.rounded-outside}'>
+				<div class='{style.rounded-inside}'>
+					<p class='{style.rounded-topspace}'></p>
+					<div class='{style.block} {style.block-forum}' id="block-forum-1">
+						<div class='{style.block-icon}'></div>
+						<h2 class='{style.block-title}'>Product</h2>
+						<div class='{style.content}'>
+							<g:DisclosurePanel ui:field="panel" animationEnabled="true" open="true">
+								<g:VerticalPanel>
+									<g:HorizontalPanel>
+										<g:Button ui:field="deleteButton" />
+										<g:Button ui:field="addButton" />
+									</g:HorizontalPanel>
+									<c:SimplePager ui:field="pager" />
+									<c:CellTable ui:field="table" />
+								</g:VerticalPanel>
+							</g:DisclosurePanel>
+						</div>
+					</div>
+					<p class='{style.rounded-bottomspace}'></p>
+				</div>
+			</div>
+			<div class='{style.rounded-block-bottom-left}'></div>
+	   		<div class='{style.rounded-block-bottom-right}'></div>
+		</div>
+	</g:HTMLPanel>
 </ui:UiBinder> 

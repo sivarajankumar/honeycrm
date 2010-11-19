@@ -401,3 +401,82 @@ tr {
   padding: 6px 10px 3px 8px;*/
 }
 
+/*****************************************/
+/* ROUNDED CORNERS FOR BLOCKS (optional) */
+/*****************************************/
+
+div.rounded-block {
+  margin-top: -1px;                               /* use negative margin to overlap stacked blocks */
+}
+
+p.rounded-topspace {
+  margin-top: -14px;                                  /* removes unwanted space */
+}
+
+p.rounded-bottomspace {
+  margin-bottom: -10px;                               /* removes unwanted space */
+}
+
+div.rounded-block-top-left, 
+div.rounded-block-top-right, 
+div.rounded-block-bottom-left, 
+div.rounded-block-bottom-right { 
+  background: transparent url('images/rounded-block.png') no-repeat;                         /* combined rounded corner image */
+  font-size: 2px;                                 /* IE div correction */
+  height: 11px;                                   /* height of an image corner */
+}
+
+body.layout-main-last #sidebar-last div.rounded-block-top-left, 
+body.layout-main-last #sidebar-last div.rounded-block-top-right, 
+body.layout-main-last #sidebar-last div.rounded-block-bottom-left, 
+body.layout-main-last #sidebar-last div.rounded-block-bottom-right { 
+  background: none;
+  font-size: inherit;
+  height: auto;
+}
+
+div.rounded-block-top-left, 
+div.rounded-block-bottom-left { 
+  margin-right: 11px;                             /* width of an image corner */
+}
+
+div.rounded-block-top-right {                        /* anchor image in top right */
+  background-position: 100% 0;
+}
+
+div.rounded-block-top-right,
+div.rounded-block-bottom-right { 
+  margin-left: 11px;                              /* width of an image corner */
+  margin-top: -11px;                              /* height of an image corner */
+}
+
+body.layout-main-last #sidebar-last div.rounded-block-top-right,
+body.layout-main-last #sidebar-last div.rounded-block-bottom-right { 
+  margin: 0;
+}
+
+div.rounded-block-bottom-left  { 
+  background-position: 0 -11px;                   /* negative height of an image corner */
+}
+
+div.rounded-block-bottom-right { 
+  background-position: 100% -11px;                /* negative height of an image corner */
+}
+
+div.rounded-outside,
+div.rounded-inside {
+  background: transparent url('images/rounded-block-inner.png') repeat-y right;
+  padding-right: 8px;
+}
+
+body.layout-main-last #sidebar-last div.rounded-outside,
+body.layout-main-last #sidebar-last div.rounded-inside {
+  background: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.rounded-inside {
+  background-position: left;
+  padding: 0 0 0 8px;
+}
