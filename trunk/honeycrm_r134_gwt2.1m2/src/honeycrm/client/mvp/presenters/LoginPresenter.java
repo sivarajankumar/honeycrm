@@ -2,12 +2,16 @@ package honeycrm.client.mvp.presenters;
 
 import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.mvp.events.LocaleChangeEvent;
 import honeycrm.client.mvp.events.SuccessfulLoginEvent;
 import honeycrm.client.services.AuthServiceAsync;
 import honeycrm.client.services.ConfigServiceAsync;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasKeyDownHandlers;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -30,6 +34,8 @@ public class LoginPresenter implements Presenter {
 		HasText getStatusLabel();
 		void hide();
 		void onCannotGetConfiguration();
+		HasChangeHandlers getLanguageBox();
+		String getCurrentLocale();
 	}
 
 	private static final boolean AUTO_LOGIN = false;
@@ -79,7 +85,7 @@ public class LoginPresenter implements Presenter {
 			// use magic login and password when automatic login is on
 			final String login = AUTO_LOGIN ? AUTO_LOGIN_USERNAME : view.getLogin().getValue();
 			final String pass = AUTO_LOGIN ? AUTO_LOGIN_PASSWORD : view.getPassword().getValue();
-
+			
 			view.getStatusLabel().setText("Checking credentials..");
 			authService.login(login, pass, new AsyncCallback<Long>() {
 				@Override
@@ -118,6 +124,12 @@ public class LoginPresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				tryLogin();
+			}
+		});
+		view.getLanguageBox().addChangeHandler(new ChangeHandler() {
+			@Override
+			public void onChange(ChangeEvent event) {
+				eventBus.fireEvent(new LocaleChangeEvent(view.getCurrentLocale()));
 			}
 		});
 	}
