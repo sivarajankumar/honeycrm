@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -101,11 +100,6 @@ public class LoginView extends Composite implements Display {
 	}
 
 	@Override
-	public HasText getStatusLabel() {
-		return status;
-	}
-
-	@Override
 	public void onCannotGetConfiguration() {
 		Window.alert(constants.cannotGetConfiguration());
 	}
@@ -118,5 +112,25 @@ public class LoginView extends Composite implements Display {
 	@Override
 	public String getCurrentLocale() {
 		return languageBox.getValue(languageBox.getSelectedIndex());
+	}
+
+	@Override
+	public void setStatusCheckCredentials() {
+		status.setText(constants.checkCredentials());
+	}
+
+	@Override
+	public void setStatusInvalidLogin() {
+		status.setText(constants.invalidLogin());
+	}
+
+	@Override
+	public void setStatusLoginSuccessful() {
+		status.setText(constants.loginSuccessful());
+	}
+
+	@Override
+	public void setStatusInitializing() {
+		status.setText(constants.initializing());
 	}
 }

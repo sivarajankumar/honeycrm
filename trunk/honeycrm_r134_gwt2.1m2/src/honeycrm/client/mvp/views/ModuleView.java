@@ -1,5 +1,6 @@
 package honeycrm.client.mvp.views;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.mvp.presenters.ModulePresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
 
@@ -24,9 +25,11 @@ public class ModuleView extends Composite implements Display {
 
 	final String module;
 	private final ReadServiceAsync readService;
+	private final LocalizedMessages constants;
 
-	public ModuleView(final String module, final ReadServiceAsync readService) {
+	public ModuleView(final String module, final ReadServiceAsync readService, final LocalizedMessages constants) {
 		this.readService = readService;
+		this.constants = constants;
 		this.module = module; // IMPORTANT: set module _before_ all other initialisation
 		this.moduleButtonBar = new ModuleButtonBarView();
 
@@ -45,7 +48,7 @@ public class ModuleView extends Composite implements Display {
 
 	@UiFactory
 	honeycrm.client.mvp.views.DetailView makeDetailView() {
-		return detail = new honeycrm.client.mvp.views.DetailView(module, readService);
+		return detail = new honeycrm.client.mvp.views.DetailView(module, readService, constants);
 	}
 
 	@UiFactory

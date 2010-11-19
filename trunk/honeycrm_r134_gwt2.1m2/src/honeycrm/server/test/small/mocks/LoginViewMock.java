@@ -42,11 +42,6 @@ public class LoginViewMock implements Display {
 	}
 
 	@Override
-	public HasText getStatusLabel() {
-		return statusLabel;
-	}
-
-	@Override
 	public void hide() {
 	}
 
@@ -62,5 +57,29 @@ public class LoginViewMock implements Display {
 	@Override
 	public String getCurrentLocale() {
 		return "en";
+	}
+
+	@Override
+	public void setStatusCheckCredentials() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setStatusInvalidLogin() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setStatusLoginSuccessful() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setStatusInitializing() {
+		// TODO Auto-generated method stub
+		
 	}
 }

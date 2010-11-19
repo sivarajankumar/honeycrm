@@ -14,4 +14,17 @@ public interface LocalizedMessages extends Messages {
 	String loginMessage(String usernameForTesting);
 	String language();
 	String cannotGetConfiguration();
+	
+	String cancel();
+	String save();
+	String edit();
+	String add();
+	String delete();
+	String create();
+	String createPdf();
+	
+	String checkCredentials();
+	String invalidLogin();
+	String loginSuccessful();
+	String initializing();
 }

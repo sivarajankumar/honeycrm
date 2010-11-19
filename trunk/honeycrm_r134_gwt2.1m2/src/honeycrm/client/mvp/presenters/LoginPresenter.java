@@ -19,7 +19,6 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
@@ -31,11 +30,15 @@ public class LoginPresenter implements Presenter {
 		HasValue<String> getPassword();
 		Widget asWidget();
 		HasKeyDownHandlers getLoginAsKeyHandler();
-		HasText getStatusLabel();
 		void hide();
 		void onCannotGetConfiguration();
 		HasChangeHandlers getLanguageBox();
 		String getCurrentLocale();
+		
+		void setStatusCheckCredentials();
+		void setStatusInvalidLogin();
+		void setStatusLoginSuccessful();
+		void setStatusInitializing();
 	}
 
 	private static final boolean AUTO_LOGIN = false;
@@ -86,14 +89,14 @@ public class LoginPresenter implements Presenter {
 			final String login = AUTO_LOGIN ? AUTO_LOGIN_USERNAME : view.getLogin().getValue();
 			final String pass = AUTO_LOGIN ? AUTO_LOGIN_PASSWORD : view.getPassword().getValue();
 			
-			view.getStatusLabel().setText("Checking credentials..");
+			view.setStatusCheckCredentials();
 			authService.login(login, pass, new AsyncCallback<Long>() {
 				@Override
 				public void onSuccess(Long result) {
 					if (null == result) {
-						view.getStatusLabel().setText("Invalid login or password.");
+						view.setStatusInvalidLogin();
 					} else {
-						view.getStatusLabel().setText("Login successful.");
+						view.setStatusLoginSuccessful();
 						eventBus.fireEvent(new SuccessfulLoginEvent(login, result));
 						view.hide();
 					}
@@ -105,7 +108,7 @@ public class LoginPresenter implements Presenter {
 				}
 			});
 		} else {
-			view.getStatusLabel().setText("Initializing..");
+			view.setStatusInitializing();
 			loginDeferred = true;
 			return;
 		}
