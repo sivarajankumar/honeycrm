@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
@@ -62,18 +63,18 @@ public class DetailView extends Composite implements Display {
 	Dto dto;
 	private final ReadServiceAsync readService;
 
-	public DetailView(final String module, final ReadServiceAsync readService) {
+	public DetailView(final String module, final ReadServiceAsync readService, final LocalizedMessages constants) {
 		this.module = module;
 		this.readService = readService;
 		this.moduleDto = DtoModuleRegistry.instance().get(module);
 
 		initWidget(uiBinder.createAndBindUi(this));
 
-		createBtn.setText("Create");
-		editBtn.setText("Edit");
-		saveBtn.setText("Save");
-		cancelBtn.setText("Cancel");
-		pdfBtn.setText("Create PDF");
+		createBtn.setText(constants.create());
+		editBtn.setText(constants.edit());
+		saveBtn.setText(constants.save());
+		cancelBtn.setText(constants.cancel());
+		pdfBtn.setText(constants.createPdf());
 
 		// TODO add "email pdf" button: generate pdf file and email it to customer (for invoices)
 	}
@@ -90,7 +91,7 @@ public class DetailView extends Composite implements Display {
 	private void resetFields(final Dto newDto, final View view, final HashMap<String, Object> prefilledFields) {
 		insertDataFromPrefilledFields(newDto, prefilledFields, view);
 		updatePdfCreateUrl(newDto.getId());
-		
+
 		this.dto = newDto;
 
 		final String[][] fieldIds = moduleDto.getFormFieldIds();

@@ -3,6 +3,7 @@ package honeycrm.client.mvp.views;
 import java.util.Collection;
 import java.util.HashMap;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.mvp.presenters.ContentPresenter;
@@ -38,12 +39,14 @@ public class ContentView extends Composite implements Display {
 	final TabLayoutPanel panel;
 	private final ReadServiceAsync readService;
 	private final ReportServiceAsync reportService;
+	private final LocalizedMessages constants;
 
-	public ContentView(final ReadServiceAsync readService, final ReportServiceAsync reportService) {
+	public ContentView(final ReadServiceAsync readService, final ReportServiceAsync reportService, final LocalizedMessages constants) {
 		initWidget(panel = new TabLayoutPanel(25, Unit.PX));
 		
 		this.readService = readService;
 		this.reportService = reportService;
+		this.constants = constants;
 
 		panel.addStyleName("with_margin");
 		panel.addStyleName("tab_layout");
@@ -75,7 +78,7 @@ public class ContentView extends Composite implements Display {
 				continue; // do not add this module to the tabs since it should be hidden
 			}
 
-			final ModuleView view = new ModuleView(moduleDto.getModule(), readService);
+			final ModuleView view = new ModuleView(moduleDto.getModule(), readService, constants);
 			moduleViewMap.put(moduleDto.getModule(), view);
 			final Widget createBtn = getCreateButton(moduleDto.getModule());
 

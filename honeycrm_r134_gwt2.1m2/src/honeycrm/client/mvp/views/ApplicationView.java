@@ -48,7 +48,7 @@ public class ApplicationView extends Composite implements Display {
 	
 	@UiFactory
 	ContentView makeContentView() {
-		return new ContentView(readService, reportService);
+		return new ContentView(readService, reportService, constants);
 	}
 	
 	@UiFactory
