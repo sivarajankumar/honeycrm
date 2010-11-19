@@ -1,4 +1,4 @@
-package honeycrm.client.login;
+package honeycrm.client.misc;
 
 public class User {
 	private static long userId;

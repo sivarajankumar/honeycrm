@@ -1,6 +1,6 @@
 package honeycrm.client.reports;
 
-import honeycrm.client.profiling.ServiceCallStatistics;
+import honeycrm.client.misc.ServiceCallStatistics;
 import honeycrm.client.services.CommonServiceAsync;
 
 import java.util.Collection;

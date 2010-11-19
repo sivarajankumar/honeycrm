@@ -46,7 +46,7 @@ public class Pdf extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			Document document = new Document();
-			PdfWriter.getInstance(document, response.getOutputStream());
+			/*final PdfWriter writer = */PdfWriter.getInstance(document, response.getOutputStream());
 
 			document.addCreationDate();
 			document.open();
@@ -103,7 +103,22 @@ public class Pdf extends HttpServlet {
 						
 						for (int i = 0; i < list.size(); i++) {
 							for (final String col: listModuleDto.getListFieldIds()) {
-								table.addCell(new Phrase(String.valueOf(list.get(i).get(col))));
+								final String colValue;
+								
+								if (list.get(i).getAllData().containsKey(col + "_resolved")) {
+									final Dto resolved = (Dto) list.get(i).get(col + "_resolved");
+									colValue = String.valueOf(resolved.get("name"));
+								} else {
+									colValue = String.valueOf(list.get(i).get(col));
+								}
+
+								if ("true".equals(colValue) || "false".equals(colValue)) {
+									// final RadioCheckField r = new RadioCheckField(writer, new Rectangle(10, 10, 20, 20), "asd", "v1");
+									// r.setChecked("true".equals(colValue));
+									table.addCell(new Phrase("true".equals(colValue) ? "X" : ""));
+								} else {
+									table.addCell(new Phrase(colValue));
+								}
 							}
 						}
 						

@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:FlowPanel styleName="tool_bar">
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_small" ui:field="search" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_big" ui:field="edit" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_small" ui:field="delete" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_small" ui:field="cancel" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_big" ui:field="save" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_big" ui:field="changes" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_small" ui:field="print" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_big" ui:field="duplicate" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_small" ui:field="findDuplicates" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_big" ui:field="importBtn" />
+		<g:Hyperlink addStyleNames="module_buttons left left_margin_small" ui:field="export" />
+		<g:HTML>
+			<div class='clear'></div>
+		</g:HTML>
+	</g:FlowPanel>
+</ui:UiBinder> 

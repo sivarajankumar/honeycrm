@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.client.login.User;
+import honeycrm.client.misc.User;
 import honeycrm.client.mvp.events.CreateEvent;
 import honeycrm.client.mvp.events.CreateEventHandler;
 import honeycrm.client.mvp.events.OpenEvent;

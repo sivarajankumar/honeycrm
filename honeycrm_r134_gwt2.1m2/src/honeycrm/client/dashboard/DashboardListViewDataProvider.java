@@ -2,7 +2,7 @@ package honeycrm.client.dashboard;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.login.User;
+import honeycrm.client.misc.User;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.view.list.ListViewDataProvider;
 

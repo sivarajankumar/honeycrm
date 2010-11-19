@@ -1,6 +1,6 @@
 package honeycrm.server.profiling;
 
-import honeycrm.client.profiling.ServiceCallStatistics;
+import honeycrm.client.misc.ServiceCallStatistics;
 import honeycrm.server.PMF;
 
 import java.util.Collection;

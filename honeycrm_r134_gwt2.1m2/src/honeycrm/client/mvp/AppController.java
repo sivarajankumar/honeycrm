@@ -1,8 +1,9 @@
 package honeycrm.client.mvp;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.Dto;
-import honeycrm.client.login.User;
 import honeycrm.client.misc.NumberParser;
+import honeycrm.client.misc.User;
 import honeycrm.client.mvp.events.DeleteEvent;
 import honeycrm.client.mvp.events.DeleteEventHandler;
 import honeycrm.client.mvp.events.OpenEvent;
@@ -49,8 +50,9 @@ public class AppController implements ValueChangeHandler<String> {
 	private final SimpleEventBus eventBus;
 	private HasWidgets container;
 	private boolean initialized = false;
+	private LocalizedMessages constants;
 
-	public AppController(final ReadServiceAsync readService, final CreateServiceAsync createService, final UpdateServiceAsync updateService, final DeleteServiceAsync deleteService, final AuthServiceAsync authService, final ConfigServiceAsync confService, final PluginServiceAsync pluginService, final ReportServiceAsync reportService, final SimpleEventBus eventBus) {
+	public AppController(final LocalizedMessages constants, final ReadServiceAsync readService, final CreateServiceAsync createService, final UpdateServiceAsync updateService, final DeleteServiceAsync deleteService, final AuthServiceAsync authService, final ConfigServiceAsync confService, final PluginServiceAsync pluginService, final ReportServiceAsync reportService, final SimpleEventBus eventBus) {
 		this.authService = authService;
 		this.createService = createService;
 		this.updateService = updateService;
@@ -60,6 +62,7 @@ public class AppController implements ValueChangeHandler<String> {
 		this.confService = confService;
 		this.reportService = reportService;
 		this.eventBus = eventBus;
+		this.constants = constants;
 		bind();
 	}
 
@@ -107,7 +110,7 @@ public class AppController implements ValueChangeHandler<String> {
 
 		if (null != token) {
 			if (token.equals("logout") || !initialized || token.equals("login")) {
-				new LoginPresenter(authService, confService, eventBus, new LoginView()).go(container);
+				new LoginPresenter(authService, confService, eventBus, new LoginView(constants)).go(container);
 			} else if (token.equals("initialized")) {
 				handleInitialized();
 			} else if ("misc".equals(token)) {
@@ -146,7 +149,7 @@ public class AppController implements ValueChangeHandler<String> {
 		GWT.runAsync(AppController.class, new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
-				new ApplicationPresenter(User.getUserId(), readService, createService, updateService, pluginService, eventBus, new ApplicationView(readService, reportService)).go(container);
+				new ApplicationPresenter(User.getUserId(), readService, createService, updateService, pluginService, eventBus, new ApplicationView(readService, reportService, constants)).go(container);
 			}
 
 			@Override

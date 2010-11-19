@@ -10,10 +10,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasKeyDownHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
@@ -29,9 +29,10 @@ public class LoginPresenter implements Presenter {
 		HasKeyDownHandlers getLoginAsKeyHandler();
 		HasText getStatusLabel();
 		void hide();
+		void onCannotGetConfiguration();
 	}
 
-	private static final boolean AUTO_LOGIN = true;
+	private static final boolean AUTO_LOGIN = false;
 	private static final String AUTO_LOGIN_USERNAME = "james";
 	private static final String AUTO_LOGIN_PASSWORD = "";
 	private final AuthServiceAsync authService;
@@ -68,7 +69,7 @@ public class LoginPresenter implements Presenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Could not get configuration");
+				view.onCannotGetConfiguration();
 			}
 		});
 	}
@@ -108,7 +109,9 @@ public class LoginPresenter implements Presenter {
 		view.getLoginAsKeyHandler().addKeyDownHandler(new KeyDownHandler() {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
-				tryLogin();
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					tryLogin();
+				}
 			}
 		});
 		view.getLoginButton().addClickHandler(new ClickHandler() {
