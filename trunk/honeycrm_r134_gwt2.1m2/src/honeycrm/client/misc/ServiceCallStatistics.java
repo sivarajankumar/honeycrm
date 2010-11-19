@@ -1,4 +1,4 @@
-package honeycrm.client.profiling;
+package honeycrm.client.misc;
 
 import java.io.Serializable;
 

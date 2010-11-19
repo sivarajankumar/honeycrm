@@ -14,6 +14,7 @@ public class ModulePresenter {
 		Widget asWidget();
 		ListView getList();
 		DetailView getDetail();
+		honeycrm.client.mvp.presenters.ModuleButtonBarPresenter.Display getModuleButtonBar();
 	}
 
 	final Display view;
@@ -26,5 +27,6 @@ public class ModulePresenter {
 		this.eventBus = eventBus;
 		this.detailPresenter = new DetailPresenter(eventBus, module, readService, updateService, createService, view.getDetail());
 		this.listPresenter = new ListPresenter(readService, updateService, createService, view.getList(), eventBus, module);
+		new ModuleButtonBarPresenter(view.getModuleButtonBar(), eventBus, module);
 	}
 }

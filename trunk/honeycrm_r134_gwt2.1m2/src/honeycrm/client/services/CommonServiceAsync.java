@@ -1,6 +1,6 @@
 package honeycrm.client.services;
 
-import honeycrm.client.profiling.ServiceCallStatistics;
+import honeycrm.client.misc.ServiceCallStatistics;
 
 import java.util.Collection;
 import com.google.gwt.user.client.rpc.AsyncCallback;

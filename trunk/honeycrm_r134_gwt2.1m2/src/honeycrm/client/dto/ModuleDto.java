@@ -6,8 +6,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.google.gwt.user.client.Window;
-
 public class ModuleDto implements Serializable {
 	private static final long serialVersionUID = -7089308530920293835L;
 

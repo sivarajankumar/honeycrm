@@ -1,7 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:honeycrm.client.view"
-	xmlns:mylist="urn:import:honeycrm.client.mvp.views">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:views="urn:import:honeycrm.client.mvp.views">
 	<ui:style>
 	.splitPanel {
 		background: url("/images/content-gradient.png") repeat-x scroll 0 1px transparent;	
@@ -10,18 +9,18 @@
 	
 	<g:DockLayoutPanel>
 		<g:north size="40">
-			<my:ModuleButtonBar ui:field="moduleButtonBar" />
+			<views:ModuleButtonBarView ui:field="moduleButtonBar" />
 		</g:north>
 		<g:center>
 			<g:SplitLayoutPanel addStyleNames="{style.splitPanel}">
 				<g:west size="500">
 					<g:ScrollPanel>
-						<mylist:ListView ui:field="list" />
+						<views:ListView ui:field="list" />
 					</g:ScrollPanel>
 				</g:west>
 				<g:center>
 					<g:ScrollPanel>
-						<mylist:DetailView ui:field="detail" />
+						<views:DetailView ui:field="detail" />
 					</g:ScrollPanel>
 				</g:center>
 			</g:SplitLayoutPanel>

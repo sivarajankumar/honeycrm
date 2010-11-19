@@ -1,5 +1,6 @@
 package honeycrm.client.mvp.views;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.mvp.presenters.ContentPresenter;
 import honeycrm.client.mvp.presenters.ApplicationPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
@@ -25,10 +26,12 @@ public class ApplicationView extends Composite implements Display {
 	
 	private final ReadServiceAsync readService;
 	private final ReportServiceAsync reportService;
+	private final LocalizedMessages constants;
 	
-	public ApplicationView(final ReadServiceAsync readService, final ReportServiceAsync reportService) {
+	public ApplicationView(final ReadServiceAsync readService, final ReportServiceAsync reportService, final LocalizedMessages constants) {
 		this.readService = readService;
 		this.reportService = reportService;
+		this.constants = constants;
 		
 		initWidget(uiBinder.createAndBindUi(this));
 	}
@@ -50,6 +53,6 @@ public class ApplicationView extends Composite implements Display {
 	
 	@UiFactory
 	HeaderView makeHeader() {
-		return new HeaderView(readService);
+		return new HeaderView(readService, constants);
 	}
 }

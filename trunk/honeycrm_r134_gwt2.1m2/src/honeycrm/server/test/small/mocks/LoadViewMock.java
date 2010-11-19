@@ -25,11 +25,6 @@ public class LoadViewMock implements Display {
 	}
 	
 	@Override
-	public HasText getLoadIndicator() {
-		return indicator;
-	}
-
-	@Override
 	public void showLoadingIndicator(boolean isVisible) {
 		this.visible = isVisible;
 	}

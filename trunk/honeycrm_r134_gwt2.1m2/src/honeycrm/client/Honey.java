@@ -34,9 +34,10 @@ public class Honey implements EntryPoint {
 		final ConfigServiceAsync configService = GWT.create(ConfigService.class);
 		final PluginServiceAsync pluginService = GWT.create(PluginService.class);
 		final ReportServiceAsync reportService = GWT.create(ReportService.class);
+		final LocalizedMessages constants = GWT.create(LocalizedMessages.class);
 		
 		final SimpleEventBus eventBus = new SimpleEventBus();
-		final AppController appViewer = new AppController(readService, createSerice, updateService, deleteService, authService, configService, pluginService, reportService, eventBus);
+		final AppController appViewer = new AppController(constants, readService, createSerice, updateService, deleteService, authService, configService, pluginService, reportService, eventBus);
 		appViewer.go(RootLayoutPanel.get());
 	}
 }

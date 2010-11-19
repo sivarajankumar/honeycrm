@@ -38,20 +38,6 @@ public class LoadPresenterTest extends TestCase {
 				return text;
 			}
 		};
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
-		expect(viewMock.getLoadIndicator()).andReturn(h);
 		
 		replay(viewMock);
 	}

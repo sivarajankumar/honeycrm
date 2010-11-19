@@ -6,11 +6,9 @@ import honeycrm.client.mvp.events.RpcEndEvent;
 import honeycrm.client.mvp.events.RpcEndEventHandler;
 
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.ui.HasText;
 
 public class LoadPresenter {
 	public interface Display {
-		HasText getLoadIndicator();
 		void showLoadingIndicator(boolean isVisible);
 	}
 
@@ -25,7 +23,6 @@ public class LoadPresenter {
 	}
 
 	private void bind() {
-		view.getLoadIndicator().setText("Loading...");
 		view.showLoadingIndicator(false);
 		
 		eventBus.addHandler(RpcBeginEvent.TYPE, new RpcBeginEventHandler() {
@@ -50,7 +47,6 @@ public class LoadPresenter {
 
 	protected void toggleIndicatorVisibility() {
 		view.showLoadingIndicator(isLoading());
-		view.getLoadIndicator().setText("Loading...");
 	}
 
 	public boolean isLoading() {

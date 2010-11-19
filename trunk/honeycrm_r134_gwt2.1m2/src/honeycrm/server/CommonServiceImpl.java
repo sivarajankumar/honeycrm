@@ -1,6 +1,6 @@
 package honeycrm.server;
 
-import honeycrm.client.profiling.ServiceCallStatistics;
+import honeycrm.client.misc.ServiceCallStatistics;
 import honeycrm.client.services.CommonService;
 import honeycrm.server.profiling.ProfilingStatisticsCollector;
 import honeycrm.server.profiling.ReadTest;

@@ -1,30 +1,90 @@
-package honeycrm.client.view;
+package honeycrm.client.mvp.views;
 
-import honeycrm.client.dto.DtoModuleRegistry;
-import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.WidgetJuggler;
-import honeycrm.client.mvp.views.DetailView;
+import honeycrm.client.mvp.presenters.ModuleButtonBarPresenter.Display;
+import honeycrm.client.view.ModuleAction;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * This widget contains everything (buttons, fulltext search field) above the list view and detail view of the currently active module.
  */
-public class ModuleButtonBar extends Composite implements ValueChangeHandler<String> {
-	private Widget editBtn, deleteBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn, cancelBtn, saveBtn, searchBtn;
+public class ModuleButtonBarView extends Composite implements Display {
+	private static ModuleButtonBarViewUiBinder uiBinder = GWT.create(ModuleButtonBarViewUiBinder.class);
+
+	interface ModuleButtonBarViewUiBinder extends UiBinder<Widget, ModuleButtonBarView> {
+	}
+
+	@UiField Hyperlink cancel;
+	@UiField Hyperlink save;
+	@UiField Hyperlink edit;
+	@UiField Hyperlink delete;
+	@UiField Hyperlink changes;
+	@UiField Hyperlink print;
+	@UiField Hyperlink duplicate;
+	@UiField Hyperlink findDuplicates;
+	@UiField Hyperlink importBtn;
+	@UiField Hyperlink export;
+	@UiField Hyperlink search;
+	
+	public ModuleButtonBarView() {
+		initWidget(uiBinder.createAndBindUi(this));
+		
+		cancel.setText("Cancel");
+		save.setText("Save");
+		edit.setText("Edit");
+		delete.setText("Delete");
+		changes.setText("Changes");
+		print.setText("Print");
+		duplicate.setText("Duplicate");
+		findDuplicates.setText("Find Duplicates");
+		importBtn.setText("Import");
+		export.setText("Export");
+		search.setText("Advanced Search");
+	}
+
+	@Override
+	public HasClickHandlers getSearchButton() {
+		return search;
+	}
+
+	@Override
+	public void toggleVisibility(final ModuleAction action) {
+		switch (action) {
+		case EDIT:
+		case CREATE:
+			WidgetJuggler.setVisible(true, cancel, save);
+			WidgetJuggler.setVisible(false, edit, delete, changes, print, duplicate, findDuplicates, importBtn, export);
+			break;
+		case INIT:
+			WidgetJuggler.setVisible(false, cancel, save, edit, delete, changes, duplicate, print, findDuplicates);
+			WidgetJuggler.setVisible(true, search, importBtn, export);
+			break;
+		case SAVE:
+		case CANCEL:
+		case DETAIL:
+			WidgetJuggler.setVisible(true, edit, delete, changes, print, duplicate, findDuplicates, importBtn, export, search);
+			WidgetJuggler.setVisible(false, save, cancel);
+			break;
+		case ADVANCEDSEARCH:
+			
+			break;
+		default:
+			// TODO
+			break;
+		}		
+	}
+	
+/*	private Widget editBtn, deleteBtn, changesBtn, printBtn, duplicateBtn, findDuplicatesBtn, importBtn, exportBtn, cancelBtn, saveBtn, searchBtn;
 	private final ModuleDto moduleDto;
 
-	public ModuleButtonBar(final String module, final DetailView detailView) {
+	public ModuleButtonBarView(final String module, final DetailView detailView) {
 		this.moduleDto = DtoModuleRegistry.instance().get(module);
 
 		final FlowPanel panel = new FlowPanel();
@@ -107,5 +167,5 @@ public class ModuleButtonBar extends Composite implements ValueChangeHandler<Str
 				toggleButtonVisibility(action);
 			}
 		}
-	}
+	}*/
 }
