@@ -1,5 +1,6 @@
 package honeycrm.server.test.small.mocks;
 
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasKeyDownHandlers;
 import com.google.gwt.user.client.ui.HasText;
@@ -51,5 +52,15 @@ public class LoginViewMock implements Display {
 
 	@Override
 	public void onCannotGetConfiguration() {
+	}
+
+	@Override
+	public HasChangeHandlers getLanguageBox() {
+		return null;
+	}
+
+	@Override
+	public String getCurrentLocale() {
+		return "en";
 	}
 }

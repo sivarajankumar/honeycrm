@@ -6,6 +6,8 @@ import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.User;
 import honeycrm.client.mvp.events.DeleteEvent;
 import honeycrm.client.mvp.events.DeleteEventHandler;
+import honeycrm.client.mvp.events.LocaleChangeEvent;
+import honeycrm.client.mvp.events.LocaleChangeEventHandler;
 import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.events.OpenReportEvent;
 import honeycrm.client.mvp.events.SuccessfulLoginEvent;
@@ -33,8 +35,10 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 
@@ -81,6 +85,12 @@ public class AppController implements ValueChangeHandler<String> {
 				doDelete(event);
 			}
 		});
+		eventBus.addHandler(LocaleChangeEvent.TYPE, new LocaleChangeEventHandler() {
+			@Override
+			public void onLocaleChangeEvent(LocaleChangeEvent event) {
+				updateLocale(event.getLocale());
+			}
+		});
 	}
 
 	private void doDelete(DeleteEvent event) {
@@ -100,8 +110,8 @@ public class AppController implements ValueChangeHandler<String> {
 	private void startInitialisation(final SuccessfulLoginEvent event) {
 		this.initialized = true;
 		User.initUser(event.getUserId(), event.getLogin());
-		History.newItem("initialized");
-		History.fireCurrentHistoryState();
+		handleInitialized();
+		//History.fireCurrentHistoryState();
 	}
 
 	@Override
@@ -111,8 +121,6 @@ public class AppController implements ValueChangeHandler<String> {
 		if (null != token) {
 			if (token.equals("logout") || !initialized || token.equals("login")) {
 				new LoginPresenter(authService, confService, eventBus, new LoginView(constants)).go(container);
-			} else if (token.equals("initialized")) {
-				handleInitialized();
 			} else if ("misc".equals(token)) {
 				handleMisc();
 			} else if ("report".equals(token)) {
@@ -209,4 +217,8 @@ public class AppController implements ValueChangeHandler<String> {
 		}
 	}
 
+	private void updateLocale(final String locale) {
+		UrlBuilder builder = Location.createUrlBuilder().setParameter("locale", locale);
+		Window.Location.replace(builder.buildString());
+	}
 }
