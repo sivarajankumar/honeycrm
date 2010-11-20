@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -64,6 +65,8 @@ public class ListView extends Composite implements Display {
 	CellTable<Dto> table;
 	@UiField
 	SimplePager pager;
+	@UiField
+	Label title;
 
 	final String module;
 	private SelectionHandler handler;
@@ -79,6 +82,9 @@ public class ListView extends Composite implements Display {
 
 		addButton.setText("Add");
 		deleteButton.setText("Delete");
+		
+		title.setText(moduleDto.getTitle());
+		
 		// db.refresh(); // <- for testing..
 	}
 	

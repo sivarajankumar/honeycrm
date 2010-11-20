@@ -43,7 +43,8 @@ public class LoginView extends Composite implements Display {
 		table.setWidget(2, 1, languageBox = createLanguageBox());
 		table.setWidget(3, 0, loginBtn = new Button(constants.login()));
 		table.setWidget(4, 0, status = new Label());
-		table.getFlexCellFormatter().setColSpan(3, 0, 1);
+		table.getFlexCellFormatter().setColSpan(3, 0, 2);
+		table.getFlexCellFormatter().setColSpan(4, 0, 2);
 
 		dialog.setText(constants.loginMessage("james"));
 		dialog.setWidget(table);
