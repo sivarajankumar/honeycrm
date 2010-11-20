@@ -31,13 +31,13 @@ public class ReadServiceTest extends DatastoreTest {
 		helper.setUp();
 		reader = new ReadServiceImpl(); // re-create read service between tests to avoid full text search cache invalidation
 	}
-	
+
 	@Override
 	protected void tearDown() throws Exception {
 		helper.tearDown();
 		reader = null;
 	}
-	
+
 	public void testGet() {
 		final Entity e = createContact();
 		final Dto dto = reader.get(Contact.class.getSimpleName(), e.getKey().getId());
@@ -76,7 +76,7 @@ public class ReadServiceTest extends DatastoreTest {
 			final Dto c = new Dto("Contact");
 			final Dto a = new Dto("Account");
 			final Dto p = new Dto("Product");
-			
+
 			c.set("name", "contact" + i);
 			a.set("name", "account" + i);
 			p.set("name", "product" + i);
@@ -140,9 +140,11 @@ public class ReadServiceTest extends DatastoreTest {
 	}
 
 	public void testGetPerformance() throws InterruptedException {
-		final float count = 1000;
+		final float count = 10000;
 
+		System.out.print("Creating key array with " + count + " elements.. ");
 		final long[] keys = new long[(int) count];
+		System.out.println("Done.");
 
 		final long createTime = Timer.getTime(new Command() {
 			@Override
@@ -154,27 +156,28 @@ public class ReadServiceTest extends DatastoreTest {
 		});
 		System.out.println("Created " + count + " entities in " + createTime + "ms (" + (count / createTime) + " entities/ms)");
 
-		final long randomGetTime = Timer.getTime(new Command() {
-			@Override
-			public void execute() {
-				for (int i = 0; i < count; i++) {
-					final long randomId = keys[random.nextInt((int) count)];
-					// db.get(KeyFactory.createKey("Contact", randomId));
-					reader.get("Contact", randomId);
+		final float iterations = 10;
+		for (int i = 0; i < iterations; i++) {
+			final long randomGetTime = Timer.getTime(new Command() {
+				@Override
+				public void execute() {
+					for (int i = 0; i < count; i++) {
+						final long randomId = keys[random.nextInt((int) count)];
+						reader.get("Contact", randomId);
+					}
 				}
-			}
-		});
-		System.out.println("Got " + count + " random entities in " + randomGetTime + "ms (" + (count / randomGetTime) + " entities/ms)");
+			});
+			System.out.println("Got " + count + " random entities " + (1 + i) + "/" + iterations + " in " + randomGetTime + "ms (" + (count / randomGetTime) + " entities/ms)");
+		}
 
-		final float getAllIterations = 10;
-		for (int i = 0; i < getAllIterations; i++) {
+		for (int i = 0; i < iterations; i++) {
 			final long getAllTime = Timer.getTime(new Command() {
 				@Override
 				public void execute() {
 					reader.getAll("Contact", 0, (int) count);
 				}
 			});
-			System.out.println("getAll " + (1 + i) + "/" + getAllIterations + " times for " + count + " entities in " + getAllTime + "ms (" + (count / getAllTime) + " entities/ms)");
+			System.out.println("getAll " + (1 + i) + "/" + iterations + " times for " + count + " entities in " + getAllTime + "ms (" + (count / getAllTime) + " entities/ms)");
 		}
 		// Thread.sleep(1000 * 60 * 60);
 	}
