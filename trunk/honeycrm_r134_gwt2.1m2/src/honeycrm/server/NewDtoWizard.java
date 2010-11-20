@@ -171,7 +171,7 @@ public class NewDtoWizard {
 		for (final Field field : reflection.getAllFields(domainClass)) {
 			final String name = field.getName();
 
-			if (name.startsWith("$") || "id".equals(name) || "serialVersionUID".equals(name)) {
+			if (name.startsWith("$") || "id".equals(name) || "serialVersionUID".equals(name) || name.startsWith("jprofiler")) {
 				continue;
 			}
 
