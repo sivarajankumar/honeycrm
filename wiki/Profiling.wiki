@@ -31,6 +31,11 @@ http://sinnema313.wordpress.com/2008/11/16/performance-tuning-a-gwt-application/
 -agentpath:/Applications/jprofiler6/bin/macos/libjprofilerti.jnilib=port=8849
 }}}
 
+ * Do not forget to increase the heap size if neccessary. You do not want to slow down the JVM with garbage collection during profiling. Use the following JVM arguments to increase the initial and maximum size of the heap
+{{{
+-Xms512m -Xmx1280m
+}}}
+
  * To see the profiling live in action have a look at the following screencast http://www.youtube.com/watch?v=zUJUSxXOOa4
 
 <wiki:video url="http://www.youtube.com/watch?v=zUJUSxXOOa4&fs=1" height="600" width="800" />
