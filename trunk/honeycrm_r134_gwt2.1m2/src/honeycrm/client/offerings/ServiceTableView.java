@@ -1,10 +1,8 @@
 package honeycrm.client.offerings;
 
-import honeycrm.client.admin.LogConsole;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
-import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.Observer;
 import honeycrm.client.misc.View;
 import honeycrm.client.offerings.ServiceTablePresenter.Display;
@@ -12,15 +10,11 @@ import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.RelateWidget;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -30,16 +24,16 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ServiceTableWidget extends ITableWidget implements Display {
+public class ServiceTableView extends ITableWidget implements Display {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
 	private final ModuleDto moduleDto;
 	private final View view;
 	private final HTML sum = new HTML();
-	private final HashMap<Integer, Dto> model = new HashMap<Integer, Dto>();
 	private final VerticalPanel panel = new VerticalPanel();
-	
-	public ServiceTableWidget(final Dto dto, final String fieldId, final View view) {
+	private ServiceTablePresenter presenter;
+
+	public ServiceTableView(final Dto dto, final String fieldId, final View view) {
 		this.view = view;
 		this.moduleDto = ModuleDto.getRelatedDto(dto.getModule(), fieldId);
 		initialize();
@@ -64,7 +58,7 @@ public class ServiceTableWidget extends ITableWidget implements Display {
 					final int newRowId = rows;
 					final String[] fields = moduleDto.getListFieldIds();
 
-					model.put(newRowId, moduleDto.createDto());
+//					presenter.appendRow();
 
 					for (int x = 0; x < fields.length; x++) {
 						final String index = fields[x];
@@ -90,7 +84,7 @@ public class ServiceTableWidget extends ITableWidget implements Display {
 				((TextBox) widget).addChangeHandler(new ChangeHandler() {
 					@Override
 					public void onChange(ChangeEvent event) {
-						rowChanged(row);
+						presenter.rowChanged(row);
 					}
 				});
 			}
@@ -100,14 +94,7 @@ public class ServiceTableWidget extends ITableWidget implements Display {
 					@Override
 					public void notify(final Dto value) {
 						// overwrite price with price of received dto
-						if (model.containsKey(row) && null != value.get("price")) {
-							final Dto updatedDto = getDtoFromRow(row);
-							updatedDto.set("price", value.get("price"));
-							updatedDto.set("productCode", value.get("productCode"));
-
-							insertDtoInTableRow(updatedDto, true, row);
-						}
-						LogConsole.log("received original price: " + value.get("price").toString() + " in row " + row);
+						presenter.receivedProduct(row, value);
 					}
 				});
 			}
@@ -116,77 +103,36 @@ public class ServiceTableWidget extends ITableWidget implements Display {
 		return widget;
 	}
 
-	protected void rowChanged(final int row) {
-		model.put(row, getDtoFromRow(row));
-		LogConsole.log("updated data of row " + row);
-
-		updateSum(row);
-
-		sum.setHTML("<b>" + NumberFormat.getCurrencyFormat("EUR").format(getSum(model.values())) + "</b>");
-	}
-
-	private void updateSum(final int row) {
-		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
-			final String index = moduleDto.getListFieldIds()[col];
-			final AbstractField field = moduleDto.getFieldById(index);
-
-			if ("sum".equals(index) && table.getWidget(/* HEADER_ROWS + */row, col) instanceof TextBox) {
-				final Dto dto = model.get(row);
-				final String text = ((TextBox) field.getWidget(View.EDIT, dto, index)).getText();
-				final TextBox box = ((TextBox) table.getWidget(/* HEADER_ROWS + */row, col));
-				box.setText(text);
-			}
+	@Override
+	public ArrayList<Dto> getData() {
+		if (null == presenter) {
+			throw new RuntimeException("Cannot return a value since no presenter has been set.");
+		} else {
+			return presenter.getValue();
 		}
 	}
 
 	@Override
-	public ArrayList<Dto> getData() {
-		final ArrayList<Dto> services = new ArrayList<Dto>();
-
-		for (int row = HEADER_ROWS; row < table.getRowCount(); row++) {
-			services.add(getDtoFromRow(row));
-		}
-
-		return services;
-	}
-
-	private Dto getDtoFromRow(final int row) {
+	public Dto getDtoFromRow(final int row) {
 		final Dto s = new Dto();
 		s.setModule(moduleDto.getModule());
 
 		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
-			if (table.getCellCount(/* HEADER_ROWS + */row) > col) {
+			if (table.getCellCount(row) > col) {
 				final String id = moduleDto.getListFieldIds()[col];
-				final Widget widget = table.getWidget(/* HEADER_ROWS + */row, col);
+				final Widget widget = table.getWidget(row, col);
 
 				s.set(id, moduleDto.getFieldById(id).getData(widget));
 			}
 		}
 
-		s.set("sum", getSumForSingleDto(s));
 		return s;
 	}
 
 	@Override
-	public void setData(List<Dto> data) {
-		if (null == data) {
-			return;
-		}
-
-		if (!data.isEmpty()) {
-			if (data.get(0) instanceof Dto) {
-				final boolean wasTableAlreadyFilled = (table.getRowCount() == HEADER_ROWS + data.size());
-
-				for (int row = 0; row < data.size(); row++) {
-					insertDtoInTableRow(data.get(row), wasTableAlreadyFilled, HEADER_ROWS + row);
-				}
-			} else {
-				Window.alert("Expected Service. Received " + data.get(0).getClass());
-				throw new RuntimeException("Expected Service. Received " + data.get(0).getClass());
-			}
-		}
-
-		sum.setHTML("<b>" + NumberFormat.getCurrencyFormat("EUR").format(getSum(data)) + "</b>");
+	public void insertDtoIntoRow(Dto dto, int row) {
+		// TODO initialize isUpdate variable properly
+		insertDtoInTableRow(dto, false, HEADER_ROWS + row);
 	}
 
 	/**
@@ -200,9 +146,6 @@ public class ServiceTableWidget extends ITableWidget implements Display {
 	 *            The number of the row that has been changed.
 	 */
 	private void insertDtoInTableRow(final Dto dto, final boolean isUpdate, int row) {
-		// make sure the dto is stored
-		model.put(row, dto);
-
 		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
 			final String index = moduleDto.getListFieldIds()[col];
 			final AbstractField field = moduleDto.getFieldById(index);
@@ -218,7 +161,7 @@ public class ServiceTableWidget extends ITableWidget implements Display {
 				} else if (table.getWidget(row, col) instanceof ListBox) {
 					final String text = String.valueOf(dto.get(index));
 					final ListBox box = ((ListBox) table.getWidget(row, col));
-					for (int i=0; i<box.getItemCount(); i++) {
+					for (int i = 0; i < box.getItemCount(); i++) {
 						box.setItemSelected(i, box.getItemText(i).equals(text));
 					}
 				}
@@ -230,27 +173,32 @@ public class ServiceTableWidget extends ITableWidget implements Display {
 		}
 	}
 
-	private double getSum(final Collection<Dto> data) {
-		double currentSum = 0.0;
-		for (Dto service : data) {
-			currentSum += getSumForSingleDto(service);
-		}
-		return currentSum;
+	@Override
+	public void setPresenter(ServiceTablePresenter presenter) {
+		this.presenter = presenter;
 	}
 
-	private double getSumForSingleDto(final Dto service) {
-		final double price = NumberParser.convertToDouble(service.get("price"));
-		final double discountValue = NumberParser.convertToDouble(service.get("discount"));
-		final double discount = ("%".equals(service.get("kindOfDiscount"))) ? (discountValue / 100 * price) : (discountValue);
+	@Override
+	public void setSumForRow(Dto dto, int row) {
+		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
+			final String index = moduleDto.getListFieldIds()[col];
+			final AbstractField field = moduleDto.getFieldById(index);
 
-		// TODO simplifiy this!
-		if (service.get("quantity") instanceof Long) {
-			return (price - discount) * (Long) service.get("quantity");
-		} else if (service.get("quantity") instanceof Integer) {
-			return (price - discount) * (Integer) service.get("quantity");
-		} else {
-			Window.alert("Cannot determine sum");
-			throw new RuntimeException("Cannot determine sum");
+			if ("sum".equals(index) && table.getWidget(row, col) instanceof TextBox) {
+				final String text = ((TextBox) field.getWidget(View.EDIT, dto, index)).getText();
+				final TextBox box = ((TextBox) table.getWidget(row, col));
+				box.setText(text);
+			}
 		}
+	}
+
+	@Override
+	public void setOverallSum(double calculatedSum) {
+		sum.setHTML("<b>" + NumberFormat.getCurrencyFormat("EUR").format(calculatedSum) + "</b>");
+	}
+
+	@Override
+	public int getRowCount() {
+		return table.getRowCount() - HEADER_ROWS;
 	}
 }
