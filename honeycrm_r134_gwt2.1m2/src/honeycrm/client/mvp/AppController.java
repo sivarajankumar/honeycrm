@@ -71,8 +71,10 @@ public class AppController implements ValueChangeHandler<String> {
 	}
 
 	private void bind() {
-		History.addValueChangeHandler(this);
-
+		if (GWT.isScript()) {
+			History.addValueChangeHandler(this);
+		}
+		
 		eventBus.addHandler(SuccessfulLoginEvent.TYPE, new SuccessfulLoginEventHandler() {
 			@Override
 			public void onLogin(final SuccessfulLoginEvent event) {
