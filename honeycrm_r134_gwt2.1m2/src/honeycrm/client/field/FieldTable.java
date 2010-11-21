@@ -2,12 +2,12 @@ package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.View;
-import honeycrm.client.offerings.ServiceTableWidget;
+import honeycrm.client.offerings.ServiceTablePresenter;
+import honeycrm.client.offerings.ServiceTableView;
 import honeycrm.client.view.ITableWidget;
 
 import java.io.Serializable;
-import java.util.List;
-
+import java.util.ArrayList;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldTable extends AbstractField {
@@ -44,11 +44,16 @@ public class FieldTable extends AbstractField {
 	 * Create the widget and initialize it with data.
 	 */
 	private Widget getTableWidget(final Dto dto, final String fieldId, final View view) {
+		// TODO use common ITableView interface instead
 		// TODO make this independend of the widget / chose the widget
 		final Serializable value = dto.get(fieldId);
-		final ITableWidget w = new ServiceTableWidget(dto, fieldId, view);
-		w.setData((List<Dto>) value);
-		return w;
+
+		final ServiceTableView v = new ServiceTableView(dto, fieldId, view);
+		final ServiceTablePresenter p = new ServiceTablePresenter(v, dto.getModule());
+		v.setPresenter(p);
+		p.setValue((ArrayList<Dto>) value);
+
+		return v;
 	}
 
 	@Override
