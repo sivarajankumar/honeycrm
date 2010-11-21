@@ -1,5 +1,7 @@
 package honeycrm.server.test.small;
 
+import java.util.HashMap;
+
 import org.easymock.IAnswer;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -7,6 +9,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.mvp.events.CreateEvent;
 import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.presenters.DetailPresenter;
 import honeycrm.client.mvp.presenters.RelationshipsPresenter;
@@ -102,13 +105,36 @@ public class DetailPresenterTest extends TestCase {
 		replay(view);
 		replay(updateService);
 		
-		this.presenter = new DetailPresenter(eventBus, module, readService, updateService, createService, view);
+		presenter = new DetailPresenter(eventBus, module, readService, updateService, createService, view);
 		presenter.onSave();
 	}
 		
-	public void testEventHandling() {
+	public void testOpenEvent() {
+		replay(view);
+		presenter = new DetailPresenter(eventBus, module, readService, updateService, createService, view);
+		
 		final Dto d = new Dto("Contact");
 		d.setId(23L);
 		eventBus.fireEvent(new OpenEvent(d));
+	}
+	
+	public void testCreateEventForNonExistingModule() {
+		replay(view);
+		presenter = new DetailPresenter(eventBus, module, readService, updateService, createService, view);
+		eventBus.fireEvent(new CreateEvent(module + module + module));
+	}
+	
+	public void testCreateEventForExistingModule() {
+		replay(view);
+		presenter = new DetailPresenter(eventBus, module, readService, updateService, createService, view);
+		eventBus.fireEvent(new CreateEvent(module));
+	}
+	
+	public void testCreateEventForExistingModuleWithPrefilling() {
+		replay(view);
+		presenter = new DetailPresenter(eventBus, module, readService, updateService, createService, view);
+		final HashMap<String, Object> prefilledFields = new HashMap<String, Object>();
+		prefilledFields.put("name", "Vicky");
+		eventBus.fireEvent(new CreateEvent(module, prefilledFields));
 	}
 }

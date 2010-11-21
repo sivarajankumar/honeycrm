@@ -14,6 +14,7 @@ public class LoginViewMock implements Display {
 	private HasKeyDownHandlers loginKeyDownHandler = new HasKeyDownHandlersMock();
 	private HasClickHandlers loginBtn = new HasClickHandlersMock();
 	private HasValue<String > passwordString = new HasStringValueMock();
+	private HasChangeHandlers languageBox = new HasChangeHandlerMock();
 	private HasText statusLabel = new HasTextMock();
 	
 	@Override
@@ -51,7 +52,7 @@ public class LoginViewMock implements Display {
 
 	@Override
 	public HasChangeHandlers getLanguageBox() {
-		return null;
+		return languageBox;
 	}
 
 	@Override
