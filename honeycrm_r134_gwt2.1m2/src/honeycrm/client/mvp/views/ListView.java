@@ -56,8 +56,6 @@ public class ListView extends Composite implements Display {
 	}
 
 	@UiField
-	DisclosurePanel panel;
-	@UiField
 	Button addButton;
 	@UiField
 	Button deleteButton;
@@ -210,7 +208,7 @@ public class ListView extends Composite implements Display {
 		pager.firstPage();
 
 		if (!showTitle) {
-			panel.setHeader(null);
+			title.setVisible(false);
 		}
 	}
 
