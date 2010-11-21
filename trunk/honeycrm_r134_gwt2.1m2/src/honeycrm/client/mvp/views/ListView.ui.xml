@@ -3,7 +3,7 @@
 
 	<ui:style>
 		.rounded-block {
-			margin-top: -1px; /* use negative margin to overlap stacked blocks */
+			margin-top: 1px; /* use negative margin to overlap stacked blocks */
 		}
 		
 		p.rounded-topspace {
@@ -62,7 +62,7 @@
 		}
 		
 		div.block-blog div.block-icon,div.block-comment div.block-icon,div.block-forum div.block-icon,div.block-search div.block-icon,div.block-menu div.block-icon,div.comments-block-icon,div.block-user div.block-icon,div.block-tagadelic div.block-icon,#block-blog-0 div.block-icon,#block-book-0 div.block-icon,#block-menu-devel div.block-icon,#block-user-0 div.block-icon,#block-views-archive-block div.block-icon,#block-views-comments_recent-block div.block-icon
-				#block-tagadelic-2 div.block-icon {
+						#block-tagadelic-2 div.block-icon {
 			height: 48px;
 			left: 0;
 			position: absolute;
@@ -70,7 +70,7 @@
 			width: 48px;
 			/* disabled this icon. sorry but this is not appropriate here. */
 			/*background: transparent url('images/tnt_icon_06.png') no-repeat left
-				center;*/
+						center;*/
 		}
 		
 		.block-title {
@@ -115,16 +115,14 @@
 						<div class='{style.block-icon}' />
 						<g:Label styleName='{style.block-title}' ui:field="title" />
 						<div class='{style.content}'>
-							<g:DisclosurePanel ui:field="panel" animationEnabled="true" open="true">
-								<g:VerticalPanel>
-									<g:HorizontalPanel>
-										<g:Button ui:field="deleteButton" />
-										<g:Button ui:field="addButton" />
-									</g:HorizontalPanel>
-									<c:SimplePager ui:field="pager" />
-									<c:CellTable ui:field="table" />
-								</g:VerticalPanel>
-							</g:DisclosurePanel>
+							<g:VerticalPanel>
+								<g:HorizontalPanel>
+									<g:Button ui:field="deleteButton" />
+									<g:Button ui:field="addButton" />
+								</g:HorizontalPanel>
+								<c:SimplePager ui:field="pager" />
+								<c:CellTable ui:field="table" />
+							</g:VerticalPanel>
 						</div>
 					</div>
 					<p class='{style.rounded-bottomspace}' />
