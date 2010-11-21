@@ -6,25 +6,28 @@ import honeycrm.client.mvp.presenters.ContentPresenter;
 import honeycrm.client.mvp.presenters.ContentPresenter.Display;
 
 public class ContentViewMock implements Display {
+	private honeycrm.client.mvp.presenters.DashboardsPresenter.Display dashboard = new DashboardsViewMock();
+	private HasBeforeSelectionHandlers<Integer> panel = new HasBeforeSelectionHandlersMock<Integer>();
+	private honeycrm.client.mvp.presenters.ModulePresenter.Display moduleView = new ModuleViewMock();
 
 	@Override
 	public honeycrm.client.mvp.presenters.DashboardsPresenter.Display getDashboard() {
-		return null;
+		return dashboard;
 	}
 
 	@Override
 	public honeycrm.client.mvp.presenters.ModulePresenter.Display getModuleViewByName(String moduleName) {
-		return null;
+		return moduleView;
 	}
 
 	@Override
 	public void setPresenter(ContentPresenter presenter) {
-		
+
 	}
 
 	@Override
 	public HasBeforeSelectionHandlers<Integer> getPanel() {
-		return null;
+		return panel;
 	}
 
 	@Override
@@ -34,7 +37,7 @@ public class ContentViewMock implements Display {
 
 	@Override
 	public void showModule(String module) {
-		
+
 	}
 
 }
