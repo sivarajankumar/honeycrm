@@ -1,7 +1,5 @@
 package honeycrm.client.mvp.presenters;
 
-import honeycrm.client.mvp.views.DetailView;
-import honeycrm.client.mvp.views.ListView;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
@@ -12,8 +10,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class ModulePresenter {
 	public interface Display {
 		Widget asWidget();
-		ListView getList();
-		DetailView getDetail();
+		honeycrm.client.mvp.presenters.ListPresenter.Display getList();
+		honeycrm.client.mvp.presenters.DetailPresenter.Display getDetail();
 		honeycrm.client.mvp.presenters.ModuleButtonBarPresenter.Display getModuleButtonBar();
 	}
 

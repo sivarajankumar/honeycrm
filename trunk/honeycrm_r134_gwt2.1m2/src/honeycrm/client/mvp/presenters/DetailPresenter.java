@@ -99,7 +99,6 @@ public class DetailPresenter implements Presenter {
 						}
 					}
 					
-					// kommt an bringt aber nichts.
 					view.startCreate(prefilledFields);
 				}
 			}

@@ -22,7 +22,6 @@ import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -44,7 +43,6 @@ public class ListView extends Composite implements Display {
 	private ListViewDB db;
 	private boolean allowDelete = true;
 	final ModuleDto moduleDto;
-	private boolean disclose = false;
 	private boolean showTitle = false;
 	private Button[] additionalButtons;
 	private boolean initialized = false;
@@ -88,10 +86,6 @@ public class ListView extends Composite implements Display {
 	
 	public void setAdditionalButtons(Button... additionalButtons) {
 		this.additionalButtons = additionalButtons;
-	}
-	
-	public void setDisclose(boolean disclose) {
-		this.disclose = disclose;
 	}
 	
 	public void setShowTitle(boolean showTitle) {
@@ -258,10 +252,6 @@ public class ListView extends Composite implements Display {
 		}
 	}
 	
-	@UiFactory DisclosurePanel makePanel() {
-		return new DisclosurePanel(module);
-	}
-
 	@Override
 	public HasClickHandlers getAddButton() {
 		return addButton;

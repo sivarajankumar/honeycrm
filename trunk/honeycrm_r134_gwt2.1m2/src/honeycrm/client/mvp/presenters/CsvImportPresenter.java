@@ -50,13 +50,17 @@ public class CsvImportPresenter implements Presenter {
 		view.getImportBtn().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				final CsvImporter importer = CsvImporter.get(module);
-				importDto(importer.parse(view.getTextArea().getValue()), 0);
+				importDto(getDtoArrayFromText(view.getTextArea().getValue()), 0);
 			}
 		});
 	}
+
+	public Dto[] getDtoArrayFromText(final String text) {
+		final CsvImporter importer = CsvImporter.get(module);
+		return importer.parse(text);
+	}
 	
-	private void importDto(final Dto[] dtos, final int currentIndex) {
+	public void importDto(final Dto[] dtos, final int currentIndex) {
 		if (0 == currentIndex) {
 			view.getStatus().setText("Status: Started Import");
 		}

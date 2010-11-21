@@ -24,7 +24,6 @@ public class RelationshipView extends ListView implements Display {
 	public RelationshipView(final String originatingDto, final String relatedDto, final ReadServiceAsync readService) {
 		super(originatingDto, readService);
 
-		setDisclose(true);
 		setShowTitle(true);
 		setPageSize(5);
 
