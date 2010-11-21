@@ -1,4 +1,4 @@
-package honeycrm.client.offerings;
+package honeycrm.client.mvp.presenters;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.NumberParser;

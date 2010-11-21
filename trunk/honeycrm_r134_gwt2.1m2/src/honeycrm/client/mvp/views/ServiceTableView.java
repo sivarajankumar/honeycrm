@@ -1,11 +1,12 @@
-package honeycrm.client.offerings;
+package honeycrm.client.mvp.views;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.misc.Observer;
 import honeycrm.client.misc.View;
-import honeycrm.client.offerings.ServiceTablePresenter.Display;
+import honeycrm.client.mvp.presenters.ServiceTablePresenter;
+import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
 import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.RelateWidget;
 

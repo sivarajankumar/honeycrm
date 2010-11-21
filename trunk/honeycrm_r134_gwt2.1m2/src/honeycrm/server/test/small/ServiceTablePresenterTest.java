@@ -3,8 +3,8 @@ package honeycrm.server.test.small;
 import java.util.ArrayList;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.client.offerings.ServiceTablePresenter;
-import honeycrm.client.offerings.ServiceTablePresenter.Display;
+import honeycrm.client.mvp.presenters.ServiceTablePresenter;
+import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
 import honeycrm.server.domain.UniqueService;
 import honeycrm.server.test.small.mocks.ServiceTableViewMock;
 import junit.framework.TestCase;
