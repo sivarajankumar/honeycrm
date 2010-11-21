@@ -83,7 +83,7 @@ public class LoginPresenter implements Presenter {
 		});
 	}
 
-	private void tryLogin() {
+	public void tryLogin() {
 		if (initializationDone) {
 			// use magic login and password when automatic login is on
 			final String login = AUTO_LOGIN ? AUTO_LOGIN_USERNAME : view.getLogin().getValue();

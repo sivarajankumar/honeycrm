@@ -8,6 +8,7 @@ import honeycrm.client.reports.ReportData;
 import honeycrm.client.reports.ReportMetaData;
 import honeycrm.client.services.ReportServiceAsync;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -43,12 +44,14 @@ public class ReportsSuggestionPresenter implements Presenter {
 			}
 		});
 
-		VisualizationUtils.loadVisualizationApi(new Runnable() {
-			@Override
-			public void run() {
-				showReport(0);
-			}
-		}, LineChart.PACKAGE);
+		if (GWT.isScript()) {
+			VisualizationUtils.loadVisualizationApi(new Runnable() {
+				@Override
+				public void run() {
+					showReport(0);
+				}
+			}, LineChart.PACKAGE);
+		}
 	}
 
 	protected void showReport(final int startingReport) {

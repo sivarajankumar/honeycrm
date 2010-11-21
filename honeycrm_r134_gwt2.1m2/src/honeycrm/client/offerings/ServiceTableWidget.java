@@ -7,6 +7,7 @@ import honeycrm.client.field.AbstractField;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.Observer;
 import honeycrm.client.misc.View;
+import honeycrm.client.offerings.ServiceTablePresenter.Display;
 import honeycrm.client.view.ITableWidget;
 import honeycrm.client.view.RelateWidget;
 
@@ -29,7 +30,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ServiceTableWidget extends ITableWidget {
+public class ServiceTableWidget extends ITableWidget implements Display {
 	private static final int HEADER_ROWS = 1;
 	private final FlexTable table = new FlexTable();
 	private final ModuleDto moduleDto;

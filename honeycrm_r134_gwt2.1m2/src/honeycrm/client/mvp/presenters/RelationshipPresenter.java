@@ -38,15 +38,19 @@ public class RelationshipPresenter extends Selector {
 		view.getAddButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				final HashMap<String, HashMap<String, HashSet<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
-				final String field = relationships.get(view.getOriginatingModule()).get(view.getRelatedModule()).iterator().next();
-				final long id = view.getId();
-
-				final HashMap<String, Object> prefilledFields = new HashMap<String, Object>();
-				prefilledFields.put(field, id);
-				
-				eventBus.fireEvent(new CreateEvent(view.getOriginatingModule(), prefilledFields));
+				add();
 			}
 		});
+	}
+
+	public void add() {
+		final HashMap<String, HashMap<String, HashSet<String>>> relationships = DtoModuleRegistry.instance().getRelationships();
+		final String field = relationships.get(view.getOriginatingModule()).get(view.getRelatedModule()).iterator().next();
+		final long id = view.getId();
+
+		final HashMap<String, Object> prefilledFields = new HashMap<String, Object>();
+		prefilledFields.put(field, id);
+		
+		eventBus.fireEvent(new CreateEvent(view.getOriginatingModule(), prefilledFields));
 	}
 }

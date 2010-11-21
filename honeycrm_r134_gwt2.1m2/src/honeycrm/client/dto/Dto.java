@@ -64,7 +64,7 @@ public class Dto implements Serializable {
 		}
 
 		Window.alert("Could not resolve module " + moduleName + " by name");
-		throw new RuntimeException();
+		throw new RuntimeException("Could not resolve module " + moduleName + " by name");
 	}
 
 	public static boolean isInternalReadOnlyField(String id) {
