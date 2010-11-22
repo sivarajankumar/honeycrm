@@ -45,7 +45,7 @@ public class FieldTable extends AbstractField {
 	 */
 	private Widget getTableWidget(final Dto dto, final String fieldId, final View view) {
 		// TODO use common ITableView interface instead
-		// TODO make this independend of the widget / chose the widget
+		// TODO make this independent of the widget / chose the widget
 		final Serializable value = dto.get(fieldId);
 
 		final ServiceTableView v = new ServiceTableView(dto, fieldId, view);

@@ -20,26 +20,38 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public abstract class NewService extends RemoteServiceServlet {
+	private final Logger log = Logger.getLogger(NewService.class.toString());
 	private static final long serialVersionUID = -4102236506193658058L;
 	protected static final DatastoreService db = DatastoreServiceFactory.getDatastoreService();
 	protected static final HashMap<String, ModuleDto> configuration = NewDtoWizard.getConfiguration().getModuleDtos();
 	protected final CopyMachine copy = new CopyMachine();
-	
+
 	class CopyMachine {
-		private final Logger log = Logger.getLogger(CopyMachine.class.toString());
-	
 		public ListQueryResult entitiesToDtoArray(String kind, final int count, final Iterable<Entity> entities, boolean isDetailView) {
 			int i = 0;
 			final Dto[] dtos = new Dto[count];
 
 			for (final Entity entity : entities) {
-				dtos[i++] = entityToDto(kind, entity, isDetailView, true);
+				dtos[i++] = entityToDto(kind, entity, isDetailView);
 			}
 
 			return new ListQueryResult(dtos, count);
 		}
 
-		public Dto entityToDto(final String kind, final Entity entity, final boolean isDetailView, final boolean resolveRelatedEntities) {
+		/**
+		 * Converts a server side entity into a client side DTO instance. Referenced entities are resolved and stored in special *_resolved fields of the DTO. Key lists are resolved, too.
+		 * 
+		 * @param kind
+		 *            Kind of the entity i.e. the name of the related domain class (e.g. "Product").
+		 * @param entity
+		 *            Instance of the entity that should be converted to a DTO.
+		 * @param isDetailView
+		 *            True if the DTO should contain all data necessary for displaying it in the detail view.
+		 * @param resolvDepth
+		 *            Specifies in how many layers a resolution of referenced entities occurred. This has to be specified to be able to limit the number of resolve-steps. This value is incremented before each new resolve step.
+		 * @return A DTO object based on the given entity.
+		 */
+		private Dto entityToDto(final String kind, final Entity entity, final boolean isDetailView, final int resolvDepth) {
 			if (null == entity) {
 				return null;
 			}
@@ -64,16 +76,19 @@ public abstract class NewService extends RemoteServiceServlet {
 				dto.set(fieldName, (Serializable) entry.getValue());
 			}
 
-			// ReadServiceTest only passes when this is commented out
-			//if (resolveRelatedEntities) {
-			// TODO resolve at most 2 (?) times: Contract -> Unique Services -> Product
-				resolveRelatedEntities(dto, entity);
-			//}
+			if (resolvDepth <= 2) {
+				// resolve at most 3 times e.g. Contract -> Unique Services -> Product
+				resolveRelatedEntities(dto, entity, 1 + resolvDepth);
+			}
 			if (isDetailView) {
 				resolveKeyLists(dto, entity);
 			}
 
 			return dto;
+		}
+
+		public Dto entityToDto(final String kind, final Entity entity, final boolean isDetailView) {
+			return entityToDto(kind, entity, isDetailView, 0);
 		}
 
 		private void resolveKeyLists(Dto dto, Entity entity) {
@@ -87,7 +102,7 @@ public abstract class NewService extends RemoteServiceServlet {
 					if (null != keys) {
 						for (final Map.Entry<Key, Entity> entry : db.get(keys).entrySet()) {
 							final String kindOfChild = entry.getValue().getKind();
-							final Dto child = entityToDto(kindOfChild, entry.getValue(), false, false);
+							final Dto child = entityToDto(kindOfChild, entry.getValue(), false);
 							children.add(child);
 						}
 					}
@@ -99,7 +114,7 @@ public abstract class NewService extends RemoteServiceServlet {
 			}
 		}
 
-		private void resolveRelatedEntities(Dto dto, Entity entity) {
+		private void resolveRelatedEntities(Dto dto, Entity entity, final int resolvDepth) {
 			for (final Map.Entry<String, String> entry : configuration.get(dto.getModule()).getRelateFieldMappings().entrySet()) {
 				final String fieldName = entry.getKey();
 				final String relatedEntityName = entry.getValue();
@@ -117,9 +132,13 @@ public abstract class NewService extends RemoteServiceServlet {
 						/**
 						 * retrieve the referenced entity and copy its dto representation as an additional field into the originating dto object.
 						 */
-						final Dto relatedEntity = get(relatedEntityName, id);
+						final Dto relatedEntity = get(relatedEntityName, id, 1 + resolvDepth);
 
-						if (null != relatedEntity) {
+						if (null == relatedEntity) {
+							log.warning(dto.getModule() + "/" + dto.getId() + " references a no-longer existing entity " + relatedEntityName + "/" + id);
+							dto.set(fieldName, 0);
+							// TODO should we persist this change of the Dto object?
+						} else {
 							dto.set(fieldName, relatedEntity.getId());
 							dto.set(fieldName + "_resolved", relatedEntity);
 						}
@@ -178,12 +197,17 @@ public abstract class NewService extends RemoteServiceServlet {
 		}
 	}
 
-	public Dto get(String kind, long id) {
+	private Dto get(String kind, long id, final int resolvDepth) {
 		try {
-			return copy.entityToDto(kind, db.get(KeyFactory.createKey(kind, id)), true, true);
+			return copy.entityToDto(kind, db.get(KeyFactory.createKey(kind, id)), true, resolvDepth);
 		} catch (EntityNotFoundException e) {
-			e.printStackTrace();
+			log.warning(kind + "/" + id + " could not be found - An EntityNotFoundException occured.");
+			// e.printStackTrace();
 			return null;
 		}
+	}
+
+	public Dto get(String kind, long id) {
+		return get(kind, id, 0);
 	}
 }

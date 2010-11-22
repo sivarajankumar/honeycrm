@@ -21,7 +21,6 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gwt.user.client.Command;
 
 public class ReadServiceTest extends DatastoreTest {
-	private static final CreateServiceImpl creator = new CreateServiceImpl();
 	private ReadServiceImpl reader;
 	private static final DatastoreService db = DatastoreServiceFactory.getDatastoreService();
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
@@ -59,7 +58,7 @@ public class ReadServiceTest extends DatastoreTest {
 		final Dto contact = new Dto(Contact.class.getSimpleName());
 		for (int i = 0; i < 10; i++) {
 			contact.set("name", "foo" + i);
-			creator.create(contact);
+			createService.create(contact);
 		}
 
 		final ListQueryResult r = reader.fulltextSearchForModule(Contact.class.getSimpleName(), "foo", 0, 100);
@@ -85,9 +84,9 @@ public class ReadServiceTest extends DatastoreTest {
 				p.set("description", "product description 42 " + i);
 			}
 
-			creator.create(c);
-			creator.create(a);
-			creator.create(p);
+			createService.create(c);
+			createService.create(a);
+			createService.create(p);
 		}
 
 		assertEquals(3, reader.fulltextSearch("1", 0, 100).getItemCount());
@@ -180,6 +179,39 @@ public class ReadServiceTest extends DatastoreTest {
 			System.out.println("getAll " + (1 + i) + "/" + iterations + " times for " + count + " entities in " + getAllTime + "ms (" + (count / getAllTime) + " entities/ms)");
 		}
 		// Thread.sleep(1000 * 60 * 60);
+	}
+	
+	public void testGetEntityContainingCycle() {
+		final Dto p1 = new Dto(Product.class.getSimpleName());
+		p1.set("name", "p1");
+		final long p1Id = createService.create(p1);
+		
+		final Dto p2 = new Dto(Product.class.getSimpleName());
+		p2.set("name", "p2");
+		p2.set("predecessor", p1Id);
+		final long p2Id = createService.create(p2);
+		
+		Dto p1Retrieved = reader.get(Product.class.getSimpleName(), p1Id);
+		p1Retrieved.set("predecessor", p2Id);
+		updateService.update(p1Retrieved);
+		
+		reader.get(Product.class.getSimpleName(), p1Id);
+	}
+	
+	public void testGetEntityWithNonExistingReference() {
+		final Dto p1 = new Dto(Product.class.getSimpleName());
+		p1.set("name", "p1");
+		final long p1Id = createService.create(p1);
+		
+		final Dto p2 = new Dto(Product.class.getSimpleName());
+		p2.set("name", "p2");
+		p2.set("predecessor", p1Id);
+		final long p2Id = createService.create(p2);
+		
+		deleteService.delete(Product.class.getSimpleName(), p1Id);
+		
+		final Dto retrievedP2 = reader.get(Product.class.getSimpleName(), p2Id);
+		assertNotNull(retrievedP2);
 	}
 
 	private Entity createContact() {
