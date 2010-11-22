@@ -3,8 +3,11 @@ package honeycrm.server.test.small;
 import java.util.ArrayList;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
+import honeycrm.server.NewDtoWizard;
+import honeycrm.server.domain.Product;
 import honeycrm.server.domain.UniqueService;
 import honeycrm.server.test.small.mocks.ServiceTableViewMock;
 import junit.framework.TestCase;
@@ -16,6 +19,8 @@ public class ServiceTablePresenterTest extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
+		DtoModuleRegistry.create(NewDtoWizard.getConfiguration());
+
 		this.view = new ServiceTableViewMock();
 		this.module = UniqueService.class.getSimpleName();
 		this.presenter = new ServiceTablePresenter(view, module);
@@ -57,7 +62,7 @@ public class ServiceTablePresenterTest extends TestCase {
 		final Dto s = new Dto(module);
 		s.set("price", 2);
 		s.set("discount", 1);
-		s.set("discountKind", "abs");
+		s.set("kindOfDiscount", "abs");
 		s.set("quantity", 3);
 
 		assertEquals((2 - 1) * 3, (int) presenter.getSumForSingleDto(s));
@@ -66,5 +71,33 @@ public class ServiceTablePresenterTest extends TestCase {
 	public void testRowChanged() {
 		presenter.setValue(getDtos());
 		presenter.rowChanged(0);
+	}
+
+	public void testAppendRow() {
+		presenter.appendRow();
+	}
+
+	public void testReceiveProduct() {
+		final Dto service = new Dto(UniqueService.class.getSimpleName());
+		service.set("price", 23);
+		service.set("quantity", 1);
+
+		final ArrayList<Dto> list = new ArrayList<Dto>();
+		list.add(service);
+
+		presenter.setValue(list);
+
+		final Dto product = new Dto(Product.class.getSimpleName());
+		product.setId(23L);
+		product.set("price", service.get("price"));
+		product.set("productCode", "foo");
+
+		presenter.receivedProduct(0, product);
+
+		assertFalse(presenter.getValue().isEmpty());
+		assertEquals(product.get("price"), presenter.getValue().get(0).get("price"));
+		assertEquals(product.get("productCode"), presenter.getValue().get(0).get("productCode"));
+		assertEquals(product.getId(), presenter.getValue().get(0).get("productID"));
+
 	}
 }
