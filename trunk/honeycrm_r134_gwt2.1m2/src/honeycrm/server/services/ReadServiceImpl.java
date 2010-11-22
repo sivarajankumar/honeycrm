@@ -48,19 +48,20 @@ public class ReadServiceImpl extends NewService implements ReadService {
 	@Override
 	public Dto getByName(String kind, String name) {
 		final PreparedQuery pq = getFiltered(kind, "name", FilterOperator.EQUAL, name);
-		return copy.entityToDto(kind, pq.asSingleEntity(), false, false);
+		// TODO should still indicate that nothing has to be resolved
+		return copy.entityToDto(kind, pq.asSingleEntity(), false/*, false*/);
 	}
 
 	@Override
 	public ListQueryResult getAllAssignedTo(String kind, long assignedTo, int from, int to) {
 		final PreparedQuery pq = getFiltered(kind, "assignedTo", FilterOperator.EQUAL, KeyFactory.createKey(Employee.class.getSimpleName(), assignedTo));
-		return copy.entitiesToDtoArray(kind, pq.countEntities(), pq.asIterable(), false);
+		return copy.entitiesToDtoArray(kind, pq.countEntities(withDefaults()), pq.asIterable(), false);
 	}
 
 	@Override
 	public ListQueryResult getAllMarked(String kind, int from, int to) {
 		final PreparedQuery pq = getFiltered(kind, "marked", FilterOperator.EQUAL, true);
-		return copy.entitiesToDtoArray(kind, pq.countEntities(), pq.asIterable(), false);
+		return copy.entitiesToDtoArray(kind, pq.countEntities(withDefaults()), pq.asIterable(), false);
 	}
 
 	@Override
@@ -91,7 +92,8 @@ public class ReadServiceImpl extends NewService implements ReadService {
 				final PreparedQuery pq = getFiltered(originating, fieldName, FilterOperator.EQUAL, keyOrigin);
 
 				for (final Entity entity : pq.asIterable()) {
-					result.add(copy.entityToDto(originating, entity, false, false));
+					// TODO should still indicate that nothing has to be resolved
+					result.add(copy.entityToDto(originating, entity, false/*, false*/));
 				}
 			}
 		}
@@ -120,7 +122,8 @@ public class ReadServiceImpl extends NewService implements ReadService {
 
 		for (final Entity entity : pq.asIterable()) {
 			if (null != entity.getProperty("name") && entity.getProperty("name") instanceof String && entity.getProperty("name").toString().startsWith(prefix)) {
-				hits.add(copy.entityToDto(kind, entity, false, false));
+				// TODO should still indicate that nothing has to be resolved
+				hits.add(copy.entityToDto(kind, entity, false/*, false*/));
 			}
 		}
 
@@ -156,7 +159,8 @@ public class ReadServiceImpl extends NewService implements ReadService {
 					final String value = (String) entity.getProperty(field); // assume that field type is string
 
 					if (null != value && ((!ignoreCase && value.contains(query)) || (ignoreCase && value.toLowerCase().contains(query.toLowerCase())))) {
-						hits.add(copy.entityToDto(kind, entity, false, false));
+						// TODO should still indicate that nothing has to be resolved
+						hits.add(copy.entityToDto(kind, entity, false/*, false*/));
 						continue ENTITY_LOOP;
 					}
 				}

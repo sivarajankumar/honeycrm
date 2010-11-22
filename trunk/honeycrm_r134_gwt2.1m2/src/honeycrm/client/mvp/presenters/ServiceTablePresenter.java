@@ -68,14 +68,6 @@ public class ServiceTablePresenter implements TakesValue<ArrayList<Dto>>{
 			services.add(d);
 		}
 		return services;
-		
-		/*final ArrayList<Dto> services = new ArrayList<Dto>();
-
-		for (int row = 0; row < view.getRowCount(); row++) {
-			services.add(view.getDtoFromRow(row));
-		}
-
-		return services;*/
 	}
 
 	@Override
