@@ -1,6 +1,8 @@
 package honeycrm.client.mvp.presenters;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.NumberParser;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,10 +21,12 @@ public class ServiceTablePresenter implements TakesValue<ArrayList<Dto>>{
 	}
 
 	private final Display view;
+	private final ModuleDto moduleDto;
 	private final HashMap<Integer, Dto> model = new HashMap<Integer, Dto>();
 
 	public ServiceTablePresenter(Display view, final String module) {
 		this.view = view;
+		this.moduleDto = DtoModuleRegistry.instance().get(module);
 	}
 
 	private double getSum(final Collection<Dto> data) {
@@ -60,12 +64,18 @@ public class ServiceTablePresenter implements TakesValue<ArrayList<Dto>>{
 	@Override
 	public ArrayList<Dto> getValue() {
 		final ArrayList<Dto> services = new ArrayList<Dto>();
+		for (final Dto d: model.values()) {
+			services.add(d);
+		}
+		return services;
+		
+		/*final ArrayList<Dto> services = new ArrayList<Dto>();
 
 		for (int row = 0; row < view.getRowCount(); row++) {
 			services.add(view.getDtoFromRow(row));
 		}
 
-		return services;
+		return services;*/
 	}
 
 	@Override
@@ -88,15 +98,22 @@ public class ServiceTablePresenter implements TakesValue<ArrayList<Dto>>{
 		view.setOverallSum(getSum(model.values()));
 	}
 
-	public void receivedProduct(int row, Dto value) {
-		if (model.containsKey(row) && null != value.get("price")) {
-			final Dto updatedDto = view.getDtoFromRow(row);
-			updatedDto.set("price", value.get("price"));
-			updatedDto.set("productCode", value.get("productCode"));
+	public void receivedProduct(int row, Dto product) {
+		if (model.containsKey(row) && null != product.get("price")) {
+			final Dto updatedService = view.getDtoFromRow(row);
+			updatedService.set("price", product.get("price"));
+			updatedService.set("productID", product.getId());
+			updatedService.set("productCode", product.get("productCode"));
 
-			model.put(row, updatedDto);
+			model.put(row, updatedService);
 			
-			view.insertDtoIntoRow(updatedDto, row);
+			view.insertDtoIntoRow(updatedService, row);
 		}
+	}
+
+	public void appendRow() {
+		final int newRowId = view.getRowCount();
+		model.put(newRowId, moduleDto.createDto());
+		view.insertDtoIntoRow(moduleDto.createDto(), newRowId);
 	}
 }

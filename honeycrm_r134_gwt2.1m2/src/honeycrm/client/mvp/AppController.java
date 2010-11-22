@@ -71,7 +71,7 @@ public class AppController implements ValueChangeHandler<String> {
 	}
 
 	private void bind() {
-		if (GWT.isScript()) {
+		if (GWT.isClient()) {
 			History.addValueChangeHandler(this);
 		}
 		
