@@ -140,7 +140,7 @@ public class ReadServiceTest extends DatastoreTest {
 	}
 
 	public void testGetPerformance() throws InterruptedException {
-		final float count = 10000;
+		final float count = 1000;
 
 		System.out.print("Creating key array with " + count + " elements.. ");
 		final long[] keys = new long[(int) count];
