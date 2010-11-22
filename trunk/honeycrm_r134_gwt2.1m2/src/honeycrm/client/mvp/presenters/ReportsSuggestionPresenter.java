@@ -44,7 +44,7 @@ public class ReportsSuggestionPresenter implements Presenter {
 			}
 		});
 
-		if (GWT.isScript()) {
+		if (GWT.isClient()) {
 			VisualizationUtils.loadVisualizationApi(new Runnable() {
 				@Override
 				public void run() {

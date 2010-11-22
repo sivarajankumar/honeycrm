@@ -58,6 +58,7 @@ public class FieldTable extends AbstractField {
 
 	@Override
 	protected Serializable internalGetData(Widget w) {
+		// TODO use presenter.getValue() instead
 		return (Serializable) ((ITableWidget) w).getData();
 	}
 }

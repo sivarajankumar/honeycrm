@@ -55,16 +55,7 @@ public class ServiceTableView extends ITableWidget implements Display {
 			addBtn.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					final int rows = table.getRowCount();
-					final int newRowId = rows;
-					final String[] fields = moduleDto.getListFieldIds();
-
-//					presenter.appendRow();
-
-					for (int x = 0; x < fields.length; x++) {
-						final String index = fields[x];
-						table.setWidget(rows, x, addChangeEvents(index, moduleDto.getFieldById(index).getWidget(View.CREATE, moduleDto.createDto(), index), newRowId));
-					}
+					presenter.appendRow();
 				}
 			});
 
@@ -95,7 +86,7 @@ public class ServiceTableView extends ITableWidget implements Display {
 					@Override
 					public void notify(final Dto value) {
 						// overwrite price with price of received dto
-						presenter.receivedProduct(row, value);
+						presenter.receivedProduct(row - HEADER_ROWS, value);
 					}
 				});
 			}
@@ -114,10 +105,12 @@ public class ServiceTableView extends ITableWidget implements Display {
 	}
 
 	@Override
-	public Dto getDtoFromRow(final int row) {
+	public Dto getDtoFromRow(int row) {
 		final Dto s = new Dto();
 		s.setModule(moduleDto.getModule());
 
+		row += HEADER_ROWS;
+		
 		for (int col = 0; col < moduleDto.getListFieldIds().length; col++) {
 			if (table.getCellCount(row) > col) {
 				final String id = moduleDto.getListFieldIds()[col];
@@ -168,7 +161,7 @@ public class ServiceTableView extends ITableWidget implements Display {
 				}
 			} else {
 				// add a new widget and new click handler
-				table.setWidget(row, col, field.getWidget(view, dto, (index)));
+				table.setWidget(row, col, field.getWidget(view == View.DETAIL ? View.DETAIL : View.EDIT, dto, (index)));
 				addChangeEvents(index, table.getWidget(/* HEADER_ROWS + */row, col), row);
 			}
 		}
