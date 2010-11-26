@@ -1,9 +1,9 @@
 package honeycrm.server.test.small;
 
-import honeycrm.client.ServiceTablePresenter;
-import honeycrm.client.ServiceTablePresenter.Display;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.misc.View;
+import honeycrm.client.mvp.presenters.ServiceTablePresenter;
+import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.server.NewDtoWizard;
 import honeycrm.server.domain.Contract;

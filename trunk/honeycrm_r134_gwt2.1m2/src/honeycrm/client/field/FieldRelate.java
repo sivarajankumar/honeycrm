@@ -4,15 +4,17 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.CollectionHelper;
+import honeycrm.client.misc.View;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.RelateWidget;
 
 import java.io.Serializable;
-
+import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -21,7 +23,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldRelate extends FieldString {
+public class FieldRelate extends AbstractField<String> {
 	private static final long serialVersionUID = -1518485985368479493L;
 	private String relatedModule;
 
@@ -139,6 +141,17 @@ public class FieldRelate extends FieldString {
 		} else {
 			throw new RuntimeException("Unexpected type " + w.getClass());
 		}
+	}
+
+	@Override
+	public Column<Dto, String> getColumn(final String fieldName, final View viewMode) {
+		// TODO support searching..
+		return new Column<Dto, String>(new EditTextCell()) {
+			@Override
+			public String getValue(Dto object) {
+				return String.valueOf(((Dto) object.get(fieldName + "_resolved")).get("name"));
+			}
+		};
 	}
 
 /*	TODO how to implement this when we cannot access the whole dto object from here?
