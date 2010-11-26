@@ -5,6 +5,8 @@ import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 
+import com.google.gwt.cell.client.EditTextCell;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Anchor;
@@ -19,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 // TODO this should be done by field currency somehow.. the fields should provide a "String format(Serializable value);" method.
-abstract public class AbstractField implements IsSerializable, Serializable {
+abstract public class AbstractField<T> implements IsSerializable, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -215,7 +217,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	protected void internalSetData(Anchor widget, Object value, View view) {
 		notImplemented();
 	}
-	
+
 	protected void internalSetData(DateBox widget, Object value, View view) {
 		notImplemented();
 	}
@@ -231,7 +233,7 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	protected void internalSetData(HTML widget, Object value, View view) {
 		notImplemented();
 	}
-	
+
 	protected void internalSetData(Label widget, Object value, View view) {
 		widget.setText(formattedValue(value, view));
 	}
@@ -247,7 +249,9 @@ abstract public class AbstractField implements IsSerializable, Serializable {
 	protected void internalSetData(ListBox widget, Object value, View view) {
 		notImplemented();
 	}
-	
+
+	abstract public Column<Dto, T> getColumn(final String fieldName);
+
 	private void notImplemented() {
 		Window.alert("not implemented");
 		throw new RuntimeException("not implemented");

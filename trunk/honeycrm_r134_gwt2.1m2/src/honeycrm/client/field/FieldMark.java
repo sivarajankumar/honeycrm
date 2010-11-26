@@ -6,9 +6,11 @@ import honeycrm.client.view.MarkWidget;
 
 import java.io.Serializable;
 
+import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldMark extends AbstractField {
+public class FieldMark extends AbstractField<Boolean> {
 	private static final long serialVersionUID = 2910540849623881202L;
 	private String dtoIndex;
 	private long dtoId;
@@ -67,5 +69,15 @@ public class FieldMark extends AbstractField {
 		dto.setMarked(value);
 
 		return new MarkWidget(dto, null);
+	}
+
+	@Override
+	public Column<Dto, Boolean> getColumn(String fieldName) {
+		return new Column<Dto, Boolean>(new CheckboxCell()) {
+			@Override
+			public Boolean getValue(Dto object) {
+				return null;
+			}
+		};
 	}
 }

@@ -1,15 +1,17 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.StringAbbreviation;
 import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldEmail extends AbstractField {
+public class FieldEmail extends FieldString {
 	private static final long serialVersionUID = -1035707556737860138L;
 
 	public FieldEmail() {

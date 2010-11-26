@@ -8,9 +8,11 @@ import honeycrm.client.view.ITableWidget;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldTable extends AbstractField {
+public class FieldTable extends AbstractField<String> {
 	private static final long serialVersionUID = 5834729592030900010L;
 
 	public FieldTable() {
@@ -60,5 +62,10 @@ public class FieldTable extends AbstractField {
 	protected Serializable internalGetData(Widget w) {
 		// TODO use presenter.getValue() instead
 		return (Serializable) ((ITableWidget) w).getData();
+	}
+
+	@Override
+	public Column<Dto, String> getColumn(String fieldName) {
+		return null;
 	}
 }

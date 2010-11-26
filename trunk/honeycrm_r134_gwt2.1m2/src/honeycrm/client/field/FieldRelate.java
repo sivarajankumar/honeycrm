@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -21,7 +22,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldRelate extends AbstractField {
+public class FieldRelate extends FieldString {
 	private static final long serialVersionUID = -1518485985368479493L;
 	private String relatedModule;
 
@@ -140,7 +141,7 @@ public class FieldRelate extends AbstractField {
 			throw new RuntimeException("Unexpected type " + w.getClass());
 		}
 	}
-	
+
 /*	TODO how to implement this when we cannot access the whole dto object from here?
  	@Override
 	public String internalFormattedValue(Serializable value) {

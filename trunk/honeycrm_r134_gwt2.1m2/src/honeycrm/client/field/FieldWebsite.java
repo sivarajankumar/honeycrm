@@ -5,7 +5,7 @@ import honeycrm.client.misc.View;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldWebsite extends AbstractField {
+public class FieldWebsite extends FieldString {
 	private static final long serialVersionUID = -3830838265148832910L;
 
 	public FieldWebsite() {
