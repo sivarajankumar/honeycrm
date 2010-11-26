@@ -1,12 +1,10 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.StringAbbreviation;
 import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;

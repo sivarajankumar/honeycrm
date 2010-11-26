@@ -1,8 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<g:VerticalPanel>
-		<g:Button text="Save" ui:field="save" />
-		<g:Button text="Add" ui:field="add" />
 		<c:CellTable ui:field="table" />
 		<c:SimplePager ui:field="pager" />
 	</g:VerticalPanel>

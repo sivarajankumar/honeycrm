@@ -56,7 +56,7 @@ public class FieldDate extends AbstractField<Date> {
 	}
 
 	@Override
-	public Column<Dto, Date> getColumn(String fieldName) {
+	public Column<Dto, Date> getColumn(String fieldName, final View viewMode) {
 		return new Column<Dto, Date>(new DateCell()) {
 			@Override
 			public Date getValue(Dto object) {
