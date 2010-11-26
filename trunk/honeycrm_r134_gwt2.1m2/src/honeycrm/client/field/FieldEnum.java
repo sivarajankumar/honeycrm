@@ -14,7 +14,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldEnum extends AbstractField<String> {
+public class FieldEnum extends FieldString {
 	private static final long serialVersionUID = -4542742508636055819L;
 	protected String[] options;
 
@@ -64,19 +64,23 @@ public class FieldEnum extends AbstractField<String> {
 	}
 
 	@Override
-	public Column<Dto, String> getColumn(final String fieldName) {
-		final ArrayList<String> optionList = new ArrayList<String>();
-		for (final String o : options) {
-			optionList.add(o);
-		}
-		final SelectionCell optionsCell = new SelectionCell(optionList);
-
-		return new Column<Dto, String>(optionsCell) {
-			@Override
-			public String getValue(Dto object) {
-				return String.valueOf(object.get(fieldName));
+	public Column<Dto, String> getColumn(final String fieldName, final View viewMode) {
+		if (View.isReadOnly(viewMode)) {
+			return super.getColumn(fieldName, viewMode);
+		} else {
+			final ArrayList<String> optionList = new ArrayList<String>();
+			for (final String o : options) {
+				optionList.add(o);
 			}
-		};
+			final SelectionCell optionsCell = new SelectionCell(optionList);
+	
+			return new Column<Dto, String>(optionsCell) {
+				@Override
+				public String getValue(Dto object) {
+					return String.valueOf(object.get(fieldName));
+				}
+			};
+		}
 	}
 
 	@Override

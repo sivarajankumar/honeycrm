@@ -1,35 +1,21 @@
 package honeycrm.client;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import honeycrm.client.ServiceTablePresenter.Display;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
-import honeycrm.client.field.FieldEnum;
 import honeycrm.client.misc.View;
 
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.SelectionCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
@@ -42,8 +28,6 @@ public class ServiceTableView extends Composite implements Display {
 
 	private ServiceTablePresenter presenter;
 
-	@UiField
-	Button add;
 	@UiField
 	CellTable<Dto> table;
 	@UiField
@@ -61,11 +45,6 @@ public class ServiceTableView extends Composite implements Display {
 	@Override
 	public void setPresenter(ServiceTablePresenter presenter) {
 		this.presenter = presenter;
-	}
-
-	@Override
-	public HasClickHandlers getAdd() {
-		return add;
 	}
 
 	@Override
@@ -87,7 +66,7 @@ public class ServiceTableView extends Composite implements Display {
 	public void initColumns(final ModuleDto moduleDto, final View viewMode) {
 		for (final String fieldName: moduleDto.getListFieldIds()) {
 			final AbstractField<Object> field = moduleDto.getFieldById(fieldName);
-			final Column<Dto, Object> c = field.getColumn(fieldName);
+			final Column<Dto, Object> c = field.getColumn(fieldName, viewMode);
 			
 			c.setFieldUpdater(new FieldUpdater<Dto, Object>() {
 				@Override
@@ -98,10 +77,5 @@ public class ServiceTableView extends Composite implements Display {
 			
 			table.addColumn(c, String.valueOf(field.getLabel()));
 		}
-	}
-	
-	@UiHandler("save")
-	public void onClickSave(ClickEvent event) {
-		Window.alert(String.valueOf(provider.getList().get(0).get("productCode")));
 	}
 }

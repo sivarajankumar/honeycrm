@@ -1,18 +1,15 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;

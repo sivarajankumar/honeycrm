@@ -1,6 +1,7 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 
@@ -30,11 +31,14 @@ public class FieldBoolean extends AbstractField<Boolean> {
 	}
 
 	@Override
-	public Column<Dto, Boolean> getColumn(String fieldName) {
-		return new Column<Dto, Boolean>(new CheckboxCell()) {
+	public Column<Dto, Boolean> getColumn(final String fieldName, final View viewMode) {
+		final CheckboxCell c = new CheckboxCell();
+		// TODO make check box read only if necessary
+		return new Column<Dto, Boolean>(c) {
 			@Override
 			public Boolean getValue(Dto object) {
-				return null;
+				final String str = String.valueOf(object.get(fieldName));
+				return "true".equals(str);
 			}
 		};
 	}

@@ -1,19 +1,12 @@
 package honeycrm.server.test.small;
 
-import org.easymock.IAnswer;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import honeycrm.client.ServiceTablePresenter;
 import honeycrm.client.ServiceTablePresenter.Display;
-import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
-import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.View;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.server.NewDtoWizard;
-import honeycrm.server.domain.Contact;
-import honeycrm.server.domain.UniqueService;
+import honeycrm.server.domain.Contract;
 import honeycrm.server.test.small.mocks.NewServiceTableViewMock;
 import junit.framework.TestCase;
 import static org.easymock.EasyMock.*;
@@ -23,6 +16,7 @@ public class NewServiceTablePresenterTest extends TestCase {
 	private Display view;
 	private ReadServiceAsync readService;
 
+	@Override
 	protected void setUp() {
 		DtoModuleRegistry.create(NewDtoWizard.getConfiguration());
 		view = new NewServiceTableViewMock();
@@ -43,6 +37,6 @@ public class NewServiceTablePresenterTest extends TestCase {
 	}
 	
 	public void testCreate() {
-		presenter = new ServiceTablePresenter(view, View.EDIT, UniqueService.class.getSimpleName(), readService);
+		presenter = new ServiceTablePresenter(view, View.EDIT, Contract.class.getSimpleName(), "uniqueServices");
 	}
 }

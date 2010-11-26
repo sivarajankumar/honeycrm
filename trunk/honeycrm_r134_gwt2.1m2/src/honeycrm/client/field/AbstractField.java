@@ -5,7 +5,6 @@ import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -250,7 +249,7 @@ abstract public class AbstractField<T> implements IsSerializable, Serializable {
 		notImplemented();
 	}
 
-	abstract public Column<Dto, T> getColumn(final String fieldName);
+	abstract public Column<Dto, T> getColumn(final String fieldName, final View viewMode);
 
 	private void notImplemented() {
 		Window.alert("not implemented");

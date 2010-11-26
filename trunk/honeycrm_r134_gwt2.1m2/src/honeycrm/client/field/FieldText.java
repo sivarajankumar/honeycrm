@@ -1,10 +1,7 @@
 package honeycrm.client.field;
 
-import honeycrm.client.dto.Dto;
-
 import java.io.Serializable;
 
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 

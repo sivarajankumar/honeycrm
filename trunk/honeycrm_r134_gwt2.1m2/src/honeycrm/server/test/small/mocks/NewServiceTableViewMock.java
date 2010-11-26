@@ -17,11 +17,6 @@ public class NewServiceTableViewMock implements Display {
 	}
 
 	@Override
-	public HasClickHandlers getAdd() {
-		return add ;
-	}
-
-	@Override
 	public ListDataProvider<Dto> getProvider() {
 		// TODO Auto-generated method stub
 		return null;

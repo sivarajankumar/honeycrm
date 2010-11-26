@@ -2,6 +2,7 @@ package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.misc.View;
 import honeycrm.client.view.MarkWidget;
 
 import java.io.Serializable;
@@ -72,7 +73,7 @@ public class FieldMark extends AbstractField<Boolean> {
 	}
 
 	@Override
-	public Column<Dto, Boolean> getColumn(String fieldName) {
+	public Column<Dto, Boolean> getColumn(String fieldName, final View viewMode) {
 		return new Column<Dto, Boolean>(new CheckboxCell()) {
 			@Override
 			public Boolean getValue(Dto object) {
