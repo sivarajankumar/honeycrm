@@ -1,13 +1,13 @@
 package honeycrm.client.field;
 
+import honeycrm.client.ServiceTablePresenter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.View;
-import honeycrm.client.view.ITableWidget;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FieldTable extends AbstractField<String> {
@@ -50,7 +50,6 @@ public class FieldTable extends AbstractField<String> {
 
 		final honeycrm.client.ServiceTableView v = new honeycrm.client.ServiceTableView();
 		final honeycrm.client.ServiceTablePresenter p = new honeycrm.client.ServiceTablePresenter(v, view, dto.getModule(), fieldId);
-		v.setPresenter(p);
 		p.setValue((ArrayList<Dto>) value);
 
 		return v;
@@ -59,7 +58,8 @@ public class FieldTable extends AbstractField<String> {
 	@Override
 	protected Serializable internalGetData(Widget w) {
 		// TODO use presenter.getValue() instead
-		return (Serializable) ((ITableWidget) w).getData();
+		final ServiceTablePresenter presenter = ((TakesValue<ServiceTablePresenter>) w).getValue();
+		return (Serializable) presenter.getValue();
 	}
 
 	@Override
