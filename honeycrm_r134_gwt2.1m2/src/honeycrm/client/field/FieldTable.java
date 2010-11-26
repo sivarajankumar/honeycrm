@@ -1,8 +1,9 @@
 package honeycrm.client.field;
 
-import honeycrm.client.ServiceTablePresenter;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.View;
+import honeycrm.client.mvp.presenters.ServiceTablePresenter;
+import honeycrm.client.mvp.views.ServiceTableView;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -48,8 +49,8 @@ public class FieldTable extends AbstractField<String> {
 		// TODO make this independent of the widget / chose the widget
 		final Serializable value = dto.get(fieldId);
 
-		final honeycrm.client.ServiceTableView v = new honeycrm.client.ServiceTableView();
-		final honeycrm.client.ServiceTablePresenter p = new honeycrm.client.ServiceTablePresenter(v, view, dto.getModule(), fieldId);
+		final ServiceTableView v = new ServiceTableView();
+		final ServiceTablePresenter p = new ServiceTablePresenter(v, view, dto.getModule(), fieldId);
 		p.setValue((ArrayList<Dto>) value);
 
 		return v;
