@@ -1,16 +1,18 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.NumberParser;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldInteger extends AbstractField {
+public class FieldInteger extends FieldString {
 	private static final int DEFAULT_WIDTH = 70;
 	private static final long serialVersionUID = 8025061226197879958L;
 

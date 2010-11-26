@@ -1,17 +1,20 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.View;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-public class FieldDate extends AbstractField {
+public class FieldDate extends AbstractField<Date> {
 	private static final long serialVersionUID = 734488177370075237L;
 
 	public FieldDate() {
@@ -50,5 +53,15 @@ public class FieldDate extends AbstractField {
 	@Override
 	public String internalFormattedValue(Object value) {
 		return null == value ? "" : DateTimeFormat.getFormat(PredefinedFormat.DATE_LONG).format((Date) value);
+	}
+
+	@Override
+	public Column<Dto, Date> getColumn(String fieldName) {
+		return new Column<Dto, Date>(new DateCell()) {
+			@Override
+			public Date getValue(Dto object) {
+				return null;
+			}
+		};
 	}
 }

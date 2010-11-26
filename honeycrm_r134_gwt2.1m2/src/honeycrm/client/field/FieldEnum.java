@@ -1,16 +1,20 @@
 package honeycrm.client.field;
 
+import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.misc.View;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.cell.client.SelectionCell;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldEnum extends AbstractField {
+public class FieldEnum extends AbstractField<String> {
 	private static final long serialVersionUID = -4542742508636055819L;
 	protected String[] options;
 
@@ -32,7 +36,7 @@ public class FieldEnum extends AbstractField {
 			final String[] options = getOptions();
 			for (int i = 0; i < options.length; i++) {
 				widget.addItem(options[i]);
-			}	
+			}
 		} else if (view == View.EDIT) {
 			final Set<String> selectedItems = (null == value || value.toString().isEmpty()) ? new HashSet<String>() : CollectionHelper.toSet(value.toString().split(FieldMultiEnum.SEPARATOR));
 			final String[] options = getOptions();
@@ -57,6 +61,22 @@ public class FieldEnum extends AbstractField {
 		} else {
 			return box.getValue(box.getSelectedIndex());
 		}
+	}
+
+	@Override
+	public Column<Dto, String> getColumn(final String fieldName) {
+		final ArrayList<String> optionList = new ArrayList<String>();
+		for (final String o : options) {
+			optionList.add(o);
+		}
+		final SelectionCell optionsCell = new SelectionCell(optionList);
+
+		return new Column<Dto, String>(optionsCell) {
+			@Override
+			public String getValue(Dto object) {
+				return String.valueOf(object.get(fieldName));
+			}
+		};
 	}
 
 	@Override

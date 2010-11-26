@@ -10,7 +10,6 @@ import honeycrm.server.domain.Contact;
 import honeycrm.server.domain.Contract;
 import honeycrm.server.domain.Product;
 import honeycrm.server.domain.UniqueService;
-import honeycrm.server.services.CreateServiceImpl;
 import honeycrm.server.services.ReadServiceImpl;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
