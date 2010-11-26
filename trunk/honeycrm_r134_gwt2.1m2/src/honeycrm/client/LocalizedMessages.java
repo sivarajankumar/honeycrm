@@ -27,4 +27,6 @@ public interface LocalizedMessages extends Messages {
 	String invalidLogin();
 	String loginSuccessful();
 	String initializing();
+	
+	String sum();
 }

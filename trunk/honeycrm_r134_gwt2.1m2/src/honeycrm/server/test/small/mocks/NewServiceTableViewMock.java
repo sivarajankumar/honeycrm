@@ -27,4 +27,10 @@ public class NewServiceTableViewMock implements Display {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void updateOverallSum(double sum) {
+		// TODO Auto-generated method stub
+		
+	}
 }
