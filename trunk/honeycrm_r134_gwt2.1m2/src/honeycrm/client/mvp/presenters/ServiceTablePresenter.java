@@ -5,9 +5,14 @@ import java.util.Collection;
 import java.util.List;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.View;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -16,28 +21,52 @@ public class ServiceTablePresenter implements TakesValue<List<Dto>> {
 		ListDataProvider<Dto> getProvider();
 		void initColumns(ModuleDto moduleDto, View viewMode);
 		void updateOverallSum(double sum);
+		HasClickHandlers getAdd();
+		void hideAddButton();
 	}
 
-	private View viewMode;
-	private Display view;
-	private String module;
-	private String fieldName;
+	private final View viewMode;
+	private final Display view;
+	private final ModuleDto relatedModule;
 
 	public ServiceTablePresenter(final Display view, final View viewMode, final String module, final String fieldName) {
 		this.view = view;
-		this.module = module;
-		this.fieldName = fieldName;
+		this.relatedModule = ModuleDto.getRelatedDto(module, fieldName);
 		this.viewMode = viewMode;
 		bind();
 	}
 
 	private void bind() {
 		view.setValue(this);
-		view.initColumns(ModuleDto.getRelatedDto(module, fieldName), viewMode);
+		view.initColumns(relatedModule, viewMode);
+
+		if (View.isReadOnly(viewMode)) {
+			view.hideAddButton();
+		} else {
+			view.getAdd().addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					final Dto newService = relatedModule.createDto();
+					newService.set("quantity", 1);
+					newService.set("discount", 0);
+					newService.set("productCode", "");
+					newService.set("sum", getSumForSingleDto(newService));
+					newService.set("price", 0);
+
+					view.getProvider().getList().add(newService);
+					
+					view.updateOverallSum(getSum(view.getProvider().getList()));
+				}
+			});
+		}
 	}
 
 	@Override
 	public void setValue(List<Dto> value) {
+		if (null == value) {
+			value = new ArrayList<Dto>();
+		}
+		
 		view.getProvider().setList(value);
 		// make sure the sum is displayed properly intially
 		view.updateOverallSum(getSum(view.getProvider().getList()));
@@ -46,7 +75,7 @@ public class ServiceTablePresenter implements TakesValue<List<Dto>> {
 	@Override
 	public List<Dto> getValue() {
 		final ArrayList<Dto> l = new ArrayList<Dto>();
-		for (final Dto d: view.getProvider().getList()) {
+		for (final Dto d : view.getProvider().getList()) {
 			l.add(d);
 		}
 		return l;

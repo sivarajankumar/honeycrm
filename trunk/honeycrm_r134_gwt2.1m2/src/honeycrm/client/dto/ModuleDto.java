@@ -161,6 +161,9 @@ public class ModuleDto implements Serializable {
 	public Dto createDto() {
 		final Dto dto = new Dto();
 		dto.setModule(module);
+		for (final AbstractField<Object, Object> field: getFields()) {
+			dto.set(field.getId(), field.getDefaultValue());
+		}
 		return dto;
 	}
 }

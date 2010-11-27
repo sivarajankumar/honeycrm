@@ -1,6 +1,8 @@
 package honeycrm.server.test.small;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
@@ -74,7 +76,15 @@ public class ServiceTablePresenterTest extends TestCase {
 		presenter.setValue(getDtos());
 	}
 
-	public void testAppendRow() {
+	public void testEnumFieldsHaveValidDefaultsSet() {
+		final Dto newDto = DtoModuleRegistry.instance().get(UniqueService.class.getSimpleName()).createDto();
+
+		for (final String field : new String[] { "unit", "kindOfDiscount" }) {
+			final Serializable value = newDto.get(field);
+			
+			assertNotNull(value);
+			assertFalse(value.toString().isEmpty());
+		}
 	}
 
 	public void testReceiveProduct() {
@@ -96,6 +106,5 @@ public class ServiceTablePresenterTest extends TestCase {
 		assertEquals(product.get("price"), presenter.getValue().get(0).get("price"));
 		assertEquals(product.get("productCode"), presenter.getValue().get(0).get("productCode"));
 		assertEquals(product.getId(), presenter.getValue().get(0).get("productID"));
-
 	}
 }

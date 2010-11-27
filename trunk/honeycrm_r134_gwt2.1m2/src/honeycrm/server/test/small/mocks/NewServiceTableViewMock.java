@@ -11,11 +11,11 @@ import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
 
 public class NewServiceTableViewMock implements Display {
 	private HasClickHandlers add = new HasClickHandlersMock();
-
+	private ListDataProvider<Dto> provider = new ListDataProvider<Dto>();
+	
 	@Override
 	public ListDataProvider<Dto> getProvider() {
-		// TODO Auto-generated method stub
-		return null;
+		return provider;
 	}
 
 	@Override
@@ -40,5 +40,16 @@ public class NewServiceTableViewMock implements Display {
 	public ServiceTablePresenter getValue() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public HasClickHandlers getAdd() {
+		return add;
+	}
+
+	@Override
+	public void hideAddButton() {
+		// TODO Auto-generated method stub
+		
 	}
 }
