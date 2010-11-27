@@ -1,5 +1,5 @@
 package honeycrm.client.misc;
 
-public interface Callback {
-	public void callback();
+public interface Callback<T> {
+	public void callback(T arg);
 }
