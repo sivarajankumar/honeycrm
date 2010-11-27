@@ -13,10 +13,6 @@ public class NewServiceTableViewMock implements Display {
 	private HasClickHandlers add = new HasClickHandlersMock();
 
 	@Override
-	public void setPresenter(ServiceTablePresenter presenter) {
-	}
-
-	@Override
 	public ListDataProvider<Dto> getProvider() {
 		// TODO Auto-generated method stub
 		return null;
@@ -32,5 +28,17 @@ public class NewServiceTableViewMock implements Display {
 	public void updateOverallSum(double sum) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setValue(ServiceTablePresenter value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ServiceTablePresenter getValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
