@@ -6,6 +6,7 @@ import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.misc.QuicksearchHelper;
+import honeycrm.client.misc.QuicksearchValue;
 import honeycrm.client.misc.View;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.RelateWidget;
@@ -26,7 +27,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldRelate extends AbstractField<SafeHtml> {
+public class FieldRelate extends AbstractField<SafeHtml, QuicksearchValue> {
 	private static final long serialVersionUID = -1518485985368479493L;
 	private String relatedModule;
 
@@ -147,29 +148,34 @@ public class FieldRelate extends AbstractField<SafeHtml> {
 	}
 
 	@Override
-	public Column<Dto, SafeHtml> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
+	public Column<Dto, SafeHtml> getColumn(final String fieldName, final View viewMode, final Callback<QuicksearchValue> fieldUpdatedCallback) {
 		return new Column<Dto, SafeHtml>(new SafeHtmlCell()) {
 			@Override
 			public SafeHtml getValue(final Dto object) {
 				if (View.isReadOnly(viewMode)) {
 					return new SafeHtml() {
 						private static final long serialVersionUID = -8017901422992491763L;
-
 						@Override
 						public String asString() {
-							if (null == object.get(fieldName + "_resolved")) {
-								return "[unresolved]";
-							} else {
-								return String.valueOf(((Dto) object.get(fieldName + "_resolved")).get("name"));
-							}
+							final String name = getInitialName(fieldName, object);
+							return null == name ? "[unresolved]" : name;
 						}
 					};
 				} else {
-					return QuicksearchHelper.getQuickSearchMarkup(object, fieldName, fieldUpdatedCallback);
+					return QuicksearchHelper.getQuickSearchMarkup(object, fieldName, getInitialName(fieldName, object), fieldUpdatedCallback);
 				}
 			}
 		};
 	}
+	
+	private String getInitialName(final String fieldName, final Dto object) {
+		if (null == object.get(fieldName + "_resolved")) {
+			return null;
+		} else {
+			return String.valueOf(((Dto) object.get(fieldName + "_resolved")).get("name"));
+		}
+	}
+	
 	/*
 	 * TODO how to implement this when we cannot access the whole dto object from here?
 	 * 

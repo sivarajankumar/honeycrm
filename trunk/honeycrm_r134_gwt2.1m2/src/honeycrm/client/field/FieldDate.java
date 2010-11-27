@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
-public class FieldDate extends AbstractField<Date> {
+public class FieldDate extends AbstractField<Date, Void> {
 	private static final long serialVersionUID = 734488177370075237L;
 
 	public FieldDate() {
@@ -57,7 +57,7 @@ public class FieldDate extends AbstractField<Date> {
 	}
 
 	@Override
-	public Column<Dto, Date> getColumn(String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
+	public Column<Dto, Date> getColumn(String fieldName, final View viewMode, final Callback<Void> fieldUpdatedCallback) {
 		return new Column<Dto, Date>(new DateCell()) {
 			@Override
 			public Date getValue(Dto object) {

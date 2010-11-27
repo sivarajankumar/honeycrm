@@ -8,7 +8,7 @@ import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 
-public class FieldString extends AbstractField<String> {
+public class FieldString extends AbstractField<String, Void> {
 	private static final long serialVersionUID = -3150226939473188904L;
 
 	public FieldString() {
@@ -23,7 +23,7 @@ public class FieldString extends AbstractField<String> {
 	}
 
 	@Override
-	public Column<Dto, String> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
+	public Column<Dto, String> getColumn(final String fieldName, final View viewMode, final Callback<Void> fieldUpdatedCallback) {
 		if (View.isReadOnly(viewMode)) {
 			return new TextColumn<Dto>() {
 				@Override

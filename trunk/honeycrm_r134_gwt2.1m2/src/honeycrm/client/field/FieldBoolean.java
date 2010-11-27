@@ -11,7 +11,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldBoolean extends AbstractField<Boolean> {
+public class FieldBoolean extends AbstractField<Boolean, Void> {
 	private static final long serialVersionUID = -4437595172130002836L;
 
 	public FieldBoolean() {
@@ -32,7 +32,7 @@ public class FieldBoolean extends AbstractField<Boolean> {
 	}
 
 	@Override
-	public Column<Dto, Boolean> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
+	public Column<Dto, Boolean> getColumn(final String fieldName, final View viewMode, final Callback<Void> fieldUpdatedCallback) {
 		final CheckboxCell c = new CheckboxCell();
 		// TODO make check box read only if necessary
 		return new Column<Dto, Boolean>(c) {

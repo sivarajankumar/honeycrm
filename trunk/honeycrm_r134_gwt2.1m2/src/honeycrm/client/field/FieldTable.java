@@ -12,7 +12,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldTable extends AbstractField<String> {
+public class FieldTable extends AbstractField<String, Void> {
 	private static final long serialVersionUID = 5834729592030900010L;
 
 	public FieldTable() {
@@ -65,7 +65,7 @@ public class FieldTable extends AbstractField<String> {
 	}
 
 	@Override
-	public Column<Dto, String> getColumn(String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
+	public Column<Dto, String> getColumn(String fieldName, final View viewMode, final Callback<Void> fieldUpdatedCallback) {
 		return null;
 	}
 }

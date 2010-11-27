@@ -1,6 +1,7 @@
 package honeycrm.server.services;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.QuicksearchHelper;
 import honeycrm.server.domain.Product;
 
 import java.io.IOException;
@@ -30,11 +31,15 @@ public class Finder extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		final String query = req.getParameter("query");
 		final ServletOutputStream out = resp.getOutputStream();
-		
-		for (final Dto d: readService.getAllByNamePrefix(Product.class.getSimpleName(), query, 0, 20).getResults()) {
-			out.println(String.valueOf(d.get("name")) + "\t" + d.getId());
+
+		for (final Dto d : readService.getAllByNamePrefix(Product.class.getSimpleName(), query, 0, 20).getResults()) {
+			for (final String field : new String[] { "name", "id", "productCode", "price" }) {
+				out.print(String.valueOf(d.get(field)) + QuicksearchHelper.FIELD_DELIMITER);
+			}
+
+			out.print(QuicksearchHelper.RECORD_DELIMITER);
 		}
-		
+
 		out.close();
 	}
 }

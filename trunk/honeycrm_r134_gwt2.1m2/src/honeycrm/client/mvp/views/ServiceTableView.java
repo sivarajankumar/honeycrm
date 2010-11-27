@@ -6,12 +6,15 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.misc.Callback;
+import honeycrm.client.misc.NumberParser;
+import honeycrm.client.misc.QuicksearchValue;
 import honeycrm.client.misc.View;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
 
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
@@ -20,7 +23,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
-import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -72,14 +74,26 @@ public class ServiceTableView extends Composite implements Display {
 	@Override
 	public void initColumns(final ModuleDto moduleDto, final View viewMode) {
 		for (final String fieldName : moduleDto.getListFieldIds()) {
-			final AbstractField<Object> field = moduleDto.getFieldById(fieldName);
-			Column<Dto, Object> column = field.getColumn(fieldName, viewMode, new Callback<Dto>() {
+			final AbstractField<Object,Object> field = moduleDto.getFieldById(fieldName);
+			Column<Dto, Object> column = field.getColumn(fieldName, viewMode, new Callback<Object>() {
 				@Override
-				public void callback(Dto arg) {
-					arg.set("productCode", "sweeeet");
-					arg.set("price", 23.0);
-					
-					provider.refresh();
+				public void callback(final Object arg) {
+					// TODO do as much as possible of this code in the presenter to make sure this can be tested.
+					if (arg instanceof QuicksearchValue) {
+						QuicksearchValue q = (QuicksearchValue) arg;
+
+						JsArrayString o = q.getReturnValue().cast();
+
+						final String id = o.get(1);
+						final String productCode = o.get(2);
+						final String price = o.get(3);
+						
+						q.getDto().set("productID", NumberParser.convertToLong(id));
+						q.getDto().set("productCode", productCode);
+						q.getDto().set("price", price);
+						
+						provider.refresh();
+					}
 				}
 			});
 

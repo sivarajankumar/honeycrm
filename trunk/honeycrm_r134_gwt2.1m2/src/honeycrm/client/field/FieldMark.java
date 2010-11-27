@@ -12,7 +12,7 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldMark extends AbstractField<Boolean> {
+public class FieldMark extends AbstractField<Boolean, Void> {
 	private static final long serialVersionUID = 2910540849623881202L;
 	private String dtoIndex;
 	private long dtoId;
@@ -74,7 +74,7 @@ public class FieldMark extends AbstractField<Boolean> {
 	}
 
 	@Override
-	public Column<Dto, Boolean> getColumn(String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
+	public Column<Dto, Boolean> getColumn(String fieldName, final View viewMode, final Callback<Void> fieldUpdatedCallback) {
 		return new Column<Dto, Boolean>(new CheckboxCell()) {
 			@Override
 			public Boolean getValue(Dto object) {

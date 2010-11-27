@@ -65,7 +65,7 @@ public class FieldEnum extends FieldString {
 	}
 
 	@Override
-	public Column<Dto, String> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
+	public Column<Dto, String> getColumn(final String fieldName, final View viewMode, final Callback<Void> fieldUpdatedCallback) {
 		if (View.isReadOnly(viewMode)) {
 			return super.getColumn(fieldName, viewMode, fieldUpdatedCallback);
 		} else {
