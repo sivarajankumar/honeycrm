@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 // TODO this should be done by field currency somehow.. the fields should provide a "String format(Serializable value);" method.
-abstract public class AbstractField<T> implements IsSerializable, Serializable {
+abstract public class AbstractField<T, C> implements IsSerializable, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -250,7 +250,7 @@ abstract public class AbstractField<T> implements IsSerializable, Serializable {
 		notImplemented();
 	}
 
-	abstract public Column<Dto, T> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback);
+	abstract public Column<Dto, T> getColumn(final String fieldName, final View viewMode, final Callback<C> fieldUpdatedCallback);
 
 	private void notImplemented() {
 		Window.alert("not implemented");
