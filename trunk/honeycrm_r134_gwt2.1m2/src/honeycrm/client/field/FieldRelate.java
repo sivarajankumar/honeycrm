@@ -3,6 +3,7 @@ package honeycrm.client.field;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.misc.QuicksearchHelper;
 import honeycrm.client.misc.View;
@@ -146,7 +147,7 @@ public class FieldRelate extends AbstractField<SafeHtml> {
 	}
 
 	@Override
-	public Column<Dto, SafeHtml> getColumn(final String fieldName, final View viewMode) {
+	public Column<Dto, SafeHtml> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
 		return new Column<Dto, SafeHtml>(new SafeHtmlCell()) {
 			@Override
 			public SafeHtml getValue(final Dto object) {
@@ -164,13 +165,10 @@ public class FieldRelate extends AbstractField<SafeHtml> {
 						}
 					};
 				} else {
-					return QuicksearchHelper.getQuickSearchHTML(object);
+					return QuicksearchHelper.getQuickSearchMarkup(object, fieldName, fieldUpdatedCallback);
 				}
 			}
 		};
-
-		// TODO support searching..
-
 	}
 	/*
 	 * TODO how to implement this when we cannot access the whole dto object from here?

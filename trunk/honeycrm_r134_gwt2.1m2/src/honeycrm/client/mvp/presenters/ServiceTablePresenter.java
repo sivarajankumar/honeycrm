@@ -12,8 +12,7 @@ import com.google.gwt.user.client.TakesValue;
 import com.google.gwt.view.client.ListDataProvider;
 
 public class ServiceTablePresenter implements TakesValue<List<Dto>> {
-	public interface Display {
-		void setPresenter(ServiceTablePresenter presenter);
+	public interface Display extends TakesValue<ServiceTablePresenter> {
 		ListDataProvider<Dto> getProvider();
 		void initColumns(ModuleDto moduleDto, View viewMode);
 		void updateOverallSum(double sum);
@@ -33,7 +32,7 @@ public class ServiceTablePresenter implements TakesValue<List<Dto>> {
 	}
 
 	private void bind() {
-		view.setPresenter(this);
+		view.setValue(this);
 		view.initColumns(ModuleDto.getRelatedDto(module, fieldName), viewMode);
 	}
 
