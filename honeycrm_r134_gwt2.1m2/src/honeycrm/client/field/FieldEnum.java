@@ -23,7 +23,7 @@ public class FieldEnum extends FieldString {
 	}
 
 	public FieldEnum(final String id, final String label, final String... options) {
-		super(id, label);
+		super(id, label, options[0]); // select first option as default value
 		this.options = options;
 	}
 

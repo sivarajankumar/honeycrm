@@ -15,6 +15,7 @@ import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
@@ -23,6 +24,8 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -38,6 +41,8 @@ public class ServiceTableView extends Composite implements Display {
 	private ServiceTablePresenter presenter;
 
 	@UiField
+	Button add;
+	@UiField
 	CellTable<Dto> table;
 	@UiField
 	SimplePager pager;
@@ -51,9 +56,15 @@ public class ServiceTableView extends Composite implements Display {
 	public ServiceTableView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
+		add.setText(constants.add());
 		sumLabel.setText(constants.sum());
 		provider.addDataDisplay(table);
 		pager.setDisplay(table);
+	}
+
+	@Override
+	public HasClickHandlers getAdd() {
+		return add;
 	}
 
 	@Override
@@ -74,7 +85,7 @@ public class ServiceTableView extends Composite implements Display {
 	@Override
 	public void initColumns(final ModuleDto moduleDto, final View viewMode) {
 		for (final String fieldName : moduleDto.getListFieldIds()) {
-			final AbstractField<Object,Object> field = moduleDto.getFieldById(fieldName);
+			final AbstractField<Object, Object> field = moduleDto.getFieldById(fieldName);
 			Column<Dto, Object> column = field.getColumn(fieldName, viewMode, new Callback<Object>() {
 				@Override
 				public void callback(final Object arg) {
@@ -84,14 +95,22 @@ public class ServiceTableView extends Composite implements Display {
 
 						JsArrayString o = q.getReturnValue().cast();
 
-						final String id = o.get(1);
+						final Long id = NumberParser.convertToLong(o.get(1));
+						final String name = o.get(0);
 						final String productCode = o.get(2);
 						final String price = o.get(3);
-						
-						q.getDto().set("productID", NumberParser.convertToLong(id));
+
+						q.getDto().set("productID", id);
 						q.getDto().set("productCode", productCode);
 						q.getDto().set("price", price);
-						
+
+						if (null == q.getDto().get("productID_resolved")) {
+							q.getDto().set("productID_resolved", new Dto("Product"));
+						}
+						final Dto resolved = (Dto) q.getDto().get("productID_resolved");
+						resolved.setId(id);
+						resolved.set("name", name);
+
 						provider.refresh();
 					}
 				}
@@ -122,5 +141,10 @@ public class ServiceTableView extends Composite implements Display {
 	@Override
 	public ServiceTablePresenter getValue() {
 		return presenter;
+	}
+
+	@Override
+	public void hideAddButton() {
+		add.setVisible(false);
 	}
 }
