@@ -5,6 +5,7 @@ import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.field.AbstractField;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.View;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
@@ -25,7 +26,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 
-public class ServiceTableView extends Composite implements Display, TakesValue<ServiceTablePresenter> {
+public class ServiceTableView extends Composite implements Display {
 	private static List1UiBinder uiBinder = GWT.create(List1UiBinder.class);
 	private static final LocalizedMessages constants = GWT.create(LocalizedMessages.class);
 
@@ -72,7 +73,15 @@ public class ServiceTableView extends Composite implements Display, TakesValue<S
 	public void initColumns(final ModuleDto moduleDto, final View viewMode) {
 		for (final String fieldName : moduleDto.getListFieldIds()) {
 			final AbstractField<Object> field = moduleDto.getFieldById(fieldName);
-			Column<Dto, Object> column = field.getColumn(fieldName, viewMode);
+			Column<Dto, Object> column = field.getColumn(fieldName, viewMode, new Callback<Dto>() {
+				@Override
+				public void callback(Dto arg) {
+					arg.set("productCode", "sweeeet");
+					arg.set("price", 23.0);
+					
+					provider.refresh();
+				}
+			});
 
 			column.setFieldUpdater(new FieldUpdater<Dto, Object>() {
 				@Override
@@ -93,17 +102,11 @@ public class ServiceTableView extends Composite implements Display, TakesValue<S
 
 	@Override
 	public void setValue(ServiceTablePresenter value) {
-		// TODO Auto-generated method stub
-
+		this.presenter = value;
 	}
 
 	@Override
 	public ServiceTablePresenter getValue() {
 		return presenter;
-	}
-
-	@Override
-	public void setPresenter(ServiceTablePresenter presenter) {
-		this.presenter = presenter;
 	}
 }

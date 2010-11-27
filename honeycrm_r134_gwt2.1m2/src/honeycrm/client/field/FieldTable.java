@@ -1,6 +1,7 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.View;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter;
 import honeycrm.client.mvp.views.ServiceTableView;
@@ -64,7 +65,7 @@ public class FieldTable extends AbstractField<String> {
 	}
 
 	@Override
-	public Column<Dto, String> getColumn(String fieldName, final View viewMode) {
+	public Column<Dto, String> getColumn(String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
 		return null;
 	}
 }

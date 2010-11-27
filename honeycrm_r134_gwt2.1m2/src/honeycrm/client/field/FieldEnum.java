@@ -1,6 +1,7 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.CollectionHelper;
 import honeycrm.client.misc.View;
 
@@ -64,9 +65,9 @@ public class FieldEnum extends FieldString {
 	}
 
 	@Override
-	public Column<Dto, String> getColumn(final String fieldName, final View viewMode) {
+	public Column<Dto, String> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
 		if (View.isReadOnly(viewMode)) {
-			return super.getColumn(fieldName, viewMode);
+			return super.getColumn(fieldName, viewMode, fieldUpdatedCallback);
 		} else {
 			final ArrayList<String> optionList = new ArrayList<String>();
 			for (final String o : options) {

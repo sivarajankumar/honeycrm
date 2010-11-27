@@ -1,6 +1,7 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.View;
 
 import java.io.Serializable;
@@ -56,7 +57,7 @@ public class FieldDate extends AbstractField<Date> {
 	}
 
 	@Override
-	public Column<Dto, Date> getColumn(String fieldName, final View viewMode) {
+	public Column<Dto, Date> getColumn(String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
 		return new Column<Dto, Date>(new DateCell()) {
 			@Override
 			public Date getValue(Dto object) {

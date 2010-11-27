@@ -1,6 +1,7 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.View;
 
 import java.io.Serializable;
@@ -249,7 +250,7 @@ abstract public class AbstractField<T> implements IsSerializable, Serializable {
 		notImplemented();
 	}
 
-	abstract public Column<Dto, T> getColumn(final String fieldName, final View viewMode);
+	abstract public Column<Dto, T> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback);
 
 	private void notImplemented() {
 		Window.alert("not implemented");

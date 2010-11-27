@@ -1,6 +1,7 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.View;
 
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class FieldBoolean extends AbstractField<Boolean> {
 	}
 
 	@Override
-	public Column<Dto, Boolean> getColumn(final String fieldName, final View viewMode) {
+	public Column<Dto, Boolean> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
 		final CheckboxCell c = new CheckboxCell();
 		// TODO make check box read only if necessary
 		return new Column<Dto, Boolean>(c) {

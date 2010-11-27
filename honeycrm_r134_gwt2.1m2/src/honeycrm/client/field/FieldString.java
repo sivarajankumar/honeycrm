@@ -1,6 +1,7 @@
 package honeycrm.client.field;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.misc.View;
 
 import com.google.gwt.cell.client.EditTextCell;
@@ -22,7 +23,7 @@ public class FieldString extends AbstractField<String> {
 	}
 
 	@Override
-	public Column<Dto, String> getColumn(final String fieldName, final View viewMode) {
+	public Column<Dto, String> getColumn(final String fieldName, final View viewMode, final Callback<Dto> fieldUpdatedCallback) {
 		if (View.isReadOnly(viewMode)) {
 			return new TextColumn<Dto>() {
 				@Override
