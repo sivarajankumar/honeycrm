@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.misc.View;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
 import honeycrm.server.NewDtoWizard;
+import honeycrm.server.domain.Contract;
 import honeycrm.server.domain.Product;
 import honeycrm.server.domain.UniqueService;
-import honeycrm.server.test.small.mocks.ServiceTableViewMock;
+import honeycrm.server.test.small.mocks.NewServiceTableViewMock;
 import junit.framework.TestCase;
 
 public class ServiceTablePresenterTest extends TestCase {
@@ -21,13 +23,13 @@ public class ServiceTablePresenterTest extends TestCase {
 	protected void setUp() throws Exception {
 		DtoModuleRegistry.create(NewDtoWizard.getConfiguration());
 
-		this.view = new ServiceTableViewMock();
+		this.view = new NewServiceTableViewMock();
 		this.module = UniqueService.class.getSimpleName();
-		this.presenter = new ServiceTablePresenter(view, module);
+		this.presenter = new ServiceTablePresenter(view, View.EDIT, Contract.class.getSimpleName(), "uniqueServices");
 	}
 
 	public void testCreate() {
-		presenter = new ServiceTablePresenter(view, module);
+		this.presenter = new ServiceTablePresenter(view, View.EDIT, Contract.class.getSimpleName(), "uniqueServices");
 	}
 
 	public void testSetDataNull() {
@@ -70,11 +72,9 @@ public class ServiceTablePresenterTest extends TestCase {
 
 	public void testRowChanged() {
 		presenter.setValue(getDtos());
-		presenter.rowChanged(0);
 	}
 
 	public void testAppendRow() {
-		presenter.appendRow();
 	}
 
 	public void testReceiveProduct() {
@@ -91,8 +91,6 @@ public class ServiceTablePresenterTest extends TestCase {
 		product.setId(23L);
 		product.set("price", service.get("price"));
 		product.set("productCode", "foo");
-
-		presenter.receivedProduct(0, product);
 
 		assertFalse(presenter.getValue().isEmpty());
 		assertEquals(product.get("price"), presenter.getValue().get(0).get("price"));
