@@ -4,16 +4,18 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.CollectionHelper;
+import honeycrm.client.misc.QuicksearchHelper;
 import honeycrm.client.misc.View;
 import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.RelateWidget;
 
 import java.io.Serializable;
-import com.google.gwt.cell.client.EditTextCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -23,7 +25,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FieldRelate extends AbstractField<String> {
+public class FieldRelate extends AbstractField<SafeHtml> {
 	private static final long serialVersionUID = -1518485985368479493L;
 	private String relatedModule;
 
@@ -104,7 +106,7 @@ public class FieldRelate extends AbstractField<String> {
 
 		return panel;
 	}
-	
+
 	private PopupPanel getDetailsPopup(final Dto related, final String fieldId, final ModuleDto moduleDtoRelated) {
 		final PopupPanel popup = new PopupPanel(true);
 
@@ -144,28 +146,35 @@ public class FieldRelate extends AbstractField<String> {
 	}
 
 	@Override
-	public Column<Dto, String> getColumn(final String fieldName, final View viewMode) {
-		// TODO support searching..
-		return new Column<Dto, String>(new EditTextCell()) {
+	public Column<Dto, SafeHtml> getColumn(final String fieldName, final View viewMode) {
+		return new Column<Dto, SafeHtml>(new SafeHtmlCell()) {
 			@Override
-			public String getValue(Dto object) {
-				return String.valueOf(((Dto) object.get(fieldName + "_resolved")).get("name"));
+			public SafeHtml getValue(final Dto object) {
+				if (View.isReadOnly(viewMode)) {
+					return new SafeHtml() {
+						private static final long serialVersionUID = -8017901422992491763L;
+
+						@Override
+						public String asString() {
+							if (null == object.get(fieldName + "_resolved")) {
+								return "[unresolved]";
+							} else {
+								return String.valueOf(((Dto) object.get(fieldName + "_resolved")).get("name"));
+							}
+						}
+					};
+				} else {
+					return QuicksearchHelper.getQuickSearchHTML();
+				}
 			}
 		};
-	}
 
-/*	TODO how to implement this when we cannot access the whole dto object from here?
- 	@Override
-	public String internalFormattedValue(Serializable value) {
-		if (null == value || 0 == (Long) value) {
-			return "";
-		} else {
-			final Serializable resolved = object.get(id + "_resolved");
-			if (null == resolved || null == ((Dto) resolved).get("name")) {
-				return "fail!";
-			} else {
-				return (String) ((Dto) resolved).get("name");
-			}
-		}
-	}*/
+		// TODO support searching..
+
+	}
+	/*
+	 * TODO how to implement this when we cannot access the whole dto object from here?
+	 * 
+	 * @Override public String internalFormattedValue(Serializable value) { if (null == value || 0 == (Long) value) { return ""; } else { final Serializable resolved = object.get(id + "_resolved"); if (null == resolved || null == ((Dto) resolved).get("name")) { return "fail!"; } else { return (String) ((Dto) resolved).get("name"); } } }
+	 */
 }
