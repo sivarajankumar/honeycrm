@@ -164,7 +164,7 @@ public class FieldRelate extends AbstractField<SafeHtml> {
 						}
 					};
 				} else {
-					return QuicksearchHelper.getQuickSearchHTML();
+					return QuicksearchHelper.getQuickSearchHTML(object);
 				}
 			}
 		};

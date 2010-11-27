@@ -43,7 +43,7 @@ public class NumberParser {
 			return (Long) value;
 
 		try {
-			return Long.parseLong(value.toString());
+			return Long.parseLong(value.toString().replace("\r", ""));
 		} catch (NumberFormatException e) {
 			return 0;
 		}

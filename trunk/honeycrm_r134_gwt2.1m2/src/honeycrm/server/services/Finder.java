@@ -32,7 +32,7 @@ public class Finder extends HttpServlet {
 		final ServletOutputStream out = resp.getOutputStream();
 		
 		for (final Dto d: readService.getAllByNamePrefix(Product.class.getSimpleName(), query, 0, 20).getResults()) {
-			out.println(String.valueOf(d.get("name")));
+			out.println(String.valueOf(d.get("name")) + "\t" + d.getId());
 		}
 		
 		out.close();
