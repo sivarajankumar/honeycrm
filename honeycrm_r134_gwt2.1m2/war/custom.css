@@ -351,12 +351,11 @@ tr {
 }
 
 /* Overwrite some of GWTs settings */
-
+/* Commented this out since it does not match the rest of the current design anymore. 
 .honey .gwt-Button {
   background: transparent url('/images/blue-button.png') no-repeat left center ! important;
   border: 1px solid #fff ! important;
   color: #fff ! important;
-  /*color: #4B4A4A;*/
   cursor: pointer ! important;
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif ! important;
   font-size: 0.916em ! important;
@@ -368,7 +367,7 @@ tr {
   -moz-border-radius: 4px ! important;
   -moz-outline-radius: 4px ! important;
   -webkit-border-radius: 4px ! important;
-}
+}*/
 
 .honey .gwt-TabLayoutPanel .gwt-TabLayoutPanelContent {
 	border: 0;	
