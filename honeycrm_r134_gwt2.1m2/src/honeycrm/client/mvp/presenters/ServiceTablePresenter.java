@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.View;
