@@ -1,5 +1,5 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:mvp="urn:import:honeycrm.client.mvp.views" xmlns:view="urn:import:honeycrm.client.view">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:mvp="urn:import:honeycrm.client.mvp.views">
 	<g:FlowPanel addStyleNames="honey_header with_margin" ui:field="panel">
 		<g:FlowPanel addStyleNames="honey_header_left">
 			<g:Label addStyleNames="header_logo">Honey CRM</g:Label>
@@ -8,7 +8,7 @@
 		</g:FlowPanel>
 		<g:FlowPanel addStyleNames="honey_header_right">
 			<g:FlowPanel addStyleNames="honey_search">
-				<view:FulltextSearchWidget ui:field="fulltextSearchView" addStyleNames="header_search_input" />
+				<mvp:FulltextSearchView ui:field="fulltextSearchView" addStyleNames="header_search_input" />
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="header_links">
 				<g:Hyperlink addStyleNames="header_link" text="Help" targetHistoryToken="help" ui:field="help" />

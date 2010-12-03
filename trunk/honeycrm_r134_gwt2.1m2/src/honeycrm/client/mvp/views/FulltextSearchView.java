@@ -1,9 +1,12 @@
-package honeycrm.client.view;
+package honeycrm.client.mvp.views;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.HistoryTokenFactory;
 import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.view.FulltextSuggestOracle;
+import honeycrm.client.view.ModuleAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,18 +26,19 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
-public class FulltextSearchWidget extends SuggestBox {
-	private static final String INITIAL_SEARCH_TEXT = "Global Search ...";
+public class FulltextSearchView extends SuggestBox {
 	public static final int MIN_QUERY_LENGTH = 3;
 	protected String lastQueryString;
 	protected final Map<String, Dto> nameToDto = new HashMap<String, Dto>();
 	private final ReadServiceAsync readService;
+	private final LocalizedMessages constants;
 
-	public FulltextSearchWidget(final ReadServiceAsync readService) {
+	public FulltextSearchView(final ReadServiceAsync readService, final LocalizedMessages constants) {
 		super(new FulltextSuggestOracle());
 		
 		this.readService = readService;
-
+		this.constants = constants;
+		
 		setupFocusAndBlur();
 
 		addStyleName("wide_search_field");
@@ -76,11 +80,11 @@ public class FulltextSearchWidget extends SuggestBox {
 	 * Display "Search..." if the user has not started typing yet.
 	 */
 	private void setupFocusAndBlur() {
-		setText(INITIAL_SEARCH_TEXT);
+		setText(constants.globalSearch());
 		getTextBox().addFocusHandler(new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent event) {
-				if (getText().equals(INITIAL_SEARCH_TEXT)) {
+				if (getText().equals(constants.globalSearch())) {
 					setText("");
 				}
 			}
@@ -89,7 +93,7 @@ public class FulltextSearchWidget extends SuggestBox {
 			@Override
 			public void onBlur(BlurEvent event) {
 				if (getText().isEmpty()) {
-					setText(INITIAL_SEARCH_TEXT);
+					setText(constants.globalSearch());
 				}
 			}
 		});
@@ -109,7 +113,6 @@ public class FulltextSearchWidget extends SuggestBox {
 
 	protected void startFulltextSearch(final String queryString) {
 		readService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
-		// commonService.fulltextSearch(queryString, 0, 10, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				if (null != result && result.getItemCount() > 0) {
@@ -150,7 +153,6 @@ public class FulltextSearchWidget extends SuggestBox {
 	 */
 	protected FulltextSuggestOracle emptySuggestOracle() {
 		final FulltextSuggestOracle o = (FulltextSuggestOracle) getSuggestOracle();
-		// final MultiWordSuggestOracle o = (MultiWordSuggestOracle) getSuggestOracle();
 		o.clear();
 		return o;
 	}
