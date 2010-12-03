@@ -2,6 +2,7 @@ package honeycrm.client.mvp.views;
 
 import com.google.gwt.view.client.HasData;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dashboard.DashboardListViewDataProvider;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
@@ -12,8 +13,8 @@ import honeycrm.client.view.list.ListViewDataProvider;
 public class DashboardView extends ListView implements Display {
 	final DashboardListViewDataProvider provider;
 
-	public DashboardView(String module, final ReadServiceAsync readService) {
-		super(module, readService);
+	public DashboardView(String module, final ReadServiceAsync readService, final LocalizedMessages constants) {
+		super(module, readService, constants);
 
 		setPageSize(20);
 		setShowTitle(true);

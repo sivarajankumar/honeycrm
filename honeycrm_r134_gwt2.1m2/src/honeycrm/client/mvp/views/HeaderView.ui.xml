@@ -11,11 +11,11 @@
 				<view:FulltextSearchWidget ui:field="fulltextSearchView" addStyleNames="header_search_input" />
 			</g:FlowPanel>
 			<g:FlowPanel addStyleNames="header_links">
-				<g:Hyperlink addStyleNames="header_link" text="Help" targetHistoryToken="help" />
-				<g:Hyperlink addStyleNames="header_link" text="Reports" targetHistoryToken="report" />
-				<g:Hyperlink addStyleNames="header_link" text="Misc" targetHistoryToken="misc" />
-				<g:Hyperlink addStyleNames="header_link" text="Profile" targetHistoryToken="profile" />
-				<g:Hyperlink addStyleNames="header_link" text="Logout" targetHistoryToken="logout" />
+				<g:Hyperlink addStyleNames="header_link" text="Help" targetHistoryToken="help" ui:field="help" />
+				<g:Hyperlink addStyleNames="header_link" text="Reports" targetHistoryToken="report" ui:field="report" />
+				<g:Hyperlink addStyleNames="header_link" text="Misc" targetHistoryToken="misc" ui:field="misc" />
+				<g:Hyperlink addStyleNames="header_link" text="Profile" targetHistoryToken="profile" ui:field="profile" />
+				<g:Hyperlink addStyleNames="header_link" text="Logout" targetHistoryToken="logout" ui:field="logout" />
 			</g:FlowPanel>
 			<g:HTML>
 				<div class="clear" />

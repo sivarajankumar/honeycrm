@@ -53,7 +53,7 @@ public class ModuleView extends Composite implements Display {
 
 	@UiFactory
 	ListView makeListView() {
-		return new ListView(module, readService);
+		return new ListView(module, readService, constants);
 	}
 
 	@Override

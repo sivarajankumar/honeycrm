@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ApplicationView extends Composite implements Display {
+	public static final LocalizedMessages constants = GWT.create(LocalizedMessages.class);
 	private static ApplicationViewUiBinder uiBinder = GWT.create(ApplicationViewUiBinder.class);
 
 	interface ApplicationViewUiBinder extends UiBinder<Widget, ApplicationView> {
@@ -26,12 +27,10 @@ public class ApplicationView extends Composite implements Display {
 	
 	private final ReadServiceAsync readService;
 	private final ReportServiceAsync reportService;
-	private final LocalizedMessages constants;
 	
-	public ApplicationView(final ReadServiceAsync readService, final ReportServiceAsync reportService, final LocalizedMessages constants) {
+	public ApplicationView(final ReadServiceAsync readService, final ReportServiceAsync reportService) {
 		this.readService = readService;
 		this.reportService = reportService;
-		this.constants = constants;
 		
 		initWidget(uiBinder.createAndBindUi(this));
 	}

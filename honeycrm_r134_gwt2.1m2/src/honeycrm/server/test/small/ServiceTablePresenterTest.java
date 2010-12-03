@@ -81,30 +81,34 @@ public class ServiceTablePresenterTest extends TestCase {
 
 		for (final String field : new String[] { "unit", "kindOfDiscount" }) {
 			final Serializable value = newDto.get(field);
-			
+
 			assertNotNull(value);
 			assertFalse(value.toString().isEmpty());
 		}
 	}
 
-	public void testReceiveProduct() {
+	public void testOnItemUpdate() {
+		final Dto s = new Dto(UniqueService.class.getSimpleName());
+		presenter.onItemUpdated(0, s);
+	}
+
+	public void testAdd() {
+		presenter.add();
+	}
+
+	public void testSetGetValue() {
 		final Dto service = new Dto(UniqueService.class.getSimpleName());
 		service.set("price", 23);
 		service.set("quantity", 1);
-
+		service.set("productCode", "foo");
+		
 		final ArrayList<Dto> list = new ArrayList<Dto>();
 		list.add(service);
 
 		presenter.setValue(list);
 
-		final Dto product = new Dto(Product.class.getSimpleName());
-		product.setId(23L);
-		product.set("price", service.get("price"));
-		product.set("productCode", "foo");
-
 		assertFalse(presenter.getValue().isEmpty());
-		assertEquals(product.get("price"), presenter.getValue().get(0).get("price"));
-		assertEquals(product.get("productCode"), presenter.getValue().get(0).get("productCode"));
-		assertEquals(product.getId(), presenter.getValue().get(0).get("productID"));
+		assertEquals(service.get("price"), presenter.getValue().get(0).get("price"));
+		assertEquals(service.get("productCode"), presenter.getValue().get(0).get("productCode"));
 	}
 }

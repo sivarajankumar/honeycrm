@@ -1,5 +1,7 @@
 package honeycrm.server.test.small.mocks;
 
+import java.util.ArrayList;
+
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.view.client.ListDataProvider;
 
@@ -12,6 +14,7 @@ import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
 public class NewServiceTableViewMock implements Display {
 	private HasClickHandlers add = new HasClickHandlersMock();
 	private ListDataProvider<Dto> provider = new ListDataProvider<Dto>();
+	private ArrayList<Dto> list = new ArrayList<Dto>();
 	
 	@Override
 	public ListDataProvider<Dto> getProvider() {
@@ -20,25 +23,18 @@ public class NewServiceTableViewMock implements Display {
 
 	@Override
 	public void initColumns(ModuleDto moduleDto, View viewMode) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void updateOverallSum(double sum) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void setValue(ServiceTablePresenter value) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public ServiceTablePresenter getValue() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -49,7 +45,10 @@ public class NewServiceTableViewMock implements Display {
 
 	@Override
 	public void hideAddButton() {
-		// TODO Auto-generated method stub
-		
+	}
+
+	@Override
+	public void add(Dto newService) {
+		list.add(newService);
 	}
 }

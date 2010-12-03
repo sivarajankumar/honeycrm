@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -21,13 +22,15 @@ public class HeaderView extends Composite implements Display {
 	interface HeaderViewUiBinder extends UiBinder<Widget, HeaderView> {
 	}
 
-	@UiField
-	Label welcome;
-	@UiField
-	LoadView loadView;
-	@UiField
-	FlowPanel panel;
-
+	@UiField Label welcome;
+	@UiField LoadView loadView;
+	@UiField FlowPanel panel;
+	@UiField Hyperlink help;
+	@UiField Hyperlink report;
+	@UiField Hyperlink misc;
+	@UiField Hyperlink profile;
+	@UiField Hyperlink logout;
+	
 	private final ReadServiceAsync readService;
 	private final LocalizedMessages constants;
 
@@ -36,6 +39,12 @@ public class HeaderView extends Composite implements Display {
 		this.constants = constants;
 
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		help.setText(constants.help());
+		report.setText(constants.reports());
+		misc.setText(constants.misc());
+		profile.setText(constants.profile());
+		logout.setText(constants.logout());
 
 		welcome.setText(constants.welcome(User.getLogin()));
 	}
