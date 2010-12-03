@@ -49,7 +49,7 @@ public class DashboardsPresenter implements Presenter {
 		}
 		view.setDashboardModules(modules);
 		for (final DashboardView v: view.getDashboardViews()) {
-			new DashboardPresenter(eventBus, v);
+			new DashboardPresenter(eventBus, v, v.getModule());
 		}
 		
 		bind();

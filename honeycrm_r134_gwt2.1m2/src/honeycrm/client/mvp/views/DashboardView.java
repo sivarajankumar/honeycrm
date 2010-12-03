@@ -36,4 +36,9 @@ public class DashboardView extends ListView implements Display {
 			}
 		}
 	}
+
+	@Override
+	public String getModule() {
+		return module;
+	}
 }

@@ -35,4 +35,6 @@ public interface LocalizedMessages extends Messages {
 	String misc();
 	String profile();
 	String logout();
+	
+	String globalSearch();
 }

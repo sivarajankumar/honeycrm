@@ -4,7 +4,6 @@ import honeycrm.client.LocalizedMessages;
 import honeycrm.client.misc.User;
 import honeycrm.client.mvp.presenters.HeaderPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
-import honeycrm.client.view.FulltextSearchWidget;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -45,13 +44,12 @@ public class HeaderView extends Composite implements Display {
 		misc.setText(constants.misc());
 		profile.setText(constants.profile());
 		logout.setText(constants.logout());
-
 		welcome.setText(constants.welcome(User.getLogin()));
 	}
 
 	@UiFactory
-	FulltextSearchWidget makeFulltextSearchWidget() {
-		return new FulltextSearchWidget(readService);
+	FulltextSearchView makeFulltextSearchWidget() {
+		return new FulltextSearchView(readService, constants);
 	}
 	
 	@UiFactory
