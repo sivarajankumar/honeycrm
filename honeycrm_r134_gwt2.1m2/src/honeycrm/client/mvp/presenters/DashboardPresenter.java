@@ -1,12 +1,7 @@
 package honeycrm.client.mvp.presenters;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
-import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.events.CreateEvent;
-import honeycrm.client.mvp.presenters.DashboardPresenter.Display;
 import honeycrm.client.mvp.views.HasSelectionHandler;
 
 import com.google.gwt.event.dom.client.ClickEvent;
