@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.DashboardsPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
@@ -31,9 +32,11 @@ public class DashboardsView extends Composite implements Display {
 	@UiField
 	FlexTable table;
 	private final ReadServiceAsync readService;
+	private final LocalizedMessages constants;
 
-	public DashboardsView(final ReadServiceAsync readService) {
+	public DashboardsView(final ReadServiceAsync readService, final LocalizedMessages constants) {
 		this.readService = readService;
+		this.constants = constants;
 		
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -58,7 +61,7 @@ public class DashboardsView extends Composite implements Display {
 
 	private void setupViews(ArrayList<String> modules) {
 		for (int i = 0; i < modules.size(); i++) {
-			views.put(modules.get(i), new DashboardView(modules.get(i), readService));
+			views.put(modules.get(i), new DashboardView(modules.get(i), readService, constants));
 		}
 	}
 

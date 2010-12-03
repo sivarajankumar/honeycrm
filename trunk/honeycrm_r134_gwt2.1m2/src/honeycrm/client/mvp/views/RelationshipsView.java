@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.RelationshipsPresenter;
 import honeycrm.client.mvp.presenters.RelationshipsPresenter.Display;
@@ -29,10 +30,12 @@ public class RelationshipsView extends Composite implements Display {
 	@UiField
 	VerticalPanel panel;
 	private final ReadServiceAsync readService;
+	private LocalizedMessages constants;
 
-	public RelationshipsView(final String module, final ArrayList<String> relationships, final ReadServiceAsync readService) {
+	public RelationshipsView(final String module, final ArrayList<String> relationships, final ReadServiceAsync readService, final LocalizedMessages constants) {
 		this.readService = readService;
 		this.module = module;
+		this.constants = constants;
 		this.relationships = relationships;
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -75,7 +78,7 @@ public class RelationshipsView extends Composite implements Display {
 
 	private void setupView(final String relation) {
 		if (views.isEmpty() || !views.containsKey(relation)) {
-			views.put(relation, new RelationshipView(relation, module, readService));
+			views.put(relation, new RelationshipView(relation, module, readService, constants));
 			panel.add(views.get(relation));
 		}
 	}

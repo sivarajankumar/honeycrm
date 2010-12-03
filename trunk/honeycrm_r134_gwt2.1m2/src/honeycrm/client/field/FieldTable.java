@@ -7,6 +7,7 @@ import honeycrm.client.mvp.presenters.ServiceTablePresenter;
 import honeycrm.client.mvp.views.ServiceTableView;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.TakesValue;
@@ -48,12 +49,17 @@ public class FieldTable extends AbstractField<String, Void> {
 	private Widget getTableWidget(final Dto dto, final String fieldId, final View view) {
 		// TODO use common ITableView interface instead
 		// TODO make this independent of the widget / chose the widget
-		final Serializable value = dto.get(fieldId);
+		Serializable value = dto.get(fieldId);
 
 		final ServiceTableView v = new ServiceTableView();
 		final ServiceTablePresenter p = new ServiceTablePresenter(v, view, dto.getModule(), fieldId);
-		p.setValue((ArrayList<Dto>) value);
 
+		if (value instanceof List<?>) {
+			p.setValue((ArrayList<Dto>) value);
+		} else {
+			p.setValue(new ArrayList<Dto>());
+		}
+		
 		return v;
 	}
 

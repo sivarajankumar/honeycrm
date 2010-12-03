@@ -62,9 +62,11 @@ public class DetailView extends Composite implements Display {
 	ModuleDto moduleDto;
 	Dto dto;
 	private final ReadServiceAsync readService;
+	private final LocalizedMessages constants;
 
 	public DetailView(final String module, final ReadServiceAsync readService, final LocalizedMessages constants) {
 		this.module = module;
+		this.constants = constants;
 		this.readService = readService;
 		this.moduleDto = DtoModuleRegistry.instance().get(module);
 
@@ -282,6 +284,6 @@ public class DetailView extends Composite implements Display {
 	RelationshipsView makeRelationshipsView() {
 		final ArrayList<String> list = DtoModuleRegistry.instance().getRelatedModules(moduleDto.getModule());
 		java.util.Collections.sort(list);
-		return new RelationshipsView(module, list, readService);
+		return new RelationshipsView(module, list, readService, constants);
 	}
 }

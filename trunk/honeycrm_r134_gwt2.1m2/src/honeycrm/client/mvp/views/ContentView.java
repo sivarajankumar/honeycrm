@@ -38,20 +38,18 @@ public class ContentView extends Composite implements Display {
 
 	final TabLayoutPanel panel;
 	private final ReadServiceAsync readService;
-	private final ReportServiceAsync reportService;
 	private final LocalizedMessages constants;
 
 	public ContentView(final ReadServiceAsync readService, final ReportServiceAsync reportService, final LocalizedMessages constants) {
 		initWidget(panel = new TabLayoutPanel(25, Unit.PX));
 		
 		this.readService = readService;
-		this.reportService = reportService;
 		this.constants = constants;
 
 		panel.addStyleName("with_margin");
 		panel.addStyleName("tab_layout");
 
-		panel.add((Composite) (dashboard = new DashboardsView(readService)), "Dashboard"); // TODO insert as first tab
+		panel.add((Composite) (dashboard = new DashboardsView(readService, constants)), "Dashboard"); // TODO insert as first tab
 
 		hiddenDirtyHack();
 		inititializeLazy(1);

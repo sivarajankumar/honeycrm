@@ -29,4 +29,10 @@ public interface LocalizedMessages extends Messages {
 	String initializing();
 	
 	String sum();
+
+	String help();
+	String reports();
+	String misc();
+	String profile();
+	String logout();
 }

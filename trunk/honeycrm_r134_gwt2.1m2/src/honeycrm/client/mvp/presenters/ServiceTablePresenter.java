@@ -23,6 +23,7 @@ public class ServiceTablePresenter implements TakesValue<List<Dto>> {
 		void updateOverallSum(double sum);
 		HasClickHandlers getAdd();
 		void hideAddButton();
+		void add(Dto newService);
 	}
 
 	private final View viewMode;
@@ -46,16 +47,7 @@ public class ServiceTablePresenter implements TakesValue<List<Dto>> {
 			view.getAdd().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
-					final Dto newService = relatedModule.createDto();
-					newService.set("quantity", 1);
-					newService.set("discount", 0);
-					newService.set("productCode", "");
-					newService.set("sum", getSumForSingleDto(newService));
-					newService.set("price", 0);
-
-					view.getProvider().getList().add(newService);
-					
-					view.updateOverallSum(getSum(view.getProvider().getList()));
+					add();
 				}
 			});
 		}
@@ -81,7 +73,7 @@ public class ServiceTablePresenter implements TakesValue<List<Dto>> {
 		return l;
 	}
 
-	public void onItemUpdated(int index, Dto object, Object value) {
+	public void onItemUpdated(int index, Dto object) {
 		object.set("sum", getSumForSingleDto(object));
 		view.getProvider().refresh();
 		view.updateOverallSum(getSum(view.getProvider().getList()));
@@ -102,5 +94,17 @@ public class ServiceTablePresenter implements TakesValue<List<Dto>> {
 		final double qty = NumberParser.convertToDouble(service.get("quantity"));
 
 		return (price - discount) * qty;
+	}
+
+	public void add() {
+		final Dto newService = relatedModule.createDto();
+		newService.set("quantity", 1);
+		newService.set("discount", 0);
+		newService.set("productCode", "");
+		newService.set("sum", getSumForSingleDto(newService));
+		newService.set("price", 0);
+
+		view.add(newService);
+		view.updateOverallSum(getSum(view.getProvider().getList()));
 	}
 }

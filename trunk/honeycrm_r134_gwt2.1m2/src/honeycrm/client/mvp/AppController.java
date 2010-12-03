@@ -159,7 +159,7 @@ public class AppController implements ValueChangeHandler<String> {
 		GWT.runAsync(AppController.class, new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
-				new ApplicationPresenter(User.getUserId(), readService, createService, updateService, pluginService, eventBus, new ApplicationView(readService, reportService, constants)).go(container);
+				new ApplicationPresenter(User.getUserId(), readService, createService, updateService, pluginService, eventBus, new ApplicationView(readService, reportService)).go(container);
 			}
 
 			@Override

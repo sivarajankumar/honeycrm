@@ -3,6 +3,7 @@ package honeycrm.client.mvp.views;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
@@ -21,8 +22,8 @@ public class RelationshipView extends ListView implements Display {
 	private long relatedId;
 	private final RelationshipListViewDataProvider provider;
 
-	public RelationshipView(final String originatingDto, final String relatedDto, final ReadServiceAsync readService) {
-		super(originatingDto, readService);
+	public RelationshipView(final String originatingDto, final String relatedDto, final ReadServiceAsync readService, final LocalizedMessages constants) {
+		super(originatingDto, readService, constants);
 
 		setShowTitle(true);
 		setPageSize(5);

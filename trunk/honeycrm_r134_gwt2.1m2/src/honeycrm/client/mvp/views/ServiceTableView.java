@@ -120,7 +120,7 @@ public class ServiceTableView extends Composite implements Display {
 				@Override
 				public void update(int index, Dto object, Object value) {
 					getProvider().getList().get(index).set(fieldName, (Serializable) value);
-					presenter.onItemUpdated(index, object, value);
+					presenter.onItemUpdated(index, object);
 				}
 			});
 
@@ -146,5 +146,10 @@ public class ServiceTableView extends Composite implements Display {
 	@Override
 	public void hideAddButton() {
 		add.setVisible(false);
+	}
+
+	@Override
+	public void add(Dto newService) {
+		provider.getList().add(newService);
 	}
 }

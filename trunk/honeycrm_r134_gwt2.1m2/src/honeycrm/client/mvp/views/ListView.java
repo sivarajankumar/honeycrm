@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
@@ -68,7 +69,7 @@ public class ListView extends Composite implements Display {
 	private SelectionHandler handler;
 	private final ReadServiceAsync readService;	
 
-	public ListView(final String module, final ReadServiceAsync readService) {
+	public ListView(final String module, final ReadServiceAsync readService, final LocalizedMessages constants) {
 		this.readService = readService;
 		this.module = module;
 		// TODO this is bad - ui should not know about dto module registry..
@@ -76,8 +77,8 @@ public class ListView extends Composite implements Display {
 		
 		initWidget(uiBinder.createAndBindUi(this));
 
-		addButton.setText("Add");
-		deleteButton.setText("Delete");
+		addButton.setText(constants.add());
+		deleteButton.setText(constants.delete());
 		
 		title.setText(moduleDto.getTitle());
 		
