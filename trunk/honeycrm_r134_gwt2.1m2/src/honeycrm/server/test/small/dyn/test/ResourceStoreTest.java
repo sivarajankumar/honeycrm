@@ -1,14 +1,14 @@
 package honeycrm.server.test.small.dyn.test;
 
+import java.io.FileInputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 
-import honeycrm.server.test.small.dyn.ResourceStore;
+import honeycrm.server.test.small.dyn.hotreload.ResourceStore;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
-public class MyResourceStoreTest extends AbstractClassLoadingTest {
+public class ResourceStoreTest extends AbstractClassLoadingTest {
 	private DatastoreService db;
 
 	@Override
@@ -29,7 +29,7 @@ public class MyResourceStoreTest extends AbstractClassLoadingTest {
 	public void testPutJarFile() {
 		try {
 			ResourceStore r = new ResourceStore(db, "Classes");
-			r.put(getBytecodeMapFromJarInputStream(FILE));
+			r.put(store.getBytecodeMapFromJarInputStream(new FileInputStream(FILE)));
 			assertNotNull(r.get("honeycrm/server/test/small/DynamicallyLoadedClass.class"));
 		} catch (Exception e) {
 			e.printStackTrace();

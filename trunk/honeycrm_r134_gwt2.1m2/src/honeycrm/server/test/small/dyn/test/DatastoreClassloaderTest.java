@@ -1,17 +1,18 @@
 package honeycrm.server.test.small.dyn.test;
 
+import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import honeycrm.server.test.Plugin;
-import honeycrm.server.test.small.dyn.DatastoreClassLoaderDelegate;
-import honeycrm.server.test.small.dyn.InterceptClassLoader;
-import honeycrm.server.test.small.dyn.ResourceStore;
+import honeycrm.server.test.small.dyn.PluginStore;
+import honeycrm.server.test.small.dyn.hotreload.DatastoreClassLoaderDelegate;
+import honeycrm.server.test.small.dyn.hotreload.InterceptClassLoader;
+import honeycrm.server.test.small.dyn.hotreload.ResourceStore;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
-public class MyDatastoreClassloaderTest extends AbstractClassLoadingTest {
+public class DatastoreClassloaderTest extends AbstractClassLoadingTest {
 	private static final String PATTERN = "honeycrm/server/.*";
 	private DatastoreService db;
 
@@ -29,11 +30,9 @@ public class MyDatastoreClassloaderTest extends AbstractClassLoadingTest {
 	public void testDynamicLoadingFromJarFileWithOneClass() {
 		try {
 			ResourceStore r = new ResourceStore(db, "Classes");
-			r.put(getBytecodeMapFromJarInputStream(FILE));
+			r.put(store.getBytecodeMapFromJarInputStream(new FileInputStream(FILE)));
 			
-			//DatastoreClassLoaderDelegate loader = new DatastoreClassLoaderDelegate(r);
 			InterceptClassLoader loader = new InterceptClassLoader(getClass().getClassLoader(), Pattern.compile(PATTERN), Arrays.asList(new DatastoreClassLoaderDelegate(r)));
-			
 			
 			Class c = loader.loadClass("honeycrm.server.test.small.DynamicallyLoadedClass", true);
 			//assertTrue(c.newInstance() instanceof Plugin);
@@ -51,7 +50,7 @@ public class MyDatastoreClassloaderTest extends AbstractClassLoadingTest {
 			ResourceStore r = new ResourceStore(db, "Classes");
 			InterceptClassLoader loader = new InterceptClassLoader(getClass().getClassLoader(), Pattern.compile(PATTERN), Arrays.asList(new DatastoreClassLoaderDelegate(r)));
 			
-			r.put(getBytecodeMapFromJarInputStream(FILE2));
+			r.put(store.getBytecodeMapFromJarInputStream(new FileInputStream(FILE2)));
 			
 			Class c = loader.loadClass("honeycrm.server.test.small.DynamicallyLoadedClass");
 			// assertTrue(c.getInterfaces()[0].equals(Plugin.class));
