@@ -14,16 +14,19 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
 import honeycrm.server.test.medium.DatastoreTest;
+import honeycrm.server.test.small.dyn.PluginStore;
 
 abstract public class AbstractClassLoadingTest extends DatastoreTest {
 	protected static final File FILE = new File("dynamicLoadingTesting.jar");
 	protected static final File FILE2 = new File("dynamicLoadingTestingTwoFiles.jar");
 	protected DatastoreService db;
+	protected PluginStore store;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		db = DatastoreServiceFactory.getDatastoreService();
+		store = new PluginStore();
 	}
 
 	protected byte[] getBytesOfFile(final File file) throws FileNotFoundException, IOException {
@@ -36,25 +39,5 @@ abstract public class AbstractClassLoadingTest extends DatastoreTest {
 		}
 
 		return out.toByteArray();
-	}
-
-	protected HashMap<String, byte[]> getBytecodeMapFromJarInputStream(final File file) throws IOException, FileNotFoundException {
-		final HashMap<String, byte[]> map = new HashMap<String, byte[]>();
-		final JarInputStream in = new JarInputStream(new FileInputStream(file));
-		
-		JarEntry e;
-		while (null != (e = in.getNextJarEntry())) {
-			System.out.println("at entry: " + e.getName());
-
-			final ByteArrayOutputStream out = new ByteArrayOutputStream();
-			int bytecode;
-			
-			while ((bytecode = in.read()) != -1) {
-				out.write(bytecode);
-			}
-
-			map.put(e.getName(), out.toByteArray());
-		}
-		return map;
 	}
 }

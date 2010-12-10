@@ -13,6 +13,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.services.PluginService;
 import honeycrm.server.ReflectionHelper;
+import honeycrm.server.test.small.dyn.PluginDescription;
 
 public class PluginServiceImpl extends RemoteServiceServlet implements PluginService {
 	private static final long serialVersionUID = -5770355812567630413L;
@@ -49,5 +50,18 @@ public class PluginServiceImpl extends RemoteServiceServlet implements PluginSer
 			list.add(String.valueOf(e.getProperty("name")));
 		}
 		return list;
+	}
+
+	@Override
+	public PluginDescription[] getPluginDescriptions() {
+		final ArrayList<PluginDescription> list = new ArrayList<PluginDescription>();
+	
+		for (final Entity plugin: db.prepare(new Query(PluginDescription.class.getSimpleName())).asIterable()) {
+			final String name = String.valueOf(plugin.getProperty("name"));
+			final String description = String.valueOf(plugin.getProperty("description"));
+			list.add(new PluginDescription(name, description));
+		}
+		
+		return list.toArray(new PluginDescription[0]);
 	}
 }
