@@ -1,7 +1,5 @@
 package honeycrm.server.test;
 
 public interface Plugin {
-
-	public abstract String request();
-
+	public String request();
 }

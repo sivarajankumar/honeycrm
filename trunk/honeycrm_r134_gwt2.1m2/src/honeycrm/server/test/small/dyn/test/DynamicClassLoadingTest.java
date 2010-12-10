@@ -1,4 +1,4 @@
-package honeycrm.server.test.small;
+package honeycrm.server.test.small.dyn.test;
 
 import honeycrm.server.test.Plugin;
 
