@@ -46,7 +46,7 @@ public class Pdf extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			Document document = new Document();
-			/*final PdfWriter writer = */PdfWriter.getInstance(document, response.getOutputStream());
+			PdfWriter.getInstance(document, response.getOutputStream());
 
 			document.addCreationDate();
 			document.open();
