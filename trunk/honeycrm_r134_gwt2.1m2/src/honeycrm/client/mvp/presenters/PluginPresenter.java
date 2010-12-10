@@ -3,16 +3,22 @@ package honeycrm.client.mvp.presenters;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Widget;
 
-import honeycrm.client.misc.PlatformProvider;
-import honeycrm.client.mvp.presenters.HeaderPresenter.Display;
 import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.services.PluginServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 
-public class PluginPresenter {
-	public PluginPresenter(final Display header, final ReadServiceAsync readService, final PluginServiceAsync pluginService) {
-		PlatformProvider.registerHeader(header);
+public class PluginPresenter implements Presenter {
+	public interface Display {
+		Widget asWidget();
+	}
+
+	private honeycrm.client.mvp.presenters.PluginPresenter.Display view;
+	
+	public PluginPresenter(final Display view, final ReadServiceAsync readService, final PluginServiceAsync pluginService) {
+		this.view = view;
 		
 		GWT.runAsync(PluginPresenter.class, new RunAsyncCallback() {
 			@Override
@@ -40,5 +46,8 @@ public class PluginPresenter {
 		});
 	}
 
-	
+	@Override
+	public void go(HasWidgets container) {
+		container.add(view.asWidget());
+	}
 }

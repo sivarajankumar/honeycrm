@@ -1,43 +1,30 @@
 package honeycrm.client;
 
-import java.util.ArrayList;
-
-import gwtupload.client.IFileInput.FileInputType;
-import gwtupload.client.IUploadStatus.Status;
-import gwtupload.client.IUploader;
-import gwtupload.client.PreloadedImage;
-import gwtupload.client.SingleUploader;
-import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
-import honeycrm.client.misc.PluginDescription;
+import honeycrm.client.mvp.AppController;
+import honeycrm.client.services.AuthService;
+import honeycrm.client.services.AuthServiceAsync;
+import honeycrm.client.services.ConfigService;
+import honeycrm.client.services.ConfigServiceAsync;
+import honeycrm.client.services.CreateService;
+import honeycrm.client.services.CreateServiceAsync;
+import honeycrm.client.services.DeleteService;
+import honeycrm.client.services.DeleteServiceAsync;
 import honeycrm.client.services.PluginService;
 import honeycrm.client.services.PluginServiceAsync;
+import honeycrm.client.services.ReadService;
+import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.services.ReportService;
+import honeycrm.client.services.ReportServiceAsync;
+import honeycrm.client.services.UpdateService;
+import honeycrm.client.services.UpdateServiceAsync;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FormHandler;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
-import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
-import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormSubmitEvent;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 public class Honey implements EntryPoint {
-	private static final PluginServiceAsync pluginService = GWT.create(PluginService.class);
+	// private static final PluginServiceAsync pluginService = GWT.create(PluginService.class);
 
 	// A panel where the thumbnails of uploaded images will be shown
 	/*
@@ -68,65 +55,45 @@ public class Honey implements EntryPoint {
 	 * @Override public void onLoad(PreloadedImage image) { image.setWidth("75px"); panelImages.add(image); } };
 	 */
 
-	public void onModuleLoad() {
-		// Create a FormPanel and point it at a service.
-		final FormPanel form = new FormPanel();
-		form.setAction("/Honey/upload");
-
-		// Because we're going to add a FileUpload widget, we'll need to set the
-		// form to use the POST method, and multipart MIME encoding.
-		form.setEncoding(FormPanel.ENCODING_MULTIPART);
-		form.setMethod(FormPanel.METHOD_POST);
-
-		// Create a panel to hold all of the form widgets.
-		VerticalPanel panel = new VerticalPanel();
-		form.setWidget(panel);
-
-		// Create a FileUpload widget.
-		FileUpload upload = new FileUpload();
-		upload.setName("file");
-		panel.add(upload);
-
-		final HTML area = new HTML();
-		panel.add(area);
-		final Button b = new Button("submit");
-		b.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				form.submit();
-			}
-		});
-		panel.add(b);
-		form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
-			@Override
-			public void onSubmitComplete(SubmitCompleteEvent event) {
-				pluginService.getPluginDescriptions(new AsyncCallback<PluginDescription[]>() {
-					@Override
-					public void onSuccess(PluginDescription[] result) {
-						String html = "";
-						
-						for (final PluginDescription p : result) {
-							html += "<li>" + p.getName() + " " + p.getDescription() + "</li>";
-						}
-				
-						area.setHTML("<h1>Plugins</h1><ul>" + html + "</ul>");
-					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-					}
-				});
-			}
-		});
-		RootPanel.get().add(form);
-	}
 	/*
-	 * @Override public void onModuleLoad() {
+	 * public void onModuleLoad() { // Create a FormPanel and point it at a service. final FormPanel form = new FormPanel(); form.setAction("/Honey/upload");
 	 * 
+	 * // Because we're going to add a FileUpload widget, we'll need to set the // form to use the POST method, and multipart MIME encoding. form.setEncoding(FormPanel.ENCODING_MULTIPART); form.setMethod(FormPanel.METHOD_POST);
 	 * 
+	 * // Create a panel to hold all of the form widgets. VerticalPanel panel = new VerticalPanel(); form.setWidget(panel);
 	 * 
-	 * final CreateServiceAsync createSerice = GWT.create(CreateService.class); final UpdateServiceAsync updateService = GWT.create(UpdateService.class); final ReadServiceAsync readService = GWT.create(ReadService.class); final DeleteServiceAsync deleteService = GWT.create(DeleteService.class); final AuthServiceAsync authService = GWT.create(AuthService.class); final ConfigServiceAsync configService = GWT.create(ConfigService.class); final PluginServiceAsync pluginService = GWT.create(PluginService.class); final ReportServiceAsync reportService = GWT.create(ReportService.class); final LocalizedMessages constants = GWT.create(LocalizedMessages.class);
+	 * // Create a FileUpload widget. FileUpload upload = new FileUpload(); upload.setName("file"); panel.add(upload);
 	 * 
-	 * final SimpleEventBus eventBus = new SimpleEventBus(); final AppController appViewer = new AppController(constants, readService, createSerice, updateService, deleteService, authService, configService, pluginService, reportService, eventBus); appViewer.go(RootLayoutPanel.get()); }
+	 * final HTML area = new HTML(); panel.add(area); final Button b = new Button("submit"); b.addClickHandler(new ClickHandler() {
+	 * 
+	 * @Override public void onClick(ClickEvent event) { form.submit(); } }); panel.add(b); form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
+	 * 
+	 * @Override public void onSubmitComplete(SubmitCompleteEvent event) { pluginService.getPluginDescriptions(new AsyncCallback<PluginDescription[]>() {
+	 * 
+	 * @Override public void onSuccess(PluginDescription[] result) { String html = "";
+	 * 
+	 * for (final PluginDescription p : result) { html += "<li>" + p.getName() + " " + p.getDescription() + "</li>"; }
+	 * 
+	 * area.setHTML("<h1>Plugins</h1><ul>" + html + "</ul>"); }
+	 * 
+	 * @Override public void onFailure(Throwable caught) { } }); } }); RootPanel.get().add(form); }
 	 */
+
+	@Override
+	public void onModuleLoad() {
+		final CreateServiceAsync createSerice = GWT.create(CreateService.class);
+		final UpdateServiceAsync updateService = GWT.create(UpdateService.class);
+		final ReadServiceAsync readService = GWT.create(ReadService.class);
+		final DeleteServiceAsync deleteService = GWT.create(DeleteService.class);
+		final AuthServiceAsync authService = GWT.create(AuthService.class);
+		final ConfigServiceAsync configService = GWT.create(ConfigService.class);
+		final PluginServiceAsync pluginService = GWT.create(PluginService.class);
+		final ReportServiceAsync reportService = GWT.create(ReportService.class);
+		final LocalizedMessages constants = GWT.create(LocalizedMessages.class);
+
+		final SimpleEventBus eventBus = new SimpleEventBus();
+		final AppController appViewer = new AppController(constants, readService, createSerice, updateService, deleteService, authService, configService, pluginService, reportService, eventBus);
+		appViewer.go(RootLayoutPanel.get());
+	}
+
 }

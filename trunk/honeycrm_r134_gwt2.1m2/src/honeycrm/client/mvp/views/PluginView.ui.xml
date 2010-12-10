@@ -1,0 +1,15 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:views="urn:import:honeycrm.client.mvp.views">
+	<g:DecoratedPopupPanel>
+		<g:ScrollPanel>
+			<g:VerticalPanel width="700px" height="400px">
+				<g:Label ui:field="selectFile" />
+				<g:FormPanel action="/Honey/upload" ui:field="form">
+					<g:FileUpload ui:field="upload" />
+				</g:FormPanel>
+				<g:Button ui:field="submit" />
+				<g:HTML ui:field="area" />
+			</g:VerticalPanel>
+		</g:ScrollPanel>
+	</g:DecoratedPopupPanel>
+</ui:UiBinder> 

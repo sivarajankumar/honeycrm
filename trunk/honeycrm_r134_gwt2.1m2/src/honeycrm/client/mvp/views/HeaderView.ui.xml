@@ -13,6 +13,7 @@
 			<g:FlowPanel addStyleNames="header_links">
 				<g:Hyperlink addStyleNames="header_link" text="Help" targetHistoryToken="help" ui:field="help" />
 				<g:Hyperlink addStyleNames="header_link" text="Reports" targetHistoryToken="report" ui:field="report" />
+				<g:Hyperlink addStyleNames="header_link" text="Plugins" targetHistoryToken="plugins" ui:field="plugins" />
 				<g:Hyperlink addStyleNames="header_link" text="Misc" targetHistoryToken="misc" ui:field="misc" />
 				<g:Hyperlink addStyleNames="header_link" text="Profile" targetHistoryToken="profile" ui:field="profile" />
 				<g:Hyperlink addStyleNames="header_link" text="Logout" targetHistoryToken="logout" ui:field="logout" />

@@ -1,6 +1,7 @@
 package honeycrm.client.mvp.views;
 
 import honeycrm.client.LocalizedMessages;
+import honeycrm.client.misc.PlatformProvider;
 import honeycrm.client.misc.User;
 import honeycrm.client.mvp.presenters.HeaderPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
@@ -29,11 +30,14 @@ public class HeaderView extends Composite implements Display {
 	@UiField Hyperlink misc;
 	@UiField Hyperlink profile;
 	@UiField Hyperlink logout;
+	@UiField Hyperlink plugins;
 	
 	private final ReadServiceAsync readService;
 	private final LocalizedMessages constants;
 
 	public HeaderView(final ReadServiceAsync readService, final LocalizedMessages constants) {
+		PlatformProvider.registerHeader(this);
+		
 		this.readService = readService;
 		this.constants = constants;
 

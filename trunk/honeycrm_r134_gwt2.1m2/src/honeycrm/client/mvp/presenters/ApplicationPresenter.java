@@ -23,7 +23,6 @@ public class ApplicationPresenter implements Presenter {
 		
 		new LoadPresenter(view.getHeader().getLoadView(), eventBus);
 		new ContentPresenter(userId, view.getContentView(), eventBus, readService, updateService, createService);
-		new PluginPresenter(view.getHeader(), readService, pluginService);
 	}
 
 	@Override
