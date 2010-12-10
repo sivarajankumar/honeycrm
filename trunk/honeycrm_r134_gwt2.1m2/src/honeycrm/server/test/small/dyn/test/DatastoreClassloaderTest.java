@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import honeycrm.server.test.small.dyn.PluginStore;
 import honeycrm.server.test.small.dyn.hotreload.DatastoreClassLoaderDelegate;
 import honeycrm.server.test.small.dyn.hotreload.InterceptClassLoader;
 import honeycrm.server.test.small.dyn.hotreload.ResourceStore;
