@@ -4,10 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import honeycrm.client.misc.PluginDescription;
 import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.plugin.IPlatform;
 import honeycrm.server.services.PluginServiceImpl;
-import honeycrm.server.test.small.dyn.PluginDescription;
 import honeycrm.server.test.small.dyn.PluginStore;
 import honeycrm.server.test.small.mocks.PlatformMock;
 

@@ -38,7 +38,7 @@ public class HeaderView extends Composite implements Display {
 		this.constants = constants;
 
 		initWidget(uiBinder.createAndBindUi(this));
-		
+	
 		help.setText(constants.help());
 		report.setText(constants.reports());
 		misc.setText(constants.misc());
