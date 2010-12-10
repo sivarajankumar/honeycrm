@@ -7,6 +7,11 @@
 	<!--inherits name="com.google.gwt.i18n.CldrLocales"/-->
 	<inherits name='com.google.gwt.visualization.Visualization' />
 	<inherits name='com.google.gwt.user.theme.standard.Standard' />
+	
+	<!-- Include GWTUpload library -->
+  	<inherits name="gwtupload.GWTUpload"/>
+  	<!-- Load dinamically predefined styles in the library when the application starts -->
+  	<stylesheet src="Upload.css"/>
 
 	<servlet path="/auth" class="honeycrm.server.services.AuthServiceImpl" />
 	<servlet path="/config" class="honeycrm.server.services.ConfigServiceImpl" />

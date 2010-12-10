@@ -7,8 +7,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import honeycrm.client.LocalizedMessages;
-import honeycrm.client.mvp.views.ServiceTableView;
 import honeycrm.client.plugin.ProgressPluginPresenter.Display;
 
 public class ProgressPluginView extends Composite implements Display {

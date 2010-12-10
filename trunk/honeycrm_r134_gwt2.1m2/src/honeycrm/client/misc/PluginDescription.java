@@ -1,4 +1,4 @@
-package honeycrm.server.test.small.dyn;
+package honeycrm.client.misc;
 
 import java.io.Serializable;
 

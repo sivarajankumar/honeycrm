@@ -2,8 +2,8 @@ package honeycrm.client.services;
 
 import java.util.ArrayList;
 
+import honeycrm.client.misc.PluginDescription;
 import honeycrm.client.plugin.AbstractPlugin;
-import honeycrm.server.test.small.dyn.PluginDescription;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

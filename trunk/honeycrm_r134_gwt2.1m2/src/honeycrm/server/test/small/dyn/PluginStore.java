@@ -1,5 +1,7 @@
 package honeycrm.server.test.small.dyn;
 
+import honeycrm.client.misc.PluginDescription;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

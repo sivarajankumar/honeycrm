@@ -9,9 +9,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gwt.user.client.Command;
 
+import honeycrm.client.misc.PluginDescription;
 import honeycrm.client.misc.Timer;
 import honeycrm.server.test.small.dyn.PluginClassBytecode;
-import honeycrm.server.test.small.dyn.PluginDescription;
 import honeycrm.server.test.small.dyn.PluginStore;
 
 public class PluginStoreTest extends AbstractClassLoadingTest {
