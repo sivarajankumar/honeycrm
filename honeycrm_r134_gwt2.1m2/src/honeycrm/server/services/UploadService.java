@@ -34,7 +34,7 @@ public class UploadService extends HttpServlet {
 		final ServletFileUpload uploader = new ServletFileUpload(new DiskFileItemFactory());
 
 		try {
-			final List<FileItem> items = (List<FileItem>) uploader.parseRequest(req);
+			final List<FileItem> items = uploader.parseRequest(req);
 			for (final FileItem item : items) {
 				// System.out.println("got " + item.getContentType() + " " + item.getName());
 				store.createPlugin(new PluginDescription(item.getName(), ""), item.getInputStream());

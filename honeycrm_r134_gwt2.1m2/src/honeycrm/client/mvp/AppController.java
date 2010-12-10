@@ -15,10 +15,12 @@ import honeycrm.client.mvp.events.SuccessfulLoginEventHandler;
 import honeycrm.client.mvp.presenters.ApplicationPresenter;
 import honeycrm.client.mvp.presenters.CsvImportPresenter;
 import honeycrm.client.mvp.presenters.LoginPresenter;
+import honeycrm.client.mvp.presenters.PluginPresenter;
 import honeycrm.client.mvp.presenters.ReportsSuggestionPresenter;
 import honeycrm.client.mvp.views.ApplicationView;
 import honeycrm.client.mvp.views.CsvImportView;
 import honeycrm.client.mvp.views.LoginView;
+import honeycrm.client.mvp.views.PluginView;
 import honeycrm.client.mvp.views.ReportsSuggestionView;
 import honeycrm.client.services.AuthServiceAsync;
 import honeycrm.client.services.ConfigServiceAsync;
@@ -125,6 +127,8 @@ public class AppController implements ValueChangeHandler<String> {
 				new LoginPresenter(authService, confService, eventBus, new LoginView(constants)).go(container);
 			} else if ("misc".equals(token)) {
 				handleMisc();
+			} else if ("plugins".equals(token)) {
+				handlePlugins();
 			} else if ("report".equals(token)) {
 				handleReports();
 			} else if (token.split("\\s+").length == 2 && "report".equals(token.split("\\s+")[0])) {
@@ -137,9 +141,20 @@ public class AppController implements ValueChangeHandler<String> {
 		}
 	}
 
-	private void handleMisc() {
-		// TODO Auto-generated method stub
+	private void handlePlugins() {
+		GWT.runAsync(new RunAsyncCallback() {
+			@Override
+			public void onSuccess() {
+				new PluginPresenter(new PluginView(), readService, pluginService).go(container);
+			}
+			
+			@Override
+			public void onFailure(Throwable reason) {
+			}
+		});
+	}
 
+	private void handleMisc() {
 	}
 
 	private void handleReports() {
