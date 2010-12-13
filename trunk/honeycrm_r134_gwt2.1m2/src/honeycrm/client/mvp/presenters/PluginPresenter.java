@@ -30,7 +30,29 @@ public class PluginPresenter implements Presenter {
 		
 		view.setPresenter(this);
 		
-		GWT.runAsync(PluginPresenter.class, new RunAsyncCallback() {
+		pluginService.getPluginDescriptions(new AsyncCallback<PluginDescription[]>() {
+			@Override
+			public void onSuccess(PluginDescription[] result) {
+				view.setPlugins(result);
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+		});
+		pluginService.request(new PluginRequest(new PluginDescription("foo", ""), "getSomething"), new AsyncCallback<PluginResponse>() {
+			@Override
+			public void onSuccess(PluginResponse result) {
+				view.setResponse(result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+		});
+		
+		// TODO at the moment, this only makes sense for the UI-only plugins.
+/*		GWT.runAsync(PluginPresenter.class, new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
 				pluginService.getAvailablePlugins(new AsyncCallback<AbstractPlugin[]>() {
@@ -39,7 +61,7 @@ public class PluginPresenter implements Presenter {
 						//final Platform platform = new Platform(header, readService);
 								
 						for (final AbstractPlugin plugin: result) {
-							plugin.initialize(); //platform/*, new HaveABreakGadgetView()*/);
+							plugin.initialize(); //platform//, new HaveABreakGadgetView());
 							plugin.runPlugin();
 						}
 					}
@@ -53,7 +75,7 @@ public class PluginPresenter implements Presenter {
 			@Override
 			public void onFailure(Throwable reason) {
 			}
-		});
+		});*/
 	}
 
 	@Override
