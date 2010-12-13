@@ -1,4 +1,4 @@
-package honeycrm.server.test.small.dyn.test;
+package honeycrm.server.test.small;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

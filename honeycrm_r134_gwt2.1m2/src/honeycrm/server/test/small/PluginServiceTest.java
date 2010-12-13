@@ -1,4 +1,4 @@
-package honeycrm.server.test.small.dyn.test;
+package honeycrm.server.test.small;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,8 +7,8 @@ import java.io.IOException;
 import honeycrm.client.misc.PluginDescription;
 import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.plugin.IPlatform;
+import honeycrm.server.PluginStore;
 import honeycrm.server.services.PluginServiceImpl;
-import honeycrm.server.test.small.dyn.PluginStore;
 import honeycrm.server.test.small.mocks.PlatformMock;
 
 public class PluginServiceTest extends AbstractClassLoadingTest {

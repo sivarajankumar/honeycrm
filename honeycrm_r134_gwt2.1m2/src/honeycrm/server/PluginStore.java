@@ -1,5 +1,6 @@
-package honeycrm.server.test.small.dyn;
+package honeycrm.server;
 
+import honeycrm.client.misc.PluginClassBytecode;
 import honeycrm.client.misc.PluginDescription;
 
 import java.io.ByteArrayOutputStream;
@@ -94,8 +95,9 @@ public class PluginStore {
 	class FooClassLoader extends ClassLoader {
 		public void defineClass(String className, byte[] bytecode) throws ClassFormatError {
 			try {
-				// try to resolve this class
-				Class.forName(className);
+				// if this class already has been loaded by this class loader Class.forName will not throw an Exception
+				// otherwise it will and we know we have to define this class first.
+				Class.forName(className, true, this);
 			} catch (ClassNotFoundException e) {
 				// define this class since it could not be resolved yet.
 				super.defineClass(className, bytecode, 0, bytecode.length);

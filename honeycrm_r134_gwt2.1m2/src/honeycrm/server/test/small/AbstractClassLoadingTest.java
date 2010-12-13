@@ -1,4 +1,4 @@
-package honeycrm.server.test.small.dyn.test;
+package honeycrm.server.test.small;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -9,8 +9,8 @@ import java.io.IOException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 
+import honeycrm.server.PluginStore;
 import honeycrm.server.test.medium.DatastoreTest;
-import honeycrm.server.test.small.dyn.PluginStore;
 
 abstract public class AbstractClassLoadingTest extends DatastoreTest {
 	protected static final File FILE = new File("dynamicLoadingTesting.jar");
