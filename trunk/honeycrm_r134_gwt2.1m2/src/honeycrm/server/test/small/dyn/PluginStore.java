@@ -23,21 +23,27 @@ public class PluginStore {
 	private static final DatastoreService db = DatastoreServiceFactory.getDatastoreService();
 	private final FooClassLoader loader = new FooClassLoader();
 
-	public void loadPlugin(final String pluginName) {
+	public FooClassLoader loadPlugin(final String pluginName) {
 		// TODO do this only for the given plugin
 
 		for (final Entity pluginBytecode : db.prepare(new Query(PluginClassBytecode.class.getSimpleName())).asIterable()) {
 			final String className = String.valueOf(pluginBytecode.getProperty("className"));
 			final Blob bytecode = (Blob) pluginBytecode.getProperty("bytecode");
 
+			if (className.contains(".class") || className.contains("/")) {
+				continue; // invalid class name
+			}
+			
 			try {
 				loader.defineClass(className, bytecode.getBytes());
 			} catch (ClassFormatError e) {
 				log.warning("Could not load class " + className + ". A ClassFormatError occured.");
 			} catch (LinkageError e) {
-				log.warning("LinkageError while trying to load " + className);
+				log.warning("LinkageError asdasd while trying to load " + className);
 			}
 		}
+		
+		return loader;
 	}
 
 	public void createPlugin(final PluginDescription plugin, final InputStream is) throws IOException {

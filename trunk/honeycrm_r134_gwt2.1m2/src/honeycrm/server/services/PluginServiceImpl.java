@@ -21,6 +21,7 @@ import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.services.PluginService;
 import honeycrm.server.ReflectionHelper;
 import honeycrm.server.test.small.dyn.PluginClassBytecode;
+import honeycrm.server.test.small.dyn.PluginStore;
 import honeycrm.server.test.small.dyn.hotreload.DatastoreClassLoaderDelegate;
 import honeycrm.server.test.small.dyn.hotreload.InterceptClassLoader;
 import honeycrm.server.test.small.dyn.hotreload.ResourceStore;
@@ -28,6 +29,7 @@ import honeycrm.server.test.small.dyn.hotreload.ResourceStore;
 public class PluginServiceImpl extends RemoteServiceServlet implements PluginService {
 	private static final long serialVersionUID = -5770355812567630413L;
 	private static final Logger log = Logger.getLogger(PluginServiceImpl.class.getSimpleName());
+	private static final PluginStore store = new PluginStore();
 	protected static final DatastoreService db = DatastoreServiceFactory.getDatastoreService();
 	
 	@Override
@@ -97,7 +99,9 @@ public class PluginServiceImpl extends RemoteServiceServlet implements PluginSer
 					// TODO which class should be loaded for this plugin - need to know the main class for this plugin e.g. via manifest definition.
 					
 					// TODO request is not among the methods..
-					final Class c = Class.forName("honeycrm.server.test.small.DynamicallyLoadedClass");
+					ClassLoader loader = store.loadPlugin("foo");
+					
+					final Class c = Class.forName("honeycrm.server.test.small.dyn.A", true, loader);
 					final String returnValue = String.valueOf(c.getMethod("request").invoke(c.newInstance()));
 					return new PluginResponse(returnValue);
 				} catch (Exception e) {
