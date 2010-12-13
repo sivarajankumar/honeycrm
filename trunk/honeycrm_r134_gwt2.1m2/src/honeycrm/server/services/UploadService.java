@@ -1,7 +1,7 @@
 package honeycrm.server.services;
 
 import honeycrm.client.misc.PluginDescription;
-import honeycrm.server.test.small.dyn.PluginStore;
+import honeycrm.server.PluginStore;
 
 import java.io.IOException;
 import java.util.List;

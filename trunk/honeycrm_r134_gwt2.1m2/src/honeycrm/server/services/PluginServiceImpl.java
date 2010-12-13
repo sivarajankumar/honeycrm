@@ -1,17 +1,12 @@
 package honeycrm.server.services;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import honeycrm.client.misc.PluginDescription;
@@ -19,12 +14,8 @@ import honeycrm.client.misc.PluginRequest;
 import honeycrm.client.misc.PluginResponse;
 import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.services.PluginService;
+import honeycrm.server.PluginStore;
 import honeycrm.server.ReflectionHelper;
-import honeycrm.server.test.small.dyn.PluginClassBytecode;
-import honeycrm.server.test.small.dyn.PluginStore;
-import honeycrm.server.test.small.dyn.hotreload.DatastoreClassLoaderDelegate;
-import honeycrm.server.test.small.dyn.hotreload.InterceptClassLoader;
-import honeycrm.server.test.small.dyn.hotreload.ResourceStore;
 
 public class PluginServiceImpl extends RemoteServiceServlet implements PluginService {
 	private static final long serialVersionUID = -5770355812567630413L;
@@ -93,8 +84,6 @@ public class PluginServiceImpl extends RemoteServiceServlet implements PluginSer
 			
 			if (classAlreadyLoaded) {
 				try {
-					
- 					
 					// TODO instantiate the class for this plugin
 					// TODO which class should be loaded for this plugin - need to know the main class for this plugin e.g. via manifest definition.
 					
