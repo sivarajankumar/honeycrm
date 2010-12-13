@@ -32,6 +32,7 @@ public class PluginView extends Composite implements Display {
 	@UiField FileUpload upload;
 	@UiField HTML area;
 	@UiField Button submit;
+	@UiField Button close;
 	@UiField Label responseLabel;
 	@UiField Label response;
 	private PluginPresenter presenter;
@@ -39,6 +40,7 @@ public class PluginView extends Composite implements Display {
 	public PluginView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		
+		close.setText(constants.cancel());
 		submit.setText(constants.uploadPlugin());
 		responseLabel.setText(constants.response());
 		
@@ -80,5 +82,10 @@ public class PluginView extends Composite implements Display {
 	@Override
 	public void setResponse(PluginResponse result) {
 		response.setText(result.getResponse());
+	}
+	
+	@UiHandler("close")
+	public void onClose(ClickEvent event) {
+		removeFromParent();
 	}
 }
