@@ -1,5 +1,6 @@
 package honeycrm.server.test.small.dyn.test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -68,6 +69,11 @@ public class PluginStoreTest extends AbstractClassLoadingTest {
 	public void testLoadPluginWithTwoInstalledPlugins() throws FileNotFoundException, IOException {
 		store.createPlugin(new PluginDescription("foo1", "wohoo"), new FileInputStream(FILE));
 		store.createPlugin(new PluginDescription("foo2", "wohoo"), new FileInputStream(FILE2));
+		store.loadPlugin("foo1");
+	}
+	
+	public void testLoadNewlyCreatedPlugin() throws FileNotFoundException, IOException {
+		store.createPlugin(new PluginDescription("foo1", "wohoo"), new FileInputStream(new File("AAA.jar")));
 		store.loadPlugin("foo1");
 	}
 }
