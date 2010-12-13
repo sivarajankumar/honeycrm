@@ -39,4 +39,5 @@ public interface LocalizedMessages extends Messages {
 	String globalSearch();
 
 	String uploadPlugin();
+	String response();
 }

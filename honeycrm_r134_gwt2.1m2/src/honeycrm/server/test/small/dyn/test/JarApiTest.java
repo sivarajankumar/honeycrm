@@ -8,8 +8,8 @@ import java.util.Map;
 public class JarApiTest extends AbstractClassLoadingTest {
 	public void testIfNamesAreCorrect() throws FileNotFoundException, IOException {
 		for (final String name : store.getBytecodeMapFromJarInputStream(new FileInputStream(FILE2)).keySet()) {
-			assertTrue(name.endsWith(".class"));
-			assertTrue(name.contains("/"));
+			assertFalse(name.endsWith(".class"));
+			assertFalse(name.contains("/"));
 		}
 	}
 	

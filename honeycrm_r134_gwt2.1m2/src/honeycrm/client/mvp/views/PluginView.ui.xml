@@ -9,6 +9,10 @@
 				</g:FormPanel>
 				<g:Button ui:field="submit" />
 				<g:HTML ui:field="area" />
+				<g:HorizontalPanel>
+					<g:Label ui:field="responseLabel" />
+					<g:Label ui:field="response" />
+				</g:HorizontalPanel>
 			</g:VerticalPanel>
 		</g:ScrollPanel>
 	</g:DecoratedPopupPanel>

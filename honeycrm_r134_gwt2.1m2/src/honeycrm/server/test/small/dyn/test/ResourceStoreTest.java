@@ -30,7 +30,7 @@ public class ResourceStoreTest extends AbstractClassLoadingTest {
 		try {
 			ResourceStore r = new ResourceStore(db, "Classes");
 			r.put(store.getBytecodeMapFromJarInputStream(new FileInputStream(FILE)));
-			assertNotNull(r.get("honeycrm/server/test/small/DynamicallyLoadedClass.class"));
+			assertNotNull(r.get("honeycrm.server.test.small.DynamicallyLoadedClass"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();

@@ -60,4 +60,14 @@ public class PluginStoreTest extends AbstractClassLoadingTest {
 		final double averageTimePerCall = time / count;
 		assertTrue(averageTimePerCall < 10);
 	}
+	
+	public void testLoadPluginWithoutInstalledPlugins() {
+		store.loadPlugin(null);
+	}
+	
+	public void testLoadPluginWithTwoInstalledPlugins() throws FileNotFoundException, IOException {
+		store.createPlugin(new PluginDescription("foo1", "wohoo"), new FileInputStream(FILE));
+		store.createPlugin(new PluginDescription("foo2", "wohoo"), new FileInputStream(FILE2));
+		store.loadPlugin("foo1");
+	}
 }
