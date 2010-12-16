@@ -10,10 +10,10 @@
 
 = Related blogs =
 
-|| http://ikaisays.com/ || from ikai lan about gwt and app engine ||
-||  ||  ||
-||  ||  ||
-||  ||  ||
+ * ikai lan about gwt and app engine http://ikaisays.com/
+
+= JSNI =
+ * example for integration of JS code (yui carousel) into GWT Java code http://code.google.com/p/gwt-yui-carousel/source/browse/trunk/dev/src/com/gwtyuicarousel/client/ui/Carousel.java
 
 = Project management =
  * *getting real* from 37signals.com http://gettingreal.37signals.com
