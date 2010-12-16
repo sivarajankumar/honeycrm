@@ -27,6 +27,7 @@
 
  * About the eclipse plugin architecture http://www.eclipse.org/articles/Article-Plug-in-architecture/plugin_architecture.html
  * Eclipse Extension Points and Extensions - Tutorial http://www.vogella.de/articles/EclipseExtensionPoint/article.html
+ * Eclipse Plugin Development Tutorial http://www.vogella.de/articles/EclipsePlugIn/article.html
 
 = General =
 
