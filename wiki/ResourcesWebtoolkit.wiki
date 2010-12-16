@@ -21,6 +21,13 @@
 = Must Read: Howtos and Patterns = 
  * *articles* in app engine documentation e.g. about datastore http://code.google.com/intl/de-DE/appengine/articles/
 
+= Plugin Development = 
+
+== Eclipse Plugin Development ==
+
+ * About the eclipse plugin architecture http://www.eclipse.org/articles/Article-Plug-in-architecture/plugin_architecture.html
+ * Eclipse Extension Points and Extensions - Tutorial http://www.vogella.de/articles/EclipseExtensionPoint/article.html
+
 = General =
 
  * The Ten Most Critical Web Application Security Vulnerabilities http://downloads.sourceforge.net/project/owasp/Top%20Ten/2004/OWASPTopTen2004.pdf?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fowasp%2Ffiles%2FTop%2520Ten%2F2004%2F&ts=1291894296&use_mirror=netcologne
