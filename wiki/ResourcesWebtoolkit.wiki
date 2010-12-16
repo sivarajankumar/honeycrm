@@ -1,7 +1,8 @@
 #summary some resources about google web toolkit
 
-= Books =
+= App Engine =
 
+ * open source implementation of app engine environment http://appscale.cs.ucsb.edu/
  * Programming Google App Engine: Build and Run Scalable Web Apps on Google's Infrastructure http://www.amazon.com/Programming-Google-App-Engine-Infrastructure/dp/059652272X
 
 = GWT Sample Applications =
