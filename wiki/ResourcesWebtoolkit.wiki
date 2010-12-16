@@ -20,12 +20,11 @@
 = Project management =
  * *getting real* from 37signals.com http://gettingreal.37signals.com
 
-= Must Read: Howtos and Patterns = 
- * *articles* in app engine documentation e.g. about datastore http://code.google.com/intl/de-DE/appengine/articles/
+= Patterns =
+ * MVP pattern for gwt apps http://code.google.com/intl/de-DE/webtoolkit/articles/mvp-architecture.html
+ * Passive screen pattern http://martinfowler.com/eaaDev/PassiveScreen.html
 
-= Plugin Development = 
-
-== Eclipse Plugin Development ==
+= Eclipse Plugin Development =
 
  * About the eclipse plugin architecture http://www.eclipse.org/articles/Article-Plug-in-architecture/plugin_architecture.html
  * Eclipse Extension Points and Extensions - Tutorial http://www.vogella.de/articles/EclipseExtensionPoint/article.html
@@ -33,7 +32,7 @@
  * Eclipse e4 white paper http://www.eclipse.org/e4/resources/e4-whitepaper.php
 
 = General =
-
+ * *Must read* http://code.google.com/intl/de-DE/appengine/articles/
  * The Ten Most Critical Web Application Security Vulnerabilities http://downloads.sourceforge.net/project/owasp/Top%20Ten/2004/OWASPTopTen2004.pdf?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fowasp%2Ffiles%2FTop%2520Ten%2F2004%2F&ts=1291894296&use_mirror=netcologne
 
 = general resources =
