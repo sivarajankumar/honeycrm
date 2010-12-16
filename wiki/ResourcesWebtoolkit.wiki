@@ -6,6 +6,7 @@
 
 = GWT Sample Applications =
 
+ * love my vehicle from jeff schwartz http://jeff-schwartz.blogspot.com/2010/11/screenshots-of-love-my-vehicle-on-web.html
  * http://www.gwt-buch.de/fitnesstagebuch
 
 = Related blogs =
