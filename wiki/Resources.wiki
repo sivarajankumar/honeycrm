@@ -7,6 +7,9 @@
 
 = GWT Sample Applications =
 
+ * http://en.bazarooma.com/
+   * Real estate search platform
+   * uses nice icons from http://www.thenounproject.com/
  * weespr.com make your own magazine application http://www.weespr.com/ http://weespr.blogspot.com/
  * geo majas: edit GIS data in the browser http://www.geomajas.org/
  * love my vehicle from jeff schwartz http://jeff-schwartz.blogspot.com/2010/11/screenshots-of-love-my-vehicle-on-web.html
