@@ -3,7 +3,7 @@ package honeycrm.client;
 import com.google.gwt.i18n.client.Messages;
 
 public interface LocalizedMessages extends Messages {
-	// TODO this should be defined as a method returning String[]Êas part of a Constants interface
+	// TODO this should be defined as a method returning String[]ï¿½as part of a Constants interface
 	String availableLocales();
 
 	String login();
@@ -40,4 +40,7 @@ public interface LocalizedMessages extends Messages {
 
 	String uploadPlugin();
 	String response();
+
+	String moduleContacts();
+	String moduleDashboard();
 }

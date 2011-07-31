@@ -1,10 +1,11 @@
 package honeycrm.server.test.medium;
 
+import honeycrm.client.reports.ReportData;
+import honeycrm.client.reports.ReportMetaData;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
-import honeycrm.client.reports.ReportData;
-import honeycrm.client.reports.ReportMetaData;
 import junit.framework.TestCase;
 
 public class ReportSuggestionTest extends TestCase {

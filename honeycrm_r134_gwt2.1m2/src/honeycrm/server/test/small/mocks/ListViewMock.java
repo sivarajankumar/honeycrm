@@ -1,10 +1,10 @@
 package honeycrm.server.test.small.mocks;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.ui.Widget;
-
 import honeycrm.client.mvp.presenters.ListPresenter.Display;
 import honeycrm.client.mvp.views.SelectionHandler;
+
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.Widget;
 
 public class ListViewMock implements Display {
 	private HasClickHandlers add = new HasClickHandlersMock();

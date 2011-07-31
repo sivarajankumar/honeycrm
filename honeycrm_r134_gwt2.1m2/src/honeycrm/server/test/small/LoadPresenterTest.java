@@ -1,15 +1,16 @@
 package honeycrm.server.test.small;
 
-import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.ui.HasText;
-
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
 import honeycrm.client.mvp.events.RpcBeginEvent;
 import honeycrm.client.mvp.events.RpcEndEvent;
 import honeycrm.client.mvp.presenters.LoadPresenter;
 import honeycrm.client.mvp.presenters.LoadPresenter.Display;
 import junit.framework.TestCase;
 
-import static org.easymock.EasyMock.*;
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.ui.HasText;
 
 public class LoadPresenterTest extends TestCase {
 	private Display viewMock;

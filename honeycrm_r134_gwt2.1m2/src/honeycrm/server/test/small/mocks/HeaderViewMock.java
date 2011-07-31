@@ -1,8 +1,8 @@
 package honeycrm.server.test.small.mocks;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import honeycrm.client.mvp.presenters.HeaderPresenter.Display;
+
+import com.google.gwt.user.client.ui.Widget;
 
 public class HeaderViewMock implements Display {
 	private honeycrm.client.mvp.presenters.LoadPresenter.Display loadView;

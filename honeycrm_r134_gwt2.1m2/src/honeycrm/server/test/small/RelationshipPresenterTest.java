@@ -1,7 +1,8 @@
 package honeycrm.server.test.small;
 
-import com.google.gwt.event.shared.SimpleEventBus;
-
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.mvp.presenters.RelationshipPresenter;
 import honeycrm.client.mvp.presenters.RelationshipPresenter.Display;
@@ -9,7 +10,8 @@ import honeycrm.server.NewDtoWizard;
 import honeycrm.server.domain.Contact;
 import honeycrm.server.test.small.mocks.HasClickHandlersMock;
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
+
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class RelationshipPresenterTest extends TestCase {
 	private SimpleEventBus eventBus;

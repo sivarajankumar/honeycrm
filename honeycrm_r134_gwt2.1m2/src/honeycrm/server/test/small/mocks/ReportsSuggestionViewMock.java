@@ -1,12 +1,12 @@
 package honeycrm.server.test.small.mocks;
 
-import java.util.Map;
-
-import com.google.gwt.user.client.ui.Widget;
-
 import honeycrm.client.mvp.presenters.ReportsSuggestionPresenter.Display;
 import honeycrm.client.reports.ReportData;
 import honeycrm.client.reports.ReportMetaData;
+
+import java.util.Map;
+
+import com.google.gwt.user.client.ui.Widget;
 
 public class ReportsSuggestionViewMock implements Display {
 

@@ -1,7 +1,5 @@
 package honeycrm.server.domain;
 
-import com.google.appengine.api.datastore.Key;
-
 import honeycrm.server.domain.decoration.Hidden;
 import honeycrm.server.domain.decoration.Label;
 import honeycrm.server.domain.decoration.fields.FieldBooleanAnnotation;
@@ -10,6 +8,8 @@ import honeycrm.server.domain.decoration.fields.FieldEnumAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldIntegerAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldRelateAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
+
+import com.google.appengine.api.datastore.Key;
 
 @Hidden
 public abstract class DiscountableService extends AbstractEntity {

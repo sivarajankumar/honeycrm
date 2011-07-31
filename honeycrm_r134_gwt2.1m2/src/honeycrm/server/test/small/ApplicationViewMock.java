@@ -1,8 +1,8 @@
 package honeycrm.server.test.small;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import honeycrm.client.mvp.presenters.ApplicationPresenter.Display;
+
+import com.google.gwt.user.client.ui.Widget;
 
 public class ApplicationViewMock implements Display {
 

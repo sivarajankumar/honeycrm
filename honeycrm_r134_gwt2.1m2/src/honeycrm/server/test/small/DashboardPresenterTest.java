@@ -1,13 +1,13 @@
 package honeycrm.server.test.small;
 
-import com.google.gwt.event.shared.SimpleEventBus;
-
 import honeycrm.client.mvp.events.CreateEvent;
 import honeycrm.client.mvp.events.CreateEventHandler;
 import honeycrm.client.mvp.presenters.DashboardPresenter;
 import honeycrm.server.domain.Contact;
 import honeycrm.server.test.small.mocks.DashboardViewMock;
 import junit.framework.TestCase;
+
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class DashboardPresenterTest extends TestCase {
 	private SimpleEventBus eventBus;

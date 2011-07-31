@@ -11,6 +11,7 @@ import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 
 import java.util.ArrayList;
 import java.util.Date;
+
 import com.google.appengine.api.datastore.Key;
 
 @DetailViewable({ "accountID", "contactID", "assignedTo", "startDate", "endDate", "uniqueServices", "recurringServices" })

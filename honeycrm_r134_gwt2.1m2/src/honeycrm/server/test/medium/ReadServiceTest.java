@@ -1,7 +1,5 @@
 package honeycrm.server.test.medium;
 
-import java.util.ArrayList;
-import java.util.List;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.Timer;
@@ -11,6 +9,10 @@ import honeycrm.server.domain.Contract;
 import honeycrm.server.domain.Product;
 import honeycrm.server.domain.UniqueService;
 import honeycrm.server.services.ReadServiceImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;

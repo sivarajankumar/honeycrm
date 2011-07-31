@@ -1,7 +1,8 @@
 package honeycrm.server.test.small;
 
-import com.google.gwt.event.shared.SimpleEventBus;
-
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.mvp.presenters.ApplicationPresenter;
 import honeycrm.client.mvp.presenters.ApplicationPresenter.Display;
@@ -11,10 +12,11 @@ import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
 import honeycrm.server.services.ConfigServiceImpl;
 import honeycrm.server.test.small.mocks.ContentViewMock;
-import honeycrm.server.test.small.mocks.LoadViewMock;
 import honeycrm.server.test.small.mocks.HeaderViewMock;
+import honeycrm.server.test.small.mocks.LoadViewMock;
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
+
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class ApplicationPresenterTest extends TestCase {
 	private ApplicationPresenter presenter;

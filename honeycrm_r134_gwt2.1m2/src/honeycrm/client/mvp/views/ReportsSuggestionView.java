@@ -1,5 +1,9 @@
 package honeycrm.client.mvp.views;
 
+import honeycrm.client.mvp.presenters.ReportsSuggestionPresenter.Display;
+import honeycrm.client.reports.ReportData;
+import honeycrm.client.reports.ReportMetaData;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -18,14 +22,10 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.AbstractDataTable;
-import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
+import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.visualizations.LineChart;
 import com.google.gwt.visualization.client.visualizations.LineChart.Options;
-
-import honeycrm.client.mvp.presenters.ReportsSuggestionPresenter.Display;
-import honeycrm.client.reports.ReportData;
-import honeycrm.client.reports.ReportMetaData;
 
 public class ReportsSuggestionView extends Composite implements Display {
 	private static ReportsSuggestionViewUiBinder uiBinder = GWT.create(ReportsSuggestionViewUiBinder.class);

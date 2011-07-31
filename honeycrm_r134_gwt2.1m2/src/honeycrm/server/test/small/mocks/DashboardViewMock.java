@@ -1,11 +1,11 @@
 package honeycrm.server.test.small.mocks;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
-
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.DashboardPresenter.Display;
 import honeycrm.client.mvp.views.SelectionHandler;
 import honeycrm.server.domain.Contact;
+
+import com.google.gwt.event.dom.client.HasClickHandlers;
 
 public class DashboardViewMock implements Display {
 	private HasClickHandlers add = new HasClickHandlersMock();

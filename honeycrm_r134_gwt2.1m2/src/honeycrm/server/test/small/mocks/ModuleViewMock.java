@@ -1,8 +1,8 @@
 package honeycrm.server.test.small.mocks;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import honeycrm.client.mvp.presenters.ModulePresenter.Display;
+
+import com.google.gwt.user.client.ui.Widget;
 
 public class ModuleViewMock implements Display {
 	private honeycrm.client.mvp.presenters.DetailPresenter.Display detail = new DetailViewMock();

@@ -12,6 +12,7 @@ import honeycrm.client.view.ModuleAction;
 import honeycrm.client.view.RelateWidget;
 
 import java.io.Serializable;
+
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;

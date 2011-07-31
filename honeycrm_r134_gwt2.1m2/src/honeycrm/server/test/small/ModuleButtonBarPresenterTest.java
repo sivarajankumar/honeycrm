@@ -1,7 +1,7 @@
 package honeycrm.server.test.small;
 
-import com.google.gwt.event.shared.SimpleEventBus;
-
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.replay;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.mvp.events.CreateEvent;
 import honeycrm.client.mvp.events.OpenEvent;
@@ -9,7 +9,8 @@ import honeycrm.client.mvp.presenters.ModuleButtonBarPresenter;
 import honeycrm.client.mvp.presenters.ModuleButtonBarPresenter.Display;
 import honeycrm.server.NewDtoWizard;
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
+
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class ModuleButtonBarPresenterTest extends TestCase {
 	private ModuleButtonBarPresenter presenter;

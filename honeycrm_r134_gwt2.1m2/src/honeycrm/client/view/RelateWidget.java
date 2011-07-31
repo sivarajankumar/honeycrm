@@ -8,12 +8,12 @@ import honeycrm.client.prefetch.Consumer;
 import honeycrm.client.prefetch.Prefetcher;
 import honeycrm.client.prefetch.ServerCallback;
 import honeycrm.client.services.ReadService;
-import honeycrm.client.services.ReadServiceAsync;import com.google.gwt.core.client.GWT;
-
+import honeycrm.client.services.ReadServiceAsync;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;

@@ -1,11 +1,5 @@
 package honeycrm.server;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Logger;
-
 import honeycrm.client.actions.AbstractAction;
 import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.ExtraButton;
@@ -44,6 +38,12 @@ import honeycrm.server.domain.decoration.fields.FieldStringAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTableAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 import honeycrm.server.domain.decoration.fields.FieldWebsiteAnnotation;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class NewDtoWizard {
 	private static final Logger log = Logger.getLogger(NewDtoWizard.class.getSimpleName());

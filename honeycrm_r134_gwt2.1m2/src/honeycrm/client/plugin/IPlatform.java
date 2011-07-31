@@ -1,9 +1,9 @@
 package honeycrm.client.plugin;
 
+import honeycrm.client.services.ReadServiceAsync;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
-
-import honeycrm.client.services.ReadServiceAsync;
 
 public interface IPlatform {
 	ReadServiceAsync getReadService();

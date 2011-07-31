@@ -1,10 +1,10 @@
 package honeycrm.server.test.small;
 
-import org.easymock.IAnswer;
-
-import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.getCurrentArguments;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.mvp.presenters.CsvImportPresenter;
 import honeycrm.client.mvp.presenters.CsvImportPresenter.Display;
@@ -12,7 +12,11 @@ import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.server.domain.Contact;
 import honeycrm.server.test.small.mocks.CsvImportViewMock;
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
+
+import org.easymock.IAnswer;
+
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class CsvImportPresenterTest extends TestCase {
 	private Display view;

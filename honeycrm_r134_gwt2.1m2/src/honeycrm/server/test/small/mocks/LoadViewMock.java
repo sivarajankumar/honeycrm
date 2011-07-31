@@ -1,8 +1,8 @@
 package honeycrm.server.test.small.mocks;
 
-import com.google.gwt.user.client.ui.HasText;
-
 import honeycrm.client.mvp.presenters.LoadPresenter.Display;
+
+import com.google.gwt.user.client.ui.HasText;
 
 public class LoadViewMock implements Display {
 	private final HasText indicator;

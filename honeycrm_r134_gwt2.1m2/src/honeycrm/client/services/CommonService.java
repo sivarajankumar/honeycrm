@@ -3,6 +3,7 @@ package honeycrm.client.services;
 import honeycrm.client.misc.ServiceCallStatistics;
 
 import java.util.Collection;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 

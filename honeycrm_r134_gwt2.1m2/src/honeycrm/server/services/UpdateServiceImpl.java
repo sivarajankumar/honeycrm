@@ -1,9 +1,9 @@
 package honeycrm.server.services;
 
-import com.google.appengine.api.datastore.Entity;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.client.services.UpdateService;
+
+import com.google.appengine.api.datastore.Entity;
 
 public class UpdateServiceImpl extends NewService implements UpdateService {
 	private static final long serialVersionUID = 4882885833170689326L;

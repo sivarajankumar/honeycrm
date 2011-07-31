@@ -1,11 +1,12 @@
 package honeycrm.server.test.small;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import honeycrm.client.dto.Configuration;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.server.NewDtoWizard;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import junit.framework.TestCase;
 
 public class NewDtoWizardTest extends TestCase {

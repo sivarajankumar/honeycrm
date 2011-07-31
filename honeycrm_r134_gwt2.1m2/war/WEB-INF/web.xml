@@ -2,12 +2,20 @@
 <web-app>
 	<!-- Default page to serve -->
 	<welcome-file-list>
-		<welcome-file>Honey.html</welcome-file>
+		<welcome-file>Sirup.html</welcome-file>
 	</welcome-file-list>
-
+	<servlet>
+		<servlet-name>authServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.AuthServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>authServlet</servlet-name>
+		<url-pattern>/Sirup/auth</url-pattern>
+	</servlet-mapping>
+	
+<!--
 	<servlet>
 		<servlet-name>uploadServlet</servlet-name>
-		<!-- This is the default servlet, it puts files in session -->
 		<servlet-class>honeycrm.server.services.UploadService</servlet-class>
 	</servlet>
 	<servlet-mapping>
@@ -15,7 +23,6 @@
 		<url-pattern>servlet.gupld</url-pattern>
 	</servlet-mapping>
 
-	<!-- Servlets -->
 	<servlet>
 		<servlet-name>authServlet</servlet-name>
 		<servlet-class>honeycrm.server.services.AuthServiceImpl</servlet-class>
@@ -123,11 +130,8 @@
 		<servlet-name>find</servlet-name>
 		<url-pattern>/find</url-pattern>
 	</servlet-mapping>
-
-	<!-- See http://code.google.com/intl/de-DE/appengine/kb/java.html#What_Is_A_Loading_Request -->
+-->
 	<precompilation-enabled>true</precompilation-enabled>
-
-	<!-- servlet> <servlet-name>jUnitHostImpl</servlet-name> <servlet-class>com.google.gwt.junit.server.JUnitHostImpl</servlet-class> </servlet> <servlet-mapping> <servlet-name>jUnitHostImpl</servlet-name> <url-pattern>/Honey/junithost/*</url-pattern> </servlet-mapping -->
 
 	<filter>
 		<filter-name>appstats</filter-name>

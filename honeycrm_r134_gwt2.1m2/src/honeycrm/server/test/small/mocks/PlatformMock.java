@@ -1,11 +1,11 @@
 package honeycrm.server.test.small.mocks;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Widget;
-
+import static org.easymock.EasyMock.createNiceMock;
 import honeycrm.client.plugin.IPlatform;
 import honeycrm.client.services.ReadServiceAsync;
-import static org.easymock.EasyMock.*;
+
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Widget;
 
 public class PlatformMock implements IPlatform {
 	private final ReadServiceAsync readService;

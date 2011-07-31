@@ -1,13 +1,14 @@
 package honeycrm.server.test.small;
 
-import com.google.gwt.event.shared.SimpleEventBus;
+import static org.easymock.EasyMock.createMock;
 import honeycrm.client.mvp.events.OpenReportEvent;
 import honeycrm.client.mvp.presenters.ReportsSuggestionPresenter;
 import honeycrm.client.mvp.presenters.ReportsSuggestionPresenter.Display;
 import honeycrm.client.services.ReportServiceAsync;
 import honeycrm.server.test.small.mocks.ReportsSuggestionViewMock;
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
+
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class ReportsSuggestionPresenterTest extends TestCase {
 	private ReportServiceAsync reportService;

@@ -1,9 +1,9 @@
 package honeycrm.server.test.small.mocks;
 
-import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
-
 import honeycrm.client.mvp.presenters.ContentPresenter;
 import honeycrm.client.mvp.presenters.ContentPresenter.Display;
+
+import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 
 public class ContentViewMock implements Display {
 	private honeycrm.client.mvp.presenters.DashboardsPresenter.Display dashboard = new DashboardsViewMock();

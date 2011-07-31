@@ -7,6 +7,7 @@ import honeycrm.server.test.small.AllSmallTestsRunner;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

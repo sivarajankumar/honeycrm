@@ -1,8 +1,8 @@
 package honeycrm.client.mvp.views;
 
 import honeycrm.client.LocalizedMessages;
-import honeycrm.client.mvp.presenters.ContentPresenter;
 import honeycrm.client.mvp.presenters.ApplicationPresenter.Display;
+import honeycrm.client.mvp.presenters.ContentPresenter;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.ReportServiceAsync;
 

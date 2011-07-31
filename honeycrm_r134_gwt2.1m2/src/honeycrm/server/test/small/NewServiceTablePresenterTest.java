@@ -1,5 +1,6 @@
 package honeycrm.server.test.small;
 
+import static org.easymock.EasyMock.createNiceMock;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.misc.View;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter;
@@ -9,7 +10,6 @@ import honeycrm.server.NewDtoWizard;
 import honeycrm.server.domain.Contract;
 import honeycrm.server.test.small.mocks.NewServiceTableViewMock;
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
 
 public class NewServiceTablePresenterTest extends TestCase {
 	private ServiceTablePresenter presenter;

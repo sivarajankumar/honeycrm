@@ -1,7 +1,5 @@
 package honeycrm.client.mvp.views;
 
-import com.google.gwt.view.client.HasData;
-
 import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dashboard.DashboardListViewDataProvider;
 import honeycrm.client.dto.Dto;
@@ -9,6 +7,8 @@ import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.DashboardPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.view.list.ListViewDataProvider;
+
+import com.google.gwt.view.client.HasData;
 
 public class DashboardView extends ListView implements Display {
 	final DashboardListViewDataProvider provider;

@@ -1,6 +1,5 @@
 package honeycrm.client.mvp.views;
 
-import java.io.Serializable;
 import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ModuleDto;
@@ -11,6 +10,8 @@ import honeycrm.client.misc.QuicksearchValue;
 import honeycrm.client.misc.View;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
+
+import java.io.Serializable;
 
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;

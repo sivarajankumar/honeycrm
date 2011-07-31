@@ -1,18 +1,19 @@
 package honeycrm.server.test.medium;
 
+import honeycrm.client.dto.Dto;
+import honeycrm.server.DemoDataProvider;
+import honeycrm.server.domain.Contact;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-
-import honeycrm.client.dto.Dto;
-import honeycrm.server.DemoDataProvider;
-import honeycrm.server.domain.Contact;
 
 public class LowLevelApiTest extends DatastoreTest {
 	private static final int COUNT = 10;

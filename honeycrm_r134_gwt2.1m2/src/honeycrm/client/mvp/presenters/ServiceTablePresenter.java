@@ -1,13 +1,13 @@
 package honeycrm.client.mvp.presenters;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.NumberParser;
 import honeycrm.client.misc.View;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
