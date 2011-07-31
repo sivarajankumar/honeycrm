@@ -7,6 +7,7 @@ import honeycrm.client.s.AppView;
 import honeycrm.client.s.AuthEvent;
 import honeycrm.client.s.AuthEventHandler;
 import honeycrm.client.s.AuthPresenter;
+import honeycrm.client.s.AuthPresenter.Display;
 import honeycrm.client.s.AuthView;
 import honeycrm.client.s.ShortcutEvent;
 import honeycrm.client.s.ShortcutEventHandler;
