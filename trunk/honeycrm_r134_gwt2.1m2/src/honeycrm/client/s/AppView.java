@@ -39,4 +39,13 @@ public class AppView extends LocalizedView implements Display {
 		SimplePager p = new SimplePager(TextLocation.CENTER);
 		return p;
 	}
+
+	@Override
+	public void selectTab(String module) {
+		if ("Dashboard".equals(module)) {
+			panel.selectTab(0);
+		} else if ("Contact".equals(module)) {
+			panel.selectTab(1);
+		}
+	}
 }
