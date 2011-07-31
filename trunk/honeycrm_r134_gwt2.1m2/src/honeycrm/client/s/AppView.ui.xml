@@ -4,7 +4,7 @@
 	<g:FocusPanel ui:field="focus">
 		<g:ScrollPanel>
 			<g:TabLayoutPanel ui:field="panel" barUnit="PX"
-				barHeight="60" width="600px" height="400px">
+				barHeight="60" width="1000px" height="400px">
 			</g:TabLayoutPanel>
 		</g:ScrollPanel>
 	</g:FocusPanel>
