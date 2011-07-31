@@ -1,0 +1,26 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+	<g:SplitLayoutPanel>
+		<g:north size="50">
+			<g:HorizontalPanel>
+				<g:Button ui:field="createBtn" />
+				<g:Button ui:field="deleteBtn" />
+				<g:Button ui:field="editBtn" />
+			</g:HorizontalPanel>
+		</g:north>
+		<g:west size="500">
+			<g:ScrollPanel>
+				<g:VerticalPanel>
+					<c:CellTable ui:field="list" />
+					<c:SimplePager ui:field="pager" />
+				</g:VerticalPanel>
+			</g:ScrollPanel>
+		</g:west>
+		<g:center>
+			<g:ScrollPanel>
+				<g:FlexTable ui:field="table" />
+			</g:ScrollPanel>
+		</g:center>
+	</g:SplitLayoutPanel>
+</ui:UiBinder>

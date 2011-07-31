@@ -9,7 +9,7 @@
 						<g:Label>Username</g:Label>
 					</g:customCell>
 					<g:customCell>
-						<g:TextBox ui:field="username" />
+						<g:TextBox ui:field="username" >42</g:TextBox>
 					</g:customCell>
 				</g:row>
 				<g:row>

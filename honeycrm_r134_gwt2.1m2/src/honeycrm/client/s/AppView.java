@@ -4,6 +4,7 @@ import honeycrm.client.s.AppPresenter.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
+import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
@@ -21,21 +22,24 @@ public class AppView extends LocalizedView implements Display {
 	interface AppViewUiBinder extends UiBinder<Widget, AppView> {
 	}
 
-	@UiField FocusPanel focus;
-	@UiField TabLayoutPanel panel;
-	
+	@UiField
+	FocusPanel focus;
+	@UiField
+	TabLayoutPanel panel;
+
 	public AppView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		panel.add(new Label("dashboard content"), constants.moduleDashboard());
-		panel.add(new Label("contacts content"), constants.moduleContacts());
+		panel.add(new Label("placeholder for contacts"), constants.moduleContacts());
 	}
 
 	@Override
 	public HasKeyPressHandlers getFocus() {
 		return focus;
 	}
-	
-	@UiFactory SimplePager makePager() {
+
+	@UiFactory
+	SimplePager makePager() {
 		SimplePager p = new SimplePager(TextLocation.CENTER);
 		return p;
 	}
@@ -46,6 +50,19 @@ public class AppView extends LocalizedView implements Display {
 			panel.selectTab(0);
 		} else if ("Contact".equals(module)) {
 			panel.selectTab(1);
+		}
+	}
+
+	@Override
+	public HasBeforeSelectionHandlers<Integer> getPanel() {
+		return panel;
+	}
+
+	@Override
+	public void initializeTab(Integer tabPosition) {
+		if (1 == tabPosition) {
+			panel.insert(new ContactsView(), constants.moduleContacts(), 1);
+			panel.remove(tabPosition + 1);
 		}
 	}
 }
