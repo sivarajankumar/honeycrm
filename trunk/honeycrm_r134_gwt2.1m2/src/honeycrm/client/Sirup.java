@@ -18,22 +18,37 @@ import honeycrm.client.services.AuthServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.http.client.UrlBuilder;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class Sirup implements EntryPoint {
-
+	private final SimpleEventBus bus = new SimpleEventBus();
+	
 	@Override
 	public void onModuleLoad() {
-		final SimpleEventBus bus = new SimpleEventBus();
+		History.addValueChangeHandler(new ValueChangeHandler<String>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				if ("login".equals(event.getValue())) {
+					AuthPresenter p = new AuthPresenter(bus, new AuthView());
+					p.go(RootPanel.get());
+				} else if ("app".equals(event.getValue())) {
+					AppPresenter appPresenter = new AppPresenter(bus, new AppView());
+					appPresenter.go(RootPanel.get());
+				}
+			}
+		});
 
-		AuthPresenter p = new AuthPresenter(bus, new AuthView());
-		p.go(RootPanel.get());
-
+		History.newItem("login");
+		History.fireCurrentHistoryState();
+		
 		GWT.runAsync(new RunAsyncCallback() {
 			@Override
 			public void onSuccess() {
@@ -45,8 +60,7 @@ public class Sirup implements EntryPoint {
 						authService.login(event.getUsername(), event.getPassword(), new AsyncCallback<Long>() {
 							@Override
 							public void onSuccess(Long result) {
-								AppPresenter appPresenter = new AppPresenter(bus, new AppView());
-								appPresenter.go(RootPanel.get());
+								History.newItem("app");
 							}
 
 							@Override
