@@ -1,5 +1,13 @@
 package honeycrm.server.services;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withDefaults;
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
+import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.services.ReadService;
+import honeycrm.server.NewDtoWizard;
+import honeycrm.server.domain.Employee;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,20 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.services.ReadService;
-import honeycrm.server.NewDtoWizard;
-import honeycrm.server.domain.Employee;
-
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
-
-import static com.google.appengine.api.datastore.FetchOptions.Builder.*;
 
 public class ReadServiceImpl extends NewService implements ReadService {
 	private static final long serialVersionUID = 4925571929249643554L;

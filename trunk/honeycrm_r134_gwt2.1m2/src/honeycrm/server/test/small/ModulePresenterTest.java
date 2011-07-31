@@ -1,7 +1,6 @@
 package honeycrm.server.test.small;
 
-import com.google.gwt.event.shared.SimpleEventBus;
-
+import static org.easymock.EasyMock.createStrictMock;
 import honeycrm.client.mvp.presenters.ModulePresenter;
 import honeycrm.client.mvp.presenters.ModulePresenter.Display;
 import honeycrm.client.services.CreateServiceAsync;
@@ -9,7 +8,8 @@ import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
 import honeycrm.server.test.small.mocks.ModuleViewMock;
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
+
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class ModulePresenterTest extends TestCase {
 	private Display view;

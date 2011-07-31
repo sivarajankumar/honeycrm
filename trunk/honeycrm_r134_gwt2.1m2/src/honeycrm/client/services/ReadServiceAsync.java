@@ -1,10 +1,10 @@
 package honeycrm.client.services;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

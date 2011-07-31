@@ -1,8 +1,5 @@
 package honeycrm.client.mvp.presenters;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.User;
 import honeycrm.client.mvp.events.CreateEvent;
@@ -13,6 +10,9 @@ import honeycrm.client.mvp.events.UpdateEvent;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

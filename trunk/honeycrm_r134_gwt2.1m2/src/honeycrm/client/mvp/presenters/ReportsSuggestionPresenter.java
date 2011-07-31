@@ -1,12 +1,12 @@
 package honeycrm.client.mvp.presenters;
 
-import java.util.Map;
-
 import honeycrm.client.mvp.events.OpenReportEvent;
 import honeycrm.client.mvp.events.OpenReportEventHandler;
 import honeycrm.client.reports.ReportData;
 import honeycrm.client.reports.ReportMetaData;
 import honeycrm.client.services.ReportServiceAsync;
+
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;

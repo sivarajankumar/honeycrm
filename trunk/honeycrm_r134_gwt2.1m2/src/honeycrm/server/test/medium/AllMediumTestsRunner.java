@@ -1,8 +1,9 @@
 package honeycrm.server.test.medium;
 
+import honeycrm.server.test.AllTestsRunner;
+
 import java.io.IOException;
 
-import honeycrm.server.test.AllTestsRunner;
 import junit.framework.Test;
 
 public class AllMediumTestsRunner extends AllTestsRunner {

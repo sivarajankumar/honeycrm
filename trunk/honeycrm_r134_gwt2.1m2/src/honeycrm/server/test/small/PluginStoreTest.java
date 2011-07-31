@@ -1,5 +1,10 @@
 package honeycrm.server.test.small;
 
+import honeycrm.client.misc.PluginClassBytecode;
+import honeycrm.client.misc.PluginDescription;
+import honeycrm.client.misc.Timer;
+import honeycrm.server.PluginStore;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,11 +14,6 @@ import java.io.InputStream;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gwt.user.client.Command;
-
-import honeycrm.client.misc.PluginClassBytecode;
-import honeycrm.client.misc.PluginDescription;
-import honeycrm.client.misc.Timer;
-import honeycrm.server.PluginStore;
 
 public class PluginStoreTest extends AbstractClassLoadingTest {
 	private PluginStore store;

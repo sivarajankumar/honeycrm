@@ -1,14 +1,14 @@
 package honeycrm.client.mvp.presenters;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.Widget;
-
 import honeycrm.client.misc.PluginDescription;
 import honeycrm.client.misc.PluginRequest;
 import honeycrm.client.misc.PluginResponse;
 import honeycrm.client.services.PluginServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Widget;
 
 public class PluginPresenter implements Presenter {
 	public interface Display {

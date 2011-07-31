@@ -1,17 +1,17 @@
 package honeycrm.client.mvp.views;
 
-import java.util.Collection;
-import java.util.HashMap;
-
 import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.mvp.presenters.ContentPresenter;
+import honeycrm.client.mvp.presenters.ContentPresenter.Display;
 import honeycrm.client.mvp.presenters.DashboardsPresenter;
 import honeycrm.client.mvp.presenters.ModulePresenter;
-import honeycrm.client.mvp.presenters.ContentPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.ReportServiceAsync;
+
+import java.util.Collection;
+import java.util.HashMap;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;

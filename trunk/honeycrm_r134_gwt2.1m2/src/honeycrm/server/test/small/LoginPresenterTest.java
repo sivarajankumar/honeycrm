@@ -1,10 +1,10 @@
 package honeycrm.server.test.small;
 
-import org.easymock.IAnswer;
-
-import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.getCurrentArguments;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
 import honeycrm.client.dto.Configuration;
 import honeycrm.client.mvp.presenters.LoginPresenter;
 import honeycrm.client.mvp.presenters.LoginPresenter.Display;
@@ -13,7 +13,11 @@ import honeycrm.client.services.ConfigServiceAsync;
 import honeycrm.server.NewDtoWizard;
 import honeycrm.server.test.small.mocks.LoginViewMock;
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
+
+import org.easymock.IAnswer;
+
+import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class LoginPresenterTest extends TestCase {
 	private LoginPresenter presenter;

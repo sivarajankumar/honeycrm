@@ -1,14 +1,14 @@
 package honeycrm.client.mvp.views;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.DashboardsPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;

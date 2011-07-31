@@ -1,8 +1,5 @@
 package honeycrm.client.mvp.views;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import honeycrm.client.LocalizedMessages;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
@@ -11,6 +8,9 @@ import honeycrm.client.mvp.presenters.RelationshipPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.view.list.ListViewDataProvider;
 import honeycrm.client.view.relationship.RelationshipListViewDataProvider;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

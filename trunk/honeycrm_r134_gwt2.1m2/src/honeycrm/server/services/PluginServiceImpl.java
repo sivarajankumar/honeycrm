@@ -1,14 +1,5 @@
 package honeycrm.server.services;
 
-import java.util.ArrayList;
-import java.util.logging.Logger;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
 import honeycrm.client.misc.PluginDescription;
 import honeycrm.client.misc.PluginRequest;
 import honeycrm.client.misc.PluginResponse;
@@ -16,6 +7,16 @@ import honeycrm.client.plugin.AbstractPlugin;
 import honeycrm.client.services.PluginService;
 import honeycrm.server.PluginStore;
 import honeycrm.server.ReflectionHelper;
+
+import java.util.ArrayList;
+import java.util.logging.Logger;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class PluginServiceImpl extends RemoteServiceServlet implements PluginService {
 	private static final long serialVersionUID = -5770355812567630413L;

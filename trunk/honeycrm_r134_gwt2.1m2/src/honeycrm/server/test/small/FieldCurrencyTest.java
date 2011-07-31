@@ -3,6 +3,7 @@ package honeycrm.server.test.small;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.field.AbstractField;
 import honeycrm.client.field.FieldCurrency;
+
 import java.util.ArrayList;
 import java.util.Random;
 

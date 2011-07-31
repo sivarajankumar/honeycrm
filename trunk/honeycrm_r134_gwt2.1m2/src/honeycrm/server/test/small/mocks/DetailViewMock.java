@@ -1,13 +1,13 @@
 package honeycrm.server.test.small.mocks;
 
+import honeycrm.client.dto.Dto;
+import honeycrm.client.mvp.presenters.DetailPresenter;
+import honeycrm.client.mvp.presenters.DetailPresenter.Display;
+
 import java.util.HashMap;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Widget;
-
-import honeycrm.client.dto.Dto;
-import honeycrm.client.mvp.presenters.DetailPresenter;
-import honeycrm.client.mvp.presenters.DetailPresenter.Display;
 
 public class DetailViewMock implements Display {
 	private honeycrm.client.mvp.presenters.RelationshipsPresenter.Display relationshipView = new RelationshipsViewMock();

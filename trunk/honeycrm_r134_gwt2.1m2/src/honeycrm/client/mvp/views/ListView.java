@@ -1,5 +1,16 @@
 package honeycrm.client.mvp.views;
 
+import honeycrm.client.LocalizedMessages;
+import honeycrm.client.dto.Dto;
+import honeycrm.client.dto.DtoModuleRegistry;
+import honeycrm.client.dto.ModuleDto;
+import honeycrm.client.field.FieldBoolean;
+import honeycrm.client.field.FieldRelate;
+import honeycrm.client.mvp.presenters.ListPresenter.Display;
+import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.view.list.ListViewDB;
+import honeycrm.client.view.list.ListViewDataProvider;
+
 import java.io.Serializable;
 
 import com.google.gwt.cell.client.CheckboxCell;
@@ -17,8 +28,8 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -26,17 +37,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-
-import honeycrm.client.LocalizedMessages;
-import honeycrm.client.dto.Dto;
-import honeycrm.client.dto.DtoModuleRegistry;
-import honeycrm.client.dto.ModuleDto;
-import honeycrm.client.field.FieldBoolean;
-import honeycrm.client.field.FieldRelate;
-import honeycrm.client.mvp.presenters.ListPresenter.Display;
-import honeycrm.client.services.ReadServiceAsync;
-import honeycrm.client.view.list.ListViewDB;
-import honeycrm.client.view.list.ListViewDataProvider;
 
 public class ListView extends Composite implements Display {
 	protected static final int DEFAULT_MAX_ENTRIES = 15;

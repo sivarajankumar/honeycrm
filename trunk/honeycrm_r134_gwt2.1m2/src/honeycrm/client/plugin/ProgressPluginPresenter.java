@@ -1,10 +1,10 @@
 package honeycrm.client.plugin;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Widget;
-
 import honeycrm.client.misc.PlatformProvider;
 import honeycrm.client.pluginviews.ProgressPluginView;
+
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Widget;
 
 public class ProgressPluginPresenter extends AbstractPlugin {
 	private static final long serialVersionUID = 5074341676146266299L;

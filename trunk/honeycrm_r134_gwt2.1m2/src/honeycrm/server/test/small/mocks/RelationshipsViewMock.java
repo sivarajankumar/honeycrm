@@ -1,12 +1,12 @@
 package honeycrm.server.test.small.mocks;
 
-import java.util.Map;
-
-import com.google.gwt.user.client.ui.Widget;
-
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.presenters.RelationshipsPresenter;
 import honeycrm.client.mvp.presenters.RelationshipsPresenter.Display;
+
+import java.util.Map;
+
+import com.google.gwt.user.client.ui.Widget;
 
 public class RelationshipsViewMock implements Display {
 

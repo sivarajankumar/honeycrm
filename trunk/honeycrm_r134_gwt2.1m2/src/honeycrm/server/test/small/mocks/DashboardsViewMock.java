@@ -1,14 +1,14 @@
 package honeycrm.server.test.small.mocks;
 
+import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.mvp.presenters.DashboardsPresenter.Display;
+import honeycrm.client.mvp.views.DashboardView;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
-
-import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.mvp.presenters.DashboardsPresenter.Display;
-import honeycrm.client.mvp.views.DashboardView;
 
 public class DashboardsViewMock implements Display {
 	private HasClickHandlers refresh = new HasClickHandlersMock();

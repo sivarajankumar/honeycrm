@@ -1,8 +1,5 @@
 package honeycrm.client.mvp.presenters;
 
-import java.util.Collection;
-import java.util.Map;
-
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.mvp.events.OpenEventHandler;
@@ -10,6 +7,9 @@ import honeycrm.client.mvp.events.RpcBeginEvent;
 import honeycrm.client.mvp.events.RpcEndEvent;
 import honeycrm.client.mvp.views.RelationshipView;
 import honeycrm.client.services.ReadServiceAsync;
+
+import java.util.Collection;
+import java.util.Map;
 
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;

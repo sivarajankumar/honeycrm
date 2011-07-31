@@ -1,24 +1,31 @@
 package honeycrm.server.test.small;
 
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.getCurrentArguments;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.EasyMock.replay;
+import honeycrm.client.dto.Dto;
+import honeycrm.client.mvp.events.CreateEvent;
+import honeycrm.client.mvp.events.OpenEvent;
+import honeycrm.client.mvp.presenters.DetailPresenter;
+import honeycrm.client.mvp.presenters.DetailPresenter.Display;
+import honeycrm.client.mvp.presenters.RelationshipsPresenter;
+import honeycrm.client.services.CreateServiceAsync;
+import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.services.UpdateServiceAsync;
+
 import java.util.HashMap;
+
+import junit.framework.TestCase;
 
 import org.easymock.IAnswer;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import honeycrm.client.dto.Dto;
-import honeycrm.client.mvp.events.CreateEvent;
-import honeycrm.client.mvp.events.OpenEvent;
-import honeycrm.client.mvp.presenters.DetailPresenter;
-import honeycrm.client.mvp.presenters.RelationshipsPresenter;
-import honeycrm.client.mvp.presenters.DetailPresenter.Display;
-import honeycrm.client.services.CreateServiceAsync;
-import honeycrm.client.services.ReadServiceAsync;
-import honeycrm.client.services.UpdateServiceAsync;
-import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
 
 public class DetailPresenterTest extends TestCase {
 	private SimpleEventBus eventBus;

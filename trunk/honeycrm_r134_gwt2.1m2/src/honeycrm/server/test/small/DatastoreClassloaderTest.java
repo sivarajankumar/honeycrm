@@ -1,12 +1,12 @@
 package honeycrm.server.test.small;
 
-import java.io.FileInputStream;
-import java.util.Arrays;
-import java.util.regex.Pattern;
-
 import honeycrm.server.test.small.dyn.hotreload.DatastoreClassLoaderDelegate;
 import honeycrm.server.test.small.dyn.hotreload.InterceptClassLoader;
 import honeycrm.server.test.small.dyn.hotreload.ResourceStore;
+
+import java.io.FileInputStream;
+import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;

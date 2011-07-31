@@ -1,15 +1,15 @@
 package honeycrm.server.test.small.mocks;
 
-import java.util.ArrayList;
-
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.view.client.ListDataProvider;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ModuleDto;
 import honeycrm.client.misc.View;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter;
 import honeycrm.client.mvp.presenters.ServiceTablePresenter.Display;
+
+import java.util.ArrayList;
+
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.view.client.ListDataProvider;
 
 public class NewServiceTableViewMock implements Display {
 	private HasClickHandlers add = new HasClickHandlersMock();

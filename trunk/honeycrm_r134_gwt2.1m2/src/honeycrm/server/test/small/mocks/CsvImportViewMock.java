@@ -1,11 +1,11 @@
 package honeycrm.server.test.small.mocks;
 
+import honeycrm.client.mvp.presenters.CsvImportPresenter.Display;
+
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Widget;
-
-import honeycrm.client.mvp.presenters.CsvImportPresenter.Display;
 
 public class CsvImportViewMock implements Display {
 	private HasClickHandlers cancel = new HasClickHandlersMock();

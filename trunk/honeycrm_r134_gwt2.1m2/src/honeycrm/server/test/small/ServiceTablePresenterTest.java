@@ -1,7 +1,5 @@
 package honeycrm.server.test.small;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.misc.View;
@@ -11,6 +9,10 @@ import honeycrm.server.NewDtoWizard;
 import honeycrm.server.domain.Contract;
 import honeycrm.server.domain.UniqueService;
 import honeycrm.server.test.small.mocks.NewServiceTableViewMock;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import junit.framework.TestCase;
 
 public class ServiceTablePresenterTest extends TestCase {

@@ -1,5 +1,6 @@
 package honeycrm.server.services;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withDefaults;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.reports.ReportData;
 import honeycrm.client.reports.ReportMetaData;
@@ -14,7 +15,6 @@ import java.util.Random;
 
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import static com.google.appengine.api.datastore.FetchOptions.Builder.*;
 
 public class ReportServiceImpl extends NewService implements ReportService {
 	private static final long serialVersionUID = 9188964651846980485L;

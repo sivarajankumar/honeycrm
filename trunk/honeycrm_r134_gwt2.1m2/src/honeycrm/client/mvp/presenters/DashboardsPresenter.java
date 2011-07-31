@@ -1,9 +1,5 @@
 package honeycrm.client.mvp.presenters;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-
 import honeycrm.client.dto.DtoModuleRegistry;
 import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.dto.ModuleDto;
@@ -13,6 +9,10 @@ import honeycrm.client.mvp.events.UpdateEvent;
 import honeycrm.client.mvp.events.UpdateEventHandler;
 import honeycrm.client.mvp.views.DashboardView;
 import honeycrm.client.services.ReadServiceAsync;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

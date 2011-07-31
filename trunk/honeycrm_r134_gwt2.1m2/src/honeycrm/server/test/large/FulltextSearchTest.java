@@ -4,6 +4,7 @@ import honeycrm.client.dto.ListQueryResult;
 import honeycrm.client.misc.Timer;
 import honeycrm.server.DemoDataProvider;
 import honeycrm.server.test.medium.DatastoreTest;
+
 import com.google.gwt.user.client.Command;
 
 public class FulltextSearchTest extends DatastoreTest {

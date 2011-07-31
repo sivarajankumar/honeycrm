@@ -1,7 +1,5 @@
 package honeycrm.client.mvp.presenters;
 
-import java.util.HashSet;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.client.mvp.events.DeleteEvent;
 import honeycrm.client.mvp.events.OpenEvent;
@@ -14,6 +12,8 @@ import honeycrm.client.mvp.views.SelectionHandler;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadServiceAsync;
 import honeycrm.client.services.UpdateServiceAsync;
+
+import java.util.HashSet;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
