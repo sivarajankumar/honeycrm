@@ -30,7 +30,7 @@ public class AppView extends LocalizedView implements Display {
 	public AppView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		panel.add(new Label("dashboard content"), constants.moduleDashboard());
-		panel.add(new Label("placeholder for contacts"), constants.moduleContacts());
+		panel.add(new Label("loading..."), constants.moduleContacts());
 	}
 
 	@Override
@@ -61,7 +61,9 @@ public class AppView extends LocalizedView implements Display {
 	@Override
 	public void initializeTab(Integer tabPosition) {
 		if (1 == tabPosition) {
-			panel.insert(new ContactsView(), constants.moduleContacts(), 1);
+			ContactsView v = new ContactsView();
+			new ContactsPresenter(v);
+			panel.insert(v, constants.moduleContacts(), 1);
 			panel.remove(tabPosition + 1);
 		}
 	}
