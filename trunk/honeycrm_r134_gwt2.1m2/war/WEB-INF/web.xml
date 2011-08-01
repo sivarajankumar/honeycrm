@@ -12,7 +12,43 @@
 		<servlet-name>authServlet</servlet-name>
 		<url-pattern>/Sirup/auth</url-pattern>
 	</servlet-mapping>
-	
+
+
+	<servlet>
+		<servlet-name>readServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.ReadServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>readServlet</servlet-name>
+		<url-pattern>/Sirup/read</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>createServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.CreateServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>createServlet</servlet-name>
+		<url-pattern>/Sirup/create</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>updateServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.UpdateServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>updateServlet</servlet-name>
+		<url-pattern>/Sirup/update</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>deleteServlet</servlet-name>
+		<servlet-class>honeycrm.server.services.DeleteServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>deleteServlet</servlet-name>
+		<url-pattern>/Sirup/delete</url-pattern>
+	</servlet-mapping>
 <!--
 	<servlet>
 		<servlet-name>uploadServlet</servlet-name>
