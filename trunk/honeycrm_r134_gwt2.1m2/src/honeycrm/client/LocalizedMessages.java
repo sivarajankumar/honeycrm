@@ -43,4 +43,9 @@ public interface LocalizedMessages extends Messages {
 
 	String moduleContacts();
 	String moduleDashboard();
+	
+	String contactsName();
+	String contactsEmail();
+	String contactsPhone();
+	String contactsNotes();
 }

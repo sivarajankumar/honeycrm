@@ -2,13 +2,6 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<g:SplitLayoutPanel>
-		<g:north size="50">
-			<g:HorizontalPanel>
-				<g:Button ui:field="createBtn" />
-				<g:Button ui:field="deleteBtn" />
-				<g:Button ui:field="editBtn" />
-			</g:HorizontalPanel>
-		</g:north>
 		<g:west size="500">
 			<g:ScrollPanel>
 				<g:VerticalPanel>
@@ -19,7 +12,48 @@
 		</g:west>
 		<g:center>
 			<g:ScrollPanel>
-				<g:FlexTable ui:field="table" />
+				<g:VerticalPanel>
+					<g:HorizontalPanel>
+						<g:Button ui:field="createBtn" />
+						<g:Button ui:field="deleteBtn" />
+						<g:Button ui:field="editBtn" />
+						<g:Button ui:field="saveBtn" />
+					</g:HorizontalPanel>
+					<g:Grid ui:field="grid" visible="false">
+						<g:row>
+							<g:customCell>
+								<g:Label ui:field="contactsName" />
+							</g:customCell>
+							<g:customCell>
+								<g:TextBox ui:field="name" />
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label ui:field="contactsEmail" />
+							</g:customCell>
+							<g:customCell>
+								<g:TextBox ui:field="email" />
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label ui:field="contactsPhone" />
+							</g:customCell>
+							<g:customCell>
+								<g:TextBox ui:field="phone" />
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label ui:field="contactsNotes" />
+							</g:customCell>
+							<g:customCell>
+								<g:TextArea ui:field="notes" />
+							</g:customCell>
+						</g:row>
+					</g:Grid>
+				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:center>
 	</g:SplitLayoutPanel>
