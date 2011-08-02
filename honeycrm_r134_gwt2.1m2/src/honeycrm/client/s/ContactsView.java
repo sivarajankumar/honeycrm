@@ -1,7 +1,10 @@
 package honeycrm.client.s;
 
 import honeycrm.client.dto.Dto;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.s.ContactsPresenter.Display;
+import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.view.list.ListViewDataProvider;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -10,14 +13,19 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 public class ContactsView extends LocalizedView implements Display {
 
@@ -40,9 +48,51 @@ public class ContactsView extends LocalizedView implements Display {
 	@UiField TextArea notes;
 	@UiField Grid grid;
 	
+	@UiField CellTable<Dto> list;
+	@UiField SimplePager pager;
+	private SingleSelectionModel<Dto> selectionModel;
+	private final ProvidesKey<Dto> keyProvider = new ProvidesKey<Dto>() {
+		@Override
+		public Object getKey(Dto item) {
+			return null == item ? null : item.getId();
+		}
+	};
+	
 	public ContactsView() {
 		initWidget(uiBinder.createAndBindUi(this));
-
+		pager.setDisplay(list);
+		
+		selectionModel = new SingleSelectionModel<Dto>(keyProvider);
+		list.setSelectionModel(selectionModel);
+		list.setPageSize(20);
+		AsyncProvider.getReadService(new Callback<ReadServiceAsync>() {
+			@Override
+			public void callback(ReadServiceAsync arg) {
+				ListViewDataProvider p = new ListViewDataProvider("Contact", arg);				
+				p.addDataDisplay(list);
+			}
+		});
+		pager.firstPage();
+		
+		list.addColumn(new TextColumn<Dto>() {
+			@Override
+			public String getValue(Dto object) {
+				return String.valueOf(object.get("name"));
+			}
+		}, constants.contactsName());
+		list.addColumn(new TextColumn<Dto>() {
+			@Override
+			public String getValue(Dto object) {
+				return String.valueOf(object.get("email"));
+			}
+		}, constants.contactsEmail());
+		list.addColumn(new TextColumn<Dto>() {
+			@Override
+			public String getValue(Dto object) {
+				return String.valueOf(object.get("phone"));
+			}
+		}, constants.contactsPhone());
+		
 		createBtn.setText(constants.create());
 		deleteBtn.setText(constants.delete());
 		editBtn.setText(constants.edit());
@@ -81,5 +131,28 @@ public class ContactsView extends LocalizedView implements Display {
 		d.set("phone", phone.getText());
 		d.set("notes", name.getText());
 		return d;
+	}
+	
+	@UiFactory CellTable<Dto> makeTable() {
+		return new CellTable<Dto>(keyProvider);
+	}
+
+	@Override
+	public SelectionModel<Dto> getSelectionHandler() {
+		return selectionModel;
+	}
+	
+	@Override
+	public Dto getSelectedObject() {
+		return selectionModel.getSelectedObject();
+	}
+
+	@Override
+	public void openView(Dto selectedObject) {
+		name.setText(String.valueOf(selectedObject.get("name")));
+		phone.setText(String.valueOf(selectedObject.get("phone")));
+		email.setText(String.valueOf(selectedObject.get("email")));
+		notes.setText(String.valueOf(selectedObject.get("notes")));
+		grid.setVisible(true);
 	}
 }

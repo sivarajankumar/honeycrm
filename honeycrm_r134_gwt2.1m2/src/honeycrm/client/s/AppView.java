@@ -4,7 +4,6 @@ import honeycrm.client.s.AppPresenter.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
-import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
@@ -27,10 +26,10 @@ public class AppView extends LocalizedView implements Display {
 	@UiField
 	TabLayoutPanel panel;
 
-	public AppView() {
+	public AppView(final honeycrm.client.s.ContactsPresenter.Display contactsView) {
 		initWidget(uiBinder.createAndBindUi(this));
 		panel.add(new Label("dashboard content"), constants.moduleDashboard());
-		panel.add(new Label("loading..."), constants.moduleContacts());
+		panel.add(contactsView.asWidget(), constants.moduleContacts());
 	}
 
 	@Override
@@ -50,21 +49,6 @@ public class AppView extends LocalizedView implements Display {
 			panel.selectTab(0);
 		} else if ("Contact".equals(module)) {
 			panel.selectTab(1);
-		}
-	}
-
-	@Override
-	public HasBeforeSelectionHandlers<Integer> getPanel() {
-		return panel;
-	}
-
-	@Override
-	public void initializeTab(Integer tabPosition) {
-		if (1 == tabPosition) {
-			ContactsView v = new ContactsView();
-			new ContactsPresenter(v);
-			panel.insert(v, constants.moduleContacts(), 1);
-			panel.remove(tabPosition + 1);
 		}
 	}
 }
