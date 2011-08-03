@@ -2,8 +2,8 @@ package honeycrm.client.s;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
-import honeycrm.client.mvp.events.OpenEvent;
 import honeycrm.client.services.CreateServiceAsync;
+import honeycrm.client.services.UpdateServiceAsync;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -27,6 +27,8 @@ public class ContactsPresenter extends AbstractPresenter {
 		Dto getSelectedObject();
 
 		void openView(Dto selectedObject);
+		
+		void refresh();
 	}
 
 	public ContactsPresenter(final SimpleEventBus bus, final Display view) {
@@ -40,22 +42,42 @@ public class ContactsPresenter extends AbstractPresenter {
 		view.getSaveBtn().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				AsyncProvider.getCreateService(new Callback<CreateServiceAsync>() {
-					@Override
-					public void callback(CreateServiceAsync arg) {
-						arg.create(view.getContact(), new AsyncCallback<Long>() {
-							@Override
-							public void onSuccess(Long result) {
-								Window.alert("success");
-							}
-							
-							@Override
-							public void onFailure(Throwable caught) {
-								Window.alert("fail");
-							}
-						});
-					}
-				});
+				final Dto dto = view.getContact();
+				
+				if (dto.getId() <= 0) {
+					AsyncProvider.getCreateService(new Callback<CreateServiceAsync>() {
+						@Override
+						public void callback(CreateServiceAsync arg) {
+							arg.create(dto, new AsyncCallback<Long>() {
+								@Override
+								public void onSuccess(Long result) {
+									view.refresh();
+								}
+								
+								@Override
+								public void onFailure(Throwable caught) {
+									Window.alert("fail");
+								}
+							});
+						}
+					});
+				} else {
+					AsyncProvider.getUpdateService(new Callback<UpdateServiceAsync>() {
+						@Override
+						public void callback(UpdateServiceAsync arg) {
+							arg.update(dto, new AsyncCallback<Void>() {
+								@Override
+								public void onSuccess(Void result) {
+									view.refresh();
+								}
+								
+								@Override
+								public void onFailure(Throwable caught) {
+								}
+							});
+						}
+					});
+				}
 			}
 		});
 	}
