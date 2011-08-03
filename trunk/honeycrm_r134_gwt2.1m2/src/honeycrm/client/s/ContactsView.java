@@ -51,12 +51,14 @@ public class ContactsView extends LocalizedView implements Display {
 	@UiField CellTable<Dto> list;
 	@UiField SimplePager pager;
 	private SingleSelectionModel<Dto> selectionModel;
+	private ListViewDataProvider provider;
 	private final ProvidesKey<Dto> keyProvider = new ProvidesKey<Dto>() {
 		@Override
 		public Object getKey(Dto item) {
 			return null == item ? null : item.getId();
 		}
 	};
+	private long currentId = 0;
 	
 	public ContactsView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -68,8 +70,8 @@ public class ContactsView extends LocalizedView implements Display {
 		AsyncProvider.getReadService(new Callback<ReadServiceAsync>() {
 			@Override
 			public void callback(ReadServiceAsync arg) {
-				ListViewDataProvider p = new ListViewDataProvider("Contact", arg);				
-				p.addDataDisplay(list);
+				provider = new ListViewDataProvider("Contact", arg);				
+				provider.addDataDisplay(list);
 			}
 		});
 		pager.firstPage();
@@ -116,6 +118,11 @@ public class ContactsView extends LocalizedView implements Display {
 	@UiHandler("createBtn")
 	public void handleClick(ClickEvent e) {
 		grid.setVisible(true);
+		currentId = 0;
+		name.setText("");
+		phone.setText("");
+		notes.setText("");
+		email.setText("");
 	}
 	
 	@Override
@@ -130,6 +137,8 @@ public class ContactsView extends LocalizedView implements Display {
 		d.set("email", email.getText());
 		d.set("phone", phone.getText());
 		d.set("notes", name.getText());
+		if (currentId > 0)
+			d.setId(currentId);
 		return d;
 	}
 	
@@ -149,10 +158,17 @@ public class ContactsView extends LocalizedView implements Display {
 
 	@Override
 	public void openView(Dto selectedObject) {
+		currentId  = selectedObject.getId();
 		name.setText(String.valueOf(selectedObject.get("name")));
 		phone.setText(String.valueOf(selectedObject.get("phone")));
 		email.setText(String.valueOf(selectedObject.get("email")));
 		notes.setText(String.valueOf(selectedObject.get("notes")));
 		grid.setVisible(true);
+	}
+
+	@Override
+	public void refresh() {
+		provider.refresh(list);
+		grid.setVisible(false);
 	}
 }

@@ -5,6 +5,8 @@ import honeycrm.client.services.CreateService;
 import honeycrm.client.services.CreateServiceAsync;
 import honeycrm.client.services.ReadService;
 import honeycrm.client.services.ReadServiceAsync;
+import honeycrm.client.services.UpdateService;
+import honeycrm.client.services.UpdateServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -12,6 +14,7 @@ import com.google.gwt.user.client.Window;
 
 public class AsyncProvider {
 	private static CreateServiceAsync createService = null;
+	private static UpdateServiceAsync updateService = null;
 	private static ReadServiceAsync readService = null;
 	
 	public static void getCreateService(final Callback<CreateServiceAsync> callback) {
@@ -47,6 +50,23 @@ public class AsyncProvider {
 			});
 		} else {
 			callback.callback(readService);
+		}
+	}
+
+	public static void getUpdateService(final Callback<UpdateServiceAsync> callback) {
+		if (null == updateService) {
+			GWT.runAsync(new RunAsyncCallback() {
+				@Override
+				public void onSuccess() {
+					callback.callback(updateService = GWT.create(UpdateService.class));
+				}
+				
+				@Override
+				public void onFailure(Throwable reason) {
+				}
+			});
+		} else {
+			callback.callback(updateService);
 		}
 	}
 }
