@@ -2,6 +2,7 @@ package honeycrm.client.view.list;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.misc.Callback;
 import honeycrm.client.services.ReadServiceAsync;
 
 import java.util.ArrayList;
@@ -74,4 +75,22 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 		return System.currentTimeMillis() - lastRefresh < 500;
 	}
 
+	public void getList(final Callback<ArrayList<Dto>> callback) {
+		readService.getAll(module, 0, 9999, new AsyncCallback<ListQueryResult>() {
+			@Override
+			public void onSuccess(ListQueryResult result) {
+				ArrayList<Dto> list = new ArrayList<Dto>();
+				
+				for (Dto d: result.getResults()) {
+					list.add(d);
+				}
+				
+				callback.callback(list);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+			}
+		});
+	}
 }
