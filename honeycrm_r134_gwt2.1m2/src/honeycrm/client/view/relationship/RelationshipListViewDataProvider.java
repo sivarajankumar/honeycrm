@@ -14,7 +14,7 @@ public class RelationshipListViewDataProvider extends ListViewDataProvider {
 	final String originatingModule;
 
 	public RelationshipListViewDataProvider(final String relationshipModule, final String originating, final ReadServiceAsync readService) {
-		super(relationshipModule, readService);
+		super(relationshipModule, readService, null);
 		this.originatingModule = originating;
 	}
 

@@ -2,6 +2,7 @@ package honeycrm.client.services;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
+import honeycrm.client.s.SortDirection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,4 +24,6 @@ public interface ReadService extends RemoteService {
 	public ListQueryResult getAllRelated(String originating, Long id, String related);
 	public Map<String, ListQueryResult> getAllRelated(final Long id, final String relatedDtoIndex);
 	public ListQueryResult fulltextSearchForModule(final String dtoIndex, String query, int from, int to);
+	ListQueryResult getAll(String kind, String sortColumn, SortDirection sortDirection, int from, int to);
+	
 }

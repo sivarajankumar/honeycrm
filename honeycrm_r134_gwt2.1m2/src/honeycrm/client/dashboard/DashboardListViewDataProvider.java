@@ -13,7 +13,7 @@ import com.google.gwt.view.client.Range;
 
 public class DashboardListViewDataProvider extends ListViewDataProvider {
 	public DashboardListViewDataProvider(final String module, final ReadServiceAsync readService) {
-		super(module, readService);
+		super(module, readService, null);
 	}
 	
 	@Override
