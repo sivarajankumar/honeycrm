@@ -1,8 +1,5 @@
 package honeycrm.client.s;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
 import honeycrm.client.s.ContactsPresenter.Display;
@@ -18,8 +15,7 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.ColumnSortEvent;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -73,13 +69,6 @@ public class ContactsView extends LocalizedView implements Display {
 		selectionModel = new SingleSelectionModel<Dto>(keyProvider);
 		list.setSelectionModel(selectionModel);
 		list.setPageSize(20);
-		AsyncProvider.getReadService(new Callback<ReadServiceAsync>() {
-			@Override
-			public void callback(ReadServiceAsync arg) {
-				provider = new ListViewDataProvider("Contact", arg);				
-				provider.addDataDisplay(list);
-			}
-		});
 		pager.firstPage();
 		
 		final TextColumn<Dto> nameCol = new TextColumn<Dto>() {
@@ -108,23 +97,12 @@ public class ContactsView extends LocalizedView implements Display {
 		list.addColumn(emailCol, constants.contactsEmail());
 		list.addColumn(phoneCol, constants.contactsPhone());
 		
-		provider.getList(new Callback<ArrayList<Dto>>() {
+		AsyncProvider.getReadService(new Callback<ReadServiceAsync>() {
 			@Override
-			public void callback(final ArrayList<Dto> contactsList) {
-				ListHandler<Dto> colSortHandler = new ListHandler<Dto>(contactsList);
-				colSortHandler.setComparator(nameCol, new Comparator<Dto>() {
-					@Override
-					public int compare(Dto o1, Dto o2) {
-						int c = String.valueOf(o1.get("name")).compareTo(String.valueOf(o2.get("name")));
-						if (c==0)
-							return 0;
-						else if (c<0)
-							return -1;
-						else
-							return +1;
-					}
-				});
-				list.addColumnSortHandler(colSortHandler);
+			public void callback(ReadServiceAsync arg) {
+				provider = new ListViewDataProvider("Contact", arg, list.getColumnSortList());				
+				provider.addDataDisplay(list);
+				list.addColumnSortHandler(new AsyncHandler(list));
 			}
 		});
 		

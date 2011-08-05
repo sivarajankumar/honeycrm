@@ -21,6 +21,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 public class ReadServiceImpl extends NewService implements ReadService {
 	private static final long serialVersionUID = 4925571929249643554L;
@@ -196,5 +197,14 @@ public class ReadServiceImpl extends NewService implements ReadService {
 			map.put(kind, getAllAssignedTo(kind, employeeID, from, to));
 		}
 		return map;
+	}
+
+	@Override
+	public ListQueryResult getAll(String kind, String sortColumn, honeycrm.client.s.SortDirection sortDirection, int from, int to) {
+		final Query q = new Query(kind);
+		final SortDirection dir = sortDirection.equals(honeycrm.client.s.SortDirection.Ascending) ? SortDirection.ASCENDING : SortDirection.DESCENDING;
+		q.addSort(sortColumn, dir);
+		PreparedQuery pq = db.prepare(q);
+		return copy.entitiesToDtoArray(kind, pq.countEntities(withDefaults()), pq.asIterable(withLimit(to - from + 1).offset(from)), false);
 	}
 }
