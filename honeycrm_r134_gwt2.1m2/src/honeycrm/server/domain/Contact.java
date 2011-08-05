@@ -15,8 +15,8 @@ import honeycrm.server.domain.decoration.fields.FieldTextAnnotation;
 import com.google.appengine.api.datastore.Key;
 
 @SearchableEntity
-@ListViewable({ "name", "email" })
-@DetailViewable({ "name,accountId", "assignedTo", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId", "child1Id,child2Id", "secretary" })
+@ListViewable({ "name", "email", "phone", "notes" })
+@DetailViewable({ "name,accountId", "assignedTo", "email,emailOptedOut", "phone,mobile", "doNotCall,doNotCallExplanation", "city,bankAccountData", "profession,study", "partnerId", "child1Id,child2Id", "secretary", "notes" })
 @Quicksearchable({ "name" })
 public class Contact extends AbstractEntity {
 	@Label("City")
@@ -58,6 +58,10 @@ public class Contact extends AbstractEntity {
 	@Label("Bank account data")
 	@FieldTextAnnotation
 	public String bankAccountData;
+	
+	@Label("Notes")
+	@FieldTextAnnotation
+	public String notes;
 
 	@Label("Profession")
 	@FieldEnumAnnotation({ "Student", "Professor", "Scientific Assistant", "Other" })
