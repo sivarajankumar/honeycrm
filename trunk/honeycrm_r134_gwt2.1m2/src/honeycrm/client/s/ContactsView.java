@@ -1,5 +1,8 @@
 package honeycrm.client.s;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
 import honeycrm.client.s.ContactsPresenter.Display;
@@ -15,6 +18,8 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -77,24 +82,51 @@ public class ContactsView extends LocalizedView implements Display {
 		});
 		pager.firstPage();
 		
-		list.addColumn(new TextColumn<Dto>() {
+		final TextColumn<Dto> nameCol = new TextColumn<Dto>() {
 			@Override
 			public String getValue(Dto object) {
 				return String.valueOf(object.get("name"));
 			}
-		}, constants.contactsName());
-		list.addColumn(new TextColumn<Dto>() {
+		};
+		TextColumn<Dto> emailCol = new TextColumn<Dto>() {
 			@Override
 			public String getValue(Dto object) {
 				return String.valueOf(object.get("email"));
 			}
-		}, constants.contactsEmail());
-		list.addColumn(new TextColumn<Dto>() {
+		};
+		TextColumn<Dto> phoneCol = new TextColumn<Dto>() {
 			@Override
 			public String getValue(Dto object) {
 				return String.valueOf(object.get("phone"));
 			}
-		}, constants.contactsPhone());
+		};
+		nameCol.setSortable(true);
+		emailCol.setSortable(true);
+		phoneCol.setSortable(true);
+		
+		list.addColumn(nameCol, constants.contactsName());
+		list.addColumn(emailCol, constants.contactsEmail());
+		list.addColumn(phoneCol, constants.contactsPhone());
+		
+		provider.getList(new Callback<ArrayList<Dto>>() {
+			@Override
+			public void callback(final ArrayList<Dto> contactsList) {
+				ListHandler<Dto> colSortHandler = new ListHandler<Dto>(contactsList);
+				colSortHandler.setComparator(nameCol, new Comparator<Dto>() {
+					@Override
+					public int compare(Dto o1, Dto o2) {
+						int c = String.valueOf(o1.get("name")).compareTo(String.valueOf(o2.get("name")));
+						if (c==0)
+							return 0;
+						else if (c<0)
+							return -1;
+						else
+							return +1;
+					}
+				});
+				list.addColumnSortHandler(colSortHandler);
+			}
+		});
 		
 		createBtn.setText(constants.create());
 		deleteBtn.setText(constants.delete());
