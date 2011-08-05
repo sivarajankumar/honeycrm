@@ -7,9 +7,7 @@
 				<g:Button ui:field="logout" />
 			</g:HorizontalPanel>
 			<g:ScrollPanel>
-				<g:TabLayoutPanel ui:field="panel" barUnit="PX"
-					barHeight="20" width="1000px" height="600px">
-				</g:TabLayoutPanel>
+				<g:TabLayoutPanel ui:field="panel" barHeight="20" width="1000px" height="700px" />
 			</g:ScrollPanel>
 		</g:VerticalPanel>
 	</g:FocusPanel>

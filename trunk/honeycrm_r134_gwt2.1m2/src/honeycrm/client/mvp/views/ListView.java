@@ -235,7 +235,7 @@ public class ListView extends Composite implements Display {
 	}
 	
 	protected ListViewDataProvider getListDataProvider() {
-		return new ListViewDataProvider(module, readService, null);
+		return new ListViewDataProvider(module, readService);
 	}
 
 	@Override

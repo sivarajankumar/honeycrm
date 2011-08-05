@@ -5,6 +5,9 @@
 		<g:west size="300">
 			<g:ScrollPanel>
 				<g:VerticalPanel>
+					<g:HorizontalPanel>
+						<g:TextBox ui:field="search" />
+					</g:HorizontalPanel>
 					<c:CellTable ui:field="list" />
 					<c:SimplePager ui:field="pager" />
 				</g:VerticalPanel>

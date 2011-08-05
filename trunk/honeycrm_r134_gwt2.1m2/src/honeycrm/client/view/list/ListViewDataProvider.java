@@ -2,13 +2,11 @@ package honeycrm.client.view.list;
 
 import honeycrm.client.dto.Dto;
 import honeycrm.client.dto.ListQueryResult;
-import honeycrm.client.s.SortDirection;
 import honeycrm.client.services.ReadServiceAsync;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.cellview.client.ColumnSortList;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -21,13 +19,11 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 	// Setting this to the current time to avoid a refresh at startup.
 	// protected long lastRefresh = System.currentTimeMillis();
 	protected long lastRefresh = 0;
-	protected final ReadServiceAsync readService;
-	private final ColumnSortList colSortList;
+	protected ReadServiceAsync readService;
 	
-	public ListViewDataProvider(final String module, final ReadServiceAsync readService, final ColumnSortList columnSortList) {
+	public ListViewDataProvider(final String module, final ReadServiceAsync readService) {
 		this.module = module;
 		this.readService = readService;
-		this.colSortList = columnSortList;
 	}
 
 	@Override
@@ -59,10 +55,8 @@ public class ListViewDataProvider extends AsyncDataProvider<Dto> {
 		final Range range = display.getVisibleRange();
 		final int start = range.getStart();
 		final int end = start + range.getLength();
-		final String sortCol = "name";
-		final SortDirection direction = colSortList.size() == 0 ? SortDirection.Ascending : (colSortList.get(0).isAscending() ? SortDirection.Ascending : SortDirection.Descending);
 
-		readService.getAll(module, sortCol, direction, start, end, new AsyncCallback<ListQueryResult>() {
+		readService.getAll(module, start, end, new AsyncCallback<ListQueryResult>() {
 			@Override
 			public void onSuccess(ListQueryResult result) {
 				insertRefreshedData(display, result);
