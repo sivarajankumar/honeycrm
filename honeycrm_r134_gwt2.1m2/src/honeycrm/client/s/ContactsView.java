@@ -4,11 +4,11 @@ import honeycrm.client.dto.Dto;
 import honeycrm.client.misc.Callback;
 import honeycrm.client.s.ContactsPresenter.Display;
 import honeycrm.client.services.ReadServiceAsync;
-import honeycrm.client.view.list.ListViewDataProvider;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasKeyDownHandlers;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
@@ -16,6 +16,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
+import com.google.gwt.user.cellview.client.ColumnSortList;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -49,11 +51,13 @@ public class ContactsView extends LocalizedView implements Display {
 	@UiField TextBox phone;
 	@UiField TextArea notes;
 	@UiField Grid grid;
+	@UiField TextBox search;
 	
 	@UiField CellTable<Dto> list;
 	@UiField SimplePager pager;
+	
 	private SingleSelectionModel<Dto> selectionModel;
-	private ListViewDataProvider provider;
+	private final ContactsDataProvider provider;
 	private final ProvidesKey<Dto> keyProvider = new ProvidesKey<Dto>() {
 		@Override
 		public Object getKey(Dto item) {
@@ -62,11 +66,12 @@ public class ContactsView extends LocalizedView implements Display {
 	};
 	private long currentId = 0;
 	
-	public ContactsView() {
+	public ContactsView(ContactsDataProvider provider) {
 		initWidget(uiBinder.createAndBindUi(this));
 		pager.setDisplay(list);
 		
-		selectionModel = new SingleSelectionModel<Dto>(keyProvider);
+		this.provider = provider;
+		this.selectionModel = new SingleSelectionModel<Dto>(keyProvider);
 		list.setSelectionModel(selectionModel);
 		list.setPageSize(20);
 		pager.firstPage();
@@ -90,8 +95,6 @@ public class ContactsView extends LocalizedView implements Display {
 			}
 		};
 		nameCol.setSortable(true);
-		emailCol.setSortable(true);
-		phoneCol.setSortable(true);
 		
 		list.addColumn(nameCol, constants.contactsName());
 		list.addColumn(emailCol, constants.contactsEmail());
@@ -100,9 +103,9 @@ public class ContactsView extends LocalizedView implements Display {
 		AsyncProvider.getReadService(new Callback<ReadServiceAsync>() {
 			@Override
 			public void callback(ReadServiceAsync arg) {
-				provider = new ListViewDataProvider("Contact", arg, list.getColumnSortList());				
-				provider.addDataDisplay(list);
+				ContactsView.this.provider.addDataDisplay(list);
 				list.addColumnSortHandler(new AsyncHandler(list));
+				ContactsView.this.provider.refresh(list, list.getColumnSortList());
 			}
 		});
 		
@@ -184,7 +187,32 @@ public class ContactsView extends LocalizedView implements Display {
 
 	@Override
 	public void refresh() {
-		provider.refresh(list);
+		provider.refresh(list, list.getColumnSortList());
 		grid.setVisible(false);
+	}
+	
+	@Override
+	public HasKeyDownHandlers getSearchBtn() {
+		return search;
+	}
+	
+	@Override
+	public String getSearch() {
+		return search.getText();
+	}
+
+	@Override
+	public ContactsDataProvider getProvider() {
+		return provider;
+	}
+
+	@Override
+	public HasData<Dto> getList() {
+		return list;
+	}
+	
+	@Override
+	public ColumnSortList getColSortList() {
+		return list.getColumnSortList();
 	}
 }

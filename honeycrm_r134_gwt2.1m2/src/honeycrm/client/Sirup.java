@@ -8,6 +8,7 @@ import honeycrm.client.s.AuthEvent;
 import honeycrm.client.s.AuthEventHandler;
 import honeycrm.client.s.AuthPresenter;
 import honeycrm.client.s.AuthView;
+import honeycrm.client.s.ContactsDataProvider;
 import honeycrm.client.s.ContactsPresenter;
 import honeycrm.client.s.ContactsView;
 import honeycrm.client.s.LogoutEvent;
@@ -42,7 +43,7 @@ public class Sirup implements EntryPoint {
 					AuthPresenter p = new AuthPresenter(bus, new AuthView());
 					p.go(RootPanel.get());
 				} else if ("app".equals(event.getValue())) {
-					ContactsView contactsView = new ContactsView();
+					ContactsView contactsView = new ContactsView(new ContactsDataProvider("Contact"));
 					new ContactsPresenter(bus, contactsView);
 					AppPresenter appPresenter = new AppPresenter(bus, new AppView(contactsView));
 					appPresenter.go(RootPanel.get());
