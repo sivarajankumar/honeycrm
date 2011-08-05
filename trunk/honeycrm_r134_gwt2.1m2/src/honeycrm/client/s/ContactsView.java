@@ -9,6 +9,7 @@ import honeycrm.client.view.list.ListViewDataProvider;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
@@ -164,6 +165,11 @@ public class ContactsView extends LocalizedView implements Display {
 		email.setText(String.valueOf(selectedObject.get("email")));
 		notes.setText(String.valueOf(selectedObject.get("notes")));
 		grid.setVisible(true);
+	}
+	
+	@Override
+	public HasKeyPressHandlers[] getAllFields() {
+		return new HasKeyPressHandlers[] {name, phone, email, notes};
 	}
 
 	@Override

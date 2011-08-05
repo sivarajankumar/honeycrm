@@ -1,9 +1,7 @@
 package honeycrm.client;
 
-import honeycrm.client.mvp.events.CreateEvent;
 import honeycrm.client.mvp.events.LocaleChangeEvent;
 import honeycrm.client.mvp.events.LocaleChangeEventHandler;
-import honeycrm.client.mvp.events.OpenModuleEvent;
 import honeycrm.client.s.AppPresenter;
 import honeycrm.client.s.AppView;
 import honeycrm.client.s.AuthEvent;
@@ -12,6 +10,8 @@ import honeycrm.client.s.AuthPresenter;
 import honeycrm.client.s.AuthView;
 import honeycrm.client.s.ContactsPresenter;
 import honeycrm.client.s.ContactsView;
+import honeycrm.client.s.LogoutEvent;
+import honeycrm.client.s.LogoutEventHandler;
 import honeycrm.client.s.ShortcutEvent;
 import honeycrm.client.s.ShortcutEventHandler;
 import honeycrm.client.services.AuthService;
@@ -58,6 +58,12 @@ public class Sirup implements EntryPoint {
 			public void onSuccess() {
 				final AuthServiceAsync authService = GWT.create(AuthService.class);
 
+				bus.addHandler(LogoutEvent.TYPE, new LogoutEventHandler() {
+					@Override
+					public void onLogout() {
+						History.newItem("login");
+					}
+				});
 				bus.addHandler(AuthEvent.TYPE, new AuthEventHandler() {
 					@Override
 					public void onAuth(AuthEvent event) {
@@ -76,6 +82,7 @@ public class Sirup implements EntryPoint {
 				bus.addHandler(ShortcutEvent.TYPE, new ShortcutEventHandler() {
 					@Override
 					public void onShortcut(ShortcutEvent event) {
+						/* ignore shortcuts for now
 						switch (event.getCode()) {
 						case 'd': // dashboard
 							bus.fireEvent(new OpenModuleEvent("Dashboard"));
@@ -87,7 +94,7 @@ public class Sirup implements EntryPoint {
 							bus.fireEvent(new OpenModuleEvent("Contact"));
 							bus.fireEvent(new CreateEvent("Contact"));
 							break;
-						}
+						}*/
 					}
 				});
 				bus.addHandler(LocaleChangeEvent.TYPE, new LocaleChangeEventHandler() {
