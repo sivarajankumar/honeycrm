@@ -43,7 +43,7 @@ public class Sirup implements EntryPoint {
 					AuthPresenter p = new AuthPresenter(bus, new AuthView());
 					p.go(RootPanel.get());
 				} else if ("app".equals(event.getValue())) {
-					ContactsView contactsView = new ContactsView(new ContactsDataProvider("Contact"));
+					ContactsView contactsView = new ContactsView(new ContactsDataProvider("Contact", bus));
 					new ContactsPresenter(bus, contactsView);
 					AppPresenter appPresenter = new AppPresenter(bus, new AppView(contactsView));
 					appPresenter.go(RootPanel.get());

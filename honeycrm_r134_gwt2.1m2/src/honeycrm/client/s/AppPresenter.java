@@ -2,6 +2,10 @@ package honeycrm.client.s;
 
 import honeycrm.client.mvp.events.OpenModuleEvent;
 import honeycrm.client.mvp.events.OpenModuleEventHandler;
+import honeycrm.client.mvp.events.RpcBeginEvent;
+import honeycrm.client.mvp.events.RpcBeginEventHandler;
+import honeycrm.client.mvp.events.RpcEndEvent;
+import honeycrm.client.mvp.events.RpcEndEventHandler;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -18,15 +22,33 @@ public class AppPresenter extends AbstractPresenter {
 		HasKeyPressHandlers getFocus();
 		void selectTab(String module);
 		HasClickHandlers getLogout();
+		void toggleLoading(boolean isLoading);
 	}
+
+	private int concurrentRpcs;
 
 	public AppPresenter(final SimpleEventBus bus, final Display view) {
 		this.view = view;
+		this.concurrentRpcs = 0;
 
+		view.toggleLoading(false);
 		view.getLogout().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				bus.fireEvent(new LogoutEvent());
+			}
+		});
+		bus.addHandler(RpcBeginEvent.TYPE, new RpcBeginEventHandler() {
+			@Override
+			public void onRpcBegin(RpcBeginEvent event) {
+				concurrentRpcs++; view.toggleLoading(true);
+			}
+		});
+		bus.addHandler(RpcEndEvent.TYPE, new RpcEndEventHandler() {
+			@Override
+			public void onRpcEnd(RpcEndEvent event) {
+				concurrentRpcs--; view.toggleLoading(concurrentRpcs == 0);
+				
 			}
 		});
 		bus.addHandler(OpenModuleEvent.TYPE, new OpenModuleEventHandler() {

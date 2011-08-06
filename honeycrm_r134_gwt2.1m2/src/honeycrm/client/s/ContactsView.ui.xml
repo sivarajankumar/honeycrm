@@ -28,7 +28,10 @@
 								<g:Label ui:field="contactsName" />
 							</g:customCell>
 							<g:customCell>
-								<g:TextBox ui:field="name" />
+								<g:FlowPanel>
+									<g:Label ui:field="contactsNameValue" />
+									<g:TextBox ui:field="name" />
+								</g:FlowPanel>
 							</g:customCell>
 						</g:row>
 						<g:row>
@@ -36,7 +39,10 @@
 								<g:Label ui:field="contactsEmail" />
 							</g:customCell>
 							<g:customCell>
-								<g:TextBox ui:field="email" />
+								<g:FlowPanel>
+									<g:Label ui:field="contactsEmailValue" />
+									<g:TextBox ui:field="email" />
+								</g:FlowPanel>
 							</g:customCell>
 						</g:row>
 						<g:row>
@@ -44,7 +50,10 @@
 								<g:Label ui:field="contactsPhone" />
 							</g:customCell>
 							<g:customCell>
-								<g:TextBox ui:field="phone" />
+								<g:FlowPanel>
+									<g:Label ui:field="contactsPhoneValue" />
+									<g:TextBox ui:field="phone" />
+								</g:FlowPanel>
 							</g:customCell>
 						</g:row>
 						<g:row>
@@ -52,7 +61,10 @@
 								<g:Label ui:field="contactsNotes" />
 							</g:customCell>
 							<g:customCell>
-								<g:TextArea ui:field="notes" />
+								<g:FlowPanel>
+									<g:Label ui:field="contactsNotesValue" />
+									<g:TextArea ui:field="notes" />
+								</g:FlowPanel>
 							</g:customCell>
 						</g:row>
 					</g:Grid>
