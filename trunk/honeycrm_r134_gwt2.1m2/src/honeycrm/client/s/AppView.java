@@ -23,15 +23,14 @@ public class AppView extends LocalizedView implements Display {
 	interface AppViewUiBinder extends UiBinder<Widget, AppView> {
 	}
 
-	@UiField
-	FocusPanel focus;
-	@UiField
-	TabLayoutPanel panel;
-	@UiField
-	Button logout;
+	@UiField FocusPanel focus;
+	@UiField TabLayoutPanel panel;
+	@UiField Button logout;
+	@UiField Label loading;
 
 	public AppView(final honeycrm.client.s.ContactsPresenter.Display contactsView) {
 		initWidget(uiBinder.createAndBindUi(this));
+		loading.setText(constants.loading());
 		logout.setText(constants.logout());
 		panel.add(new Label("dashboard content"), constants.moduleDashboard());
 		panel.add(contactsView.asWidget(), constants.moduleContacts());
@@ -60,5 +59,10 @@ public class AppView extends LocalizedView implements Display {
 		} else if ("Contact".equals(module)) {
 			panel.selectTab(1);
 		}
+	}
+	
+	@Override
+	public void toggleLoading(boolean isLoading) {
+		loading.setVisible(isLoading);
 	}
 }
