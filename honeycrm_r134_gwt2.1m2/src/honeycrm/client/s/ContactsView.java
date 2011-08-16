@@ -15,6 +15,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ContactsView extends ModuleView implements Display {
@@ -70,19 +71,6 @@ public class ContactsView extends ModuleView implements Display {
 
 		toggleVisibility(false, name, email, phone, notes);
 		toggleVisibility(true, contactsNameValue, contactsEmailValue, contactsPhoneValue, contactsNotesValue);
-		grid.setVisible(true);
-	}
-
-	@UiHandler("createBtn")
-	public void handleClick(ClickEvent e) {
-		currentDto = new Dto(module.toString());
-		for (String field : getFieldNames()) {
-			currentDto.set(field, "");
-		}
-
-		empty(name, phone, notes, email);
-		toggleVisibility(true, name, email, phone, notes);
-		toggleVisibility(false, contactsNameValue, contactsEmailValue, contactsPhoneValue, contactsNotesValue);
 		grid.setVisible(true);
 	}
 
@@ -169,5 +157,15 @@ public class ContactsView extends ModuleView implements Display {
 	@Override
 	protected String[] getFieldNames() {
 		return new String[] { "name", "email", "phone", "notes" };
+	}
+
+	@Override
+	protected Label[] getDetailViewFields() {
+		return new Label[] { contactsNameValue, contactsEmailValue, contactsPhoneValue, contactsNotesValue };
+	}
+
+	@Override
+	protected UIObject[] getEditViewFields() {
+		return new UIObject[] { name, email, phone, notes };
 	}
 }
