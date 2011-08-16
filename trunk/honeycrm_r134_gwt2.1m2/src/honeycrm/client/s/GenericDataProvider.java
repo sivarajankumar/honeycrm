@@ -15,11 +15,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.Range;
 
-public class ContactsDataProvider extends ListViewDataProvider {
+public class GenericDataProvider extends ListViewDataProvider {
 	private SimpleEventBus bus;
 
-	public ContactsDataProvider(final String module, SimpleEventBus bus) {
-		super(module, null);
+	public GenericDataProvider(final Module module, SimpleEventBus bus) {
+		super(module.toString(), null);
 		this.bus = bus;
 	}
 	
@@ -75,7 +75,7 @@ public class ContactsDataProvider extends ListViewDataProvider {
 			AsyncProvider.getReadService(new Callback<ReadServiceAsync>() {
 				@Override
 				public void callback(ReadServiceAsync arg) {
-					arg.fulltextSearchForModule("Contact", search, start, end, new AsyncCallback<ListQueryResult>() {
+					arg.fulltextSearchForModule(module, search, start, end, new AsyncCallback<ListQueryResult>() {
 						@Override
 						public void onSuccess(ListQueryResult result) {
 							bus.fireEvent(new RpcEndEvent());

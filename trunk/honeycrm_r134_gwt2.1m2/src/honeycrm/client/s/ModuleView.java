@@ -33,7 +33,7 @@ abstract public class ModuleView extends LocalizedView {
 	protected Dto currentDto = null;
 	protected final Module module;
 	protected SingleSelectionModel<Dto> selectionModel;
-	protected ContactsDataProvider provider;
+	protected GenericDataProvider provider;
 	protected static final ProvidesKey<Dto> keyProvider = new ProvidesKey<Dto>() {
 		@Override
 		public Object getKey(Dto item) {
@@ -41,8 +41,10 @@ abstract public class ModuleView extends LocalizedView {
 		}
 	};
 	
-	public ModuleView(Module module) {
+	public ModuleView(Module module, GenericDataProvider provider) {
 		this.module = module;
+		this.provider = provider;
+		this.selectionModel = new SingleSelectionModel<Dto>(keyProvider);
 	}
 
 	public HasClickHandlers getCreate() {
@@ -50,7 +52,6 @@ abstract public class ModuleView extends LocalizedView {
 	}
 
 	abstract protected String[] getFieldNames();
-	abstract public void refresh();
 
 	protected void empty(HasText ... textFields) {
 		for (HasText f: textFields) {
@@ -94,7 +95,7 @@ abstract public class ModuleView extends LocalizedView {
 		return search.getText();
 	}
 
-	public ContactsDataProvider getProvider() {
+	public GenericDataProvider getProvider() {
 		return provider;
 	}
 
@@ -104,5 +105,10 @@ abstract public class ModuleView extends LocalizedView {
 
 	public ColumnSortList getColSortList() {
 		return list.getColumnSortList();
+	}
+
+	public void refresh() {
+		provider.refresh(list, list.getColumnSortList());
+		grid.setVisible(false);
 	}
 }
