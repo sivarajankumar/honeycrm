@@ -22,7 +22,7 @@ public class ApplicationView extends Composite implements Display {
 	
 	@UiField
 	ContentView content;
-	@UiField
+	// @UiField
 	HeaderView header;
 	
 	private final ReadServiceAsync readService;

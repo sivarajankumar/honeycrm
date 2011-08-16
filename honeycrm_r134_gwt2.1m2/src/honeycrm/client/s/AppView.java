@@ -1,10 +1,13 @@
 package honeycrm.client.s;
 
+import honeycrm.client.misc.Callback;
 import honeycrm.client.s.AppPresenter.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
@@ -27,13 +30,21 @@ public class AppView extends LocalizedView implements Display {
 	@UiField TabLayoutPanel panel;
 	@UiField Button logout;
 	@UiField Label loading;
+	
+	private honeycrm.client.s.ContactsPresenter.Display contactsView;
+	private honeycrm.client.s.ProductPresenter.Display productView; 
 
-	public AppView(final honeycrm.client.s.ContactsPresenter.Display contactsView) {
+	public AppView(final honeycrm.client.s.ContactsPresenter.Display contactsView, honeycrm.client.s.ProductPresenter.Display productView) {
+		this.contactsView = contactsView;
+		this.productView = productView;
+		
 		initWidget(uiBinder.createAndBindUi(this));
+		
 		loading.setText(constants.loading());
 		logout.setText(constants.logout());
 		panel.add(new Label("dashboard content"), constants.moduleDashboard());
 		panel.add(contactsView.asWidget(), constants.moduleContacts());
+		panel.add(productView.asWidget(), constants.moduleProducts());
 	}
 
 	@Override
@@ -64,5 +75,36 @@ public class AppView extends LocalizedView implements Display {
 	@Override
 	public void toggleLoading(boolean isLoading) {
 		loading.setVisible(isLoading);
+	}
+
+	@Override
+	public void addTabChangeHandler(final Callback<Module> callback) {
+		panel.addBeforeSelectionHandler(new BeforeSelectionHandler<Integer>() {
+			@Override
+			public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+				switch(event.getItem()) {
+				case 0:
+					callback.callback(Module.Dashboard);
+					break;
+				case 1:
+					callback.callback(Module.Contact);
+					break;
+				case 2:
+					callback.callback(Module.Product);
+				}
+			}
+		});
+	}
+
+	@Override
+	public void initModule(Module arg) {
+		switch (arg) {
+		case Contact:
+			contactsView.init(null);
+			break;
+		case Product:
+			productView.init(null);
+			break;
+		}
 	}
 }

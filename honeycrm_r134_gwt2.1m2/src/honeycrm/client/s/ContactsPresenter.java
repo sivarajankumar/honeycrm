@@ -25,7 +25,7 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 
 public class ContactsPresenter extends AbstractPresenter {
-	public interface Display extends AbstractPresenterDisplay {
+	public interface Display extends AbstractPresenterDisplay, Initializable<Void> {
 		HasClickHandlers getCreate();
 		HasClickHandlers getSaveBtn();
 		HasKeyDownHandlers getSearchBtn();

@@ -21,7 +21,7 @@ public class ApplicationPresenter implements Presenter {
 	public ApplicationPresenter(long userId, ReadServiceAsync readService, final CreateServiceAsync createService, final UpdateServiceAsync updateService, final PluginServiceAsync pluginService, SimpleEventBus eventBus, Display applicationView) {
 		this.view = applicationView;
 		
-		new LoadPresenter(view.getHeader().getLoadView(), eventBus);
+		//new LoadPresenter(view.getHeader().getLoadView(), eventBus);
 		new ContentPresenter(userId, view.getContentView(), eventBus, readService, updateService, createService);
 	}
 

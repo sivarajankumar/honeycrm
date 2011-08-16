@@ -1,12 +1,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:view="urn:import:honeycrm.client.mvp.views">
-	<g:DockLayoutPanel addStyleNames="honey">
+	<!-- g:DockLayoutPanel addStyleNames="honey">
 		<g:north size="100">
 			<view:HeaderView ui:field="header" />
 		</g:north>
-		<g:center>
+		<g:center-->
 			<view:ContentView ui:field="content" />
-		</g:center>
-	</g:DockLayoutPanel>
+		<!-- /g:center>
+	</g:DockLayoutPanel-->
 </ui:UiBinder> 
