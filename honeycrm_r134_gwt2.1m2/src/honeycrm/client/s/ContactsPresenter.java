@@ -38,7 +38,7 @@ public class ContactsPresenter extends AbstractPresenter {
 		
 		void openView(Dto selectedObject);
 		void refresh();
-		ContactsDataProvider getProvider();
+		GenericDataProvider getProvider();
 		HasData<Dto> getList();
 		ColumnSortList getColSortList();
 	}

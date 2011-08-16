@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.SingleSelectionModel;
 
 public class ContactsView extends ModuleView implements Display {
 
@@ -50,22 +49,14 @@ public class ContactsView extends ModuleView implements Display {
 	@UiField
 	TextArea notes;
 
-	public ContactsView(ContactsDataProvider provider) {
-		super(Module.Contact);
+	public ContactsView(GenericDataProvider provider) {
+		super(Module.Contact, provider);
 		initWidget(uiBinder.createAndBindUi(this));
-		this.provider = provider;
-		this.selectionModel = new SingleSelectionModel<Dto>(keyProvider);
 	}
 
 	@Override
 	public HasKeyPressHandlers[] getAllFields() {
 		return new HasKeyPressHandlers[] { name, phone, email, notes };
-	}
-
-	@Override
-	public void refresh() {
-		provider.refresh(list, list.getColumnSortList());
-		grid.setVisible(false);
 	}
 
 	@Override
