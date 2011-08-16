@@ -41,8 +41,8 @@ public class LoginPresenter implements Presenter {
 		void setStatusInitializing();
 	}
 
-	private static final boolean AUTO_LOGIN = false;
-	private static final String AUTO_LOGIN_USERNAME = "james";
+	private static final boolean AUTO_LOGIN = true;
+	private static final String AUTO_LOGIN_USERNAME = "42";
 	private static final String AUTO_LOGIN_PASSWORD = "";
 	private final AuthServiceAsync authService;
 	private final ConfigServiceAsync confService;
