@@ -11,6 +11,7 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ProductView extends ModuleView implements Display {
@@ -72,5 +73,15 @@ public class ProductView extends ModuleView implements Display {
 	@Override
 	protected String[] getFieldNames() {
 		return new String[] { "name" };
+	}
+
+	@Override
+	protected Label[] getDetailViewFields() {
+		return new Label[] { nameDetail };
+	}
+
+	@Override
+	protected UIObject[] getEditViewFields() {
+		return new UIObject[] { nameEdit };
 	}
 }
