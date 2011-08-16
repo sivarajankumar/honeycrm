@@ -11,6 +11,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-testing.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-api-stubs.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/iText-5.0.5.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.2.jar" sourcepath="/Users/ingo/Downloads/commons-fileupload-1.2.2-src/src/java"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
