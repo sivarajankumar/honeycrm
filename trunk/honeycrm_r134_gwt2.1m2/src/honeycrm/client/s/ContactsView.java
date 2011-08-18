@@ -1,7 +1,7 @@
 package honeycrm.client.s;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.client.s.ContactsPresenter.Display;
+import honeycrm.client.s.ModulePresenter.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ContactsView extends ModuleView implements Display {
-
 	private static ContactsViewUiBinder uiBinder = GWT.create(ContactsViewUiBinder.class);
 
 	interface ContactsViewUiBinder extends UiBinder<Widget, ContactsView> {
@@ -87,7 +86,7 @@ public class ContactsView extends ModuleView implements Display {
 	}
 
 	@Override
-	public Dto getContact() {
+	public Dto getDto() {
 		Dto d = new Dto("Contact");
 		d.set("name", name.getText());
 		d.set("email", email.getText());

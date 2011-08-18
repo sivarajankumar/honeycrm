@@ -31,12 +31,14 @@ public class AppView extends LocalizedView implements Display {
 	@UiField Button logout;
 	@UiField Label loading;
 	
-	private honeycrm.client.s.ContactsPresenter.Display contactsView;
-	private honeycrm.client.s.ProductPresenter.Display productView; 
+	private honeycrm.client.s.ModulePresenter.Display contactsView;
+	private honeycrm.client.s.ModulePresenter.Display productView;
+	private honeycrm.client.s.ModulePresenter.Display proposalsView; 
 
-	public AppView(final honeycrm.client.s.ContactsPresenter.Display contactsView, honeycrm.client.s.ProductPresenter.Display productView) {
+	public AppView(final honeycrm.client.s.ModulePresenter.Display contactsView, honeycrm.client.s.ModulePresenter.Display productView, honeycrm.client.s.ModulePresenter.Display proposalView) {
 		this.contactsView = contactsView;
 		this.productView = productView;
+		this.proposalsView = proposalView;
 		
 		initWidget(uiBinder.createAndBindUi(this));
 		
@@ -45,6 +47,7 @@ public class AppView extends LocalizedView implements Display {
 		panel.add(new Label("dashboard content"), constants.moduleDashboard());
 		panel.add(contactsView.asWidget(), constants.moduleContacts());
 		panel.add(productView.asWidget(), constants.moduleProducts());
+		panel.add(proposalView.asWidget(), constants.moduleProposals());
 	}
 
 	@Override
@@ -91,6 +94,9 @@ public class AppView extends LocalizedView implements Display {
 					break;
 				case 2:
 					callback.callback(Module.Product);
+					break;
+				case 3:
+					callback.callback(Module.Proposal);
 				}
 			}
 		});
@@ -104,6 +110,9 @@ public class AppView extends LocalizedView implements Display {
 			break;
 		case Product:
 			productView.init(null);
+			break;
+		case Proposal:
+			proposalsView.init(null);
 			break;
 		}
 	}
