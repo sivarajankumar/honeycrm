@@ -1,5 +1,5 @@
 package honeycrm.client.s;
 
 public enum Module {
-	Dashboard, Contact, Product
+	Dashboard, Contact, Product, Proposal
 }

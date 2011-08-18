@@ -61,6 +61,10 @@ abstract public class ModuleView extends LocalizedView {
 	public HasClickHandlers getCreate() {
 		return createBtn;
 	}
+	
+	public HasClickHandlers getSaveBtn() {
+		return saveBtn;
+	}
 
 	abstract protected String[] getFieldNames();
 
@@ -78,10 +82,6 @@ abstract public class ModuleView extends LocalizedView {
 		for (UIObject o : uiObjects) {
 			o.setVisible(visible);
 		}
-	}
-
-	public HasClickHandlers getSaveBtn() {
-		return saveBtn;
 	}
 
 	@UiFactory

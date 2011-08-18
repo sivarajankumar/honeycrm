@@ -24,7 +24,7 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
 
-public class ContactsPresenter extends AbstractPresenter {
+public class ModulePresenter extends AbstractPresenter {
 	public interface Display extends AbstractPresenterDisplay, Initializable<Void> {
 		HasClickHandlers getCreate();
 		HasClickHandlers getSaveBtn();
@@ -33,7 +33,7 @@ public class ContactsPresenter extends AbstractPresenter {
 		HasKeyPressHandlers[] getAllFields();
 		
 		String getSearch();
-		Dto getContact();
+		Dto getDto();
 		Dto getSelectedObject();
 		
 		void openView(Dto selectedObject);
@@ -42,8 +42,8 @@ public class ContactsPresenter extends AbstractPresenter {
 		HasData<Dto> getList();
 		ColumnSortList getColSortList();
 	}
-
-	public ContactsPresenter(final SimpleEventBus bus, final Display view) {
+	
+	public ModulePresenter(final SimpleEventBus bus, final Display view) {
 		this.view = view;
 		for (HasKeyPressHandlers h : view.getAllFields()) {
 			h.addKeyPressHandler(new KeyPressHandler() {
@@ -81,7 +81,7 @@ public class ContactsPresenter extends AbstractPresenter {
 	}
 
 	private void save(final Display view) {
-		final Dto dto = view.getContact();
+		final Dto dto = view.getDto();
 
 		if (dto.getId() <= 0) {
 			AsyncProvider.getCreateService(new Callback<CreateServiceAsync>() {

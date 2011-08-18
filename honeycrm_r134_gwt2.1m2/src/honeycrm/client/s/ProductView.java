@@ -1,10 +1,11 @@
 package honeycrm.client.s;
 
 import honeycrm.client.dto.Dto;
-import honeycrm.client.s.ProductPresenter.Display;
+import honeycrm.client.s.ModulePresenter.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
@@ -50,7 +51,7 @@ public class ProductView extends ModuleView implements Display {
 				};
 				nameCol.setSortable(true);
 
-				list.addColumn(nameCol, constants.contactsName());
+				list.addColumn(nameCol, constants.productsName());
 
 				list.addColumnSortHandler(new AsyncHandler(list));
 				provider.addDataDisplay(list);
@@ -61,7 +62,7 @@ public class ProductView extends ModuleView implements Display {
 				editBtn.setText(constants.edit());
 				saveBtn.setText(constants.save());
 
-				nameLbl.setText(constants.contactsName());
+				nameLbl.setText(constants.productsName());
 			}
 
 			@Override
@@ -83,5 +84,28 @@ public class ProductView extends ModuleView implements Display {
 	@Override
 	protected UIObject[] getEditViewFields() {
 		return new UIObject[] { nameEdit };
+	}
+
+	@Override
+	public HasKeyPressHandlers[] getAllFields() {
+		return new HasKeyPressHandlers[] { nameEdit };
+	}
+
+	@Override
+	public Dto getDto() {
+		final Dto d = new Dto(Module.Product.toString());
+		d.set("name", nameEdit.getText());
+		return d;
+	}
+
+	@Override
+	public void openView(Dto selectedObject) {
+		currentDto = selectedObject;
+
+		nameDetail.setText(String.valueOf(selectedObject.get("name")));
+
+		toggleVisibility(false, nameEdit);
+		toggleVisibility(true, nameDetail);
+		grid.setVisible(true);
 	}
 }
