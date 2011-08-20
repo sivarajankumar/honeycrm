@@ -1,16 +1,22 @@
 package honeycrm.client.s;
 
+import java.util.Date;
+
 import honeycrm.client.dto.Dto;
 import honeycrm.client.s.ModulePresenter.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
@@ -46,6 +52,8 @@ public class ProposalView extends ModuleView implements Display {
 	DatePicker dateEdit;
 	@UiField
 	SuggestBox contactEdit;
+	@UiField
+	Button productsAddBtn;
 
 	public ProposalView(GenericDataProvider provider) {
 		super(Module.Proposal, provider);
@@ -99,6 +107,7 @@ public class ProposalView extends ModuleView implements Display {
 				dateLbl.setText(constants.proposalsDate());
 				contactLbl.setText(constants.proposalsContact());
 				productsLbl.setText(constants.proposalsProducts());
+				productsAddBtn.setText(constants.add());
 			}
 
 			@Override
@@ -142,6 +151,25 @@ public class ProposalView extends ModuleView implements Display {
 
 	@Override
 	protected UIObject[] getEditViewFields() {
-		return new UIObject[]{nameEdit, dateEdit, contactEdit };
+		// TODO need special treatment in super class for DatePicker
+		return new UIObject[]{nameEdit, contactEdit };
+	}
+
+	@Override
+	protected void openEditView() {
+		nameEdit.setText(String.valueOf(currentDto.get("name")));
+		dateEdit.setValue((Date) currentDto.get("date"));
+		contactEdit.setText(String.valueOf(currentDto.get("contact")));
+		// TODO insert data into productsEdit
+		
+		toggleVisibility(true, nameEdit, dateEdit, contactEdit);
+ 		toggleVisibility(false, nameDetail, dateDetail, contactDetail, productsDetail);
+		grid.setVisible(true);
+	}
+	
+	@UiHandler("productsAddBtn")
+	void onClick(ClickEvent e) {
+		AddProductView v = new AddProductView();
+		RootPanel.get().add(v.asWidget());
 	}
 }
