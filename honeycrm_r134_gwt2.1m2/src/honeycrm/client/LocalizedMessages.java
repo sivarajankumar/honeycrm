@@ -15,6 +15,7 @@ public interface LocalizedMessages extends Messages {
 	String language();
 	String cannotGetConfiguration();
 	
+	String finish();
 	String cancel();
 	String save();
 	String edit();
@@ -57,4 +58,5 @@ public interface LocalizedMessages extends Messages {
 	String proposalsContact();
 	String proposalsDate();
 	String proposalsProducts();
+	String proposalsSelectedProducts();
 }

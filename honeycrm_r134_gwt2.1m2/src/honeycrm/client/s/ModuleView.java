@@ -45,7 +45,7 @@ abstract public class ModuleView extends LocalizedView {
 	protected final Module module;
 	protected SingleSelectionModel<Dto> selectionModel;
 	protected GenericDataProvider provider;
-	protected static final ProvidesKey<Dto> keyProvider = new ProvidesKey<Dto>() {
+	public static final ProvidesKey<Dto> keyProvider = new ProvidesKey<Dto>() {
 		@Override
 		public Object getKey(Dto item) {
 			return null == item ? null : item.getId();
@@ -66,6 +66,8 @@ abstract public class ModuleView extends LocalizedView {
 		return saveBtn;
 	}
 
+	abstract protected void openEditView();
+	
 	abstract protected String[] getFieldNames();
 
 	abstract protected Label[] getDetailViewFields();
@@ -125,6 +127,15 @@ abstract public class ModuleView extends LocalizedView {
 	public void refresh() {
 		provider.refresh(list, list.getColumnSortList());
 		grid.setVisible(false);
+	}
+
+	@UiHandler("saveBtn")
+	public void handleClickSave(ClickEvent e) {
+	}
+	
+	@UiHandler("editBtn")
+	public void handleClickEdit(ClickEvent e) {
+		openEditView();
 	}
 
 	@UiHandler("createBtn")

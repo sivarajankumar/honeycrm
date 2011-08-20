@@ -108,4 +108,13 @@ public class ProductView extends ModuleView implements Display {
 		toggleVisibility(true, nameDetail);
 		grid.setVisible(true);
 	}
+
+	@Override
+	protected void openEditView() {
+		nameEdit.setText(String.valueOf(currentDto.get("name")));
+		
+		toggleVisibility(true, nameEdit);
+ 		toggleVisibility(false, nameDetail);
+		grid.setVisible(true);		
+	}
 }

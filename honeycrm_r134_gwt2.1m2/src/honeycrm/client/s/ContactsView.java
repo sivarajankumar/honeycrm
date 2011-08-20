@@ -5,11 +5,9 @@ import honeycrm.client.s.ModulePresenter.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Label;
@@ -72,9 +70,9 @@ public class ContactsView extends ModuleView implements Display {
 		toggleVisibility(true, contactsNameValue, contactsEmailValue, contactsPhoneValue, contactsNotesValue);
 		grid.setVisible(true);
 	}
-
-	@UiHandler("editBtn")
-	public void handleClickEdit(ClickEvent e) {
+	
+	@Override
+	protected void openEditView() {
 		name.setText(String.valueOf(currentDto.get("name")));
 		phone.setText(String.valueOf(currentDto.get("phone")));
 		email.setText(String.valueOf(currentDto.get("email")));

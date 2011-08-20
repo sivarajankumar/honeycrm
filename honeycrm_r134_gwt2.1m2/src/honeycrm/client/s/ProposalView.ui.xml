@@ -43,7 +43,7 @@
 							<g:customCell>
 								<g:FlowPanel>
 									<g:Label ui:field="dateDetail" />
-									<dp:DatePicker ui:field="dateEdit" />
+									<g:DateLabel ui:field="dateEdit" />
 								</g:FlowPanel>
 							</g:customCell>
 						</g:row>
@@ -65,7 +65,10 @@
 							<g:customCell>
 								<g:FlowPanel>
 									<g:Label ui:field="productsDetail" />
-									<g:TextBox ui:field="productsEdit" />
+									<g:VerticalPanel>
+										<c:CellTable ui:field="productsEdit" />
+										<g:Button ui:field="productsAddBtn" />
+									</g:VerticalPanel>
 								</g:FlowPanel>
 							</g:customCell>
 						</g:row>
