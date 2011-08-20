@@ -11,9 +11,12 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DateLabel;
@@ -55,6 +58,10 @@ public class ProposalView extends ModuleView implements Display {
 	SuggestBox contactEdit;
 	@UiField
 	Button productsAddBtn;
+	@UiField
+	CellTable<Dto> productsEdit;
+	@UiField
+	SimplePager productsEditPager;
 
 	public ProposalView(GenericDataProvider provider) {
 		super(Module.Proposal, provider);
@@ -95,6 +102,8 @@ public class ProposalView extends ModuleView implements Display {
 				list.addColumn(dateCol, constants.proposalsDate());
 				list.addColumn(contactCol, constants.proposalsContact());
 
+				initProductTable();
+				
 				list.addColumnSortHandler(new AsyncHandler(list));
 				provider.addDataDisplay(list);
 				provider.refresh(list, list.getColumnSortList());
@@ -109,6 +118,18 @@ public class ProposalView extends ModuleView implements Display {
 				contactLbl.setText(constants.proposalsContact());
 				productsLbl.setText(constants.proposalsProducts());
 				productsAddBtn.setText(constants.add());
+			}
+
+			private void initProductTable() {
+				final TextColumn<Dto> nameCol = new TextColumn<Dto>() {
+					@Override
+					public String getValue(Dto object) {
+						return String.valueOf(object.get("name"));
+					}
+				};
+				nameCol.setSortable(true);
+
+				productsEdit.addColumn(nameCol, constants.productsName());
 			}
 
 			@Override

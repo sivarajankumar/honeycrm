@@ -11,6 +11,7 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
@@ -66,6 +67,16 @@ public class AddProductView extends LocalizedView implements Initializable<Void>
 				finish.setText(constants.finish());
 				cancel.setText(constants.cancel());
 				selectedProductsLbl.setText(constants.proposalsSelectedProducts());
+			
+				final TextColumn<Dto> nameCol = new TextColumn<Dto>() {
+					@Override
+					public String getValue(Dto object) {
+						return String.valueOf(object.get("name"));
+					}
+				};
+				nameCol.setSortable(true);
+
+				table.addColumn(nameCol, constants.productsName());
 				
 				// panel.center();
 			}
