@@ -59,4 +59,5 @@ public interface LocalizedMessages extends Messages {
 	String proposalsDate();
 	String proposalsProducts();
 	String proposalsSelectedProducts();
+	String proposalsPleaseSelectProducts();
 }

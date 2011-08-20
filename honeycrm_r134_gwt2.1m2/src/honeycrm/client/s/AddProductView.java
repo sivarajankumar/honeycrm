@@ -12,7 +12,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -25,8 +24,6 @@ public class AddProductView extends LocalizedView implements Initializable<Void>
 	interface AddProductViewUiBinder extends UiBinder<Widget, AddProductView> {
 	}
 	
-	@UiField
-	DecoratedPopupPanel panel;
 	@UiField
 	Button cancel;
 	@UiField
@@ -43,7 +40,7 @@ public class AddProductView extends LocalizedView implements Initializable<Void>
 	public AddProductView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
-		panel.addAttachHandler(new AttachEvent.Handler() {
+		this.addAttachHandler(new AttachEvent.Handler() {
 			@Override
 			public void onAttachOrDetach(AttachEvent event) {
 				init(null);
@@ -53,7 +50,7 @@ public class AddProductView extends LocalizedView implements Initializable<Void>
 	
 	@UiHandler("cancel")
 	void handleClick(ClickEvent e) {
-		panel.hide();
+		// panel.hide();
 	}
 	
 	@UiFactory

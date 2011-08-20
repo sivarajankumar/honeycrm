@@ -1,27 +1,28 @@
 package honeycrm.client.s;
 
-import java.util.Date;
-
 import honeycrm.client.dto.Dto;
 import honeycrm.client.s.ModulePresenter.Display;
+
+import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasKeyPressHandlers;
+import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DateLabel;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.datepicker.client.DatePicker;
 
 public class ProposalView extends ModuleView implements Display {
 
@@ -49,7 +50,7 @@ public class ProposalView extends ModuleView implements Display {
 	@UiField
 	TextBox nameEdit;
 	@UiField
-	DatePicker dateEdit;
+	DateLabel dateEdit;
 	@UiField
 	SuggestBox contactEdit;
 	@UiField
@@ -103,7 +104,7 @@ public class ProposalView extends ModuleView implements Display {
 				editBtn.setText(constants.edit());
 				saveBtn.setText(constants.save());
 
-				nameLbl.setText(constants.contactsName());
+				nameLbl.setText(constants.proposalsName());
 				dateLbl.setText(constants.proposalsDate());
 				contactLbl.setText(constants.proposalsContact());
 				productsLbl.setText(constants.proposalsProducts());
@@ -146,7 +147,7 @@ public class ProposalView extends ModuleView implements Display {
 
 	@Override
 	protected Label[] getDetailViewFields() {
-		return new Label[] { nameLbl, dateLbl, contactLbl, productsLbl };
+		return new Label[] { nameDetail, dateDetail, contactDetail, productsDetail };
 	}
 
 	@Override
@@ -162,6 +163,7 @@ public class ProposalView extends ModuleView implements Display {
 		contactEdit.setText(String.valueOf(currentDto.get("contact")));
 		// TODO insert data into productsEdit
 		
+		
 		toggleVisibility(true, nameEdit, dateEdit, contactEdit);
  		toggleVisibility(false, nameDetail, dateDetail, contactDetail, productsDetail);
 		grid.setVisible(true);
@@ -169,7 +171,15 @@ public class ProposalView extends ModuleView implements Display {
 	
 	@UiHandler("productsAddBtn")
 	void onClick(ClickEvent e) {
-		AddProductView v = new AddProductView();
-		RootPanel.get().add(v.asWidget());
+		final DialogBox dialog = new DialogBox(true);
+		dialog.setText(constants.proposalsPleaseSelectProducts());
+		dialog.addAttachHandler(new AttachEvent.Handler() {
+			@Override
+			public void onAttachOrDetach(AttachEvent event) {
+				dialog.center();
+			}
+		});
+		dialog.add(new AddProductView());
+		dialog.show();
 	}
 }
