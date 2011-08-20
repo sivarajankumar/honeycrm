@@ -67,6 +67,7 @@
 									<g:Label ui:field="productsDetail" />
 									<g:VerticalPanel>
 										<c:CellTable ui:field="productsEdit" />
+										<c:SimplePager ui:field="productsEditPager" />
 										<g:Button ui:field="productsAddBtn" />
 									</g:VerticalPanel>
 								</g:FlowPanel>
