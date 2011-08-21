@@ -9,7 +9,7 @@
 
 == General ==
 
- * *TDD is only applied if it speeds up the development:* People do not test their code because they think it is a punishment. Developers are lazy and will not start writing tests in addition to their other tasks. If a developer writes tests because he/she is forced to do so, the resulting test cases are very likely to have a poor code-coverage and quality and will not be maintained properly. The only way to convince developers of the application of TDD is to demonstrate to them that it results in a noticable speed-up and simplification in the development process. Developers will write tests if it is saves them time, makes their lives easier, and more comfortable.
+ * *TDD is only applied if it speeds up the development:* People do not test their code because they think it is a punishment. Developers are lazy and will not start writing tests in addition to their other tasks. If a developer writes tests because he/she is forced to do so, the resulting test cases are very likely to have a poor code-coverage and quality and will not be maintained properly. The only way to convince developers of the application of TDD is to demonstrate to them that it results in a noticable speed-up and simplification in the development process. Developers will write tests if it saves them time, makes their lives easier, and more comfortable.
 
  * *Run tests cases rather than testing manually:* If you write tests as a means of speeding up the development your test suite will gradually grow. Running this large number of test cases gives you confidence about your changes. More importantly it is several orders of magnitude faster than manual testing. Manual testing either has a low code-coverage or takes a lot of time. TODO add link to 70, 20, 10 rule
 
