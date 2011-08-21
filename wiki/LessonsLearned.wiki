@@ -33,8 +33,7 @@
 
  * *Do not over-engineer the UI:* Do not add features on the basis of what you expect to be important. Start with something ridiculously simple. Get the basics right. Experiment with it and gradually extend it.
 
- * *Nobody knows what is actually required:* Neither you, nor the users, nor any smart consultant is able to know in advance what the user wants and/or needs. Furthermore, what the user describes as being important may have nothing to do with making him/she more productive. It may simply be very similar to the way he already works. 
-There will never be a single description of the requirements that all users agree on. You have to create an atmosphere and establish a process that allows the exploration of requirements which most users agree on. The rest is experience and intuition.
+ * *Nobody knows what is actually required:* Neither you, nor the users, nor any smart consultant is able to know in advance what the user wants and/or needs. Furthermore, what the user describes as being important may have nothing to do with making him/she more productive. It may simply be very similar to the way he already works. There will never be a single description of the requirements that all users agree on. You have to create an atmosphere and establish a process that allows the exploration of requirements which most users agree on. The rest is experience and intuition.
 
  * *Use lazy views:* The constructors of your views should not contain expensive operations. When you are using UiBinder all you really have to do within your constructors is to call the initWidget function. Everything else should be done either at the latest point possible or when your user is idling.  However, it can be difficult to predict your user's behavior. Thus, you may simply not know when you can execute the potentially expensive initialization function. Instead you may defer the initialization until the latest time possible within a split-point.
 
