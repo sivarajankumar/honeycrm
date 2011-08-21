@@ -19,7 +19,7 @@
 
  * *Don't repeat yourself (DRY):* DRY should be applied to all parts of your code base. Do not forget, to apply DRY in your views as well, e.g. by inheritance. Everytime you implement the same functionality twice, you will forget to update the other place(s) during maintainance activities.
 
- * *Someone else is smarter than you:* Reuse existing patterns, designs, and patterns.
+ * *Someone else is smarter than you:* Reuse existing patterns, designs, and code.
 
 == Client Side ==
 
