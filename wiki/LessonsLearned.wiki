@@ -54,3 +54,6 @@
  * *Reduce the number of HTTP requests:* In traditional non-AJAX LAMP applications, each of the user's clicks may result in up to 150 separate HTTP request. Only one of them is the request to the PHP script which is executed. The rest accounts for static content, e.g. images, CSS, and JavaScript files. To speed up the rendering and allow your application to scale, you want to lower the number of HTTP request to a minimum. For instance, you can put all of your images into a single file and use CSS sprites and put your CSS code into the widgets XML code. In addition, you can bundle requests of the client and send a single response back instead of responding separately to each request.
 
  * *Push rather than pull:* Use GWT's server side push approach to notify clients of updates instead of letting clients periodically pull for updates. This saves bandwidth for the clients and lowers the load of your server.
+
+== Additional Resources ==
+ * http://www.userfocus.co.uk/articles/4-forgotten-principles-of-usability-testing.html
