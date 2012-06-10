@@ -27,7 +27,7 @@
 
  * *Reuse your widgets:* Creating, configuring, and attaching widgets to the browser's DOM is expensive. If possible, create and attach the widgets you need only once and hide them if required. Consult tools like yslow to find out whether or not your DOM is considered to be too "complex". While you may think your page is rendered quick enough. But when you open the page on a old machine with an out-dated browser and/or mobile devices.
 
- * *Offer views for different screen sizes:* Your views should be interchangable to make sure your application works well on big office screens (2560x1920), laptops (1280x800), touchpads (1024x800), and smartphones (640x480). 
+ * *Offer views for different screen sizes:* Your views should be interchangable to make sure your application works well on big office screens (2560x1920), laptops (1280x800), tablets (1024x800), and smartphones (640x480). 
 
  * *Support power-users:* Everyone who uses your application on a day-to-day basis will love every shortcut that you build into it. For instance, provide keyboard shortcuts for the most common operations, put barcodes on the print-outs that you generate which can be scanned later on to allow finding related documents instantly, put the focus (i.e. the cursor) automatically into the widget where it is most-likely to be expected by the user, etc.
 
